@@ -53,6 +53,10 @@ class AcceptanceTester extends \Codeception\Actor
 
     public function installFluentFormPro()
     {
+        $KEY = fopen("tests/Support/Data/licensekey.txt", "r") or die("Unable to open file!");
+        $LICENSE_KEY = fgets($KEY);
+
+
         $this->wantTo('Install FluentForm Pro plugin');
         $this->amOnPage('wp-admin/plugin-install.php');
         $this->seeElement('.upload');
@@ -66,7 +70,7 @@ class AcceptanceTester extends \Codeception\Actor
         {
             $this->click('Activate Now', "div[class='error error_notice_ff_fluentform_pro_license'] p");
             $this->waitForElement("input[name='_ff_fluentform_pro_license_key']",30);
-            $this->fillField("input[name='_ff_fluentform_pro_license_key']",'97019eb28ede80342d3a17da2da5f41d');
+            $this->fillField("input[name='_ff_fluentform_pro_license_key']",$LICENSE_KEY);
             $this->click("input[value='Activate License']");
             $this->waitForText('Your license is active! Enjoy Fluent Forms Pro Add On');
             $this->see('Your license is active! Enjoy Fluent Forms Pro Add On');

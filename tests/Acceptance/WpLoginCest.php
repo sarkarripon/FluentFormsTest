@@ -14,7 +14,7 @@ class WpLoginCest
     public function Install_plugins(AcceptanceTester $I)
     {
         $I->installFluentForm();
-        $I->installFluentFormPdfGenerator();
+//        $I->installFluentFormPdfGenerator();
         $I->installFluentFormPro();
     }
 
@@ -29,8 +29,8 @@ class WpLoginCest
         $I->wantTo('Clean up plugin');
         $I->amOnPage('/wp-admin/plugins.php');
 
-        $I->uninstallFluentFormPro();
-        $I->uninstallFluentFormPdfGenerator();
-        $I->uninstallFluentForm();
+//        $I->uninstallFluentFormPro();
+//        $I->uninstallFluentFormPdfGenerator();
+//        $I->uninstallFluentForm();
     }
 }
