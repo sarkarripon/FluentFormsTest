@@ -1,0 +1,48 @@
+# Codeception Test Suite Configuration
+#
+# Suite for acceptance tests.
+# Perform tests in browser using the WebDriver or PhpBrowser.
+# If you need both WebDriver and PHPBrowser tests - create a separate suite.
+
+actor: AcceptanceTester
+extensions:
+    enabled:
+        - Codeception\Extension\RunProcess:
+            0: chromedriver --url-base=wd/hub
+            sleep: 1
+
+modules:
+    enabled:
+        - WebDriver:
+            url: https://fluentsmtp.com
+            browser: chrome
+            clear_cookies: true
+            port: 9515
+
+            capabilities:
+                acceptInsecureCerts: true
+                chromeOptions:
+                    args:
+#                        - "--headless"
+                        - "--disable-gpu"
+                        - "--window-size=1920,1080"
+                        - "--no-sandbox"
+                        - "--disable-dev-shm-usage"
+                        - "--disable-extensions"
+                        - "--disable-setuid-sandbox"
+                        - "--disable-infobars"
+                        - "--disable-notifications"
+                        - "--disable-features=VizDisplayCompositor"
+                        - "--disable-features=NetworkService"
+                        - "--disable-features=TranslateUI"
+                        - "--disable-features=Translate"
+                        - "--disable-features=AutofillServerCommunication"
+                        - "--disable-features=Autofill"
+                        - "--disable-features=AutofillEnableAccountWalletStorage"
+                        - "--disable-features=AutofillEnableAccountWalletStorage"
+
+# add Codeception\Step\Retry trait to AcceptanceTester to enable retries
+step_decorators:
+    - Codeception\Step\ConditionalAssertion
+    - Codeception\Step\TryTo
+    - Codeception\Step\Retry
