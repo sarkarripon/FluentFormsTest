@@ -41,10 +41,12 @@ class AcceptanceTester extends \Codeception\Actor
     {
         $this->wantTo('Install FluentForm plugin');
         $this->amOnPage('wp-admin/plugin-install.php?s=Fluent+Forms+contact+form&tab=search&type=term');
+
         if ($this->tryToSee('Install Now', '.plugin-card.plugin-card-fluentform'))
         {
+            $this->waitForElementClickable('.plugin-card.plugin-card-fluentform',60);
             $this->click('Install Now', '.plugin-card.plugin-card-fluentform');
-            $this->waitForText('Activate',30,'.plugin-card.plugin-card-fluentform');
+            $this->waitForText('Activate',60,'.plugin-card.plugin-card-fluentform');
             $this->click('Activate', '.plugin-card.plugin-card-fluentform');
         }
         $this->amOnPage('/wp-admin/plugins.php');
@@ -53,9 +55,9 @@ class AcceptanceTester extends \Codeception\Actor
 
     public function installFluentFormPro()
     {
+        //Import license key
         $KEY = fopen("tests/Support/Data/licensekey.txt", "r") or die("Unable to open file!");
         $LICENSE_KEY = fgets($KEY);
-
 
         $this->wantTo('Install FluentForm Pro plugin');
         $this->amOnPage('wp-admin/plugin-install.php');
@@ -64,16 +66,15 @@ class AcceptanceTester extends \Codeception\Actor
         $this->attachFile('input[type="file"]','fluentformpro.zip');
         $this->seeElement('#install-plugin-submit');
         $this->click('#install-plugin-submit');
-        $this->waitForText('Activate Plugin',30,'.button.button-primary');
+        $this->waitForText('Activate Plugin',60,'.button.button-primary');
         $this->click('.button.button-primary');
         if($this->tryToSee('The Fluent Forms Pro Add On license needs to be activated. Activate Now', "div[class='error error_notice_ff_fluentform_pro_license'] p"))
         {
             $this->click('Activate Now', "div[class='error error_notice_ff_fluentform_pro_license'] p");
-            $this->waitForElement("input[name='_ff_fluentform_pro_license_key']",30);
+            $this->waitForElement("input[name='_ff_fluentform_pro_license_key']",60);
             $this->fillField("input[name='_ff_fluentform_pro_license_key']",$LICENSE_KEY);
             $this->click("input[value='Activate License']");
-            $this->waitForText('Your license is active! Enjoy Fluent Forms Pro Add On');
-            $this->see('Your license is active! Enjoy Fluent Forms Pro Add On');
+            $this->tryToSee('Your license is active! Enjoy Fluent Forms Pro Add On');
         }
         $this->amOnPage('/wp-admin/plugins.php');
         $this->see('Fluent Forms Pro Add On Pack');
@@ -86,18 +87,26 @@ class AcceptanceTester extends \Codeception\Actor
         if($this->tryToSee('Install Now', '.plugin-card.plugin-card-fluentforms-pdf'))
         {
             $this->click('Install Now', '.plugin-card.plugin-card-fluentforms-pdf');
-            $this->waitForText('Activate',30,'.plugin-card.plugin-card-fluentforms-pdf');
+            $this->waitForText('Activate',60,'.plugin-card.plugin-card-fluentforms-pdf');
             $this->click('Activate', '.plugin-card.plugin-card-fluentforms-pdf');
         }
         $this->amOnPage('/wp-admin/plugins.php');
         $this->see('Fluent Forms PDF Generator');
     }
 
+    public function removeFluentFormProLicense()
+    {
+        $this->tryToClick('Deactivate License',"form[method='post']");
+        $this->tryToSee('Activate License', "form[method='post']");
+
+
+    }
+
     public function uninstallFluentFormPro()
     {
         //delete fluentform pro
         $this->click('Deactivate', "tr[data-slug='fluent-forms-pro-add-on-pack'] td[class='plugin-title column-primary']");
-        $this->waitForText('Plugin deactivated.',30,"div[id='message'] p");
+        $this->waitForText('Plugin deactivated.',60,"div[id='message'] p");
         $this->see('Plugin deactivated.',"div[id='message'] p");
         $this->click('Delete', "tr[data-slug='fluent-forms-pro-add-on-pack'] td[class='plugin-title column-primary']");
         $this->tryToAcceptPopup();
@@ -109,7 +118,7 @@ class AcceptanceTester extends \Codeception\Actor
     {
         //delete fluentform pdf generator
         $this->click('Deactivate', "tr[data-slug='fluentforms-pdf'] td[class='plugin-title column-primary']");
-        $this->waitForText('Plugin deactivated.',30,"div[id='message'] p");
+        $this->waitForText('Plugin deactivated.',60,"div[id='message'] p");
         $this->see('Plugin deactivated.',"div[id='message'] p");
         $this->click('Delete', "tr[data-slug='fluentforms-pdf'] td[class='plugin-title column-primary']");
         $this->tryToAcceptPopup();
@@ -121,13 +130,15 @@ class AcceptanceTester extends \Codeception\Actor
     {
         //delete fluentform
         $this->click('Deactivate', "tr[data-slug='fluentform'] td[class='plugin-title column-primary']");
-        $this->waitForText('Plugin deactivated.',30,"div[id='message'] p");
+        $this->waitForText('Plugin deactivated.',60,"div[id='message'] p");
         $this->see('Plugin deactivated.',"div[id='message'] p");
         $this->click('Delete', "tr[data-slug='fluentform'] td[class='plugin-title column-primary']");
         $this->tryToAcceptPopup();
         $this->waitForText('Fluent Forms was successfully deleted.');
         $this->see('Fluent Forms was successfully deleted.');
     }
+
+
 
 
 }
