@@ -53,33 +53,6 @@ class AcceptanceTester extends \Codeception\Actor
         $this->see('Fluent Forms');
     }
 
-    public function installFluentFormPro()
-    {
-        //Import license key
-        $KEY = fopen("tests/Support/Data/licensekey.txt", "r") or die("Unable to open file!");
-        $LICENSE_KEY = fgets($KEY);
-
-        $this->wantTo('Install FluentForm Pro plugin');
-        $this->amOnPage('wp-admin/plugin-install.php');
-        $this->seeElement('.upload');
-        $this->click('.upload');
-        $this->attachFile('input[type="file"]','fluentformpro.zip');
-        $this->seeElement('#install-plugin-submit');
-        $this->click('#install-plugin-submit');
-        $this->waitForText('Activate Plugin',60,'.button.button-primary');
-        $this->click('.button.button-primary');
-        if($this->tryToSee('The Fluent Forms Pro Add On license needs to be activated. Activate Now', "div[class='error error_notice_ff_fluentform_pro_license'] p"))
-        {
-            $this->click('Activate Now', "div[class='error error_notice_ff_fluentform_pro_license'] p");
-            $this->waitForElement("input[name='_ff_fluentform_pro_license_key']",60);
-            $this->fillField("input[name='_ff_fluentform_pro_license_key']",$LICENSE_KEY);
-            $this->click("input[value='Activate License']");
-            $this->tryToSee('Your license is active! Enjoy Fluent Forms Pro Add On');
-        }
-        $this->amOnPage('/wp-admin/plugins.php');
-        $this->see('Fluent Forms Pro Add On Pack');
-    }
-
     public function installFluentFormPdfGenerator()
     {
         $this->wantTo('Install FluentForm PDF Generator plugin');
@@ -94,11 +67,46 @@ class AcceptanceTester extends \Codeception\Actor
         $this->see('Fluent Forms PDF Generator');
     }
 
+    public function installFluentFormPro()
+    {
+        $this->wantTo('Install FluentForm Pro plugin');
+        $this->amOnPage('wp-admin/plugin-install.php');
+        $this->seeElement('.upload');
+        $this->click('.upload');
+        $this->attachFile('input[type="file"]','fluentformpro.zip');
+        $this->seeElement('#install-plugin-submit');
+        $this->click('#install-plugin-submit');
+        $this->waitForText('Activate Plugin',60,'.button.button-primary');
+        $this->click('.button.button-primary');
+
+    }
+
+    public function activateFluentFormPro()
+    {
+
+        //Import license key
+        $KEY = fopen("tests/Support/Data/licensekey.txt", "r") or die("Unable to open file!");
+        $LICENSE_KEY = fgets($KEY);
+        fclose($KEY);
+
+        if($this->tryToSee('The Fluent Forms Pro Add On license needs to be activated. Activate Now', "div[class='error error_notice_ff_fluentform_pro_license'] p"))
+        {
+            $this->click('Activate Now', "div[class='error error_notice_ff_fluentform_pro_license'] p");
+            $this->waitForElement("input[name='_ff_fluentform_pro_license_key']",60);
+            $this->fillField("input[name='_ff_fluentform_pro_license_key']",$LICENSE_KEY);
+            $this->click("input[value='Activate License']");
+            $this->tryToSee('Your license is active! Enjoy Fluent Forms Pro Add On');
+        }
+        $this->amOnPage('/wp-admin/plugins.php');
+        $this->see('Fluent Forms Pro Add On Pack');
+    }
+
+
+
     public function removeFluentFormProLicense()
     {
         $this->tryToClick('Deactivate License',"form[method='post']");
         $this->tryToSee('Activate License', "form[method='post']");
-
 
     }
 
@@ -137,8 +145,6 @@ class AcceptanceTester extends \Codeception\Actor
         $this->waitForText('Fluent Forms was successfully deleted.');
         $this->see('Fluent Forms was successfully deleted.');
     }
-
-
 
 
 }
