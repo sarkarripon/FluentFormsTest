@@ -35,6 +35,7 @@ return array(
     'Codeception\\Lib\\Interfaces\\Web' => $vendorDir . '/codeception/lib-web/src/Lib/Interfaces/Web.php',
     'Codeception\\Module\\AbstractAsserts' => $vendorDir . '/codeception/module-asserts/src/Codeception/Module/AbstractAsserts.php',
     'Codeception\\Module\\Asserts' => $vendorDir . '/codeception/module-asserts/src/Codeception/Module/Asserts.php',
+    'Codeception\\Module\\Cli' => $vendorDir . '/codeception/module-cli/src/Codeception/Module/Cli.php',
     'Codeception\\Module\\Db' => $vendorDir . '/codeception/module-db/src/Codeception/Module/Db.php',
     'Codeception\\Module\\PhpBrowser' => $vendorDir . '/codeception/module-phpbrowser/src/Codeception/Module/PhpBrowser.php',
     'Codeception\\Module\\WebDriver' => $vendorDir . '/codeception/module-webdriver/src/Codeception/Module/WebDriver.php',

@@ -6,13 +6,14 @@ extensions:
         - Codeception\Extension\RunProcess:
             0: chromedriver --url-base=wd/hub
             sleep: 1
-            wait: 5
+            wait: 10
 #        - Codeception\Extension\RunFailed:
 
 
 modules:
     enabled:
         - WebDriver:
+
         - Db:
             dsn: 'mysql:host=localhost;dbname=fluentsmtp'
             user: 'admin'
@@ -20,10 +21,6 @@ modules:
 #            dump: 'tests/_data/dump.sql'
             populate: true
             cleanup: true
-
-
-
-
 
     config:
         WebDriver:
@@ -38,11 +35,6 @@ modules:
 #                        - "--headless"
                         - "--disable-gpu"
                         - "--window-size=1920,1080"
-
-
-
-
-
 
 
 

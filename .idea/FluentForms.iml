@@ -72,6 +72,7 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/codeception/module-webdriver" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/codeception/module-db" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/masterminds/html5" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/codeception/module-cli" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

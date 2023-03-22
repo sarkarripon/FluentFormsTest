@@ -80,6 +80,7 @@
       <path value="$PROJECT_DIR$/vendor/codeception/module-webdriver" />
       <path value="$PROJECT_DIR$/vendor/codeception/module-db" />
       <path value="$PROJECT_DIR$/vendor/masterminds/html5" />
+      <path value="$PROJECT_DIR$/vendor/codeception/module-cli" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="7.1">

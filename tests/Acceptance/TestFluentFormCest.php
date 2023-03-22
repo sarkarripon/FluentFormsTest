@@ -5,6 +5,8 @@ namespace Tests\Acceptance;
 use Tests\Support\AcceptanceTester;
 use Codeception\Util\Locator;
 use Facebook\WebDriver\Exception\WebDriverException;
+use \Facebook\WebDriver\WebDriverKeys;
+use Codeception\Example;
 
 class TestFluentFormCest
 {
@@ -99,20 +101,29 @@ class TestFluentFormCest
         $I->amOnPage('/wp-admin/edit.php?post_type=page');
         $I->click(".page-title-action");
         $I->wait(1);
-        $I->fillField("h1[aria-label='Add title']", "Acceptance test form");
-        $I->pressKey("h1[aria-label='Add title']",\Facebook\WebDriver\WebDriverKeys::TAB);
-        $I->fillField($shortcode);
-
-
-        $I->
-        die();
-
-
         $I->executeJS(sprintf('wp.data.dispatch("core/editor").editPost({title: "%s"})',"Acceptance test form"));
+        $I->executeJS(sprintf("wp.data.dispatch('core/block-editor').insertBlock(wp.blocks.createBlock('core/paragraph',{content:'%s'}))",$shortcode));
+        $I->click( "(//button[normalize-space()='Publish'])[1]");
+        $I->wait(1);
+        $I->click( "(//button[@class='components-button editor-post-publish-button editor-post-publish-button__button is-primary'])[1]");
+        $I->wait(1);
+        $I->click( "(//a[@class='components-button is-primary'])[1]");
 
-        $I->executeJS(sprintf('wp.data.dispatch("core/block-editor").insertBlock(wp.blocks.createBlock("core/heading",{content:"%s"}))',$shortcode));
+    }
+
+    public function insert_data_to_general_field(AcceptanceTester $I , Example $example)
+    {
 
 
+
+    }
+
+    public function data_provider(): array
+    {
+        return [
+            []
+
+        ];
 
     }
 
