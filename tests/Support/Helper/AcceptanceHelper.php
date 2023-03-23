@@ -3,8 +3,9 @@
 namespace Tests\Support\Helper;
 
 use Codeception\Module\WebDriver;
+use Codeception\Module;
 
-class AcceptanceHelper extends \Codeception\Module
+class AcceptanceHelper extends Module
 {
 
 }

@@ -2,20 +2,27 @@
 
 namespace Tests\Acceptance;
 
+use Codeception\Attribute\DataProvider;
+use Codeception\Attribute\Skip;
+use JetBrains\PhpStorm\NoReturn;
 use Tests\Support\AcceptanceTester;
+use Codeception\Attribute\Before;
+use Codeception\Attribute\After;
 use Codeception\Util\Locator;
 use Facebook\WebDriver\Exception\WebDriverException;
 use \Facebook\WebDriver\WebDriverKeys;
+use \Codeception\Attribute\Examples;
 use Codeception\Example;
 
 class TestFluentFormCest
 {
-    public function _before(AcceptanceTester $I)
+
+    public function _before(AcceptanceTester $I): void
     {
         $I->wpLogin();
     }
 
-    public function Install_required_plugins(AcceptanceTester $I)
+    public function Install_required_plugins(AcceptanceTester $I): void
     {
         $I->amOnPage('/wp-admin/plugins.php');
         if (!$I->tryToSee('Fluent Forms'))
@@ -31,24 +38,40 @@ class TestFluentFormCest
             $I->installFluentFormPro();
             $I->activateFluentFormPro();
         }
+    }
+    #[DataProvider('count_existing_form')]
+    public function delete_existing_forms(AcceptanceTester $I, Example $example): void
+    {
+        $I->amOnPage('/wp-admin/admin.php?page=fluent_forms');
 
+        if($I->tryToClick($example['xpath']))
+        {
+            $I->moveMouseOver($example['xpath']);
+            $I->wait(1);
+            $I->click('Delete', "tbody tr:nth-child(1) td:nth-child(2)");
+            $I->waitForText('confirm', 2);
+            $I->click("/html[1]/body[1]/div[2]/div[1]/button[2]");
+            $I->wait(1);
+        }
+    }
+
+
+    public function count_existing_form():array
+    {
+        return [
+            ['xpath' =>'tbody tr:nth-child(1) td:nth-child(2)'],
+            ['xpath' =>'tbody tr:nth-child(1) td:nth-child(2)'],
+            ['xpath' =>'tbody tr:nth-child(1) td:nth-child(2)']
+        ];
     }
 
     //Main test function goes here
 
-    public function create_blank_form_with_general_fields(AcceptanceTester $I)
+    #[After('rename_newly_created_form')]
+    #[NoReturn] public function create_blank_form_with_general_fields(AcceptanceTester $I): void
     {
             $I->wantTo('Create a blank form with general fields');
             $I->amOnPage('/wp-admin/admin.php?page=fluent_forms');
-
-            //delete existing forms
-            $I->moveMouseOver("tbody tr:nth-child(1) td:nth-child(2)");
-            $I->wait(1);
-            $I->click('Delete', "tbody tr:nth-child(1) td:nth-child(2)");
-            $I->waitForText('confirm',2);
-            $I->click("/html[1]/body[1]/div[2]/div[1]/button[2]");
-            $I->wait(1);
-
 
             if ($I->tryToClick('Add a New Form') || $I->tryToClick('Click Here to Create Your First Form', ".fluent_form_intro")) {
                 $I->tryToMoveMouseOver("(//div[@class='ff-el-banner-text-inside ff-el-banner-text-inside-hoverable'])[1]");
@@ -75,25 +98,37 @@ class TestFluentFormCest
                 $I->tryToClick("div[class='option-fields-section option-fields-section_active'] div:nth-child(6) div:nth-child(3) div:nth-child(1)");
                 $I->waitForElementClickable("(//button[normalize-space()='Save Form'])[1]",10);
                 $I->click("(//button[normalize-space()='Save Form'])[1]");
-                $I->wait(1);
 
-                //rename form
-                $I->tryToClick("div[id='js-ff-nav-title'] span");
-                $I->tryToFillField("input[placeholder='Awesome Form']", "Acceptance Test Form");
-                $I->tryToClick("Rename", "div[aria-label='Rename Form'] div[class='el-dialog__footer']");
-                $I->tryToSee("The form is successfully updated.");
+
+
             }
     }
 
-    public function delete_existing_pages(AcceptanceTester $I)
+    public function rename_newly_created_form(AcceptanceTester $I):void
     {
-        $I->amOnPage('/wp-admin/edit.php?post_type=page');
-        $I->click("(//input[@id='cb-select-all-1'])[1]");
-        $I->selectOption("(//select[@id='bulk-action-selector-top'])[1]", "Move to Trash");
-        $I->click("(//input[@id='doaction'])[1]");
+        //rename form
+        $I->tryToClick("div[id='js-ff-nav-title'] span");
+        $I->tryToFillField("input[placeholder='Awesome Form']", "Acceptance Test Form");
+        $I->tryToClick("Rename", "div[aria-label='Rename Form'] div[class='el-dialog__footer']");
+        $I->see("The form is successfully updated.");
+
     }
 
-    public function create_new_page_with_form(AcceptanceTester $I)
+
+    public function delete_existing_pages(AcceptanceTester $I): void
+    {
+        $I->amOnPage('/wp-admin/edit.php?post_type=page');
+       if ( $I->tryToClick("(//td[@class='title column-title has-row-actions column-primary page-title'])[1]"))
+       {
+           $I->click("(//input[@id='cb-select-all-1'])[1]");
+           $I->selectOption("(//select[@id='bulk-action-selector-top'])[1]", "Move to Trash");
+           $I->click("(//input[@id='doaction'])[1]");
+           $I->see('moved to the Trash');
+       }
+    }
+
+    #[Before('delete_existing_pages')]
+    public function create_new_page_with_form(AcceptanceTester $I): void
     {
         $I->amOnPage('/wp-admin/admin.php?page=fluent_forms');
         $shortcode= $I->grabTextFrom("(//code[@title='Click to copy shortcode'])[1]");
@@ -111,7 +146,9 @@ class TestFluentFormCest
 
     }
 
-    public function insert_data_to_general_field(AcceptanceTester $I , Example $example)
+
+    #[Before('create_new_page_with_form')] #[DataProvider('data_provider')]
+    public function insert_data_to_general_field(AcceptanceTester $I , Example $example): void
     {
 
 
@@ -121,13 +158,15 @@ class TestFluentFormCest
     public function data_provider(): array
     {
         return [
-            []
+            ['name' => 'John', 'email' => 'mail@mail.com'],
+            ['name' => 'Doe', 'email' => 'doe@mail.com']
 
         ];
 
     }
 
-    public function UninstallPlugins(AcceptanceTester $I)
+    #[Skip]
+    public function UninstallPlugins(AcceptanceTester $I): void
     {
         $I->wantTo('Clean up plugins');
         try {
