@@ -7,27 +7,21 @@ extensions:
             0: chromedriver --url-base=wd/hub
             sleep: 1
             wait: 10
-#        - Codeception\Extension\RunFailed:
-
 
 modules:
     enabled:
-        - WebDriver:
-
+        - Tests\Support\Helper\Acceptance\AcceptanceHelper:
         - Db:
-            dsn: 'mysql:host=localhost;dbname=fluentsmtp'
-            user: 'admin'
-            password: 'admin'
-#            dump: 'tests/_data/dump.sql'
-            populate: true
-            cleanup: true
+
 
     config:
-        WebDriver:
+        Tests\Support\Helper\Acceptance\AcceptanceHelper:
             url: https://fluentsmtp.com
             browser: chrome
             clear_cookies: true
             port: 9515
+            wp_username: 'admin'
+            wp_password: 'admin'
             capabilities:
                 acceptInsecureCerts: true
                 chromeOptions:
@@ -36,6 +30,12 @@ modules:
                         - "--disable-gpu"
                         - "--window-size=1920,1080"
 
+        Db:
+            dsn: 'mysql:host=localhost;dbname=fluentsmtp'
+            user: 'admin'
+            password: 'admin'
+            populate: true
+            cleanup: true
 
 
 # add Codeception\Step\Retry trait to AcceptanceTester to enable retries

@@ -14,6 +14,7 @@ use \Facebook\WebDriver\WebDriverKeys;
 use \Codeception\Attribute\Examples;
 use Codeception\Example;
 
+
 class TestFluentFormCest
 {
 
@@ -54,7 +55,6 @@ class TestFluentFormCest
             $I->wait(1);
         }
     }
-
 
     public function count_existing_form():array
     {
@@ -98,7 +98,6 @@ class TestFluentFormCest
                 $I->tryToClick("div[class='option-fields-section option-fields-section_active'] div:nth-child(6) div:nth-child(3) div:nth-child(1)");
                 $I->waitForElementClickable("(//button[normalize-space()='Save Form'])[1]",10);
                 $I->click("(//button[normalize-space()='Save Form'])[1]");
-
 
 
             }
