@@ -2,11 +2,9 @@
 namespace Tests\Support\Helper\Acceptance\Selectors;
 abstract class AccepTestSelec
 {
-    const pluginPage = '/wp-admin/plugins.php';
     const fluentForm = 'fluentform.zip';
     const fluentFormPdf = 'fluentforms-pdf.zip';
     const fluentFormPro = 'fluentformpro.zip';
-    const pluginInstallPage = 'wp-admin/plugin-install.php';
     const uploadField = '.upload';
     const inputField = 'input[type="file"]';
 
