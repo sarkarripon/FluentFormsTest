@@ -27,58 +27,20 @@ class AcceptanceTester extends \Codeception\Actor
 
     /**
      * @author Sarkar Ripon
-     * Install FluentForm plugin
+     * @param string $pluginName
      * @return void
+     * Install plugin from local
      */
-    public function installFluentForm(): void
+    public function installPlugin(string $pluginName): void
     {
-        //Install FluentForm plugin from local
-        $this->wantTo('Install FluentForm plugin');
+        $this->wantTo('Install ' . $pluginName . ' plugin');
         $this->amOnPage(GlobalPageSelec::pluginInstallPage);
         $this->seeElement(AccepTestSelec::uploadField);
         $this->click(AccepTestSelec::uploadField);
-        $this->attachFile(AccepTestSelec::inputField,AccepTestSelec::fluentForm);
+        $this->attachFile(AccepTestSelec::inputField,$pluginName);
         $this->seeElement(AccepTestSelec::submitButton);
         $this->click(AccepTestSelec::submitButton);
         $this->waitForText('Activate Plugin',5,AccepTestSelec::activateButton);
-        $this->click(AccepTestSelec::activateButton);
-    }
-
-    /**
-     * @author Sarkar Ripon
-     * Install FluentForm PDF Generator plugin
-     * @return void
-     */
-    public function installFluentFormPdfGenerator(): void
-    {
-        //Install FluentForm PDF Generator plugin from local
-        $this->wantTo('Install FluentForm PDF generator plugin');
-        $this->amOnPage(GlobalPageSelec::pluginInstallPage);
-        $this->seeElement(AccepTestSelec::uploadField);
-        $this->click(AccepTestSelec::uploadField);
-        $this->attachFile(AccepTestSelec::inputField,AccepTestSelec::fluentFormPdf);
-        $this->seeElement(AccepTestSelec::submitButton);
-        $this->click(AccepTestSelec::submitButton);
-        $this->waitForText('Activate Plugin',10,AccepTestSelec::activateButton);
-        $this->click(AccepTestSelec::activateButton);
-    }
-
-    /**
-     * @author Sarkar Ripon
-     * Install FluentForm Pro plugin
-     * @return void
-     */
-    public function installFluentFormPro(): void
-    {
-        //Install FluentForm Pro plugin from local
-        $this->wantTo('Install FluentForm Pro plugin');
-        $this->amOnPage(GlobalPageSelec::pluginInstallPage);
-        $this->seeElement(AccepTestSelec::uploadField);
-        $this->click(AccepTestSelec::uploadField);
-        $this->attachFile(AccepTestSelec::inputField,AccepTestSelec::fluentFormPro);
-        $this->seeElement(AccepTestSelec::submitButton);
-        $this->click(AccepTestSelec::submitButton);
-        $this->waitForText('Activate Plugin',10,AccepTestSelec::activateButton);
         $this->click(AccepTestSelec::activateButton);
     }
 
@@ -107,8 +69,8 @@ class AcceptanceTester extends \Codeception\Actor
 
     /**
      * @author Sarkar Ripon
-     * Remove FluentForm Pro license
      * @return void
+     * Remove FluentForm Pro license
      */
     public function removeFluentFormProLicense():void
     {
@@ -116,56 +78,24 @@ class AcceptanceTester extends \Codeception\Actor
         $this->see('Enter your license key', AccepTestSelec::licenseBtn);
     }
 
-    /**
-     * @author Sarkar Ripon
-     * Uninstall FluentForm Pro plugin
-     * @return void
-     */
-    public function uninstallFluentFormPro():void
-    {
-        //delete fluent form pro
-        $this->click('Deactivate', AccepTestSelec::fFormProRemoveBtn);
-        $this->waitForText('Plugin deactivated.',10,AccepTestSelec::msg);
-        $this->see('Plugin deactivated.',AccepTestSelec::msg);
-        $this->click('Delete', AccepTestSelec::fFormProRemoveBtn);
-        $this->tryToAcceptPopup();
-        $this->waitForText('Fluent Forms Pro Add On Pack was successfully deleted.');
-        $this->see('Fluent Forms Pro Add On Pack was successfully deleted.');
-    }
 
     /**
      * @author Sarkar Ripon
-     * Uninstall FluentForm PDF Generator plugin
+     * @param string $pluginSlug
      * @return void
+     * Uninstall plugin
      */
-    public function uninstallFluentFormPdfGenerator():void
+    public function uninstallPlugin(string $pluginSlug):void
     {
-        //delete fluent form pdf generator
-        $this->click('Deactivate', AccepTestSelec::fFormPdfRemoveBtn);
+        $slug = str_replace(" ", "-", strtolower($pluginSlug));
+
+        $this->click('Deactivate', "tr[data-slug='".$slug."'] td[class='plugin-title column-primary']");
         $this->waitForText('Plugin deactivated.',10,AccepTestSelec::msg);
         $this->see('Plugin deactivated.',AccepTestSelec::msg);
-        $this->click('Delete', AccepTestSelec::fFormPdfRemoveBtn);
+        $this->click('Delete', "tr[data-slug='".$slug."'] td[class='plugin-title column-primary']");
         $this->tryToAcceptPopup();
-        $this->waitForText('Fluent Forms PDF Generator was successfully deleted.');
-        $this->see('Fluent Forms PDF Generator was successfully deleted.');
+        $this->waitForText('successfully deleted.');
+        $this->see('successfully deleted.');
     }
-
-    /**
-     * @author Sarkar Ripon
-     * Uninstall FluentForm plugin
-     * @return void
-     */
-    public function uninstallFluentForm():void
-    {
-        //delete fluent form
-        $this->click('Deactivate', AccepTestSelec::fFormRemoveBtn);
-        $this->waitForText('Plugin deactivated.',10,AccepTestSelec::msg);
-        $this->see('Plugin deactivated.',AccepTestSelec::msg);
-        $this->click('Delete', AccepTestSelec::fFormRemoveBtn);
-        $this->tryToAcceptPopup();
-        $this->waitForText('Fluent Forms was successfully deleted.');
-        $this->see('Fluent Forms was successfully deleted.');
-    }
-
 
 }

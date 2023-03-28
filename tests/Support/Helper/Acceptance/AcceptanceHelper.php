@@ -8,8 +8,8 @@ class AcceptanceHelper extends WebDriver
 {
     /**
      * @author Sarkar Ripon
-     * Login to WordPress
      * @return void
+     * Login to WordPress
      */
     public function wpLogin(): void
     {
@@ -21,19 +21,20 @@ class AcceptanceHelper extends WebDriver
     }
 
     /**
+     * @author Sarkar Ripon
      * @return void
      * @throws Exception
-     * @author Sarkar Ripon
      * logout from WordPress
      */
     public function wpLogout(): void
     {
+        $this->wait(2);
         $this->amOnPage('/wp-admin/index.php');
         $this->moveMouseOver("(//span[@class='display-name'])[1]");
         $this->waitForText('Log Out',1);
         $this->click('Log Out');
         $this->waitForText('You are now logged out.',5);
-        $this->seeInCurrentUrl('/wp-login.php?loggedout=true&wp_lang=en_US');
+        $this->seeCurrentUrlMatches('/(^|\?)loggedout=true($|&)/');
         $this->see('You are now logged out.');
     }
 

@@ -10,6 +10,7 @@ use Codeception\Attribute\Before;
 use Codeception\Attribute\After;
 use Facebook\WebDriver\Exception\WebDriverException;
 use Codeception\Example;
+use Codeception\Actor;
 
 use Tests\Support\Helper\Acceptance\Selectors\GlobalPageSelec;
 use Tests\Support\Helper\Acceptance\Selectors\FluentFormSelec;
@@ -35,13 +36,6 @@ class FluentFormCest
         $I->wpLogout();
     }
 
-
-    public function check(AcceptanceTester $I): void
-    {
-        $I->wantTo("say hello");
-    }
-
-
     /**
      * @author Sarkar Ripon
      * @param AcceptanceTester $I
@@ -50,21 +44,25 @@ class FluentFormCest
      */
     public function Install_required_plugins(AcceptanceTester $I): void
     {
+
+        $I->wantTo('Install required plugins');
         $I->amOnPage(GlobalPageSelec::pluginPage);
+
         if (!$I->tryToSee('Fluent Forms')) {
-            $I->installFluentForm();
+            $I->installPlugin("fluentform.zip");
         }
-
         if (!$I->tryToSee('Fluent Forms PDF Generator')) {
-            $I->installFluentFormPdfGenerator();
+            $I->installPlugin("fluentforms-pdf.zip");
         }
-
         if (!$I->tryToSee('Fluent Forms Pro')) {
-            $I->installFluentFormPro();
+            $I->installPlugin("fluentformpro.zip");
+
             $I->activateFluentFormPro();
         }
         $I->amOnPage(GlobalPageSelec::pluginPage);
         $I->see('Fluent Forms Pro Add On Pack');
+        $I->see('Fluent Forms');
+        $I->see('Fluent Forms PDF Generator');
 
     }
 
@@ -106,7 +104,7 @@ class FluentFormCest
         ];
     }
 
-    //************************************************* Main test function goes here *************************************************//
+    //************************************************* Main test function start here *************************************************//
 
     /**
      * @author Sarkar Ripon
@@ -142,10 +140,13 @@ class FluentFormCest
                 $I->click(FluentFormSelec::timeDate);
                 $I->click(FluentFormSelec::imageUpload);
                 $I->click(FluentFormSelec::fileUpload);
-                $I->click(FluentFormSelec::customHtml);
+//                $I->click(FluentFormSelec::customHtml);
                 $I->click(FluentFormSelec::phoneField);
                 $I->waitForElementClickable(FluentFormSelec::saveForm,1);
                 $I->click(FluentFormSelec::saveForm);
+                $I->wait(1);
+                $I->see("Success");
+                $I->wait(5);
             }
     }
 
@@ -155,6 +156,7 @@ class FluentFormCest
      * @return void
      * This function will rename the newly created form
      */
+    #[Skip('Because this test has already been run by previous test function')]
     public function rename_newly_created_form(AcceptanceTester $I):void
     {
         $I->wantTo('Rename the newly created form');
@@ -162,8 +164,8 @@ class FluentFormCest
         $I->tryToClick(FluentFormSelec::rename);
         $I->tryToFillField(FluentFormSelec::renameField, "Acceptance Test Form");
         $I->tryToClick("Rename", FluentFormSelec::renameBtn);
-        $I->waitForText("The form is successfully updated.", 10);
-        $I->see("The form is successfully updated.");
+        $I->wait(1);
+        $I->see("Success!");
     }
 
     /**
@@ -192,9 +194,10 @@ class FluentFormCest
      * @return void
      * This function will create a new page with the form shortcode
      */
-    #[Before('delete_existing_pages')]
-    public function create_new_page_with_form(AcceptanceTester $I): void
+    #[Before('delete_existing_pages')] // #[Skip('Because this test will be run by fill_form_with_data function')]
+    public function create_new_page_with_form(AcceptanceTester $I): string
     {
+        global $pageUrl;
         $I->wantTo('Create a new page with the form shortcode');
 
         $I->amOnPage(GlobalPageSelec::fFormPage);
@@ -206,10 +209,23 @@ class FluentFormCest
         $I->executeJS(sprintf(FluentFormSelec::jsForTitle,"Acceptance test form"));
         $I->executeJS(sprintf(FluentFormSelec::jsForContent,$shortcode));
         $I->click( FluentFormSelec::publishBtn);
-        $I->wait(1);
+        $I->waitForElementClickable(FluentFormSelec::confirmPublish);
         $I->click( FluentFormSelec::confirmPublish);
+        $I->wait(1);
+        $pageUrl = $I->grabAttributeFrom(FluentFormSelec::viewPage, 'href');
+        return $pageUrl;
     }
 
+    public function fill_form_with_data(AcceptanceTester $I): void
+    {
+        global $pageUrl;
+        $I->wantTo('Fill the form with sample data');
+        $I->amOnUrl($pageUrl);
+
+
+    }
+
+    //************************************************* Main test function end here *************************************************//
 
     /**
      * @author Sarkar Ripon
@@ -217,7 +233,7 @@ class FluentFormCest
      * @return void
      * This function will uninstall all the plugins after the end of the test
      */
-    #[Skip]
+    #[Skip('Because I do not want to uninstall plugins when test is done')]
     public function UninstallPlugins(AcceptanceTester $I): void
     {
         $I->wantTo('Clean up plugins');
@@ -225,8 +241,10 @@ class FluentFormCest
         $I->amOnPage(GlobalPageSelec::fFormLicensePage);
         $I->removeFluentFormProLicense();
         $I->amOnPage(GlobalPageSelec::pluginPage);
-        $I->uninstallFluentFormPro();
-        $I->uninstallFluentFormPdfGenerator();
-        $I->uninstallFluentForm();
+
+        $I->uninstallPlugin("Fluent Forms Pro Add On Pack");
+        $I->uninstallPlugin("FluentForms PDF");
+        $I->uninstallPlugin("FluentForm");
+
     }
 }

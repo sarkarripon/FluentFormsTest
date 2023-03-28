@@ -34,6 +34,9 @@ class FluentFormSelec
     const rename = "div[id='js-ff-nav-title'] span";
     const renameField = "input[placeholder='Awesome Form']";
     const renameBtn = "div[aria-label='Rename Form'] div[class='el-dialog__footer']";
+    const successMsg = "(//div[@role='alert'])[1]";
+
+
     const previousPageAvailable = "(//td[@class='title column-title has-row-actions column-primary page-title'])[1]";
     const selectAllCheckMark = "(//input[@id='cb-select-all-1'])[1]";
     const selectMoveToTrash = "(//select[@id='bulk-action-selector-top'])[1]";
@@ -44,6 +47,7 @@ class FluentFormSelec
     const jsForContent = "wp.data.dispatch('core/block-editor').insertBlock(wp.blocks.createBlock('core/paragraph',{content:'%s'}))";
     const publishBtn = "(//button[normalize-space()='Publish'])[1]";
     const confirmPublish = "(//button[@class='components-button editor-post-publish-button editor-post-publish-button__button is-primary'])[1]";
+    const viewPage = "a[class='components-button is-primary']";
 
 
 }

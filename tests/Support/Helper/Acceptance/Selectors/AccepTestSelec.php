@@ -15,9 +15,6 @@ abstract class AccepTestSelec
     const licenseInputField = "input[name='_ff_fluentform_pro_license_key']";
     const activateLicenseBtn = "input[value='Activate License']";
     const licenseBtn = "form[method='post']";
-    const fFormProRemoveBtn = "tr[data-slug='fluent-forms-pro-add-on-pack'] td[class='plugin-title column-primary']";
-    const fFormPdfRemoveBtn = "tr[data-slug='fluentforms-pdf'] td[class='plugin-title column-primary']";
-    const fFormRemoveBtn = "tr[data-slug='fluentform'] td[class='plugin-title column-primary']";
     const msg = "div[id='message'] p";
 
 }

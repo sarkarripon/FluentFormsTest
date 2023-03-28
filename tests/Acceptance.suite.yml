@@ -23,6 +23,7 @@ modules:
             wp_username: 'admin'
             wp_password: 'admin'
             capabilities:
+                unexpectedAlertBehaviour: 'accept'
                 acceptInsecureCerts: true
                 chromeOptions:
                     args:
