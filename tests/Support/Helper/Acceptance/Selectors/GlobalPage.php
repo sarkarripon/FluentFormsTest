@@ -1,7 +1,7 @@
 <?php
 namespace Tests\Support\Helper\Acceptance\Selectors;
 
-class GlobalPageSelec
+class GlobalPage
 {
     const pluginPage = '/wp-admin/plugins.php';
     const pluginInstallPage = 'wp-admin/plugin-install.php';

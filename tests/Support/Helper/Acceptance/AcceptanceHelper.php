@@ -38,4 +38,19 @@ class AcceptanceHelper extends WebDriver
         $this->see('You are now logged out.');
     }
 
+    /**
+     * @author Sarkar Ripon
+     * @param string $selector
+     * @return void
+     * @throws Exception
+     * This function will wait for the element to be visible and then click on it.
+     * This is a workaround for the issue of Codeception not waiting for the element to be visible before clicking on it.
+     */
+    public function clicked(string $selector): void
+    {
+        $this->wait(1);
+        $this->waitForElementVisible($selector, 10);
+        parent::click($selector);
+    }
+
 }

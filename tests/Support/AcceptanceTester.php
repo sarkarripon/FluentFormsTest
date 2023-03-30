@@ -3,8 +3,14 @@
 declare(strict_types=1);
 namespace Tests\Support;
 
-use Tests\Support\Helper\Acceptance\Selectors\GlobalPageSelec;
+use Codeception\Attribute\DataProvider;
+use Codeception\Attribute\Skip;
+use Codeception\Example;
+use Tests\Support\Helper\Acceptance\Selectors\DeleteForm;
+use Tests\Support\Helper\Acceptance\Selectors\GlobalPage;
 use Tests\Support\Helper\Acceptance\Selectors\AccepTestSelec;
+use Tests\Support\Helper\Acceptance\Selectors\NewForm;
+use Tests\Support\Helper\Acceptance\Selectors\RenameForm;
 
 /**
  * Inherited Methods
@@ -34,7 +40,7 @@ class AcceptanceTester extends \Codeception\Actor
     public function installPlugin(string $pluginName): void
     {
         $this->wantTo('Install ' . $pluginName . ' plugin');
-        $this->amOnPage(GlobalPageSelec::pluginInstallPage);
+        $this->amOnPage(GlobalPage::pluginInstallPage);
         $this->seeElement(AccepTestSelec::uploadField);
         $this->click(AccepTestSelec::uploadField);
         $this->attachFile(AccepTestSelec::inputField,$pluginName);
@@ -96,6 +102,41 @@ class AcceptanceTester extends \Codeception\Actor
         $this->tryToAcceptPopup();
         $this->waitForText('successfully deleted.');
         $this->see('successfully deleted.');
+    }
+
+
+
+
+    /**
+     * @author Sarkar Ripon
+     * @return void
+     * Create a new form
+     *
+     */
+    public function createNewForm():void
+    {
+        $this->amOnPage(GlobalPage::fFormPage);
+        if ($this->tryToClick('Add a New Form') ||
+            $this->tryToClick('Click Here to Create Your First Form', NewForm::createFirstForm)) {
+            $this->tryToMoveMouseOver(NewForm::blankForm);
+            $this->tryToClick('Create Form');
+//            $this->wait(1);
+        }
+    }
+
+    /**
+     * @author Sarkar Ripon
+     * @param $formName
+     * @return void
+     * This function will rename the form
+     */
+    public function renameForm($formName):void
+    {
+        $this->tryToClick(RenameForm::rename);
+        $this->tryToFillField(RenameForm::renameField, $formName);
+        $this->tryToClick("Rename", RenameForm::renameBtn);
+        $this->wait(1);
+        $this->see("Success!");
     }
 
 }

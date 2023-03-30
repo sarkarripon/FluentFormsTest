@@ -2,9 +2,6 @@
 namespace Tests\Support\Helper\Acceptance\Selectors;
 abstract class AccepTestSelec
 {
-    const fluentForm = 'fluentform.zip';
-    const fluentFormPdf = 'fluentforms-pdf.zip';
-    const fluentFormPro = 'fluentformpro.zip';
     const uploadField = '.upload';
     const inputField = 'input[type="file"]';
 
