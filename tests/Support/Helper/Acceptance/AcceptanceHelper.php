@@ -49,8 +49,23 @@ class AcceptanceHelper extends WebDriver
     public function clicked(string $selector): void
     {
         $this->wait(1);
-        $this->waitForElementVisible($selector, 10);
+        $this->moveMouseOver($selector);
         parent::click($selector);
+    }
+
+    /**
+     * @param string $text
+     * @return void
+     * @throws Exception
+     * @author Sarkar Ripon
+     * This function will wait for the element until it can be seen.
+     * This is a workaround for the issue of Codeception not waiting for the element to be visible before seen it.
+     */
+    public function seeText(string $text): void
+    {
+        $this->waitForText($text);
+        parent::see($text);
+        $this->enableImplicitWait();
     }
 
 }

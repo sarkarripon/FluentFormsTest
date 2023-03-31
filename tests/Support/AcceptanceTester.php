@@ -10,6 +10,7 @@ use Tests\Support\Helper\Acceptance\Selectors\DeleteForm;
 use Tests\Support\Helper\Acceptance\Selectors\GlobalPage;
 use Tests\Support\Helper\Acceptance\Selectors\AccepTestSelec;
 use Tests\Support\Helper\Acceptance\Selectors\NewForm;
+use Tests\Support\Helper\Acceptance\Selectors\NewPage;
 use Tests\Support\Helper\Acceptance\Selectors\RenameForm;
 
 /**
@@ -70,7 +71,6 @@ class AcceptanceTester extends \Codeception\Actor
             $this->click(AccepTestSelec::activateLicenseBtn);
             $this->see('Your license is active! Enjoy Fluent Forms Pro Add On');
         }
-
     }
 
     /**
@@ -83,8 +83,6 @@ class AcceptanceTester extends \Codeception\Actor
         $this->tryToClick('Deactivate License',AccepTestSelec::licenseBtn);
         $this->see('Enter your license key', AccepTestSelec::licenseBtn);
     }
-
-
     /**
      * @author Sarkar Ripon
      * @param string $pluginSlug
@@ -104,14 +102,33 @@ class AcceptanceTester extends \Codeception\Actor
         $this->see('successfully deleted.');
     }
 
+    /**
+     * @return void
+     * This function will delete all the existing forms
+     * @author Sarkar Ripon
+     */
+    public function deleteExistingForms(): void
+    {
+        $this->amOnPage(GlobalPage::fFormPage);
 
-
-
+        $tr = count($this->grabMultiple('tr'));
+        for ($i = 1; $i < ($tr); $i++) {
+            do {
+                try {
+                    $this->click('Delete', DeleteForm::deleteBtn);
+                    $this->waitForText('confirm', 2);
+                    $this->click(DeleteForm::confirmBtn);
+                    $this->wait(1);
+                } catch (\Exception $e) {
+                    $this->wait(1);
+                }
+            } while ($this->tryToClick(DeleteForm::deleteBtn)==true);
+        }
+    }
     /**
      * @author Sarkar Ripon
      * @return void
      * Create a new form
-     *
      */
     public function createNewForm():void
     {
@@ -120,7 +137,6 @@ class AcceptanceTester extends \Codeception\Actor
             $this->tryToClick('Click Here to Create Your First Form', NewForm::createFirstForm)) {
             $this->tryToMoveMouseOver(NewForm::blankForm);
             $this->tryToClick('Create Form');
-//            $this->wait(1);
         }
     }
 
@@ -137,6 +153,50 @@ class AcceptanceTester extends \Codeception\Actor
         $this->tryToClick("Rename", RenameForm::renameBtn);
         $this->wait(1);
         $this->see("Success!");
+    }
+
+    /**
+     * @return void
+     * This function will delete all the existing pages
+     * @author Sarkar Ripon
+     */
+    public function deleteExistingPages(): void
+    {
+        $this->amOnPage(GlobalPage::newPageCreationPage);
+        if ( $this->tryToClick(NewPage::previousPageAvailable))
+        {
+            $this->click(NewPage::selectAllCheckMark);
+            $this->selectOption(NewPage::selectMoveToTrash, "Move to Trash");
+            $this->click(NewPage::applyBtn);
+            $this->see('moved to the Trash');
+        }
+    }
+
+    /**
+     * @param $title
+     * @param $content
+     * @return string
+     * This function will create a new page with title and content
+     * @author Sarkar Ripon
+     */
+    public function createNewPage($title, $content=null): string
+    {
+        global $pageUrl;
+        $this->amOnPage(GlobalPage::fFormPage);
+        if(!isset($content)){
+            $content = $this->grabTextFrom(NewPage::formShortCode);
+        }
+        $this->amOnPage(GlobalPage::newPageCreationPage);
+        $this->click(NewPage::addNewPage);
+        $this->wait(1);
+        $this->executeJS(sprintf(NewPage::jsForTitle,$title));
+        $this->executeJS(sprintf(NewPage::jsForContent,$content));
+        $this->click( NewPage::publishBtn);
+        $this->waitForElementClickable(NewPage::confirmPublish);
+        $this->click( NewPage::confirmPublish);
+        $this->wait(1);
+        $pageUrl = $this->grabAttributeFrom(NewPage::viewPage, 'href');
+        return $pageUrl;
     }
 
 }
