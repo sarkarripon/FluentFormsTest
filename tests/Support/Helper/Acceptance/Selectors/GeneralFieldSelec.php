@@ -2,19 +2,16 @@
 
 namespace Tests\Support\Helper\Acceptance\Selectors;
 
-class GeneralField
+class GeneralFieldSelec
 {
     //general fields
     public static function fieldCustomise($fieldNumber): string
     {
         return "(//div[@class='item-actions-wrapper hover-action-middle'])[$fieldNumber]";
     }
-    public static function selectContainer($containerNumber): string
-    {
-        return "(//i[contains(text(),'+')])[$containerNumber]";
-    }
     const gnrlField = "(//h5[normalize-space()='General Fields'])[1]";
     const nameField = "//div[@class='vddl-draggable btn-element'][normalize-space()='Name Fields']";
+//    public static $nameField = "//div[@class='vddl-draggable btn-element'][normalize-space()='Name Fields']";
     const emailField = "(//div[@class='vddl-draggable btn-element'][normalize-space()='Email Address'])[1]";
     const simpleText = "(//div[@class='vddl-draggable btn-element'][normalize-space()='Simple Text'])[1]";
     const maskInput = "(//div[@class='vddl-draggable btn-element'][normalize-space()='Mask Input'])[1]";
@@ -32,4 +29,15 @@ class GeneralField
     const fileUpload = "(//div[@class='vddl-draggable btn-element'][normalize-space()='File Upload'])[1]";
     const customHtml = "(//div[@class='vddl-draggable btn-element'][normalize-space()='Custom HTML'])[1]";
     const phoneField = "(//div[@class='vddl-draggable btn-element'][normalize-space()='Phone/Mobile Field'])[1]";
+
+
+    const generalFields = [
+        'nameField' => "//div[@class='vddl-draggable btn-element'][normalize-space()='Name Fields']",
+        'emailField' => "(//div[@class='vddl-draggable btn-element'][normalize-space()='Email Address'])[1]",
+        'simpleText' => "(//div[@class='vddl-draggable btn-element'][normalize-space()='Simple Text'])[1]",
+        'maskInput' => "(//div[@class='vddl-draggable btn-element'][normalize-space()='Mask Input'])[1]"
+        ];
+
+
+
 }

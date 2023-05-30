@@ -19,6 +19,8 @@ modules:
             url: https://fluentsmtp.com
             browser: chrome
             clear_cookies: true
+            restart: false
+            pageload_timeout: 
             port: 9515
             wp_username: 'admin'
             wp_password: 'admin'

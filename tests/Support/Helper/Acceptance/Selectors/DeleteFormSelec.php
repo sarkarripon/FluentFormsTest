@@ -2,7 +2,7 @@
 
 namespace Tests\Support\Helper\Acceptance\Selectors;
 
-class DeleteForm
+class DeleteFormSelec
 {
     //existing form delete buttons
     const deleteBtn = "tbody tr:nth-child(1) td:nth-child(2)";

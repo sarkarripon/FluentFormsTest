@@ -6,7 +6,7 @@ abstract class AccepTestSelec
     const inputField = 'input[type="file"]';
 
     const submitButton = '#install-plugin-submit';
-    const activateButton = '.button.button-primary';
+    const activateButton = "(//a[normalize-space()='Activate Plugin'])[1]";
     const licenseKey = "tests/Support/Data/licensekey.txt";
     const activeNowBtn = "div[class='error error_notice_ff_fluentform_pro_license'] p";
     const licenseInputField = "input[name='_ff_fluentform_pro_license_key']";

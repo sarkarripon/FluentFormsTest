@@ -2,7 +2,7 @@
 
 namespace Tests\Support\Helper\Acceptance\Selectors;
 
-class RenameForm
+class RenameFormSelec
 {
     //rename form
     const rename = "div[id='js-ff-nav-title'] span";

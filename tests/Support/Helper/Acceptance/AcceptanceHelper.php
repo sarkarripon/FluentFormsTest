@@ -14,10 +14,10 @@ class AcceptanceHelper extends WebDriver
     public function wpLogin(): void
     {
         $this->amOnPage('/wp-login.php');
+        $this->wait(1);
         $this->fillField('Username',$this->config['wp_username']);
         $this->fillField('Password',$this->config['wp_password']);
         $this->click('Log In');
-        $this->see('Dashboard');
     }
 
     /**

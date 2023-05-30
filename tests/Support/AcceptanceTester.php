@@ -6,12 +6,15 @@ namespace Tests\Support;
 use Codeception\Attribute\DataProvider;
 use Codeception\Attribute\Skip;
 use Codeception\Example;
-use Tests\Support\Helper\Acceptance\Selectors\DeleteForm;
-use Tests\Support\Helper\Acceptance\Selectors\GlobalPage;
+use Tests\Support\Helper\Acceptance\Selectors\AdvancedFieldSelec;
+use Tests\Support\Helper\Acceptance\Selectors\ContainerSelec;
+use Tests\Support\Helper\Acceptance\Selectors\DeleteFormSelec;
+use Tests\Support\Helper\Acceptance\Selectors\GeneralFieldSelec;
+use Tests\Support\Helper\Acceptance\Selectors\GlobalPageSelec;
 use Tests\Support\Helper\Acceptance\Selectors\AccepTestSelec;
-use Tests\Support\Helper\Acceptance\Selectors\NewForm;
-use Tests\Support\Helper\Acceptance\Selectors\NewPage;
-use Tests\Support\Helper\Acceptance\Selectors\RenameForm;
+use Tests\Support\Helper\Acceptance\Selectors\NewFormSelec;
+use Tests\Support\Helper\Acceptance\Selectors\NewPageSelec;
+use Tests\Support\Helper\Acceptance\Selectors\RenameFormSelec;
 
 /**
  * Inherited Methods
@@ -41,7 +44,7 @@ class AcceptanceTester extends \Codeception\Actor
     public function installPlugin(string $pluginName): void
     {
         $this->wantTo('Install ' . $pluginName . ' plugin');
-        $this->amOnPage(GlobalPage::pluginInstallPage);
+        $this->amOnPage(GlobalPageSelec::pluginInstallPage);
         $this->seeElement(AccepTestSelec::uploadField);
         $this->click(AccepTestSelec::uploadField);
         $this->attachFile(AccepTestSelec::inputField,$pluginName);
@@ -109,20 +112,20 @@ class AcceptanceTester extends \Codeception\Actor
      */
     public function deleteExistingForms(): void
     {
-        $this->amOnPage(GlobalPage::fFormPage);
+        $this->amOnPage(GlobalPageSelec::fFormPage);
 
         $tr = count($this->grabMultiple('tr'));
         for ($i = 1; $i < ($tr); $i++) {
             do {
                 try {
-                    $this->click('Delete', DeleteForm::deleteBtn);
+                    $this->click('Delete', DeleteFormSelec::deleteBtn);
                     $this->waitForText('confirm', 2);
-                    $this->click(DeleteForm::confirmBtn);
+                    $this->click(DeleteFormSelec::confirmBtn);
                     $this->wait(1);
                 } catch (\Exception $e) {
                     $this->wait(1);
                 }
-            } while ($this->tryToClick(DeleteForm::deleteBtn)==true);
+            } while ($this->tryToClick(DeleteFormSelec::deleteBtn)==true);
         }
     }
     /**
@@ -130,12 +133,12 @@ class AcceptanceTester extends \Codeception\Actor
      * @return void
      * Create a new form
      */
-    public function createNewForm():void
+    public function initiateNewForm():void
     {
-        $this->amOnPage(GlobalPage::fFormPage);
+        $this->amOnPage(GlobalPageSelec::fFormPage);
         if ($this->tryToClick('Add a New Form') ||
-            $this->tryToClick('Click Here to Create Your First Form', NewForm::createFirstForm)) {
-            $this->tryToMoveMouseOver(NewForm::blankForm);
+            $this->tryToClick('Click Here to Create Your First Form', NewFormSelec::createFirstForm)) {
+            $this->tryToMoveMouseOver(NewFormSelec::blankForm);
             $this->tryToClick('Create Form');
         }
     }
@@ -148,9 +151,9 @@ class AcceptanceTester extends \Codeception\Actor
      */
     public function renameForm($formName):void
     {
-        $this->tryToClick(RenameForm::rename);
-        $this->tryToFillField(RenameForm::renameField, $formName);
-        $this->tryToClick("Rename", RenameForm::renameBtn);
+        $this->tryToClick(RenameFormSelec::rename);
+        $this->tryToFillField(RenameFormSelec::renameField, $formName);
+        $this->tryToClick("Rename", RenameFormSelec::renameBtn);
         $this->wait(1);
         $this->see("Success!");
     }
@@ -162,12 +165,12 @@ class AcceptanceTester extends \Codeception\Actor
      */
     public function deleteExistingPages(): void
     {
-        $this->amOnPage(GlobalPage::newPageCreationPage);
-        if ( $this->tryToClick(NewPage::previousPageAvailable))
+        $this->amOnPage(GlobalPageSelec::newPageCreationPage);
+        if ( $this->tryToClick(NewPageSelec::previousPageAvailable))
         {
-            $this->click(NewPage::selectAllCheckMark);
-            $this->selectOption(NewPage::selectMoveToTrash, "Move to Trash");
-            $this->click(NewPage::applyBtn);
+            $this->click(NewPageSelec::selectAllCheckMark);
+            $this->selectOption(NewPageSelec::selectMoveToTrash, "Move to Trash");
+            $this->click(NewPageSelec::applyBtn);
             $this->see('moved to the Trash');
         }
     }
@@ -182,21 +185,40 @@ class AcceptanceTester extends \Codeception\Actor
     public function createNewPage($title, $content=null): string
     {
         global $pageUrl;
-        $this->amOnPage(GlobalPage::fFormPage);
+        $this->amOnPage(GlobalPageSelec::fFormPage);
         if(!isset($content)){
-            $content = $this->grabTextFrom(NewPage::formShortCode);
+            $content = $this->grabTextFrom(NewPageSelec::formShortCode);
         }
-        $this->amOnPage(GlobalPage::newPageCreationPage);
-        $this->click(NewPage::addNewPage);
+        $this->amOnPage(GlobalPageSelec::newPageCreationPage);
+        $this->click(NewPageSelec::addNewPage);
         $this->wait(1);
-        $this->executeJS(sprintf(NewPage::jsForTitle,$title));
-        $this->executeJS(sprintf(NewPage::jsForContent,$content));
-        $this->click( NewPage::publishBtn);
-        $this->waitForElementClickable(NewPage::confirmPublish);
-        $this->click( NewPage::confirmPublish);
+        $this->executeJS(sprintf(NewPageSelec::jsForTitle,$title));
+        $this->executeJS(sprintf(NewPageSelec::jsForContent,$content));
+        $this->click( NewPageSelec::publishBtn);
+        $this->waitForElementClickable(NewPageSelec::confirmPublish);
+        $this->click( NewPageSelec::confirmPublish);
         $this->wait(1);
-        $pageUrl = $this->grabAttributeFrom(NewPage::viewPage, 'href');
-        return $pageUrl;
+        $pageUrl = $this->grabAttributeFrom(NewPageSelec::viewPage, 'href');
+        return $pageUrl; // it will return the page url and assign it to $pageUrl global variable above.
     }
+
+    public function createFormWithAdvancedField($inputFields = array()): void
+    {
+        $this->wantTo('Create a form for integrations');
+        foreach ($inputFields as $inputField) {
+            $selector = constant(AdvancedFieldSelec::class . '::' . $inputField);
+            $this->clicked($selector);
+        }
+
+    }
+//    public function insertContainer($inputFields = array()): void
+//    {
+//        $this->wantTo('Create a form for integrations');
+//        foreach ($inputFields as $inputField) {
+//            $selector = constant(ContainerSelec::class . '::' . $inputField);
+//            $this->clicked($selector);
+//        }
+//
+//    }
 
 }

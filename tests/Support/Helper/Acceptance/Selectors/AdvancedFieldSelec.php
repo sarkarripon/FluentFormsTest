@@ -1,7 +1,7 @@
 <?php
 
 namespace Tests\Support\Helper\Acceptance\Selectors;
-class AdvancedField
+class AdvancedFieldSelec
 {
     const advField = "(//h5[normalize-space()='Advanced Fields'])[1]";
     const hiddenField = "(//div[contains(text(),'Hidden Field')])[1]";

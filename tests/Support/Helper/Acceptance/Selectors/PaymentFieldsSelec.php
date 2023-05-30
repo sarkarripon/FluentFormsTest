@@ -1,7 +1,7 @@
 <?php
 namespace Tests\Support\Helper\Acceptance\Selectors;
 
-class PaymentFields
+class PaymentFieldsSelec
 {
     const paymentSection = "(//h5[normalize-space()='Payment Fields'])[1]";
     const paymentField = "(//div[contains(text(),'Payment Field')])[1]";

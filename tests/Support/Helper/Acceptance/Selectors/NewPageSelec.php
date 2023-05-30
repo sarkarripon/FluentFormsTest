@@ -2,7 +2,7 @@
 
 namespace Tests\Support\Helper\Acceptance\Selectors;
 
-class NewPage
+class NewPageSelec
 {
     //New page creation with form short code
     const previousPageAvailable = "(//td[@class='title column-title has-row-actions column-primary page-title'])[1]";

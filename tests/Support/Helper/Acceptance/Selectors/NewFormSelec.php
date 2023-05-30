@@ -2,7 +2,7 @@
 
 namespace Tests\Support\Helper\Acceptance\Selectors;
 
-class NewForm
+class NewFormSelec
 {
     // new form creation buttons
     const createFirstForm = ".fluent_form_intro";
