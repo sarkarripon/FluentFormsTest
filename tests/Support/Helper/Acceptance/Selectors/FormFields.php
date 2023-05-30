@@ -2,7 +2,7 @@
 
 namespace Tests\Support\Helper\Acceptance\Selectors;
 
-class GeneralFieldSelec
+class FormFields
 {
     //general fields
     public static function fieldCustomise($fieldNumber): string
@@ -10,7 +10,7 @@ class GeneralFieldSelec
         return "(//div[@class='item-actions-wrapper hover-action-middle'])[$fieldNumber]";
     }
 
-    const generalField = "(//h5[normalize-space()='General Fields'])[1]";
+    const generalSection = "(//h5[normalize-space()='General Fields'])[1]";
     const generalFields = [
         'nameField' => "//div[@class='vddl-draggable btn-element'][normalize-space()='Name Fields']",
         'emailField' => "(//div[@class='vddl-draggable btn-element'][normalize-space()='Email Address'])[1]",
@@ -57,6 +57,47 @@ class GeneralFieldSelec
         'richText' => "(//div[contains(text(),'Rich Text Input')])[1]",
         'save_resume' => "(//div[contains(text(),'Save & Resume')])[1]"
         ];
+
+    public static function selectContainer($containerNumber): string
+    {
+        return "(//i[contains(text(),'+')])[$containerNumber]";
+    }
+    const containerSection = "(//h5[normalize-space()='Container'])[1]";
+
+    const containers = [
+        'oneColumn' => "(//div[contains(text(),'One Column Container')])[1]",
+        'twoColumns' => "(//div[contains(text(),'Two Column Container')])[1]",
+        'threeColumns' => "(//div[contains(text(),'Three Column Container')])[1]",
+        'fourColumns' => "(//div[contains(text(),'Four Column Container')])[1]",
+        'fiveColumns' => "(//div[contains(text(),'Five Column Container')])[1]",
+        'sixColumns' => "(//div[contains(text(),'Six Column Container')])[1]",
+    ];
+    const paymentSection = "(//h5[normalize-space()='Payment Fields'])[1]";
+    const paymentFields = [
+        'paymentSection' => "(//h5[normalize-space()='Payment Fields'])[1]",
+        'paymentField' => "(//div[contains(text(),'Payment Field')])[1]",
+        'subscription' => "(//div[contains(text(),'Subscription Field')])[1]",
+        'customPmnt' => "(//div[contains(text(),'Custom Payment Amount')])[1]",
+        'itmQty' => "(//div[contains(text(),'Item Quantity')])[1]",
+        'pmntMethodField' => "(//div[contains(text(),'Payment Method Field')])[1]",
+        'pmntSummary' => "(//div[contains(text(),'Payment Summary')])[1]",
+        'coupon' => "(//div[contains(text(),'Coupon')])[1]",
+    ];
+
+
+    const createFirstForm = ".fluent_form_intro";
+    const blankForm = "(//div[@class='ff-el-banner-text-inside ff-el-banner-text-inside-hoverable'])[1]";
+    const saveForm = "(//button[normalize-space()='Save Form'])[1]";
+
+
+    //Settings and integrations selectors
+
+    const settingsAndIntegration = "(//a[normalize-space()='Settings & Integrations'])[1]";
+    const marketingAndCrm = "(//a[normalize-space()='Marketing & CRM Integrations'])[1]";
+    const addNewIntegration = "(//div[@class='action-buttons mb15 clearfix el-col el-col-24 el-col-md-12'])[1]";
+    const searchIntegrations = "(//input[@placeholder='Search Integration'])[1]";
+
+
 
 
 

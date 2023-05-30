@@ -6,10 +6,11 @@ namespace Tests\Support;
 use Codeception\Attribute\DataProvider;
 use Codeception\Attribute\Skip;
 use Codeception\Example;
+use Codeception\Util\Locator;
 use Tests\Support\Helper\Acceptance\Selectors\AdvancedFieldSelec;
 use Tests\Support\Helper\Acceptance\Selectors\ContainerSelec;
 use Tests\Support\Helper\Acceptance\Selectors\DeleteFormSelec;
-use Tests\Support\Helper\Acceptance\Selectors\GeneralFieldSelec;
+use Tests\Support\Helper\Acceptance\Selectors\FormFields;
 use Tests\Support\Helper\Acceptance\Selectors\GlobalPageSelec;
 use Tests\Support\Helper\Acceptance\Selectors\AccepTestSelec;
 use Tests\Support\Helper\Acceptance\Selectors\NewFormSelec;
@@ -137,8 +138,8 @@ class AcceptanceTester extends \Codeception\Actor
     {
         $this->amOnPage(GlobalPageSelec::fFormPage);
         if ($this->tryToClick('Add a New Form') ||
-            $this->tryToClick('Click Here to Create Your First Form', NewFormSelec::createFirstForm)) {
-            $this->tryToMoveMouseOver(NewFormSelec::blankForm);
+            $this->tryToClick('Click Here to Create Your First Form', FormFields::createFirstForm)) {
+            $this->tryToMoveMouseOver(FormFields::blankForm);
             $this->tryToClick('Create Form');
         }
     }
@@ -202,33 +203,29 @@ class AcceptanceTester extends \Codeception\Actor
         return $pageUrl; // it will return the page url and assign it to $pageUrl global variable above.
     }
 
-    public function createForm($fieldType, $inputFields = array()): void
+    public function createFormField($data): void
     {
         $this->wantTo('Create a form for integrations');
-        foreach ($inputFields as $inputField) {
-            $selector = constant("Tests\Support\Helper\Acceptance\Selectors\\".$fieldType . "::generalFields"[$inputField]);
-            $this->clicked($selector);
+        $this->clicked(FormFields::generalSection);
+
+        foreach ($data as $fieldType => $fields) {
+            $sectionType = match ($fieldType) {
+                'advancedFields' => 'advancedSection',
+                default => 'generalSection',
+            };
+            $this->clicked(constant(FormFields::class . '::' . $sectionType));
+            foreach ($fields as $inputField){
+                $selector = constant(FormFields::class . '::' . $fieldType)[$inputField];
+                $this->clicked($selector);
+            }
         }
 
     }
 
-    public function createFormWithAdvancedField($inputFields = array()): void
+    public function createFormFieldBySearch($fieldName): void
     {
-        $this->wantTo('Create a form for integrations');
-        foreach ($inputFields as $inputField) {
-            $selector = constant(AdvancedFieldSelec::class . '::' . $inputField);
-            $this->clicked($selector);
-        }
-
-    }
-
-    public function createFormField($fieldType, $inputFields = array()): void
-    {
-        $this->wantTo('Create a form for integrations');
-        foreach ($inputFields as $inputField) {
-            $selector = constant(GeneralFieldSelec::class . '::' . $fieldType)[$inputField];
-            $this->clicked($selector);
-        }
+        $this->fillField("(//input[@placeholder='Search (name, address)'])[1]", $fieldName);
+        $this->clicked("div[class='v-row mb15'] div[class='vddl-draggable btn-element']");
 
     }
 

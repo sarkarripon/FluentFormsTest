@@ -6,7 +6,7 @@ use Codeception\Attribute\Skip;
 use Tests\Support\AcceptanceTester;
 
 use Tests\Support\Helper\Acceptance\Selectors\AdvancedFieldSelec;
-use Tests\Support\Helper\Acceptance\Selectors\GeneralFieldSelec;
+use Tests\Support\Helper\Acceptance\Selectors\FormFields;
 use Tests\Support\Helper\Acceptance\Selectors\GlobalPageSelec;
 use Tests\Support\Helper\Acceptance\Selectors\NewFormSelec;
 
@@ -72,24 +72,24 @@ class FluentFormCest
 //            $I->deleteExistingForms();
             $I->initiateNewForm();
             //general fields
-            $I->clicked(GeneralFieldSelec::nameField);
-            $I->click(GeneralFieldSelec::emailField);
-            $I->click(GeneralFieldSelec::simpleText);
-            $I->click(GeneralFieldSelec::maskInput);
-            $I->click(GeneralFieldSelec::textArea);
-            $I->click(GeneralFieldSelec::addressField);
-            $I->click(GeneralFieldSelec::countryList);
-            $I->click(GeneralFieldSelec::numaricField);
-            $I->click(GeneralFieldSelec::dropdown);
-            $I->click(GeneralFieldSelec::radioBtn);
-            $I->click(GeneralFieldSelec::checkbox);
-            $I->click(GeneralFieldSelec::multipleChoice);
-            $I->click(GeneralFieldSelec::websiteUrl);
-            $I->click(GeneralFieldSelec::timeDate);
-            $I->click(GeneralFieldSelec::imageUpload);
-            $I->click(GeneralFieldSelec::fileUpload);
-            $I->click(GeneralFieldSelec::customHtml);
-            $I->click(GeneralFieldSelec::phoneField);
+            $I->clicked(FormFields::nameField);
+            $I->click(FormFields::emailField);
+            $I->click(FormFields::simpleText);
+            $I->click(FormFields::maskInput);
+            $I->click(FormFields::textArea);
+            $I->click(FormFields::addressField);
+            $I->click(FormFields::countryList);
+            $I->click(FormFields::numaricField);
+            $I->click(FormFields::dropdown);
+            $I->click(FormFields::radioBtn);
+            $I->click(FormFields::checkbox);
+            $I->click(FormFields::multipleChoice);
+            $I->click(FormFields::websiteUrl);
+            $I->click(FormFields::timeDate);
+            $I->click(FormFields::imageUpload);
+            $I->click(FormFields::fileUpload);
+            $I->click(FormFields::customHtml);
+            $I->click(FormFields::phoneField);
             $I->clicked(NewFormSelec::saveForm);
             $I->seeText("Success");
             $I->renameForm("General Fields Form");
@@ -102,11 +102,11 @@ class FluentFormCest
         $I->wantTo('Create a blank form with advanced fields');
 //        $I->deleteExistingForms();
         $I->initiateNewForm();
-        $I->clicked(GeneralFieldSelec::nameField);
-        $I->click(GeneralFieldSelec::emailField);
+        $I->clicked(FormFields::nameField);
+        $I->click(FormFields::emailField);
         $I->clicked(AdvancedFieldSelec::advField);
         $I->click(AdvancedFieldSelec::passField);
-        $I->clicked(GeneralFieldSelec::fieldCustomise(3)); //click on the 3rd field
+        $I->clicked(FormFields::fieldCustomise(3)); //click on the 3rd field
         $I->click(NewFormSelec::saveForm);
         $I->seeText("Success");
         $I->renameForm("Signup Form");
