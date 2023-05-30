@@ -22,7 +22,8 @@ class PreCheckCest
     public function formcr(AcceptanceTester $I)
     {
         $I->initiateNewForm();
-        $I->createFormWithGeneralField('GeneralFieldSelec',array('nameField','emailField','phoneField','addressField','timeDate','numaricField'));
+        $I->createFormField('generalFields',
+            array('nameField','emailField','addressField' ,'phoneField', 'timeDate','numaricField'));
     }
 
 

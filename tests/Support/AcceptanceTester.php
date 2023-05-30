@@ -202,6 +202,16 @@ class AcceptanceTester extends \Codeception\Actor
         return $pageUrl; // it will return the page url and assign it to $pageUrl global variable above.
     }
 
+    public function createForm($fieldType, $inputFields = array()): void
+    {
+        $this->wantTo('Create a form for integrations');
+        foreach ($inputFields as $inputField) {
+            $selector = constant("Tests\Support\Helper\Acceptance\Selectors\\".$fieldType . "::generalFields"[$inputField]);
+            $this->clicked($selector);
+        }
+
+    }
+
     public function createFormWithAdvancedField($inputFields = array()): void
     {
         $this->wantTo('Create a form for integrations');
@@ -211,14 +221,17 @@ class AcceptanceTester extends \Codeception\Actor
         }
 
     }
-//    public function insertContainer($inputFields = array()): void
-//    {
-//        $this->wantTo('Create a form for integrations');
-//        foreach ($inputFields as $inputField) {
-//            $selector = constant(ContainerSelec::class . '::' . $inputField);
-//            $this->clicked($selector);
-//        }
-//
-//    }
+
+    public function createFormField($fieldType, $inputFields = array()): void
+    {
+        $this->wantTo('Create a form for integrations');
+        foreach ($inputFields as $inputField) {
+            $selector = constant(GeneralFieldSelec::class . '::' . $fieldType)[$inputField];
+            $this->clicked($selector);
+        }
+
+    }
+
+
 
 }
