@@ -46,7 +46,7 @@ class FormFields
         'rating' => "(//div[contains(text(),'Ratings')])[1]",
         'checkableGrid' => "(//div[contains(text(),'Checkable Grid')])[1]",
         'gdpr' => "(//div[contains(text(),'GDPR Agreement')])[1]",
-        'passField' => "(//div[contains(text(),'Password Field')])[1]",
+        'passwordField' => "(//div[contains(text(),'Password Field')])[1]",
         'customSubBtn' => "(//div[contains(text(),'Custom Submit Button')])[1]",
         'rangeSlider' => "(//div[contains(text(),'Range Slider Field')])[1]",
         'netPromoter' => "(//div[contains(text(),'Net Promoter Score')])[1]",

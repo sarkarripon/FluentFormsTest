@@ -114,15 +114,23 @@ class AcceptanceTester extends \Codeception\Actor
     public function deleteExistingForms(): void
     {
         $this->amOnPage(GlobalPageSelec::fFormPage);
+        $tableRow =count($this->grabMultiple("tr"));
 
-        $tr = count($this->grabMultiple('tr'));
-        for ($i = 1; $i < ($tr); $i++) {
+        for ($i = 1; $i < ($tableRow); $i++) {
             do {
+
                 try {
-                    $this->click('Delete', DeleteFormSelec::deleteBtn);
-                    $this->waitForText('confirm', 2);
-                    $this->click(DeleteFormSelec::confirmBtn);
-                    $this->wait(1);
+                $this->wait(1);
+                $this->moveMouseOver(DeleteFormSelec::mouseHoverMenu);
+                $this->click( DeleteFormSelec::deleteBtn);
+                $this->wait(1);
+                $this->click(DeleteFormSelec::confirmBtn);
+
+                $this->wait(1);
+//                    $this->clicked('Delete', DeleteFormSelec::deleteBtn);
+//                    $this->waitForText('confirm', 2);
+//                    $this->click(DeleteFormSelec::confirmBtn);
+//                    $this->wait(1);
                 } catch (\Exception $e) {
                     $this->wait(1);
                 }

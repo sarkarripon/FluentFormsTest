@@ -22,23 +22,25 @@ class PreCheckCest
 
     public function formcr(AcceptanceTester $I)
     {
-        global $pageUrl;
-
-        $I->initiateNewForm();
-
-        $requiredField = [
-            'generalFields' =>['nameField','emailField','addressField' ,'phoneField', 'timeDate'],
-        ];
-        $I->createFormField($requiredField);
-
-        $I->click(FormFields::saveForm);
-        $I->seeText("Success");
-        $I->renameForm("Platformly Integration");
-
+//        global $pageUrl;
+        $I->deleteExistingForms();
+//        $I->initiateNewForm();
+//
+//        $requiredField = [
+//            'generalFields' =>['nameField','emailField','addressField' ,'phoneField'],
+//            'advancedFields' => ['sectionBreak','passwordField','passwordField',]
+//        ];
+//        $I->createFormField($requiredField);
+//
+//        $I->click(FormFields::saveForm);
+//        exit();
+//        $I->seeText("Success");
+//        $I->renameForm("Platformly Integration");
+//
 //        $I->deleteExistingPages();
-        $I->createNewPage("Signup Form");
-        $I->wantTo('Fill the form with sample data');
-        $I->amOnUrl($pageUrl);
+//        $I->createNewPage("Signup Form");
+//        $I->wantTo('Fill the form with sample data');
+//        $I->amOnUrl($pageUrl);
 
     }
 

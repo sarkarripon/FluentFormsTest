@@ -5,6 +5,8 @@ namespace Tests\Support\Helper\Acceptance\Selectors;
 class DeleteFormSelec
 {
     //existing form delete buttons
-    const deleteBtn = "tbody tr:nth-child(1) td:nth-child(2)";
-    const confirmBtn = "/html[1]/body[1]/div[2]/div[1]/button[2]";
+    const mouseHoverMenu = "(//div[contains(@class,'cell')])[8]";
+    const deleteBtn = "(//a[contains(text(),'Delete')])[1]";
+//    const confirmBtn = "[class='el-popover el-popper']:last-child button:last-child";
+const  confirmBtn = "(//span[contains(text(),'confirm')])[1]";
 }
