@@ -2,9 +2,9 @@
 namespace Tests\Acceptance;
 
 use Tests\Support\AcceptanceTester;
-use Tests\Support\Helper\Acceptance\Integrations\Platformly;
-use Tests\Support\Helper\Acceptance\Selectors\FormFields;
-use Tests\Support\Helper\Acceptance\Selectors\NewFormSelec;
+use Tests\Support\Selectors\FluentFormsSelectors;
+use Tests\Support\Selectors\FormFields;
+use Tests\Support\Selectors\GlobalPageSelec;
 
 class PreCheckCest
 {
@@ -22,25 +22,28 @@ class PreCheckCest
 
     public function formcr(AcceptanceTester $I)
     {
-//        global $pageUrl;
+        global $pageUrl;
         $I->deleteExistingForms();
-//        $I->initiateNewForm();
-//
-//        $requiredField = [
-//            'generalFields' =>['nameField','emailField','addressField' ,'phoneField'],
-//            'advancedFields' => ['sectionBreak','passwordField','passwordField',]
-//        ];
-//        $I->createFormField($requiredField);
-//
-//        $I->click(FormFields::saveForm);
-//        exit();
-//        $I->seeText("Success");
-//        $I->renameForm("Platformly Integration");
-//
-//        $I->deleteExistingPages();
-//        $I->createNewPage("Signup Form");
-//        $I->wantTo('Fill the form with sample data');
-//        $I->amOnUrl($pageUrl);
+        $I->initiateNewForm();
+
+        $requiredField = [
+            'generalFields' =>['nameField','emailField','addressField' ,'phoneField'],
+        ];
+        $I->createFormField($requiredField);
+
+        $I->click(FluentFormsSelectors::saveForm);
+        $I->seeText("Success");
+        $I->renameForm("Platformly Integration");
+
+        $I->amOnPage(FluentFormsSelectors::fFormPage);
+        exit();
+
+
+
+        $I->deleteExistingPages();
+        $I->createNewPage("Platformly Integration");
+        $I->wantTo('Fill the form with sample data');
+        $I->amOnUrl($pageUrl);
 
     }
 

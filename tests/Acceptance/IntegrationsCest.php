@@ -14,5 +14,6 @@ class IntegrationsCest
     public function tryToTest(AcceptanceTester $I)
     {
 
+
     }
 }

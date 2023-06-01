@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Support\Helper\Acceptance\Selectors;
+namespace Tests\Support\Selectors;
 
 class FormFields
 {
@@ -85,17 +85,11 @@ class FormFields
     ];
 
 
-    const createFirstForm = ".fluent_form_intro";
-    const blankForm = "(//div[@class='ff-el-banner-text-inside ff-el-banner-text-inside-hoverable'])[1]";
-    const saveForm = "(//button[normalize-space()='Save Form'])[1]";
 
 
-    //Settings and integrations selectors
 
-    const settingsAndIntegration = "(//a[normalize-space()='Settings & Integrations'])[1]";
-    const marketingAndCrm = "(//a[normalize-space()='Marketing & CRM Integrations'])[1]";
-    const addNewIntegration = "(//div[@class='action-buttons mb15 clearfix el-col el-col-24 el-col-md-12'])[1]";
-    const searchIntegrations = "(//input[@placeholder='Search Integration'])[1]";
+
+
 
 
 

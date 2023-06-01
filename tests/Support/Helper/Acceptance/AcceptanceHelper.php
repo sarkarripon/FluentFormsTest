@@ -68,4 +68,21 @@ class AcceptanceHelper extends WebDriver
         $this->enableImplicitWait();
     }
 
+    /**
+     * @author Sarkar Ripon
+     * If element is found return true if not return false
+     * @param $element
+     * @return bool
+     */
+    public function elementCheck($element): bool
+    {
+        try {
+            $this->seeElement($element);
+            $isFound = true;
+        } catch (\Exception $e) {
+            $isFound = false;
+        }
+        return $isFound;
+    }
+
 }

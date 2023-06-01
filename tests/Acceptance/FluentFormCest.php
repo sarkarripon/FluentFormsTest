@@ -4,12 +4,9 @@ namespace Tests\Acceptance;
 
 use Codeception\Attribute\Skip;
 use Tests\Support\AcceptanceTester;
-
-use Tests\Support\Helper\Acceptance\Selectors\AdvancedFieldSelec;
-use Tests\Support\Helper\Acceptance\Selectors\FormFields;
-use Tests\Support\Helper\Acceptance\Selectors\GlobalPageSelec;
-use Tests\Support\Helper\Acceptance\Selectors\NewFormSelec;
-
+use Tests\Support\Selectors\FormFields;
+use Tests\Support\Selectors\GlobalPageSelec;
+use Tests\Support\Selectors\NewFormSelec;
 
 
 class FluentFormCest

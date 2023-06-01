@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Support\Helper\Acceptance\Selectors;
+namespace Tests\Support\Selectors;
 
 class NewFormSelec
 {

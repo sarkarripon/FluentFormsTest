@@ -11,6 +11,7 @@ extensions:
 modules:
     enabled:
         - Tests\Support\Helper\Acceptance\AcceptanceHelper:
+        - \Codeception\Module\Asserts:
         - Db:
 
 

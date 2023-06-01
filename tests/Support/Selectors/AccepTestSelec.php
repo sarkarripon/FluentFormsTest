@@ -1,5 +1,5 @@
 <?php
-namespace Tests\Support\Helper\Acceptance\Selectors;
+namespace Tests\Support\Selectors;
 abstract class AccepTestSelec
 {
     const uploadField = '.upload';

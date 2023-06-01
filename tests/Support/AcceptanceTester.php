@@ -3,19 +3,13 @@
 declare(strict_types=1);
 namespace Tests\Support;
 
-use Codeception\Attribute\DataProvider;
-use Codeception\Attribute\Skip;
-use Codeception\Example;
-use Codeception\Util\Locator;
-use Tests\Support\Helper\Acceptance\Selectors\AdvancedFieldSelec;
-use Tests\Support\Helper\Acceptance\Selectors\ContainerSelec;
-use Tests\Support\Helper\Acceptance\Selectors\DeleteFormSelec;
-use Tests\Support\Helper\Acceptance\Selectors\FormFields;
-use Tests\Support\Helper\Acceptance\Selectors\GlobalPageSelec;
-use Tests\Support\Helper\Acceptance\Selectors\AccepTestSelec;
-use Tests\Support\Helper\Acceptance\Selectors\NewFormSelec;
-use Tests\Support\Helper\Acceptance\Selectors\NewPageSelec;
-use Tests\Support\Helper\Acceptance\Selectors\RenameFormSelec;
+use Tests\Support\Selectors\AccepTestSelec;
+use Tests\Support\Selectors\FluentFormsSelectors;
+use Tests\Support\Selectors\FormFields;
+use Tests\Support\Selectors\GlobalPageSelec;
+use Tests\Support\Selectors\NewPageSelec;
+use Tests\Support\Selectors\RenameFormSelec;
+
 
 /**
  * Inherited Methods
@@ -35,6 +29,21 @@ use Tests\Support\Helper\Acceptance\Selectors\RenameFormSelec;
 class AcceptanceTester extends \Codeception\Actor
 {
     use _generated\AcceptanceTesterActions;
+
+    /**
+     * @author Sarkar Ripon
+     * @param $selector
+     * @return void
+     */
+    public function reloadIfElementNotFound($selector): void
+    {
+        try {
+            $this->seeElement($selector);
+        } catch (\Exception $e){
+            $this->reloadPage();
+            $this->seeElement($selector);
+        }
+    }
 
     /**
      * @author Sarkar Ripon
@@ -113,28 +122,18 @@ class AcceptanceTester extends \Codeception\Actor
      */
     public function deleteExistingForms(): void
     {
-        $this->amOnPage(GlobalPageSelec::fFormPage);
+        $this->amOnPage(FluentFormsSelectors::fFormPage);
         $tableRow =count($this->grabMultiple("tr"));
+//        codecept_debug($tableRow);
 
         for ($i = 1; $i < ($tableRow); $i++) {
             do {
-
-                try {
                 $this->wait(1);
-                $this->moveMouseOver(DeleteFormSelec::mouseHoverMenu);
-                $this->click( DeleteFormSelec::deleteBtn);
-                $this->wait(1);
-                $this->click(DeleteFormSelec::confirmBtn);
-
-                $this->wait(1);
-//                    $this->clicked('Delete', DeleteFormSelec::deleteBtn);
-//                    $this->waitForText('confirm', 2);
-//                    $this->click(DeleteFormSelec::confirmBtn);
-//                    $this->wait(1);
-                } catch (\Exception $e) {
-                    $this->wait(1);
-                }
-            } while ($this->tryToClick(DeleteFormSelec::deleteBtn)==true);
+                $this->moveMouseOver(FluentFormsSelectors::mouseHoverMenu);
+                $this->clicked( FluentFormsSelectors::deleteBtn);
+                $this->clicked(FluentFormsSelectors::confirmBtn);
+            } while ($this->tryToClick(FluentFormsSelectors::deleteBtn)==true);
+            $this->reloadPage();
         }
     }
     /**
@@ -144,10 +143,10 @@ class AcceptanceTester extends \Codeception\Actor
      */
     public function initiateNewForm():void
     {
-        $this->amOnPage(GlobalPageSelec::fFormPage);
+        $this->amOnPage(FluentFormsSelectors::fFormPage);
         if ($this->tryToClick('Add a New Form') ||
-            $this->tryToClick('Click Here to Create Your First Form', FormFields::createFirstForm)) {
-            $this->tryToMoveMouseOver(FormFields::blankForm);
+            $this->tryToClick('Click Here to Create Your First Form', FluentFormsSelectors::createFirstForm)) {
+            $this->tryToMoveMouseOver(FluentFormsSelectors::blankForm);
             $this->tryToClick('Create Form');
         }
     }
@@ -175,12 +174,14 @@ class AcceptanceTester extends \Codeception\Actor
     public function deleteExistingPages(): void
     {
         $this->amOnPage(GlobalPageSelec::newPageCreationPage);
-        if ( $this->tryToClick(NewPageSelec::previousPageAvailable))
+
+        if ($this->elementCheck(NewPageSelec::previousPageAvailable))
         {
-            $this->click(NewPageSelec::selectAllCheckMark);
+            $this->clicked(NewPageSelec::selectAllCheckMark);
             $this->selectOption(NewPageSelec::selectMoveToTrash, "Move to Trash");
             $this->click(NewPageSelec::applyBtn);
-            $this->see('moved to the Trash');
+            $this->assertStringContainsString('moved to the Trash',
+                $this->grabTextFrom('#message'), 'Existing pages were deleted successfully!');
         }
     }
 
@@ -194,23 +195,28 @@ class AcceptanceTester extends \Codeception\Actor
     public function createNewPage($title, $content=null): string
     {
         global $pageUrl;
-        $this->amOnPage(GlobalPageSelec::fFormPage);
+        $this->amOnPage(FluentFormsSelectors::fFormPage);
         if(!isset($content)){
             $content = $this->grabTextFrom(NewPageSelec::formShortCode);
         }
         $this->amOnPage(GlobalPageSelec::newPageCreationPage);
-        $this->click(NewPageSelec::addNewPage);
+        $this->clicked(NewPageSelec::addNewPage);
         $this->wait(1);
         $this->executeJS(sprintf(NewPageSelec::jsForTitle,$title));
         $this->executeJS(sprintf(NewPageSelec::jsForContent,$content));
-        $this->click( NewPageSelec::publishBtn);
+        $this->clicked( NewPageSelec::publishBtn);
         $this->waitForElementClickable(NewPageSelec::confirmPublish);
-        $this->click( NewPageSelec::confirmPublish);
+        $this->clicked( NewPageSelec::confirmPublish);
         $this->wait(1);
         $pageUrl = $this->grabAttributeFrom(NewPageSelec::viewPage, 'href');
         return $pageUrl; // it will return the page url and assign it to $pageUrl global variable above.
     }
 
+    /**
+     * @author Sarkar Ripon
+     * @param $data
+     * @return void
+     */
     public function createFormField($data): void
     {
         $this->wantTo('Create a form for integrations');
@@ -227,15 +233,24 @@ class AcceptanceTester extends \Codeception\Actor
                 $this->clicked($selector);
             }
         }
-
     }
 
-    public function createFormFieldBySearch($fieldName): void
+
+    public function thirdPartyIntegrationMap(): void
     {
-        $this->fillField("(//input[@placeholder='Search (name, address)'])[1]", $fieldName);
-        $this->clicked("div[class='v-row mb15'] div[class='vddl-draggable btn-element']");
+        $this->amOnPage(FluentFormsSelectors::fFormPage);
+        $this->moveMouseOver(FluentFormsSelectors::mouseHoverMenu);
+
+
 
     }
+
+//    public function createFormFieldBySearch($fieldName): void
+//    {
+//        $this->fillField("(//input[@placeholder='Search (name, address)'])[1]", $fieldName);
+//        $this->clicked("div[class='v-row mb15'] div[class='vddl-draggable btn-element']");
+//
+//    }
 
 
 
