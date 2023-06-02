@@ -2,6 +2,7 @@
 namespace Tests\Acceptance;
 
 use Tests\Support\AcceptanceTester;
+use Tests\Support\Selectors\FluentFormsAddonsSelectors;
 use Tests\Support\Selectors\FluentFormsSelectors;
 use Tests\Support\Selectors\FormFields;
 use Tests\Support\Selectors\GlobalPageSelec;
@@ -23,19 +24,40 @@ class PreCheckCest
     public function formcr(AcceptanceTester $I)
     {
         global $pageUrl;
-        $I->deleteExistingForms();
-        $I->initiateNewForm();
+        $formName = 'Platformly Integration';
 
-        $requiredField = [
-            'generalFields' =>['nameField','emailField','addressField' ,'phoneField'],
-        ];
-        $I->createFormField($requiredField);
+//        $I->deleteExistingForms();
+//        $I->initiateNewForm();
+//
+//        $requiredField = [
+//            'generalFields' =>['nameField','emailField','addressField' ,'phoneField'],
+//        ];
+//        $I->createFormField($requiredField);
+//
+//        $I->click(FluentFormsSelectors::saveForm);
+//        $I->seeText("Success");
+//        $I->renameForm($formName);
+//        $I->wait(2);
+        $I->amOnPage(FluentFormsAddonsSelectors::integrationsPage);
+//        $I->clickWithLeftButton(FluentFormsAddonsSelectors::turnOnIntegration(12));
+        $I->integrationConfigurationSettings('12');
 
-        $I->click(FluentFormsSelectors::saveForm);
-        $I->seeText("Success");
-        $I->renameForm("Platformly Integration");
 
+        exit();
         $I->amOnPage(FluentFormsSelectors::fFormPage);
+        $I->wait(2);
+        $I->moveMouseOver(FluentFormsSelectors::mouseHoverMenu);
+        $I->clicked(FluentFormsSelectors::formSettings);
+        $I->clicked(FluentFormsSelectors::allIntegrations);
+        $I->clicked(FluentFormsSelectors::addNewIntegration);
+        $I->moveMouseOver(FluentFormsSelectors::searchIntegration);
+        $I->fillField(FluentFormsSelectors::searchIntegration,'Platformly');
+        $I->clicked(FluentFormsSelectors::searchResult);
+
+
+
+
+
         exit();
 
 
