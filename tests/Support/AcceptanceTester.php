@@ -3,8 +3,10 @@
 declare(strict_types=1);
 namespace Tests\Support;
 
+use Codeception\Module\WebDriver;
 use Tests\Support\Selectors\AccepTestSelec;
 use Tests\Support\Selectors\FluentFormsSelectors;
+use Tests\Support\Selectors\FluentFormsSettingsSelectors;
 use Tests\Support\Selectors\FormFields;
 use Tests\Support\Selectors\GlobalPageSelec;
 use Tests\Support\Selectors\NewPageSelec;
@@ -297,19 +299,38 @@ class AcceptanceTester extends \Codeception\Actor
      *
      *
      * @param $integrationPositionNumber
-     * @return string
+     * @return void
+     *
      */
 
-   public function integrationConfigurationSettings($integrationPositionNumber): void
+   public function configureIntegration($integrationPositionNumber, $api, $projectID): void
    {
-       $element = $this->dontSeeElement("(//div[@class='addon_footer'])[{$integrationPositionNumber}]//span[@class='dashicons dashicons-admin-generic']");
-       if ($element){
-           $this->click("(//div[@class='addon_footer'])[{$integrationPositionNumber}]//span[@class='dashicons dashicons-admin-generic']");
-           $this->wait(1);
-           $this->clicked("(//span[@class='el-switch__core'])[{$integrationPositionNumber}]");
+       $element = $this->checkElement("(//div[@class='addon_footer'])[{$integrationPositionNumber}]+[@class='dashicons dashicons-admin-generic']");
 
+       if (!$element){
+           $this->waitForElement("(//span[@class='el-switch__core'])[{$integrationPositionNumber}]");
+           $this->clickWithLeftButton("(//span[@class='el-switch__core'])[{$integrationPositionNumber}]");
        }
+       $this->waitForElement("(//div[@class='addon_footer'])[{$integrationPositionNumber}]//span[@class='dashicons dashicons-admin-generic']");
+       $this->click("(//div[@class='addon_footer'])[{$integrationPositionNumber}]//span[@class='dashicons dashicons-admin-generic']");
+
+        if($integrationPositionNumber == 12){
+            $elmnt = $this->checkElement(FluentFormsSettingsSelectors::platformlyApiKey);
+            dd($elmnt);
+            if ($this->checkElement(FluentFormsSettingsSelectors::platformlyApiKey)){
+                $this->fillField(FluentFormsSettingsSelectors::platformlyApiKey,$api);
+                $this->fillField(FluentFormsSettingsSelectors::platformlyProjectID,$projectID);
+            }
+            $this->clicked(FluentFormsSettingsSelectors::platformlySaveButton);
+            $this->seeText("Success");
+        }
+
    }
+
+
+
+
+
 //    public function createFormFieldBySearch($fieldName): void
 //    {
 //        $this->fillField("(//input[@placeholder='Search (name, address)'])[1]", $fieldName);

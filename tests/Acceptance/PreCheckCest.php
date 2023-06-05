@@ -40,7 +40,8 @@ class PreCheckCest
 //        $I->wait(2);
         $I->amOnPage(FluentFormsAddonsSelectors::integrationsPage);
 //        $I->clickWithLeftButton(FluentFormsAddonsSelectors::turnOnIntegration(12));
-        $I->integrationConfigurationSettings('12');
+        $I->configureIntegration('12','4XIamp9fiLokeugrcmxSLMQjoRyXyStw','2919');
+
 
 
         exit();

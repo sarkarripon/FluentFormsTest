@@ -48,11 +48,12 @@ class AcceptanceHelper extends WebDriver
      */
     public function clicked(string $selector): void
     {
-        $this->waitForElement($selector, 10);
+        $this->waitForElement($selector, 5);
         $this->moveMouseOver($selector);
         parent::click($selector);
         $this->wait(1);
     }
+
 
     /**
      * @param string $text
@@ -64,7 +65,7 @@ class AcceptanceHelper extends WebDriver
      */
     public function seeText(string $text): void
     {
-        $this->waitForText($text);
+        $this->waitForText($text, 5);
         parent::see($text);
         $this->enableImplicitWait();
     }
@@ -75,10 +76,11 @@ class AcceptanceHelper extends WebDriver
      * @param $element
      * @return bool
      */
-    public function elementCheck($element): bool
+    public function checkElement($element): bool
     {
         try {
-            $this->seeElement($element);
+            $this->waitForElement($element, 10);
+            $this->dontSeeElement($element);
             $isFound = true;
         } catch (\Exception $e) {
             $isFound = false;
