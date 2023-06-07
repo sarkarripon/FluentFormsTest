@@ -238,19 +238,7 @@ class AcceptanceTester extends \Codeception\Actor
     }
 
 
-    public function configurePlatformlyApiSettings($searchKey): void
-    {
-        $this->amOnPage(FluentFormsSelectors::fFormPage);
-        $this->wait(2);
-        $this->moveMouseOver(FluentFormsSelectors::mouseHoverMenu);
-        $this->clicked(FluentFormsSelectors::formSettings);
-        $this->clicked(FluentFormsSelectors::allIntegrations);
-        $this->clicked(FluentFormsSelectors::addNewIntegration);
-        $this->moveMouseOver(FluentFormsSelectors::searchIntegration);
-        $this->fillField(FluentFormsSelectors::searchIntegration,$searchKey);
-        $this->clicked(FluentFormsSelectors::searchResult);
 
-    }
 
     /**
      *
