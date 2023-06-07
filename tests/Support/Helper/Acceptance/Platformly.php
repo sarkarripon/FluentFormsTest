@@ -1,7 +1,8 @@
 <?php
-namespace Tests\Support\Helper\Acceptance\Integrations;
+namespace Tests\Support\Helper\Acceptance;
 
 use Codeception\Module\WebDriver;
+use Tests\Support\Selectors\FluentFormsSelectors;
 
 
 class Platformly extends WebDriver
@@ -31,5 +32,7 @@ class Platformly extends WebDriver
 
 
     }
+
+
 
 }

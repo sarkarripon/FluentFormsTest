@@ -79,8 +79,7 @@ class AcceptanceHelper extends WebDriver
     public function checkElement($element): bool
     {
         try {
-            $this->waitForElement($element, 10);
-            $this->dontSeeElement($element);
+            $this->dontSeeElementInDOM($element);
             $isFound = true;
         } catch (\Exception $e) {
             $isFound = false;

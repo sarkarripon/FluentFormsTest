@@ -25,6 +25,7 @@ modules:
             port: 9515
             wp_username: 'admin'
             wp_password: 'admin'
+
             capabilities:
                 unexpectedAlertBehaviour: 'accept'
                 acceptInsecureCerts: true

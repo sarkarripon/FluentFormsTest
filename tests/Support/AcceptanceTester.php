@@ -238,13 +238,17 @@ class AcceptanceTester extends \Codeception\Actor
     }
 
 
-    public function thirdPartyIntegrationMap(): void
+    public function configurePlatformlyApiSettings($searchKey): void
     {
         $this->amOnPage(FluentFormsSelectors::fFormPage);
+        $this->wait(2);
         $this->moveMouseOver(FluentFormsSelectors::mouseHoverMenu);
-
-
-
+        $this->clicked(FluentFormsSelectors::formSettings);
+        $this->clicked(FluentFormsSelectors::allIntegrations);
+        $this->clicked(FluentFormsSelectors::addNewIntegration);
+        $this->moveMouseOver(FluentFormsSelectors::searchIntegration);
+        $this->fillField(FluentFormsSelectors::searchIntegration,$searchKey);
+        $this->clicked(FluentFormsSelectors::searchResult);
 
     }
 
@@ -299,33 +303,41 @@ class AcceptanceTester extends \Codeception\Actor
      *
      *
      * @param $integrationPositionNumber
+     * @param $api
+     * @param $projectID
      * @return void
-     *
      */
 
    public function configureIntegration($integrationPositionNumber, $api, $projectID): void
    {
-       $element = $this->checkElement("(//div[@class='addon_footer'])[{$integrationPositionNumber}]+[@class='dashicons dashicons-admin-generic']");
+       $element = $this->checkElement("//div[starts-with(@class, 'add_on_card addon_enabled_')][{$integrationPositionNumber}]//span[normalize-space()='Enabled']");
 
-       if (!$element){
-           $this->waitForElement("(//span[@class='el-switch__core'])[{$integrationPositionNumber}]");
+       if ($element){
            $this->clickWithLeftButton("(//span[@class='el-switch__core'])[{$integrationPositionNumber}]");
        }
-       $this->waitForElement("(//div[@class='addon_footer'])[{$integrationPositionNumber}]//span[@class='dashicons dashicons-admin-generic']");
-       $this->click("(//div[@class='addon_footer'])[{$integrationPositionNumber}]//span[@class='dashicons dashicons-admin-generic']");
+       $this->clickWithLeftButton("(//div[@class='addon_footer'])[{$integrationPositionNumber}]//span[@class='dashicons dashicons-admin-generic']");
 
-        if($integrationPositionNumber == 12){
-            $elmnt = $this->checkElement(FluentFormsSettingsSelectors::platformlyApiKey);
-            dd($elmnt);
-            if ($this->checkElement(FluentFormsSettingsSelectors::platformlyApiKey)){
-                $this->fillField(FluentFormsSettingsSelectors::platformlyApiKey,$api);
-                $this->fillField(FluentFormsSettingsSelectors::platformlyProjectID,$projectID);
+        if($integrationPositionNumber == 12)
+        {
+            $saveSettings = $this->checkElement(FluentFormsSettingsSelectors::platformlySaveButton);
+
+            if (!$saveSettings) // if the platformly integration is already configured
+            {
+                $this->retryFillField(FluentFormsSettingsSelectors::platformlyApiKey,$api,2);
+                $this->retryFillField(FluentFormsSettingsSelectors::platformlyProjectID,$projectID,2);
+                $this->clicked(FluentFormsSettingsSelectors::platformlySaveButton);
+                $this->seeText("Success");
             }
-            $this->clicked(FluentFormsSettingsSelectors::platformlySaveButton);
-            $this->seeText("Success");
+            $this->configurePlatformlyApiSettings("Platformly");
+
+
         }
 
    }
+
+
+
+
 
 
 

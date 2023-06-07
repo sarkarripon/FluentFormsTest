@@ -6,6 +6,8 @@ use Tests\Support\Selectors\FluentFormsAddonsSelectors;
 use Tests\Support\Selectors\FluentFormsSelectors;
 use Tests\Support\Selectors\FormFields;
 use Tests\Support\Selectors\GlobalPageSelec;
+use Tests\Support\Helper\Acceptance\Platformly;
+use Tests\Support\Helper\Acceptance\IntegrationHelper;
 
 class PreCheckCest
 {
@@ -38,24 +40,10 @@ class PreCheckCest
 //        $I->seeText("Success");
 //        $I->renameForm($formName);
 //        $I->wait(2);
-        $I->amOnPage(FluentFormsAddonsSelectors::integrationsPage);
-//        $I->clickWithLeftButton(FluentFormsAddonsSelectors::turnOnIntegration(12));
-        $I->configureIntegration('12','4XIamp9fiLokeugrcmxSLMQjoRyXyStw','2919');
+//        $I->amOnPage(FluentFormsAddonsSelectors::integrationsPage);
+//        $I->configureIntegration('12','4XIamp9fiLokeugrcmxSLMQjoRyXyStw','2919');
 
-
-
-        exit();
-        $I->amOnPage(FluentFormsSelectors::fFormPage);
-        $I->wait(2);
-        $I->moveMouseOver(FluentFormsSelectors::mouseHoverMenu);
-        $I->clicked(FluentFormsSelectors::formSettings);
-        $I->clicked(FluentFormsSelectors::allIntegrations);
-        $I->clicked(FluentFormsSelectors::addNewIntegration);
-        $I->moveMouseOver(FluentFormsSelectors::searchIntegration);
-        $I->fillField(FluentFormsSelectors::searchIntegration,'Platformly');
-        $I->clicked(FluentFormsSelectors::searchResult);
-
-
+        $I->something();
 
 
 
