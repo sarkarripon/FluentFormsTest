@@ -87,4 +87,5 @@ class AcceptanceHelper extends WebDriver
         return $isFound;
     }
 
+
 }

@@ -4,7 +4,10 @@ declare(strict_types=1);
 namespace Tests\Support;
 
 use Codeception\Module\WebDriver;
+use Exception;
+use Tests\Support\Helper\Acceptance\Platformly;
 use Tests\Support\Selectors\AccepTestSelec;
+use Tests\Support\Selectors\FluentFormsAddonsSelectors;
 use Tests\Support\Selectors\FluentFormsSelectors;
 use Tests\Support\Selectors\FluentFormsSettingsSelectors;
 use Tests\Support\Selectors\FormFields;
@@ -41,7 +44,7 @@ class AcceptanceTester extends \Codeception\Actor
     {
         try {
             $this->seeElement($selector);
-        } catch (\Exception $e){
+        } catch (Exception $e){
             $this->reloadPage();
             $this->seeElement($selector);
         }
@@ -134,8 +137,9 @@ class AcceptanceTester extends \Codeception\Actor
                 $this->moveMouseOver(FluentFormsSelectors::mouseHoverMenu);
                 $this->clicked( FluentFormsSelectors::deleteBtn);
                 $this->clicked(FluentFormsSelectors::confirmBtn);
+                $this->reloadPage();
             } while ($this->tryToClick(FluentFormsSelectors::deleteBtn)==true);
-            $this->reloadPage();
+
         }
     }
     /**
@@ -177,7 +181,7 @@ class AcceptanceTester extends \Codeception\Actor
     {
         $this->amOnPage(GlobalPageSelec::newPageCreationPage);
 
-        if ($this->elementCheck(NewPageSelec::previousPageAvailable))
+        if ($this->checkElement(NewPageSelec::previousPageAvailable))
         {
             $this->clicked(NewPageSelec::selectAllCheckMark);
             $this->selectOption(NewPageSelec::selectMoveToTrash, "Move to Trash");
@@ -238,7 +242,19 @@ class AcceptanceTester extends \Codeception\Actor
     }
 
 
+    public function configurePlatformlyApiSettings($searchKey): void
+    {
+        $this->amOnPage(FluentFormsSelectors::fFormPage);
+        $this->wait(2);
+        $this->moveMouseOver(FluentFormsSelectors::mouseHoverMenu);
+        $this->clicked(FluentFormsSelectors::formSettings);
+        $this->clicked(FluentFormsSelectors::allIntegrations);
+        $this->clicked(FluentFormsSelectors::addNewIntegration);
+        $this->moveMouseOver(FluentFormsSelectors::searchIntegration);
+        $this->fillField(FluentFormsSelectors::searchIntegration,$searchKey);
+        $this->clicked(FluentFormsSelectors::searchResult);
 
+    }
 
     /**
      *
@@ -298,6 +314,7 @@ class AcceptanceTester extends \Codeception\Actor
 
    public function configureIntegration($integrationPositionNumber, $api, $projectID): void
    {
+       $this->amOnPage(FluentFormsAddonsSelectors::integrationsPage);
        $element = $this->checkElement("//div[starts-with(@class, 'add_on_card addon_enabled_')][{$integrationPositionNumber}]//span[normalize-space()='Enabled']");
 
        if ($element){
@@ -309,7 +326,7 @@ class AcceptanceTester extends \Codeception\Actor
         {
             $saveSettings = $this->checkElement(FluentFormsSettingsSelectors::platformlySaveButton);
 
-            if (!$saveSettings) // if the platformly integration is already configured
+            if (!$saveSettings) // Check if the platformly integration is already configured.
             {
                 $this->retryFillField(FluentFormsSettingsSelectors::platformlyApiKey,$api,2);
                 $this->retryFillField(FluentFormsSettingsSelectors::platformlyProjectID,$projectID,2);
@@ -317,8 +334,6 @@ class AcceptanceTester extends \Codeception\Actor
                 $this->seeText("Success");
             }
             $this->configurePlatformlyApiSettings("Platformly");
-
-
         }
 
    }

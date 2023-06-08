@@ -3,25 +3,11 @@ namespace Tests\Support\Helper\Acceptance;
 
 use Codeception\Module\WebDriver;
 use Tests\Support\Selectors\FluentFormsSelectors;
+use Tests\Support\Helper\Acceptance\AcceptanceHelper;
 
 
 class Platformly extends WebDriver
 {
-
-    public function configurePlatformlyApiSettings($searchKey): void
-    {
-        $this->amOnPage(FluentFormsSelectors::fFormPage);
-        $this->wait(2);
-        $this->moveMouseOver(FluentFormsSelectors::mouseHoverMenu);
-        $this->click(FluentFormsSelectors::formSettings);
-        $this->click(FluentFormsSelectors::allIntegrations);
-        $this->click(FluentFormsSelectors::addNewIntegration);
-        $this->moveMouseOver(FluentFormsSelectors::searchIntegration);
-        $this->fillField(FluentFormsSelectors::searchIntegration,$searchKey);
-        $this->click(FluentFormsSelectors::searchResult);
-
-    }
-
     public function platformlyData($email): string
     {
         $curl = curl_init();
