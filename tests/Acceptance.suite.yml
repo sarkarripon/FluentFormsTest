@@ -32,7 +32,7 @@ modules:
                 chromeOptions:
                     args:
 #                        - "--headless"
-                        - "--disable-gpu"
+#                        - "--disable-gpu"
                         - "disable-infobars"
                         - "--window-size=1920,1080"
 

@@ -3,11 +3,11 @@ namespace Tests\Support\Helper\Acceptance;
 
 use Codeception\Module\WebDriver;
 use Tests\Support\Selectors\FluentFormsSelectors;
-use Tests\Support\Helper\Acceptance\AcceptanceHelper;
 
-
-class Platformly extends WebDriver
+trait IntegrationHelper
 {
+
+    // All about platformly
     public function platformlyData($email): string
     {
         $curl = curl_init();
@@ -21,7 +21,7 @@ class Platformly extends WebDriver
             CURLOPT_FOLLOWLOCATION => true,
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST => 'POST',
-            CURLOPT_POSTFIELDS => 'api_key=4XIamp9fiLokeugrcmxSLMQjoRyXyStw&action=fetch_contact&value={"email":"'.$email.'"}',
+            CURLOPT_POSTFIELDS => 'api_key=4XIamp9fiLokeugrcmxSLMQjoRyXyStw&action=fetch_contact&value={"email":"' . $email . '"}',
             CURLOPT_HTTPHEADER => array(
                 'Content-Type: application/x-www-form-urlencoded'
             ),
@@ -30,9 +30,9 @@ class Platformly extends WebDriver
 
         curl_close($curl);
 
-
     }
 
 
 
 }
+

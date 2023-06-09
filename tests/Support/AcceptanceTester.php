@@ -173,15 +173,16 @@ class AcceptanceTester extends \Codeception\Actor
     }
 
     /**
-     * @return void
+     *
      * This function will delete all the existing pages
      * @author Sarkar Ripon
+     * @return void
      */
     public function deleteExistingPages(): void
     {
         $this->amOnPage(GlobalPageSelec::newPageCreationPage);
-
-        if ($this->checkElement(NewPageSelec::previousPageAvailable))
+        $existingPage = $this->checkElement(NewPageSelec::previousPageAvailable);
+        if($existingPage)
         {
             $this->clicked(NewPageSelec::selectAllCheckMark);
             $this->selectOption(NewPageSelec::selectMoveToTrash, "Move to Trash");
@@ -239,6 +240,23 @@ class AcceptanceTester extends \Codeception\Actor
                 $this->clicked($selector);
             }
         }
+    }
+
+    public function mapPlatformlyFields(): void
+    {
+        $this->waitForElement(FluentFormsSelectors::feedName,5);
+        $this->fillField(FluentFormsSelectors::feedName,'Platformly Integration');
+
+        $this->clicked(FluentFormsSelectors::plarformlySegmentDropDown);
+        $this->clicked(FluentFormsSelectors::plarformlySegment);
+
+        $this->clicked(FluentFormsSelectors::mapEmailDropdown);
+        $this->clicked(FluentFormsSelectors::mapEmail);
+        $this->fillField(FluentFormsSelectors::mapField(1),'{inputs.names.first_name}');
+        $this->fillField(FluentFormsSelectors::mapField(2),'{inputs.names.last_name}');
+        $this->fillField(FluentFormsSelectors::mapField(3),'{inputs.phone}');
+        $this->clickWithLeftButton(FluentFormsSelectors::saveFeed);
+        $this->wait(2);
     }
 
 
@@ -315,21 +333,26 @@ class AcceptanceTester extends \Codeception\Actor
    public function configureIntegration($integrationPositionNumber, $api, $projectID): void
    {
        $this->amOnPage(FluentFormsAddonsSelectors::integrationsPage);
+
        $element = $this->checkElement("//div[starts-with(@class, 'add_on_card addon_enabled_')][{$integrationPositionNumber}]//span[normalize-space()='Enabled']");
 
-       if ($element){
+       if ($element)
+       {
            $this->clickWithLeftButton("(//span[@class='el-switch__core'])[{$integrationPositionNumber}]");
        }
-       $this->clickWithLeftButton("(//div[@class='addon_footer'])[{$integrationPositionNumber}]//span[@class='dashicons dashicons-admin-generic']");
+       $this->clickWithLeftButton("(//div[contains(@class,'addon_footer')])[{$integrationPositionNumber}]//span[contains(@class,'dashicons dashicons-admin-generic')]",20);
+
 
         if($integrationPositionNumber == 12)
         {
-            $saveSettings = $this->checkElement(FluentFormsSettingsSelectors::platformlySaveButton);
+            $saveSettings = $this->checkElement(FluentFormsSettingsSelectors::disconnectPlatformly);
 
-            if (!$saveSettings) // Check if the platformly integration is already configured.
+            if ($saveSettings) // Check if the platformly integration is already configured.
             {
-                $this->retryFillField(FluentFormsSettingsSelectors::platformlyApiKey,$api,2);
-                $this->retryFillField(FluentFormsSettingsSelectors::platformlyProjectID,$projectID,2);
+                $this->waitForElement(FluentFormsSettingsSelectors::platformlyApiKey,5);
+                $this->fillField(FluentFormsSettingsSelectors::platformlyApiKey,$api);
+                $this->waitForElement(FluentFormsSettingsSelectors::platformlyProjectID,5);
+                $this->fillField(FluentFormsSettingsSelectors::platformlyProjectID,$projectID);
                 $this->clicked(FluentFormsSettingsSelectors::platformlySaveButton);
                 $this->seeText("Success");
             }

@@ -5,7 +5,7 @@ namespace Tests\Support\Selectors;
 class NewPageSelec
 {
     //New page creation with form short code
-    const previousPageAvailable = "(//td[@class='title column-title has-row-actions column-primary page-title'])[1]";
+    const previousPageAvailable = "//input[@id='post-query-submit']";
     const selectAllCheckMark = "(//input[@id='cb-select-all-1'])[1]";
     const selectMoveToTrash = "(//select[@id='bulk-action-selector-top'])[1]";
     const applyBtn = "(//input[@id='doaction'])[1]";
