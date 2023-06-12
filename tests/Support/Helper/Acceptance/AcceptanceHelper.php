@@ -50,7 +50,7 @@ class AcceptanceHelper extends WebDriver
     {
         $this->waitForElement($selector, 5);
         $this->moveMouseOver($selector);
-        parent::click($selector);
+        parent::clickWithLeftButton($selector);
         $this->wait(1);
     }
 

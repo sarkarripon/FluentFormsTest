@@ -8,7 +8,7 @@ trait IntegrationHelper
 {
 
     // All about platformly
-    public function platformlyData($email): string
+    public function fetchPlatformlyData($email): string
     {
         $curl = curl_init();
 
@@ -31,6 +31,8 @@ trait IntegrationHelper
         curl_close($curl);
 
     }
+
+
 
 
 

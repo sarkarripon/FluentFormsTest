@@ -1,12 +1,16 @@
 <?php
 namespace Tests\Acceptance;
 
+use Codeception\Attribute\DataProvider;
+use Codeception\Example;
 use Tests\Support\AcceptanceTester;
 use Tests\Support\Helper\Acceptance\IntegrationHelper as Integration;
+use Tests\Support\Selectors\FieldSelectors;
 use Tests\Support\Selectors\FluentFormsAddonsSelectors;
 use Tests\Support\Selectors\FluentFormsSelectors;
 use Tests\Support\Selectors\FormFields;
 use Tests\Support\Selectors\GlobalPageSelec;
+use Tests\Support\Helper\Acceptance\DataProvider\FormData;
 
 class PreCheckCest
 {
@@ -18,11 +22,15 @@ class PreCheckCest
 
     public function PullData()
     {
-//        $allData = json_decode($this->platformlyData("etlldnkbtzp@internetkeno.com"));
-//        echo $allData->first_name;
+        $allData = json_decode($this->fetchPlatformlyData("etlldnkbtzp@internetkeno.com"));
+        echo $allData->first_name;
     }
 
-    public function formcr(AcceptanceTester $I)
+
+    /**
+     * @dataProvider \Tests\Support\Helper\Acceptance\DataProvider\FormData::fieldData
+     */
+    public function formcr(AcceptanceTester $I, Example $example)
     {
         global $pageUrl;
         $formName = 'Platformly Integration';
@@ -39,16 +47,30 @@ class PreCheckCest
 //        $I->click(FluentFormsSelectors::saveForm);
 //        $I->seeText("Success");
 //        $I->renameForm($formName);
-        $I->configureIntegration('12','4XIamp9fiLokeugrcmxSLMQjoRyXyStw','2919');
-
-//        $I->amOnPage("wp-admin/admin.php?page=fluent_forms&form_id=478&route=settings&sub_route=form_settings#/all-integrations/0/platformly");
-
+//        $I->configureIntegration('12','4XIamp9fiLokeugrcmxSLMQjoRyXyStw','2919');
+//
 //        $I->mapPlatformlyFields();
 //
 //        $I->deleteExistingPages();
 //        $I->createNewPage($formName);
 //        $I->wantTo('Fill the form with sample data');
 //        $I->amOnUrl($pageUrl);
+        $I->amOnPage('platformly-integration/');
+        $I->wait(1);
+        $I->fillField(FieldSelectors::first_name, ($example['first_name']));
+        $I->fillField(FieldSelectors::last_name, ($example['last_name']));
+        $I->fillField(FieldSelectors::email, ($example['email']));
+        $I->fillField(FieldSelectors::address_line_1, ($example['address_line_1']));
+        $I->fillField(FieldSelectors::address_line_2, ($example['address_line_2']));
+        $I->fillField(FieldSelectors::city, ($example['city']));
+        $I->fillField(FieldSelectors::state, ($example['state']));
+        $I->fillField(FieldSelectors::zip, ($example['zip']));
+        $I->selectOption(FieldSelectors::country, ($example['country']));
+        $I->fillField(FieldSelectors::phone, ($example['phone']));
+        $I->click(FieldSelectors::submitButton);
+
+
+
         exit();
 
     }

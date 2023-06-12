@@ -335,8 +335,7 @@ class AcceptanceTester extends \Codeception\Actor
        $this->amOnPage(FluentFormsAddonsSelectors::integrationsPage);
 
        $element = $this->checkElement("//div[starts-with(@class, 'add_on_card addon_enabled_')][{$integrationPositionNumber}]//span[normalize-space()='Enabled']");
-
-       if ($element)
+       if (!$element)
        {
            $this->clickWithLeftButton("(//span[@class='el-switch__core'])[{$integrationPositionNumber}]");
        }
