@@ -73,6 +73,11 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/codeception/module-db" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/masterminds/html5" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/codeception/module-cli" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/codeception/module-datafactory" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/codeception/module-doctrine2" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/fakerphp/faker" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/league/factory-muffin" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/league/factory-muffin-faker" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

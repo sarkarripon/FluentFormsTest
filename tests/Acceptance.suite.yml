@@ -13,6 +13,7 @@ modules:
         - Tests\Support\Helper\Acceptance\AcceptanceHelper:
         - \Codeception\Module\Asserts:
         - Db:
+        - DataFactory:
 
 
     config:

@@ -1,0 +1,31 @@
+{
+	"name": "codeception/module-datafactory",
+	"description": "DataFactory module for Codeception",
+	"license": "MIT",
+	"type": "library",
+	"keywords": [
+		"codeception"
+	],
+	"authors": [
+		{
+			"name": "Michael Bodnarchuk"
+		}
+	],
+	"homepage": "https://codeception.com/",
+	"require": {
+		"php": "^8.0",
+		"codeception/codeception": "^5.0.0-RC6",
+		"league/factory-muffin": "^3.3",
+		"league/factory-muffin-faker": "^2.3"
+	},
+	"minimum-stability": "RC",
+	"autoload": {
+		"classmap": [
+			"src/"
+		]
+	},
+	"config": {
+		"classmap-authoritative": true,
+		"sort-packages": true
+	}
+}

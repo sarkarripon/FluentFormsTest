@@ -1,16 +1,11 @@
 <?php
 namespace Tests\Acceptance;
 
-use Codeception\Attribute\DataProvider;
 use Codeception\Example;
 use Tests\Support\AcceptanceTester;
+use Tests\Support\Factories\DataProvider\FormData;
 use Tests\Support\Helper\Acceptance\IntegrationHelper as Integration;
 use Tests\Support\Selectors\FieldSelectors;
-use Tests\Support\Selectors\FluentFormsAddonsSelectors;
-use Tests\Support\Selectors\FluentFormsSelectors;
-use Tests\Support\Selectors\FormFields;
-use Tests\Support\Selectors\GlobalPageSelec;
-use Tests\Support\Helper\Acceptance\DataProvider\FormData;
 
 class PreCheckCest
 {
@@ -28,7 +23,7 @@ class PreCheckCest
 
 
     /**
-     * @dataProvider \Tests\Support\Helper\Acceptance\DataProvider\FormData::fieldData
+     * @dataProvider \Tests\Support\Factories\DataProvider\FormData::fieldData
      */
     public function formcr(AcceptanceTester $I, Example $example)
     {
