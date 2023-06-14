@@ -1,10 +1,5 @@
 <?php
 namespace Tests\Support\Factories\DataProvider;
-
-use League\FactoryMuffin\Faker\Facade as Faker;
-use Tests\Support\Factories\User;
-
-
 class FormData
 {
 
@@ -26,21 +21,6 @@ class FormData
 
         ];
     }
-
-    public function dataLake()
-    {
-        $fm->define(User::class)->setDefinitions([
-            'name'   => Faker::name(),
-
-            // generate email
-            'email'  => Faker::email(),
-            'body'   => Faker::text(),
-
-            // generate a profile and return its Id
-            'profile_id' => 'factory|Profile'
-        ]);
-    }
-
 
 
 }
