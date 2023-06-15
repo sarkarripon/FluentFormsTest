@@ -20,6 +20,7 @@ modules:
             url: https://fluentsmtp.com
             browser: chrome
             clear_cookies: true
+            stop_on_failure: false
             restart: false
             pageload_timeout: 
             port: 9515

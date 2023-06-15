@@ -1,22 +1,25 @@
 <?php
 namespace Tests\Support\Factories\DataProvider;
+use Faker\Generator;
+
 class FormData
 {
 
     public static function fieldData() : array
     {
+        $faker = \Faker\Factory::create();
         return [
             [
-                'first_name'=>"Sarkar",
-                'last_name'=>"Ripon",
-                'email'=>"etlldnkbtzp@internetkeno.com",
-                'address_line_1'=>"Authlab 24/A, Jalalabad R/A",
-                'address_line_2'=>"Sylhet Sadar",
-                'city'=>"Sylhet",
-                'state'=>"Sylhet",
-                'zip'=>"3100",
-                'country'=>"Bangladesh",
-                'phone'=>"01700000000",
+                'first_name'=>$faker->firstName,
+                'last_name'=>$faker->lastName,
+                'email'=>$faker->userName. '@gmail.com',
+                'address_line_1'=>$faker->streetAddress,
+                'address_line_2'=>$faker->streetAddress,
+                'city'=>$faker->city,
+                'state'=>$faker->state,
+                'zip'=>$faker->postcode,
+                'country'=>$faker->country,
+                'phone'=>$faker->phoneNumber,
             ]
 
         ];

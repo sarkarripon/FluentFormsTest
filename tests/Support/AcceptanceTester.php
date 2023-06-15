@@ -268,8 +268,9 @@ class AcceptanceTester extends \Codeception\Actor
         $this->clicked(FluentFormsSelectors::formSettings);
         $this->clicked(FluentFormsSelectors::allIntegrations);
         $this->clicked(FluentFormsSelectors::addNewIntegration);
-        $this->moveMouseOver(FluentFormsSelectors::searchIntegration);
+//        $this->click(FluentFormsSelectors::searchIntegration);
         $this->fillField(FluentFormsSelectors::searchIntegration,$searchKey);
+
         $this->clicked(FluentFormsSelectors::searchResult);
 
     }

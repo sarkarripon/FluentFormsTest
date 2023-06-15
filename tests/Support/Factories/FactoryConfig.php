@@ -1,10 +1,11 @@
 <?php
-use League\FactoryMuffin\FactoryMuffin;
+namespace Tests\Support\Factories;
 
-$fm = new FactoryMuffin();
-try {
-    $fm->loadFactories(__DIR__ . '/Factories');
-} catch (\League\FactoryMuffin\Exceptions\DirectoryNotFoundException $e) {
+class FactoryConfig
+{
+   public static function faker(): \Faker\Generator
+   {
+       return \Faker\Factory::create();
+   }
+
 }
-
-return $fm;

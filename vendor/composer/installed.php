@@ -3,7 +3,7 @@
         'name' => '__root__',
         'pretty_version' => 'dev-master',
         'version' => 'dev-master',
-        'reference' => 'd820335ed0977c0a1df67fbf8f18405cd8c39e31',
+        'reference' => '0bc97612146d1650e441ff516e2b9205a660aa14',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -13,7 +13,7 @@
         '__root__' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => 'd820335ed0977c0a1df67fbf8f18405cd8c39e31',
+            'reference' => '0bc97612146d1650e441ff516e2b9205a660aa14',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -228,6 +228,15 @@
             'replaced' => array(
                 0 => '*',
             ),
+        ),
+        'fzaninotto/faker' => array(
+            'pretty_version' => 'v1.5.0',
+            'version' => '1.5.0.0',
+            'reference' => 'd0190b156bcca848d401fb80f31f504f37141c8d',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../fzaninotto/faker',
+            'aliases' => array(),
+            'dev_requirement' => true,
         ),
         'guzzlehttp/guzzle' => array(
             'pretty_version' => '7.7.0',
