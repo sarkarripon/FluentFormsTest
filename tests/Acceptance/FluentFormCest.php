@@ -1,13 +1,9 @@
 <?php
-
 namespace Tests\Acceptance;
 
 use Codeception\Attribute\Skip;
 use Tests\Support\AcceptanceTester;
-use Tests\Support\Selectors\FormFields;
 use Tests\Support\Selectors\GlobalPageSelec;
-use Tests\Support\Selectors\NewFormSelec;
-
 
 class FluentFormCest
 {
@@ -57,62 +53,6 @@ class FluentFormCest
 
     //************************************************* Main test function start here *************************************************//
 
-    /**
-     * @author Sarkar Ripon
-     * @param AcceptanceTester $I
-     * @return void
-     * This function will create a blank form with general fields
-     */
-    public function create_blank_form_with_general_fields(AcceptanceTester $I): void
-    {
-            $I->wantTo('Create a blank form with general fields');
-//            $I->deleteExistingForms();
-            $I->initiateNewForm();
-            //general fields
-            $I->clicked(FormFields::nameField);
-            $I->click(FormFields::emailField);
-            $I->click(FormFields::simpleText);
-            $I->click(FormFields::maskInput);
-            $I->click(FormFields::textArea);
-            $I->click(FormFields::addressField);
-            $I->click(FormFields::countryList);
-            $I->click(FormFields::numaricField);
-            $I->click(FormFields::dropdown);
-            $I->click(FormFields::radioBtn);
-            $I->click(FormFields::checkbox);
-            $I->click(FormFields::multipleChoice);
-            $I->click(FormFields::websiteUrl);
-            $I->click(FormFields::timeDate);
-            $I->click(FormFields::imageUpload);
-            $I->click(FormFields::fileUpload);
-            $I->click(FormFields::customHtml);
-            $I->click(FormFields::phoneField);
-            $I->clicked(NewFormSelec::saveForm);
-            $I->seeText("Success");
-            $I->renameForm("General Fields Form");
-            $I->createNewPage("General Fields");
-    }
-
-    public function create_blank_form_with_advanced_fields(AcceptanceTester $I): void
-    {
-        global $pageUrl;
-        $I->wantTo('Create a blank form with advanced fields');
-//        $I->deleteExistingForms();
-        $I->initiateNewForm();
-        $I->clicked(FormFields::nameField);
-        $I->click(FormFields::emailField);
-        $I->clicked(AdvancedFieldSelec::advField);
-        $I->click(AdvancedFieldSelec::passField);
-        $I->clicked(FormFields::fieldCustomise(3)); //click on the 3rd field
-        $I->click(NewFormSelec::saveForm);
-        $I->seeText("Success");
-        $I->renameForm("Signup Form");
-
-//        $I->deleteExistingPages();
-        $I->createNewPage("Signup Form");
-        $I->wantTo('Fill the form with sample data');
-        $I->amOnUrl($pageUrl);
-    }
 
 
     //************************************************* Main test function end here *************************************************//

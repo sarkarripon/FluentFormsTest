@@ -1,11 +1,8 @@
 <?php
-
 declare(strict_types=1);
 namespace Tests\Support;
 
-use Codeception\Module\WebDriver;
 use Exception;
-use Tests\Support\Helper\Acceptance\Platformly;
 use Tests\Support\Selectors\AccepTestSelec;
 use Tests\Support\Selectors\FluentFormsAddonsSelectors;
 use Tests\Support\Selectors\FluentFormsSelectors;
@@ -277,7 +274,6 @@ class AcceptanceTester extends \Codeception\Actor
 
     /**
      *
-     *
      * [!] This is the positions of the integrations in the list.
      * Use the position number to turn on the integration.
      *
@@ -360,22 +356,6 @@ class AcceptanceTester extends \Codeception\Actor
         }
 
    }
-
-
-
-
-
-
-
-
-
-//    public function createFormFieldBySearch($fieldName): void
-//    {
-//        $this->fillField("(//input[@placeholder='Search (name, address)'])[1]", $fieldName);
-//        $this->clicked("div[class='v-row mb15'] div[class='vddl-draggable btn-element']");
-//
-//    }
-
 
 
 }

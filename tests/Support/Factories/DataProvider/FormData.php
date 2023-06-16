@@ -4,7 +4,6 @@ use Faker\Generator;
 
 class FormData
 {
-
     public static function fieldData() : array
     {
         $faker = \Faker\Factory::create();
@@ -12,13 +11,13 @@ class FormData
             [
                 'first_name'=>$faker->firstName,
                 'last_name'=>$faker->lastName,
-                'email'=>$faker->userName. '@gmail.com',
+                'email'=>$faker->unique()->userName. '@gmail.com',
                 'address_line_1'=>$faker->streetAddress,
                 'address_line_2'=>$faker->streetAddress,
                 'city'=>$faker->city,
                 'state'=>$faker->state,
                 'zip'=>$faker->postcode,
-                'country'=>$faker->country,
+                'country'=>$faker->country($faker->locale),
                 'phone'=>$faker->phoneNumber,
             ]
 

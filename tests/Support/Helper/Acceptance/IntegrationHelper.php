@@ -8,10 +8,9 @@ trait IntegrationHelper
 {
 
     // All about platformly
-    public function fetchPlatformlyData($email): string
+    public function fetchDataFromPlatformly($email): string
     {
         $curl = curl_init();
-
         curl_setopt_array($curl, array(
             CURLOPT_URL => 'https://api.platform.ly',
             CURLOPT_RETURNTRANSFER => true,
@@ -22,13 +21,15 @@ trait IntegrationHelper
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST => 'POST',
             CURLOPT_POSTFIELDS => 'api_key=4XIamp9fiLokeugrcmxSLMQjoRyXyStw&action=fetch_contact&value={"email":"' . $email . '"}',
+//            CURLOPT_POSTFIELDS => 'api_key='.$api.'&action=fetch_contact&value={"email":"' . $email . '"}',
             CURLOPT_HTTPHEADER => array(
                 'Content-Type: application/x-www-form-urlencoded'
             ),
         ));
-        return curl_exec($curl);
-
+        $response = curl_exec($curl);
         curl_close($curl);
+
+        return $response;
 
     }
 
