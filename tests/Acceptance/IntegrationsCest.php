@@ -18,7 +18,7 @@ class IntegrationsCest
     /**
      * @dataProvider \Tests\Support\Factories\DataProvider\FormData::fieldData
      */
-    public function platformly_Integration_Test(AcceptanceTester $I, Example $example)
+    public function platformly_Integration_Test(AcceptanceTester $I, Example $example): void
     {
         global $pageUrl;
         $formName = 'Platformly Integration';

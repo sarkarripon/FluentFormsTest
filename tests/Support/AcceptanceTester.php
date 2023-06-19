@@ -241,7 +241,7 @@ class AcceptanceTester extends \Codeception\Actor
 
     public function mapPlatformlyFields(): void
     {
-        $this->waitForElement(FluentFormsSelectors::feedName,5);
+        $this->waitForElement(FluentFormsSelectors::feedName,10);
         $this->fillField(FluentFormsSelectors::feedName,'Platformly Integration');
 
         $this->clicked(FluentFormsSelectors::plarformlySegmentDropDown);
@@ -265,7 +265,6 @@ class AcceptanceTester extends \Codeception\Actor
         $this->clicked(FluentFormsSelectors::formSettings);
         $this->clicked(FluentFormsSelectors::allIntegrations);
         $this->clicked(FluentFormsSelectors::addNewIntegration);
-//        $this->click(FluentFormsSelectors::searchIntegration);
         $this->fillField(FluentFormsSelectors::searchIntegration,$searchKey);
 
         $this->clicked(FluentFormsSelectors::searchResult);

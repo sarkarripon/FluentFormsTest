@@ -6,9 +6,8 @@ use Tests\Support\Selectors\FluentFormsSelectors;
 
 trait IntegrationHelper
 {
-
     // All about platformly
-    public function fetchDataFromPlatformly($email): string
+    public function fetchDataFromPlatformly($api, $email): string
     {
         $curl = curl_init();
         curl_setopt_array($curl, array(
@@ -20,8 +19,7 @@ trait IntegrationHelper
             CURLOPT_FOLLOWLOCATION => true,
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST => 'POST',
-            CURLOPT_POSTFIELDS => 'api_key=4XIamp9fiLokeugrcmxSLMQjoRyXyStw&action=fetch_contact&value={"email":"' . $email . '"}',
-//            CURLOPT_POSTFIELDS => 'api_key='.$api.'&action=fetch_contact&value={"email":"' . $email . '"}',
+            CURLOPT_POSTFIELDS => 'api_key='.$api.'&action=fetch_contact&value={"email":"' . $email . '"}',
             CURLOPT_HTTPHEADER => array(
                 'Content-Type: application/x-www-form-urlencoded'
             ),
