@@ -26,10 +26,27 @@ class FluentFormsSelectors
     const plarformlySegment = "//div[@x-placement='bottom-start']//ul[contains(@class,'el-scrollbar__view el-select-dropdown__list')]";
     const mapEmailDropdown = "//tbody//div//div[@class='el-select']//i[contains(@class,'el-select__caret el-input__icon el-icon-arrow-up')]";
     const mapEmail = "//span[normalize-space()='Email']";
+
     public static function mapField($fieldPosition): string
     {
         return "(//input[@placeholder='Select a Field or Type Custom value'])[{$fieldPosition}]";
     }
     const saveFeed = "//button[contains(@class,'el-button pull-right el-button--primary el-button--small')]";
+
+
+    //Other Fields
+    const addField = "(//span[contains(text(),'+')])[1]";
+    const removeField = "(//span[contains(text(),'-')])[1]";
+    public static function fieldLabel($fieldPosition): string
+    {
+        return "(//input[@placeholder='Select'])[{$fieldPosition}]";
+    }
+    public static function selectField($fieldName): string
+    {
+        return "//div[@x-placement='bottom-start']//span[contains(text(),'$fieldName')]";
+    }
+    const contactTag = "//input[contains(@class,'el-select')]";
+
+
 
 }
