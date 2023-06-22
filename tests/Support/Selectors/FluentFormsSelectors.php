@@ -41,12 +41,11 @@ class FluentFormsSelectors
     {
         return "(//input[@placeholder='Select'])[{$fieldPosition}]";
     }
-    public static function selectField($fieldName): string
-    {
-        return "//div[@x-placement='bottom-start']//span[contains(text(),'$fieldName')]";
-    }
+//    public static function selectField($fieldName): string
+//    {
+//        return "//div[@x-placement='bottom-start']//span[normalize-space()='{$fieldName}']";
+//    }
+
+    const selectField = "(//span[normalize-space()='City'])";
     const contactTag = "//input[contains(@class,'el-select')]";
-
-
-
 }
