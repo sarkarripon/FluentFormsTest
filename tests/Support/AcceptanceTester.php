@@ -47,6 +47,12 @@ class AcceptanceTester extends \Codeception\Actor
         }
     }
 
+    public function seeSuccess($message): void
+    {
+        $this->assertStringContainsString('Success',
+            $this->grabTextFrom("//div[@role='alert']//h2[normalize-space()='Success'][1]"), $message);
+    }
+
     /**
      * @author Sarkar Ripon
      * @param string $pluginName
@@ -144,14 +150,11 @@ class AcceptanceTester extends \Codeception\Actor
      * @return void
      * Create a new form
      */
-    public function initiateNewForm():void
+    public function initiateNewForm(): void
     {
         $this->amOnPage(FluentFormsSelectors::fFormPage);
-        if ($this->tryToClick('Add a New Form') ||
-            $this->tryToClick('Click Here to Create Your First Form', FluentFormsSelectors::createFirstForm)) {
-            $this->tryToMoveMouseOver(FluentFormsSelectors::blankForm);
-            $this->tryToClick('Create Form');
-        }
+        $this->clicked(FluentFormsSelectors::addNewForm);
+        $this->clicked(FluentFormsSelectors::blankForm);
     }
 
     /**
@@ -162,11 +165,10 @@ class AcceptanceTester extends \Codeception\Actor
      */
     public function renameForm($formName):void
     {
-        $this->tryToClick(RenameFormSelec::rename);
-        $this->tryToFillField(RenameFormSelec::renameField, $formName);
-        $this->tryToClick("Rename", RenameFormSelec::renameBtn);
+        $this->click(RenameFormSelec::rename);
+        $this->fillField(RenameFormSelec::renameField, $formName);
+        $this->click("Rename", RenameFormSelec::renameBtn);
         $this->wait(1);
-        $this->see("Success!");
     }
 
     /**
@@ -224,16 +226,16 @@ class AcceptanceTester extends \Codeception\Actor
     public function createFormField($data): void
     {
         $this->wantTo('Create a form for integrations');
-        $this->clicked(FormFields::generalSection);
+        $this->clicked(FluentFormsSelectors::generalSection);
 
         foreach ($data as $fieldType => $fields) {
             $sectionType = match ($fieldType) {
                 'advancedFields' => 'advancedSection',
                 default => 'generalSection',
             };
-            $this->clicked(constant(FormFields::class . '::' . $sectionType));
+            $this->clicked(constant(FluentFormsSelectors::class . '::' . $sectionType));
             foreach ($fields as $inputField){
-                $selector = constant(FormFields::class . '::' . $fieldType)[$inputField];
+                $selector = constant(FluentFormsSelectors::class . '::' . $fieldType)[$inputField];
                 $this->clicked($selector);
             }
         }
@@ -330,7 +332,7 @@ class AcceptanceTester extends \Codeception\Actor
    {
        $this->amOnPage(FluentFormsAddonsSelectors::integrationsPage);
 
-       $element = $this->checkElement("//div[starts-with(@class, 'add_on_card addon_enabled_')][{$integrationPositionNumber}]//span[normalize-space()='Enabled']");
+       $element = $this->checkElement("(//div[@class='ff_card_footer'])[{$integrationPositionNumber}]//i[@class='el-icon-setting']");
        if (!$element)
        {
            $this->clickWithLeftButton("(//span[@class='el-switch__core'])[{$integrationPositionNumber}]");

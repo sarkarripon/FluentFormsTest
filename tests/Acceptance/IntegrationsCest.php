@@ -33,8 +33,11 @@ class IntegrationsCest
         ];
         $I->createFormField($requiredField);
         $I->click(FluentFormsSelectors::saveForm);
-        $I->seeText("Success");
+        $I->wait(1);
+        $I->seeSuccess('Form created successfully.');
         $I->renameForm($formName);
+        $I->seeSuccess('Form renamed successfully.');
+
         $I->configureIntegration($integrationPositionNumber, $api, $projectId);
         $I->mapPlatformlyFields();
         $I->deleteExistingPages();
