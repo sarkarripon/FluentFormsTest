@@ -12,7 +12,7 @@ class FluentFormsSelectors
     const mouseHoverMenu = "//tbody/tr[contains(@class,'el-table__row')]/td[2]/div[1]";
     const deleteBtn = "//a[normalize-space()='Delete']";
     const confirmBtn = "[class='el-popover el-popper']:last-child button:last-child";
-    const formSettings = "//span[@class='ff_edit']//a[contains(text(),'Settings')]";
+    const formSettings = "//span[contains(@class,'ff_edit')]//a[contains(text(),'Settings')]";
     const settingsAndIntegrations = "//a[normalize-space()='Settings & Integrations']";
     const allIntegrations = "//a[@data-route_key='/all-integrations']";
     const addNewIntegration = "//button[normalize-space()='Add New Integration']";
@@ -30,25 +30,24 @@ class FluentFormsSelectors
 
     const generalSection = "(//h5[normalize-space()='General Fields'])[1]";
     const generalFields = [
-        'nameField' => "//div[contains(@class,'vddl-draggable btn-element')]//span[normalize-space()='Name Fields']",
-        'emailField' => "//div[contains(@class,'vddl-draggable btn-element')]//span[normalize-space()='Email']",
+        'nameFields' => "//div[contains(@class,'vddl-draggable btn-element')]//span[normalize-space()='Name Fields']",
+        'email' => "//div[contains(@class,'vddl-draggable btn-element')]//span[normalize-space()='Email']",
         'simpleText' => "//div[contains(@class,'vddl-draggable btn-element')]//span[normalize-space()='Simple Text']",
         'maskInput' => "//div[contains(@class,'vddl-draggable btn-element')]//span[normalize-space()='Mask Input']",
         'textArea' => "//div[contains(@class,'vddl-draggable btn-element')]//span[normalize-space()='Text Area']",
-        'addressField' => "//div[contains(@class,'vddl-draggable btn-element')]//span[normalize-space()='Address Fields']",
+        'addressFields' => "//div[contains(@class,'vddl-draggable btn-element')]//span[normalize-space()='Address Fields']",
         'countryList' => "//div[contains(@class,'vddl-draggable btn-element')]//span[normalize-space()='Country List']",
         'numaricField' => "//div[contains(@class,'vddl-draggable btn-element')]//span[normalize-space()='Numeric Field']",
         'dropdown' => "//div[contains(@class,'vddl-draggable btn-element')]//span[normalize-space()='Dropdown']",
         'radioField' => "//div[contains(@class,'vddl-draggable btn-element')]//span[normalize-space()='Radio Field']",
-        'checkbox' => "//div[contains(@class,'vddl-draggable btn-element')]//span[normalize-space()='Check Box']",
+        'checkBox' => "//div[contains(@class,'vddl-draggable btn-element')]//span[normalize-space()='Check Box']",
         'multipleChoice' => "//div[contains(@class,'vddl-draggable btn-element')]//span[normalize-space()='Multiple Choice']",
         'websiteUrl' => "//div[contains(@class,'vddl-draggable btn-element')]//span[normalize-space()='Website URL']",
         'timeDate' => "//div[contains(@class,'vddl-draggable btn-element')]//span[normalize-space()='Time & Date']",
         'imageUpload' => "//div[contains(@class,'vddl-draggable btn-element')]//span[normalize-space()='Image Upload']",
         'fileUpload' => "//div[contains(@class,'vddl-draggable btn-element')]//span[normalize-space()='File Upload']",
         'customHtml' => "//div[contains(@class,'vddl-draggable btn-element')]//span[normalize-space()='Custom HTML']",
-        'phoneField' => "//div[contains(@class,'vddl-draggable btn-element')]//span[normalize-space()='Phone/Mobile']",
-
+        'phone' => "//div[contains(@class,'vddl-draggable btn-element')]//span[normalize-space()='Phone/Mobile']",
     ];
 
     const advancedSection = "(//h5[normalize-space()='Advanced Fields'])[1]";
@@ -118,7 +117,7 @@ class FluentFormsSelectors
     {
         return "(//input[@placeholder='Select a Field or Type Custom value'])[{$fieldPosition}]";
     }
-    const saveFeed = "//button[contains(@class,'el-button pull-right el-button--primary el-button--small')]";
+    const saveFeed = "(//button[contains(@class,'el-button--primary')])";
 
 
     //Other Fields

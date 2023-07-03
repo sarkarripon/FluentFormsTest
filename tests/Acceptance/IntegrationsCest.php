@@ -29,7 +29,7 @@ class IntegrationsCest
         $I->deleteExistingForms();
         $I->initiateNewForm();
         $requiredField = [
-            'generalFields' =>['nameField','emailField','addressField' ,'phoneField'],
+            'generalFields' =>['nameFields','email','addressFields' ,'phone'],
         ];
         $I->createFormField($requiredField);
         $I->click(FluentFormsSelectors::saveForm);
@@ -81,7 +81,7 @@ class IntegrationsCest
             $I->fail($message . " is not present to the remote.");
         }else
         {
-            echo 'Hurray!! Integration test pass. All data has been sent to remote';
+            echo 'Hurray!! Integration test pass. All data has been sent to Platform.ly';
         }
     }
 

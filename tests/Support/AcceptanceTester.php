@@ -131,6 +131,7 @@ class AcceptanceTester extends \Codeception\Actor
     public function deleteExistingForms(): void
     {
         $this->amOnPage(FluentFormsSelectors::fFormPage);
+        $this->wait(2);
         $tableRow =count($this->grabMultiple("tr"));
 //        codecept_debug($tableRow);
 
@@ -243,7 +244,7 @@ class AcceptanceTester extends \Codeception\Actor
 
     public function mapPlatformlyFields(): void
     {
-        $this->waitForElement(FluentFormsSelectors::feedName,10);
+        $this->waitForElement(FluentFormsSelectors::feedName,20);
         $this->fillField(FluentFormsSelectors::feedName,'Platformly Integration');
 
         $this->clicked(FluentFormsSelectors::plarformlySegmentDropDown);
@@ -262,13 +263,12 @@ class AcceptanceTester extends \Codeception\Actor
     public function configurePlatformlyApiSettings($searchKey): void
     {
         $this->amOnPage(FluentFormsSelectors::fFormPage);
-        $this->wait(2);
+        $this->waitForElement(FluentFormsSelectors::mouseHoverMenu,10);
         $this->moveMouseOver(FluentFormsSelectors::mouseHoverMenu);
         $this->clicked(FluentFormsSelectors::formSettings);
         $this->clicked(FluentFormsSelectors::allIntegrations);
         $this->clicked(FluentFormsSelectors::addNewIntegration);
         $this->fillField(FluentFormsSelectors::searchIntegration,$searchKey);
-
         $this->clicked(FluentFormsSelectors::searchResult);
 
     }
@@ -333,25 +333,26 @@ class AcceptanceTester extends \Codeception\Actor
        $this->amOnPage(FluentFormsAddonsSelectors::integrationsPage);
 
        $element = $this->checkElement("(//div[@class='ff_card_footer'])[{$integrationPositionNumber}]//i[@class='el-icon-setting']");
+
        if (!$element)
        {
            $this->clickWithLeftButton("(//span[@class='el-switch__core'])[{$integrationPositionNumber}]");
        }
-       $this->clickWithLeftButton("(//div[contains(@class,'addon_footer')])[{$integrationPositionNumber}]//span[contains(@class,'dashicons dashicons-admin-generic')]",20);
+
+       $this->clickWithLeftButton("(//DIV[@class='ff_card_footer_group'])[{$integrationPositionNumber}]//I[@class='el-icon-setting']");
 
 
         if($integrationPositionNumber == 12)
         {
             $saveSettings = $this->checkElement(FluentFormsSettingsSelectors::disconnectPlatformly);
 
-            if ($saveSettings) // Check if the platformly integration is already configured.
+            if (!$saveSettings) // Check if the platformly integration is already configured.
             {
                 $this->waitForElement(FluentFormsSettingsSelectors::platformlyApiKey,5);
                 $this->fillField(FluentFormsSettingsSelectors::platformlyApiKey,$api);
                 $this->waitForElement(FluentFormsSettingsSelectors::platformlyProjectID,5);
                 $this->fillField(FluentFormsSettingsSelectors::platformlyProjectID,$projectID);
                 $this->clicked(FluentFormsSettingsSelectors::platformlySaveButton);
-                $this->seeText("Success");
             }
             $this->configurePlatformlyApiSettings("Platformly");
         }

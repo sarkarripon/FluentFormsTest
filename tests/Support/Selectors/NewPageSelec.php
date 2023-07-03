@@ -9,7 +9,7 @@ class NewPageSelec
     const selectAllCheckMark = "(//input[@id='cb-select-all-1'])[1]";
     const selectMoveToTrash = "(//select[@id='bulk-action-selector-top'])[1]";
     const applyBtn = "(//input[@id='doaction'])[1]";
-    const formShortCode = "(//code[@title='Click to copy shortcode'])[1]";
+    const formShortCode = "//code[contains(@title,'Click to copy')]";
     const addNewPage = ".page-title-action";
     const jsForTitle = 'wp.data.dispatch("core/editor").editPost({title: "%s"})';
     const jsForContent = "wp.data.dispatch('core/block-editor').insertBlock(wp.blocks.createBlock('core/paragraph',{content:'%s'}))";
