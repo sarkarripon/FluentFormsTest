@@ -20,7 +20,7 @@ class PreCheckCest
 
    public function check_test(AcceptanceTester $I): void
    {
-       $I->amOnPage("wp-admin/admin.php?page=fluent_forms&form_id=550&route=settings&sub_route=form_settings#/all-integrations/2583/platformly");
+       $I->amOnPage("wp-admin/admin.php?page=fluent_forms&form_id=579&route=settings&sub_route=form_settings#/all-integrations/2739/platformly");
 
        $otherFieldsArray = [
            'Address Line 1'=>'{inputs.address_1.address_line_1}',
@@ -36,6 +36,7 @@ class PreCheckCest
 //       }
 
        $I->clicked(FluentFormsSelectors::addField);
+       exit();
        $I->click(FluentFormsSelectors::fieldLabel(1));
        $I->wait(2);
        $I->moveMouseOver("//div[@x-placement='bottom-start']//span[contains(normalize-space(),'Address Line 1')]");
