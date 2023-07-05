@@ -121,11 +121,13 @@ class FluentFormsSelectors
 
 
     //Other Fields
-    const addField = "(//span[contains(text(),'+')])[1]";
-    const removeField = "(//span[contains(text(),'-')])[1]";
+    const addField = "(//i[contains(@class,'el-icon-plus')])[1]";
+    const removeField = "(//i[contains(@class,'el-icon-minus')])[1]";
+    const openFieldLabel = "(//ul[contains(@class,'el-input__inner')])";
+
     public static function fieldLabel($fieldPosition): string
     {
-        return "(//input[@placeholder='Select'])[{$fieldPosition}]";
+        return "(//ul[contains(@class,'el-select-dropdown__list')]//span[contains(text(),'State')])[{$fieldPosition}]";
     }
 //    public static function selectField($fieldName): string
 //    {

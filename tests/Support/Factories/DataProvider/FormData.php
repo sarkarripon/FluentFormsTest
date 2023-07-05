@@ -1,16 +1,14 @@
 <?php
 namespace Tests\Support\Factories\DataProvider;
 
-
-
 class FormData
 {
     public static function countryName(): string
     {
         $faker = \Faker\Factory::create();
-        $singleWordCountry = explode(' ', $faker->country);
+        $singleWordCountry = explode('(', $faker->country);
         if (strlen($singleWordCountry[0]) >= 4) {
-            return $singleWordCountry[0];
+            return trim($singleWordCountry[0]);
         } else {
             return 'United States';
         }

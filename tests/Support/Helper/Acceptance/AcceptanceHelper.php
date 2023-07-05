@@ -72,7 +72,7 @@ class AcceptanceHelper extends WebDriver
 
     /**
      * @author Sarkar Ripon
-     * If element is found return true if not return false
+     * If element is found return true, if not, return false
      * @param $element
      * @return bool
      */
