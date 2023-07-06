@@ -20,31 +20,13 @@ class PreCheckCest
 
    public function check_test(AcceptanceTester $I): void
    {
-       $I->amOnPage("wp-admin/admin.php?page=fluent_forms&form_id=582&route=settings&sub_route=form_settings#/all-integrations/2760/platformly");
+       $I->amOnPage("wp-admin/admin.php?page=fluent_forms&form_id=589&route=settings&sub_route=form_settings#/all-integrations/2808/platformly");
 
-       $otherFieldsArray = [
-           'Address Line 1'=>'{inputs.address_1.address_line_1}',
-           'Address Line 2'=>'{inputs.address_1.address_line_2}',
-           'City'=>'{inputs.address_1.city}',
-           'State'=>'{inputs.address_1.state}',
-           'Zip'=>'{inputs.address_1.zip}',
 
-       ];
-//       foreach ($otherFieldsArray as $fieldLabel => $fieldValue) {
-//
-//
-//       }
 
-       $I->clicked(FluentFormsSelectors::addField);
-       $I->click("(//input[@type='text'])[7]");
-       try {
-           $I->click("body > div:nth-child(8) > div:nth-child(1) > div:nth-child(1) > ul:nth-child(1) > li:nth-child(4) > span:nth-child(1)");
-       } catch (\Exception $e) {
-           echo $e->getMessage();
-       }
 
-       $I->pause();
-       $I->click("//div[@x-placement='bottom-start']//span[contains(normalize-space(),'Address Line 1')]");
+
+
        exit();
 
 

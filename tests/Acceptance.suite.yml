@@ -19,10 +19,11 @@ modules:
         Tests\Support\Helper\Acceptance\AcceptanceHelper:
             url: https://fluentsmtp.com
             browser: chrome
+            request_timeout: 15
             clear_cookies: true
             stop_on_failure: false
             restart: false
-            pageload_timeout: 
+            pageload_timeout: 15
             port: 9515
             wp_username: 'admin'
             wp_password: 'admin'

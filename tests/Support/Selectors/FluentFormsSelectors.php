@@ -121,19 +121,33 @@ class FluentFormsSelectors
 
 
     //Other Fields
-    const addField = "(//i[contains(@class,'el-icon-plus')])[1]";
-    const removeField = "(//i[contains(@class,'el-icon-minus')])[1]";
-    const openFieldLabel = "(//ul[contains(@class,'el-input__inner')])";
-
-    public static function fieldLabel($fieldPosition): string
+    public static function addField($fieldOrder): string
     {
-        return "(//ul[contains(@class,'el-select-dropdown__list')]//span[contains(text(),'State')])[{$fieldPosition}]";
+        return "(//i[contains(@class,'el-icon-plus')])[{$fieldOrder}]";
     }
-//    public static function selectField($fieldName): string
-//    {
-//        return "//div[@x-placement='bottom-start']//span[normalize-space()='{$fieldName}']";
-//    }
+    const removeField = "(//i[contains(@class,'el-icon-minus')])[1]";
+    public static function openFieldLabel($fieldPosition): string
+    {
+        return "(//input[@placeholder='Select'])[{$fieldPosition}]";
+    }
+    public static function jsForFieldLabel($fieldOrder,$fieldValuePosition): string
+    {
+        return 'document.querySelector("body > div:nth-child('. $fieldOrder .') > div:nth-child(1) > div:nth-child(1) > ul:nth-child(1) > li:nth-child('. $fieldValuePosition .') > span:nth-child(1)").click();';
+    }
 
+    public static function jsForFieldLabelFromBottom($fieldValuePosition): string
+    {
+        return "document.querySelector(\"div[x-placement='bottom-start'] li:nth-child($fieldValuePosition)\").click();";
+    }
+    public static function jsForFieldLabelFromTop($fieldValuePosition): string
+    {
+        return "document.querySelector(\"div[x-placement='top-start'] li:nth-child($fieldValuePosition)\").click();";
+    }
+
+    public static function fieldValue($fieldPosition): string
+    {
+        return "(//tbody/tr/td/div[contains(@class,'field_general')]/div/div[contains(@class,'el-input-group--append')]/input[contains(@class,'el-input__inner')])[$fieldPosition]";
+    }
     const selectField = "(//span[normalize-space()='City'])";
     const contactTag = "//input[contains(@class,'el-select')]";
 }

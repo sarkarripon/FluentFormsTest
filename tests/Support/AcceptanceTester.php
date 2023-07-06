@@ -204,6 +204,7 @@ class AcceptanceTester extends \Codeception\Actor
         global $pageUrl;
         $this->amOnPage(FluentFormsSelectors::fFormPage);
         if(!isset($content)){
+            $this->waitForElement(NewPageSelec::formShortCode, 10);
             $content = $this->grabTextFrom(NewPageSelec::formShortCode);
         }
         $this->amOnPage(GlobalPageSelec::newPageCreationPage);
@@ -255,6 +256,32 @@ class AcceptanceTester extends \Codeception\Actor
         $this->fillField(FluentFormsSelectors::mapField(1),'{inputs.names.first_name}');
         $this->fillField(FluentFormsSelectors::mapField(2),'{inputs.names.last_name}');
         $this->fillField(FluentFormsSelectors::mapField(3),'{inputs.phone}');
+
+        $otherFieldsArray = [
+            2=>'{inputs.address_1.address_line_1}',
+            3=>'{inputs.address_1.address_line_2}',
+            4=>'{inputs.address_1.city}',
+            5=>'{inputs.address_1.state}',
+            6=>'{inputs.address_1.zip}',
+            7=>'{inputs.address_1.country}',
+        ];
+        $counter = 1;
+        foreach ($otherFieldsArray as $fieldValuePosition => $fieldValue) {
+            $this->clicked(FluentFormsSelectors::openFieldLabel($counter));
+
+            try {
+                $this->executeJS(FluentFormsSelectors::jsForFieldLabelFromTop($fieldValuePosition));
+            }catch (\Exception $e){
+                $this->executeJS(FluentFormsSelectors::jsForFieldLabelFromBottom($fieldValuePosition));
+                echo $e->getMessage();
+            }
+
+            $this->fillField(FluentFormsSelectors::fieldValue($counter), $fieldValue);
+            $this->clicked(FluentFormsSelectors::addField($counter));
+            $counter++;
+        }
+
+
         $this->clickWithLeftButton(FluentFormsSelectors::saveFeed);
         $this->wait(2);
     }

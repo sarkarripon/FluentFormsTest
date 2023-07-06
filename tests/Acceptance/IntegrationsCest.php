@@ -67,6 +67,11 @@ class IntegrationsCest
             'last_name' => $example['last_name'],
             'email' => $example['email'],
             'phone' => $example['phone'],
+            'address' => $example['address_line_1'],
+            'address2' => $example['address_line_2'],
+            'city' => $example['city'],
+            'state' => $example['state'],
+            'zip' => $example['zip'],
         ];
 
         $absentData = array_diff_assoc($referenceData, (array)$remoteData);
