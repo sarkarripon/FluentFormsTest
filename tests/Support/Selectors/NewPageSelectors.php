@@ -2,7 +2,7 @@
 
 namespace Tests\Support\Selectors;
 
-class NewPageSelec
+class NewPageSelectors
 {
     //New page creation with form short code
     const previousPageAvailable = "//input[@id='post-query-submit']";

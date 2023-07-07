@@ -148,6 +148,5 @@ class FluentFormsSelectors
     {
         return "(//tbody/tr/td/div[contains(@class,'field_general')]/div/div[contains(@class,'el-input-group--append')]/input[contains(@class,'el-input__inner')])[$fieldPosition]";
     }
-    const selectField = "(//span[normalize-space()='City'])";
     const contactTag = "//input[contains(@class,'el-select')]";
 }

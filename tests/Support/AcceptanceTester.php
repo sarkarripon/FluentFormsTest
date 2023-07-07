@@ -9,7 +9,7 @@ use Tests\Support\Selectors\FluentFormsSelectors;
 use Tests\Support\Selectors\FluentFormsSettingsSelectors;
 use Tests\Support\Selectors\FormFields;
 use Tests\Support\Selectors\GlobalPageSelec;
-use Tests\Support\Selectors\NewPageSelec;
+use Tests\Support\Selectors\NewPageSelectors;
 use Tests\Support\Selectors\RenameFormSelec;
 
 
@@ -181,12 +181,12 @@ class AcceptanceTester extends \Codeception\Actor
     public function deleteExistingPages(): void
     {
         $this->amOnPage(GlobalPageSelec::newPageCreationPage);
-        $existingPage = $this->checkElement(NewPageSelec::previousPageAvailable);
+        $existingPage = $this->checkElement(NewPageSelectors::previousPageAvailable);
         if($existingPage)
         {
-            $this->clicked(NewPageSelec::selectAllCheckMark);
-            $this->selectOption(NewPageSelec::selectMoveToTrash, "Move to Trash");
-            $this->click(NewPageSelec::applyBtn);
+            $this->clicked(NewPageSelectors::selectAllCheckMark);
+            $this->selectOption(NewPageSelectors::selectMoveToTrash, "Move to Trash");
+            $this->click(NewPageSelectors::applyBtn);
             $this->assertStringContainsString('moved to the Trash',
                 $this->grabTextFrom('#message'), 'Existing pages were deleted successfully!');
         }
@@ -204,19 +204,19 @@ class AcceptanceTester extends \Codeception\Actor
         global $pageUrl;
         $this->amOnPage(FluentFormsSelectors::fFormPage);
         if(!isset($content)){
-            $this->waitForElement(NewPageSelec::formShortCode, 10);
-            $content = $this->grabTextFrom(NewPageSelec::formShortCode);
+            $this->waitForElement(NewPageSelectors::formShortCode, 10);
+            $content = $this->grabTextFrom(NewPageSelectors::formShortCode);
         }
         $this->amOnPage(GlobalPageSelec::newPageCreationPage);
-        $this->clicked(NewPageSelec::addNewPage);
+        $this->clicked(NewPageSelectors::addNewPage);
         $this->wait(1);
-        $this->executeJS(sprintf(NewPageSelec::jsForTitle,$title));
-        $this->executeJS(sprintf(NewPageSelec::jsForContent,$content));
-        $this->clicked( NewPageSelec::publishBtn);
-        $this->waitForElementClickable(NewPageSelec::confirmPublish);
-        $this->clicked( NewPageSelec::confirmPublish);
+        $this->executeJS(sprintf(NewPageSelectors::jsForTitle,$title));
+        $this->executeJS(sprintf(NewPageSelectors::jsForContent,$content));
+        $this->clicked( NewPageSelectors::publishBtn);
+        $this->waitForElementClickable(NewPageSelectors::confirmPublish);
+        $this->clicked( NewPageSelectors::confirmPublish);
         $this->wait(1);
-        $pageUrl = $this->grabAttributeFrom(NewPageSelec::viewPage, 'href');
+        $pageUrl = $this->grabAttributeFrom(NewPageSelectors::viewPage, 'href');
         return $pageUrl; // it will return the page url and assign it to $pageUrl global variable above.
     }
 
@@ -281,10 +281,16 @@ class AcceptanceTester extends \Codeception\Actor
             $counter++;
         }
 
+        $this->clicked(FluentFormsSelectors::contactTag);
+        $this->clickByJS("//span[normalize-space()='Non_US']");
+        $this->clickByJS("//span[normalize-space()='Asian']");
+
 
         $this->clickWithLeftButton(FluentFormsSelectors::saveFeed);
         $this->wait(2);
     }
+
+
 
 
     public function configurePlatformlyApiSettings($searchKey): void

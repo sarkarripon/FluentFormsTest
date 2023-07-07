@@ -54,6 +54,21 @@ class AcceptanceHelper extends WebDriver
         parent::clickWithLeftButton($selector);
     }
 
+    public function prepareJSforXpath(string $xpath):string
+    {
+        return <<<JS
+        var xpathExpression = "$xpath";
+        var element = document.evaluate(xpathExpression, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+        if (element) {
+            element.click();
+        }
+        JS;
+    }
+    public function clickByJS(string $xpath): void
+    {
+        $this->executeJS($this->prepareJSforXpath($xpath));
+    }
+
 
     /**
      * @param string $text
@@ -65,7 +80,7 @@ class AcceptanceHelper extends WebDriver
      */
     public function seeText(string $text): void
     {
-        $this->waitForText($text, 5);
+        $this->waitForText($text, 10);
         parent::see($text);
         $this->enableImplicitWait();
     }

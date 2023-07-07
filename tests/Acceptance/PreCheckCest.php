@@ -5,6 +5,7 @@ use Codeception\Example;
 use Facebook\WebDriver\WebDriverBy;
 use Tests\Support\AcceptanceTester;
 use Tests\Support\Factories\DataProvider\FormData;
+use Tests\Support\Helper\Acceptance\AcceptanceHelper;
 use Tests\Support\Helper\Acceptance\IntegrationHelper as Integration;
 use Tests\Support\Selectors\FieldSelectors;
 use Tests\Support\Selectors\FluentFormsSelectors;
@@ -25,8 +26,6 @@ class PreCheckCest
 
 
 
-
-
        exit();
 
 
@@ -37,7 +36,7 @@ class PreCheckCest
 //
 //       });
 
-       $I->clicked(FluentFormsSelectors::selectField);
+
 
        $I->fillField(FluentFormsSelectors::mapField(4), '{inputs.address_1.address_line_1}');
 

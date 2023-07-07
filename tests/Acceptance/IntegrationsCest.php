@@ -60,6 +60,7 @@ class IntegrationsCest
 
         $I->wait(3);
         $remoteData = json_decode($this->fetchDataFromPlatformly($api,$example['email']));
+//        $remoteData = json_decode($this->fetchDataFromPlatformly($api,'haylie.robel@gmail.com'));
         $I->wait(3);
 
         $referenceData = [
