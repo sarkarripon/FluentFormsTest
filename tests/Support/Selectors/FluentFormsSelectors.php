@@ -130,10 +130,6 @@ class FluentFormsSelectors
     {
         return "(//input[@placeholder='Select'])[{$fieldPosition}]";
     }
-    public static function jsForFieldLabel($fieldOrder,$fieldValuePosition): string
-    {
-        return 'document.querySelector("body > div:nth-child('. $fieldOrder .') > div:nth-child(1) > div:nth-child(1) > ul:nth-child(1) > li:nth-child('. $fieldValuePosition .') > span:nth-child(1)").click();';
-    }
 
     public static function jsForFieldLabelFromBottom($fieldValuePosition): string
     {

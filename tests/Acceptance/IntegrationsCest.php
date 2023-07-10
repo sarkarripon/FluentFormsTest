@@ -3,13 +3,12 @@ namespace Tests\Acceptance;
 
 use Codeception\Example;
 use Tests\Support\AcceptanceTester;
+use Tests\Support\Helper\Acceptance\Integrations\Platformly;
 use Tests\Support\Selectors\FieldSelectors;
 use Tests\Support\Selectors\FluentFormsSelectors;
-use Tests\Support\Helper\Acceptance\IntegrationHelper as Integration;
 
 class IntegrationsCest
 {
-    use Integration;
     public function _before(AcceptanceTester $I): void
     {
         $I->wpLogin();
@@ -18,13 +17,16 @@ class IntegrationsCest
     /**
      * @dataProvider \Tests\Support\Factories\DataProvider\FormData::fieldData
      */
-    public function platformly_Integration_Test(AcceptanceTester $I, Example $example): void
+    public function platformly_Integration_Test(AcceptanceTester $I, Example $example, Platformly $integration): void
     {
         global $pageUrl;
+        global $tags;
+
         $formName = 'Platformly Integration';
         $integrationPositionNumber = 12;
         $api = '4XIamp9fiLokeugrcmxSLMQjoRyXyStw';
         $projectId = '2919';
+        $tags = ['Non_US', 'Asian'];
 
         $I->deleteExistingForms();
         $I->initiateNewForm();
@@ -38,8 +40,8 @@ class IntegrationsCest
         $I->renameForm($formName);
         $I->seeSuccess('Form renamed successfully.');
 
-        $I->configureIntegration($integrationPositionNumber, $api, $projectId);
-        $I->mapPlatformlyFields();
+        $integration->configureIntegration($integrationPositionNumber, $api, $projectId);
+        $integration->mapPlatformlyFields();
         $I->deleteExistingPages();
         $I->createNewPage($formName);
         $I->wantTo('Fill the form with sample data');
@@ -59,9 +61,18 @@ class IntegrationsCest
         $I->click(FieldSelectors::submitButton);
 
         $I->wait(3);
-        $remoteData = json_decode($this->fetchDataFromPlatformly($api,$example['email']));
-//        $remoteData = json_decode($this->fetchDataFromPlatformly($api,'haylie.robel@gmail.com'));
+        $remoteData = json_decode($integration->fetchDataFromPlatformly($api,$example['email']));
+//        $remoteData = json_decode($integration->fetchDataFromPlatformly($api,'cojizuc@gmail.com'));
+
+        //retrieving tags from remote
+        $remoteTag = $remoteData->project[0]->data->tags;
+        $remoteTagArray = [];
+        foreach ($remoteTag as $tag)
+        {
+            $remoteTagArray[] = $tag->name;
+        }
         $I->wait(3);
+
 
         $referenceData = [
             'first_name' => $example['first_name'],
@@ -77,18 +88,26 @@ class IntegrationsCest
 
         $absentData = array_diff_assoc($referenceData, (array)$remoteData);
 
-        $message = '';
-        if (!empty($absentData))
-        {
-            foreach ($absentData as $missingField => $value)
+            $message = '';
+            if (!empty($absentData))
             {
-                $message .= $missingField.', ';
+                foreach ($absentData as $missingField => $value)
+                {
+                    $message .= $missingField.', ';
+                }
+                $I->fail($message . " is not present to the remote.");
+            }else
+            {
+                echo 'Hurray!! Integration test pass. All data has been sent to Platform.ly';
             }
-            $I->fail($message . " is not present to the remote.");
-        }else
-        {
-            echo 'Hurray!! Integration test pass. All data has been sent to Platform.ly';
-        }
+
+        //checking tags
+        $I->assertContains($tags[0], $remoteTagArray);
+        $I->assertContains($tags[1], $remoteTagArray);
+
+
+
+
     }
 
 
