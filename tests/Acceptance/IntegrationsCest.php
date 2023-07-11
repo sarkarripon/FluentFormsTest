@@ -17,7 +17,7 @@ class IntegrationsCest
     /**
      * @dataProvider \Tests\Support\Factories\DataProvider\FormData::fieldData
      */
-    public function platformly_Integration_Test(AcceptanceTester $I, Example $example, Platformly $integration): void
+    public function test_platformly_can_push_data(AcceptanceTester $I, Example $example, Platformly $platformly): void
     {
         global $pageUrl;
         global $tags;
@@ -40,8 +40,17 @@ class IntegrationsCest
         $I->renameForm($formName);
         $I->seeSuccess('Form renamed successfully.');
 
-        $integration->configureIntegration($integrationPositionNumber, $api, $projectId);
-        $integration->mapPlatformlyFields();
+        $platformly->configurePlatformly($integrationPositionNumber, $api, $projectId);
+
+        $otherFieldsArray = [
+            2=>'{inputs.address_1.address_line_1}',
+            3=>'{inputs.address_1.address_line_2}',
+            4=>'{inputs.address_1.city}',
+            5=>'{inputs.address_1.state}',
+            6=>'{inputs.address_1.zip}',
+            7=>'{inputs.address_1.country}',
+        ];
+        $platformly->mapPlatformlyFields('yes', $otherFieldsArray,'yes');
         $I->deleteExistingPages();
         $I->createNewPage($formName);
         $I->wantTo('Fill the form with sample data');
@@ -61,7 +70,7 @@ class IntegrationsCest
         $I->click(FieldSelectors::submitButton);
 
         $I->wait(3);
-        $remoteData = json_decode($integration->fetchDataFromPlatformly($api,$example['email']));
+        $remoteData = json_decode($platformly->fetchDataFromPlatformly($api,$example['email']));
 //        $remoteData = json_decode($integration->fetchDataFromPlatformly($api,'cojizuc@gmail.com'));
 
         //retrieving tags from remote
@@ -98,17 +107,58 @@ class IntegrationsCest
                 $I->fail($message . " is not present to the remote.");
             }else
             {
-                echo 'Hurray!! Integration test pass. All data has been sent to Platform.ly';
+                echo ' Hurray!! Integration test pass. All data has been sent to Platform.ly' . "\n";
             }
 
-        //checking tags
-        $I->assertContains($tags[0], $remoteTagArray);
-        $I->assertContains($tags[1], $remoteTagArray);
-
-
-
+        //checking static tags
+        $I->assertContains($tags[0], $remoteTagArray, 'Tag '.$tags[0].' is present to the remote');
+        $I->assertContains($tags[1], $remoteTagArray,'Tag '.$tags[1].' is present to the remote');
 
     }
+
+    /**
+     * @dataProvider \Tests\Support\Factories\DataProvider\FormData::fieldData
+     */
+    public function test_platformly_can_be_enabled_conditionally(AcceptanceTester $I, Example $example, Platformly $platformly): void
+    {
+        global $pageUrl;
+        global $tags;
+
+        $formName = 'Platformly tag';
+        $integrationPositionNumber = 12;
+        $api = '4XIamp9fiLokeugrcmxSLMQjoRyXyStw';
+        $projectId = '2919';
+        $tags = ['Non_US', 'Asian'];
+
+        $I->deleteExistingForms();
+        $I->initiateNewForm();
+        $requiredField = [
+            'generalFields' =>['email'],
+        ];
+        $I->createFormField($requiredField);
+        $I->click(FluentFormsSelectors::saveForm);
+        $I->wait(1);
+        $I->seeSuccess('Form created successfully.');
+        $I->renameForm($formName);
+        $I->seeSuccess('Form renamed successfully.');
+
+        $platformly->configurePlatformly($integrationPositionNumber, $api, $projectId);
+        $platformly->mapPlatformlyFields('',[],'yes', '');
+        $I->deleteExistingPages();
+        $I->createNewPage($formName);
+        $I->wantTo('Fill the form with sample data');
+        $I->amOnUrl($pageUrl);
+
+        $I->wait(1);
+        $I->fillField(FieldSelectors::email, ($example['email']));
+
+
+        $I->click(FieldSelectors::submitButton);
+
+    }
+
+
+
 
 
 

@@ -9,7 +9,7 @@ use Tests\Support\Selectors\FluentFormsSettingsSelectors;
 class Platformly extends Pageobjects
 {
 
-    public function mapPlatformlyFields(): void
+    public function mapPlatformlyFields(string $optionalField=null, array $otherFieldsArray=null, string $staticTag=null, string $dynamicTag=null): void
     {
         global $tags;
         $this->I->waitForElement(FluentFormsSelectors::feedName,20);
@@ -20,37 +20,43 @@ class Platformly extends Pageobjects
 
         $this->I->clicked(FluentFormsSelectors::mapEmailDropdown);
         $this->I->clicked(FluentFormsSelectors::mapEmail);
-        $this->I->fillField(FluentFormsSelectors::mapField(1),'{inputs.names.first_name}');
-        $this->I->fillField(FluentFormsSelectors::mapField(2),'{inputs.names.last_name}');
-        $this->I->fillField(FluentFormsSelectors::mapField(3),'{inputs.phone}');
-
-        $otherFieldsArray = [
-            2=>'{inputs.address_1.address_line_1}',
-            3=>'{inputs.address_1.address_line_2}',
-            4=>'{inputs.address_1.city}',
-            5=>'{inputs.address_1.state}',
-            6=>'{inputs.address_1.zip}',
-            7=>'{inputs.address_1.country}',
-        ];
-        $counter = 1;
-        foreach ($otherFieldsArray as $fieldValuePosition => $fieldValue) {
-            $this->I->clicked(FluentFormsSelectors::openFieldLabel($counter));
-
-            try {
-                $this->I->executeJS(FluentFormsSelectors::jsForFieldLabelFromTop($fieldValuePosition));
-            }catch (\Exception $e){
-                $this->I->executeJS(FluentFormsSelectors::jsForFieldLabelFromBottom($fieldValuePosition));
-                echo $e->getMessage();
-            }
-
-            $this->I->fillField(FluentFormsSelectors::fieldValue($counter), $fieldValue);
-            $this->I->clicked(FluentFormsSelectors::addField($counter));
-            $counter++;
+        if (isset($optionalField) and $optionalField == 'yes'){
+            $this->I->fillField(FluentFormsSelectors::mapField(1),'{inputs.names.first_name}');
+            $this->I->fillField(FluentFormsSelectors::mapField(2),'{inputs.names.last_name}');
+            $this->I->fillField(FluentFormsSelectors::mapField(3),'{inputs.phone}');
         }
 
-        $this->I->clicked(FluentFormsSelectors::contactTag);
-        $this->I->clickByJS("//span[normalize-space()='$tags[0]']");
-        $this->I->clickByJS("//span[normalize-space()='$tags[1]']");
+        if (isset($otherFieldsArray))
+        {
+            $counter = 1;
+            foreach ($otherFieldsArray as $fieldValuePosition => $fieldValue)
+            {
+                $this->I->clicked(FluentFormsSelectors::openFieldLabel($counter));
+
+                try {
+                    $this->I->executeJS(FluentFormsSelectors::jsForFieldLabelFromTop($fieldValuePosition));
+                }catch (\Exception $e){
+                    $this->I->executeJS(FluentFormsSelectors::jsForFieldLabelFromBottom($fieldValuePosition));
+                    echo $e->getMessage();
+                }
+                $this->I->fillField(FluentFormsSelectors::fieldValue($counter), $fieldValue);
+                $this->I->clicked(FluentFormsSelectors::addField($counter));
+                $counter++;
+            }
+
+        }
+        if (isset($staticTag) and $staticTag == 'yes'){
+            $this->I->clicked(FluentFormsSelectors::contactTag);
+            $this->I->clickByJS("//span[normalize-space()='$tags[0]']");
+            $this->I->clickByJS("//span[normalize-space()='$tags[1]']");
+        }
+        if (isset($dynamicTag) and $dynamicTag == 'yes'){
+            $this->I->clicked(FluentFormsSelectors::contactTag);
+            $this->I->clickByJS("//span[normalize-space()='$tags[2]']");
+            $this->I->clickByJS("//span[normalize-space()='$tags[3]']");
+        }
+
+
 
 
         $this->I->clickWithLeftButton(FluentFormsSelectors::saveFeed);
@@ -126,19 +132,10 @@ class Platformly extends Pageobjects
      * @return void
      */
 
-    public function configureIntegration($integrationPositionNumber, $api, $projectID): void
+    public function configurePlatformly($integrationPositionNumber, $api, $projectID): void
     {
-        $this->I->amOnPage(FluentFormsAddonsSelectors::integrationsPage);
-
-        $element = $this->I->checkElement("(//div[@class='ff_card_footer'])[{$integrationPositionNumber}]//i[@class='el-icon-setting']");
-
-        if (!$element)
-        {
-            $this->I->clickWithLeftButton("(//span[@class='el-switch__core'])[{$integrationPositionNumber}]");
-        }
-
-        $this->I->clickWithLeftButton("(//DIV[@class='ff_card_footer_group'])[{$integrationPositionNumber}]//I[@class='el-icon-setting']");
-
+        $general = new General($this->I);
+        $general->initiateIntegrationConfiguration($integrationPositionNumber);
 
         if($integrationPositionNumber == 12)
         {

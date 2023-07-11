@@ -4,9 +4,7 @@ namespace Tests\Support;
 
 use Exception;
 use Tests\Support\Selectors\AccepTestSelec;
-use Tests\Support\Selectors\FluentFormsAddonsSelectors;
 use Tests\Support\Selectors\FluentFormsSelectors;
-use Tests\Support\Selectors\FluentFormsSettingsSelectors;
 use Tests\Support\Selectors\GlobalPageSelec;
 use Tests\Support\Selectors\NewPageSelectors;
 use Tests\Support\Selectors\RenameFormSelec;
