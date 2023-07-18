@@ -12,12 +12,12 @@ modules:
     enabled:
         - Tests\Support\Helper\Acceptance\AcceptanceHelper:
         - \Codeception\Module\Asserts:
-        - Db:
+#        - Db:
 
 
     config:
         Tests\Support\Helper\Acceptance\AcceptanceHelper:
-            url: https://fluentsmtp.com
+            url: 'https://fluentsmtp.com'
             browser: chrome
             request_timeout: 15
             clear_cookies: true
@@ -38,12 +38,12 @@ modules:
                         - "disable-infobars"
                         - "--window-size=1920,1080"
 
-        Db:
-            dsn: 'mysql:host=localhost;dbname=fluentsmtp'
-            user: 'admin'
-            password: 'admin'
-            populate: true
-            cleanup: true
+#        Db:
+#            dsn: 'mysql:host=localhost;dbname=fluentsmtp'
+#            user: 'admin'
+#            password: 'admin'
+#            populate: true
+#            cleanup: true
 
 
 # add Codeception\Step\Retry trait to AcceptanceTester to enable retries

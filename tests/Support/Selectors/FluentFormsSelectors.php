@@ -2,7 +2,9 @@
 
 namespace Tests\Support\Selectors;
 
-class FluentFormsSelectors
+use Tests\Support\Helper\Pageobjects;
+
+class FluentFormsSelectors extends Pageobjects
 {
     const fFormPage = '/wp-admin/admin.php?page=fluent_forms';
     const createFirstForm = "(//button[contains(@class,'el-button el-button--primary el-button--large')])[1]";
@@ -146,6 +148,35 @@ class FluentFormsSelectors
     }
     const contactTag = "//input[contains(@class,'el-select')]";
 
-    const enableDynamicTag = "//div[@class='ff_field_routing']//span[contains(@class,'is-checked')]";
+    const dynamicTagChecked = "//div[@class='ff_field_routing']//span[contains(@class,'is-checked')]";
+    const dynamicTagUnchecked = "//span[@class='el-checkbox__input']//span[@class='el-checkbox__inner']";
+    const conditionalLogicUnchecked = "//div[@class='ff-filter-fields-wrap']//span[@class='el-checkbox__inner']";
+    const conditionalLogicChecked = "//div[@class='ff-filter-fields-wrap']//label[@class='el-checkbox is-checked']";
+    public static function openConditionalFieldLable($position): string
+    {
+        return "//span[normalize-space()='Enable conditional logic']/following::input[@placeholder='Select'][{$position}]";
+    }
+
+    public function clickOnText($text)
+    {
+        try {
+            $this->I->clickByJS("//div[@x-placement='bottom-start']//span[contains(text(),'{$text}')]");
+        } catch (\Exception $e) {
+            echo $e->getMessage();
+            try {
+                $this->I->clickByJS("//div[@x-placement='top-start']//span[contains(text(),'{$text}')]");
+            } catch (\Exception $e) {
+                echo $e->getMessage();
+                try {
+                    $this->I->clickByJS("//span[contains(text(),'{$text}')]");
+                } catch (\Exception $e) {
+                    $this->I->clickByJS("//span[normalize-space()='{$text}']");
+                }
+            }
+        }
+    }
+
+
+    const selectNotificationOption = "//select[@class='ff-select ff-select-small ml-1 mr-1']";
 
 }

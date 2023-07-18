@@ -54,19 +54,19 @@ class AcceptanceHelper extends WebDriver
         parent::clickWithLeftButton($selector);
     }
 
-    public function prepareJSforXpath(string $xpath):string
+    public function prepareJSforXpath(string $cssORxpath):string
     {
         return <<<JS
-        var xpathExpression = "$xpath";
+        var xpathExpression = "$cssORxpath";
         var element = document.evaluate(xpathExpression, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
         if (element) {
             element.click();
         }
         JS;
     }
-    public function clickByJS(string $xpath): void
+    public function clickByJS(string $cssORxpath): void
     {
-        $this->executeJS($this->prepareJSforXpath($xpath));
+        $this->executeJS($this->prepareJSforXpath($cssORxpath));
     }
 
 
