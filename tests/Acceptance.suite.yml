@@ -32,8 +32,9 @@ modules:
                 unexpectedAlertBehaviour: 'accept'
                 acceptInsecureCerts: true
                 chromeOptions:
+#                    binary: '/usr/bin/google-chrome-stable'
                     args:
-#                        - "--headless"
+                        - "--headless"
 #                        - "--disable-gpu"
                         - "disable-infobars"
                         - "--window-size=1920,1080"

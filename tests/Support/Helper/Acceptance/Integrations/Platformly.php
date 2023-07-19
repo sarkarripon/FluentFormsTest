@@ -9,7 +9,7 @@ use Tests\Support\Selectors\FluentFormsSettingsSelectors;
 class Platformly extends Pageobjects
 {
 
-    public function mapPlatformlyFields(string $optionalField=null, array $otherFieldsArray=null, string $staticTag=null, string $dynamicTag=null): void
+    public function mapPlatformlyFields(string $optionalField=null, array $otherFields=[], string $staticTag=null, string $dynamicTag=null, array $conditionalLogic=[], string $conditionState=null): void
     {
         global $tags;
         $this->I->waitForElement(FluentFormsSelectors::feedName,20);
@@ -20,16 +20,16 @@ class Platformly extends Pageobjects
 
         $this->I->clicked(FluentFormsSelectors::mapEmailDropdown);
         $this->I->clicked(FluentFormsSelectors::mapEmail);
-        if (isset($optionalField) and $optionalField == 'yes'){
+        if (isset($optionalField) and !empty($optionalField)){
             $this->I->fillField(FluentFormsSelectors::mapField(1),'{inputs.names.first_name}');
             $this->I->fillField(FluentFormsSelectors::mapField(2),'{inputs.names.last_name}');
             $this->I->fillField(FluentFormsSelectors::mapField(3),'{inputs.phone}');
         }
 
-        if (isset($otherFieldsArray))
+        if (isset($otherFields) and !empty($otherFields))
         {
             $counter = 1;
-            foreach ($otherFieldsArray as $fieldValuePosition => $fieldValue)
+            foreach ($otherFields as $fieldValuePosition => $fieldValue)
             {
                 $this->I->clicked(FluentFormsSelectors::openFieldLabel($counter));
 
@@ -45,19 +45,46 @@ class Platformly extends Pageobjects
             }
 
         }
-        if (isset($staticTag) and $staticTag == 'yes'){
+        if (isset($staticTag) and !empty($staticTag)){
             $this->I->clicked(FluentFormsSelectors::contactTag);
             $this->I->clickByJS("//span[normalize-space()='$tags[0]']");
             $this->I->clickByJS("//span[normalize-space()='$tags[1]']");
         }
-        if (isset($dynamicTag) and $dynamicTag == 'yes'){
+        if (!empty($dynamicTag) and $dynamicTag == 'yes'){
             $this->I->clicked(FluentFormsSelectors::contactTag);
             $this->I->clickByJS("//span[normalize-space()='$tags[2]']");
             $this->I->clickByJS("//span[normalize-space()='$tags[3]']");
         }
+        if(isset($conditionalLogic) and !empty($conditionalLogic))
+        {
+            if(!$this->I->checkElement(FluentFormsSelectors::conditionalLogicChecked))
+            {
+                $this->I->clicked(FluentFormsSelectors::conditionalLogicUnchecked);
+            }
+                if (isset($conditionState) and !empty($conditionState))
+                {
+                    $this->I->selectOption(FluentFormsSelectors::selectNotificationOption,$conditionState);
+                }
 
 
+            global $fieldCounter;
+            $fieldCounter = 1;
+            $labelCounter = 1;
+            foreach ($conditionalLogic as $key => $value)
+            {
+                $this->I->click(FluentFormsSelectors::openConditionalFieldLable($labelCounter));
+                $this->I->clickOnText($key);
 
+                $this->I->click(FluentFormsSelectors::openConditionalFieldLable($labelCounter+1));
+                $this->I->clickOnText($value[0]);
+
+                $this->I->fillField(FluentFormsSelectors::conditionalFieldValue($fieldCounter),$value[1]);
+                $this->I->click(FluentFormsSelectors::addConditionalField($fieldCounter));
+                $fieldCounter++;
+                $labelCounter+=2;
+            }
+            $this->I->click(FluentFormsSelectors::removeConditionalField($fieldCounter));
+        }
 
         $this->I->clickWithLeftButton(FluentFormsSelectors::saveFeed);
         $this->I->wait(2);

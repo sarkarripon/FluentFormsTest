@@ -54,6 +54,33 @@ class AcceptanceHelper extends WebDriver
         parent::clickWithLeftButton($selector);
     }
 
+    public function clickOnText($text): void
+    {
+        $xpathVariations = [
+            "//div[@x-placement='bottom-start']//span[contains(text(),'{$text}')]",
+            "//div[@x-placement='top-start']//span[contains(text(),'{$text}')]",
+            "//label[normalize-space()='{$text}']",
+            "//label[contains(text(),'{$text}')]",
+            "//span[normalize-space()='{$text}']",
+            "//span[contains(text(),'{$text}')]",
+            "//button[contains(text(),'{$text}')]",
+            "//a[contains(text(),'{$text}')]",
+            "//h2[normalize-space()='{$text}']",
+            "//p[contains(text(),'{$text}')]",
+        ];
+
+        foreach ($xpathVariations as $xpath) {
+            try {
+                $this->seeElementInDOM($xpath);
+                $this->moveMouseOver();
+                $this->clickByJS($xpath);
+                break; // Exit the loop if the element is found and clicked successfully
+            } catch (\Exception $e) {
+                // If the element is not found or the click fails, continue to the next XPath variation
+            }
+        }
+    }
+
     public function prepareJSforXpath(string $cssORxpath):string
     {
         return <<<JS
