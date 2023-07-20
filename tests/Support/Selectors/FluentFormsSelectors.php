@@ -153,6 +153,27 @@ class FluentFormsSelectors extends Pageobjects
     const dynamicTagChecked = "//div[@class='ff_field_routing']//span[contains(@class,'is-checked')]";
     const dynamicTagUnchecked = "//span[@class='el-checkbox__input']//span[@class='el-checkbox__inner']";
 
+    public static function addDynamicTagField($position): string
+    {
+        return "(//span[normalize-space()='Enable Dynamic Tag Selection']/following::i[contains(@class,'el-icon-plus')])[{$position}]";
+    }
+    public static function removeDynamicTagField($position): string
+    {
+        return "(//span[normalize-space()='Enable Dynamic Tag Selection']/following::i[contains(@class,'el-icon-minus')])[{$position}]";
+    }
+    public static function setTag($position): string
+    {
+        return "(//input[@placeholder='Set Tag'])[{$position}]";
+    }
+    public static function ifClause($position): string
+    {
+        return "(//span[normalize-space()='Enable Dynamic Tag Selection']/following::input[@placeholder='Select'])[{$position}]";
+    }
+    public static function dynamicTagValue($position): string
+    {
+        return "(//input[@placeholder='Enter a value'])[{$position}]";
+    }
+
 
     //Conditional Logic
     const conditionalLogicUnchecked = "//div[@class='ff-filter-fields-wrap']//span[@class='el-checkbox__inner']";

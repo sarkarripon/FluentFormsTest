@@ -9,9 +9,8 @@ use Tests\Support\Selectors\FluentFormsSettingsSelectors;
 class Platformly extends Pageobjects
 {
 
-    public function mapPlatformlyFields(string $optionalField=null, array $otherFields=[], array $staticTag=[], string $dynamicTag=null, array $conditionalLogic=[], string $conditionState=null): void
+    public function mapPlatformlyFields(string $optionalField=null, array $otherFields=[], array $staticTag=[], array $dynamicTag=[], array $conditionalLogic=[], string $conditionState=null): void
     {
-        global $tags;
         $this->I->waitForElement(FluentFormsSelectors::feedName,20);
         $this->I->fillField(FluentFormsSelectors::feedName,'Platformly Integration');
 
@@ -20,6 +19,7 @@ class Platformly extends Pageobjects
 
         $this->I->clicked(FluentFormsSelectors::mapEmailDropdown);
         $this->I->clicked(FluentFormsSelectors::mapEmail);
+
         if (isset($optionalField) and !empty($optionalField)){
             $this->I->fillField(FluentFormsSelectors::mapField(1),'{inputs.names.first_name}');
             $this->I->fillField(FluentFormsSelectors::mapField(2),'{inputs.names.last_name}');
@@ -52,10 +52,30 @@ class Platformly extends Pageobjects
             }
         }
 
-        if (isset($dynamicTag) and !empty($dynamicTag)){
-            $this->I->clicked(FluentFormsSelectors::contactTag);
-            $this->I->clickByJS("//span[normalize-space()='$tags[2]']");
-            $this->I->clickByJS("//span[normalize-space()='$tags[3]']");
+        if (isset($dynamicTag) and !empty($dynamicTag))
+        {
+            $this->I->clicked(FluentFormsSelectors::dynamicTagUnchecked);
+
+            global $dynamicTagField;
+            $dynamicTagField = 1;
+            $dynamicTagValue = 1;
+            foreach ($dynamicTag as $key => $value)
+            {
+                $this->I->clicked(FluentFormsSelectors::setTag($dynamicTagField));
+                $this->I->clickOnText($key);
+
+                $this->I->click(FluentFormsSelectors::ifClause($dynamicTagValue));
+                $this->I->clickOnText($value[0]);
+
+                $this->I->click(FluentFormsSelectors::ifClause($dynamicTagValue+1));
+                $this->I->clickOnText($value[1]);
+
+                $this->I->fillField(FluentFormsSelectors::dynamicTagValue($dynamicTagField),$value[2]);
+                $this->I->click(FluentFormsSelectors::addDynamicTagField($dynamicTagField));
+                $dynamicTagField++;
+                $dynamicTagValue+=2;
+            }
+            $this->I->click(FluentFormsSelectors::removeDynamicTagField($dynamicTagField));
         }
 
         if(isset($conditionalLogic) and !empty($conditionalLogic))
@@ -90,8 +110,6 @@ class Platformly extends Pageobjects
         $this->I->clickWithLeftButton(FluentFormsSelectors::saveFeed);
         $this->I->wait(2);
     }
-
-
     public function configurePlatformlyApiSettings($searchKey): void
     {
         $this->I->amOnPage(FluentFormsSelectors::fFormPage);

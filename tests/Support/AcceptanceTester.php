@@ -4,6 +4,7 @@ namespace Tests\Support;
 
 use Exception;
 use Tests\Support\Selectors\AccepTestSelec;
+use Tests\Support\Selectors\FluentFormsAllEntries;
 use Tests\Support\Selectors\FluentFormsSelectors;
 use Tests\Support\Selectors\GlobalPageSelec;
 use Tests\Support\Selectors\NewPageSelectors;
@@ -239,6 +240,31 @@ class AcceptanceTester extends \Codeception\Actor
                 $this->clicked($selector);
             }
         }
+    }
+
+    public function checkAPICallStatus():string
+    {
+        $this->wait(5);
+        $this->amOnPage(FluentFormsAllEntries::entriesPage);
+        $this->clicked(FluentFormsAllEntries::viewEntry);
+        $this->clicked(FluentFormsAllEntries::apiCalls);
+        $this->waitForElement(FluentFormsAllEntries::logStatus,10);
+
+        for ($i = 0; $i < 5; $i++) {
+            try {
+                $this->wait(5);
+                $this->clicked(FluentFormsAllEntries::apiCalls);
+                $this->waitForElement(FluentFormsAllEntries::logStatus,10);
+                $this->seeTextCaseInsensitive('Success', FluentFormsAllEntries::logStatus);
+                break;
+            } catch (Exception $e) {
+                try {
+                    $this->reloadPage();
+                } catch (Exception $e) {
+                }
+            }
+        }
+        return $this->grabTextFrom(FluentFormsAllEntries::logStatus);
     }
 
 

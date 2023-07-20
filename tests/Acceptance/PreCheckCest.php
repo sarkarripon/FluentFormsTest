@@ -3,6 +3,7 @@ namespace Tests\Acceptance;
 
 use Tests\Support\AcceptanceTester;
 use Tests\Support\Helper\Acceptance\Integrations\Platformly;
+use Tests\Support\Selectors\FluentFormsAllEntries;
 use Tests\Support\Selectors\FluentFormsSelectors;
 
 
@@ -14,10 +15,8 @@ class PreCheckCest
         $I->wpLogin();
     }
 
-//   public function check_test(AcceptanceTester $I, FluentFormsSelectors $fluentFormsSelectors)
-//   {
-//       $I->amOnPage("wp-admin/admin.php?page=fluent_forms&form_id=603&route=settings&sub_route=form_settings#/all-integrations/2905/platformly");
-//
+   public function check_test(AcceptanceTester $I, FluentFormsSelectors $fluentFormsSelectors)
+   {
 //       $I->waitForElement(FluentFormsSelectors::feedName,20);
 //       if(!$I->checkElement(FluentFormsSelectors::conditionalLogicChecked))
 //       {
@@ -47,10 +46,19 @@ class PreCheckCest
 //           $labelCounter+=2;
 //       }
 //       $I->click(FluentFormsSelectors::removeConditionalField($fieldCounter));
-//
-//
-//       exit();
-//
-//   }
+
+       $I->amOnPage(FluentFormsAllEntries::entriesPage);
+       $I->clicked(FluentFormsAllEntries::viewEntry);
+       $I->clicked(FluentFormsAllEntries::apiCalls);
+       $I->waitForElement(FluentFormsAllEntries::logStatus,10);
+       $apiCallStatus = $I->grabTextFrom(FluentFormsAllEntries::logStatus);
+
+
+
+
+
+       exit();
+
+   }
 
 }

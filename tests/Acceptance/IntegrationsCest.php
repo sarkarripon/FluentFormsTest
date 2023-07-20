@@ -39,7 +39,7 @@ class IntegrationsCest
         $I->seeSuccess('Form renamed successfully.');
 
         $platformly->configurePlatformly($integrationPositionNumber, $api, $projectId);
-        $platformly->mapPlatformlyFields('yes', [],'','',[],'');
+        $platformly->mapPlatformlyFields('yes', [],[],[],[],'');
 
         $I->deleteExistingPages();
         $I->createNewPage($formName);
@@ -78,8 +78,6 @@ class IntegrationsCest
         {
             echo ' Hurray!! Integration test pass. All data has been sent to Platform.ly' . "\n";
         }
-
-
     }
 
 
@@ -118,7 +116,7 @@ class IntegrationsCest
             5=>'{inputs.address_1.state}',
             6=>'{inputs.address_1.zip}',
         ];
-        $platformly->mapPlatformlyFields('', $otherFieldsArray,'','',[],'');
+        $platformly->mapPlatformlyFields('', $otherFieldsArray,[],[],[],'');
         $I->deleteExistingPages();
         $I->createNewPage($formName);
         $I->wantTo('Fill the form with sample data');
@@ -192,9 +190,8 @@ class IntegrationsCest
         $I->seeSuccess('Form renamed successfully.');
 
         $platformly->configurePlatformly($integrationPositionNumber, $api, $projectId);
+        $platformly->mapPlatformlyFields('',[],$tags,[],[],'');
 
-
-        $platformly->mapPlatformlyFields('',[],$tags,'',[],'');
         $I->deleteExistingPages();
         $I->createNewPage($formName);
         $I->wantTo('Fill the form with sample data');
@@ -223,10 +220,7 @@ class IntegrationsCest
         {
             $I->assertContains($tag, $remoteTagArray);
         }
-
         echo ' Hurray!! Static Tag applied to platform.ly'. "\n";
-
-
     }
 
     /**
@@ -236,16 +230,15 @@ class IntegrationsCest
     {
         global $pageUrl;
 
-        $formName = 'test_platformly_static_tag_apply';
+        $formName = 'test_platformly_dynamic_tag_apply';
         $integrationPositionNumber = 12;
         $api = '4XIamp9fiLokeugrcmxSLMQjoRyXyStw';
         $projectId = '2919';
-        $tags = ['Asian'];
 
         $I->deleteExistingForms();
         $I->initiateNewForm();
         $requiredField = [
-            'generalFields' =>['email'],
+            'generalFields' =>['email','nameFields'],
         ];
         $I->createFormField($requiredField);
         $I->click(FluentFormsSelectors::saveForm);
@@ -255,7 +248,12 @@ class IntegrationsCest
         $I->seeSuccess('Form renamed successfully.');
 
         $platformly->configurePlatformly($integrationPositionNumber, $api, $projectId);
-        $platformly->mapPlatformlyFields('',[],[],'',[],'');
+        $dynamicTagArray = [
+            'European'=>['names[First Name]','contains','John'],
+
+        ];
+
+        $platformly->mapPlatformlyFields('',[],[],$dynamicTagArray,[],'');
 
         $I->deleteExistingPages();
         $I->createNewPage($formName);
@@ -265,6 +263,8 @@ class IntegrationsCest
         $I->wait(1);
 
         $I->fillField(FieldSelectors::email, ($example['email']));
+        $I->fillField(FieldSelectors::first_name, "John ".($example['first_name']));
+        $I->fillField(FieldSelectors::last_name, ($example['last_name']));
         $I->click(FieldSelectors::submitButton);
 
         $I->wait(3);
@@ -281,15 +281,84 @@ class IntegrationsCest
         $I->wait(3);
 
         //checking static tags
-        foreach ($tags as $tag)
+        foreach ($dynamicTagArray as $tag => $value)
         {
             $I->assertContains($tag, $remoteTagArray);
         }
-
-        echo ' Hurray!! Static Tag applied to platform.ly'. "\n";
-
+        echo ' Hurray!! Dynamic Tag applied to platform.ly'. "\n";
 
     }
+
+    /**
+     * @dataProvider \Tests\Support\Factories\DataProvider\FormData::fieldData
+     */
+    public function test_platformly_activated_when_satisfy_all_conditions(AcceptanceTester $I, Example $example, Platformly $platformly): void
+    {
+        global $pageUrl;
+
+        $formName = 'test_platformly_dynamic_tag_apply';
+        $integrationPositionNumber = 12;
+        $api = '4XIamp9fiLokeugrcmxSLMQjoRyXyStw';
+        $projectId = '2919';
+
+        $I->deleteExistingForms();
+        $I->initiateNewForm();
+        $requiredField = [
+            'generalFields' =>['email','nameFields'],
+        ];
+        $I->createFormField($requiredField);
+        $I->click(FluentFormsSelectors::saveForm);
+        $I->wait(1);
+        $I->seeSuccess('Form created successfully.');
+        $I->renameForm($formName);
+        $I->seeSuccess('Form renamed successfully.');
+
+        $platformly->configurePlatformly($integrationPositionNumber, $api, $projectId);
+        $dynamicTagArray = [
+            'names[First Name]' =>['starts with','John'],
+            'names[Last Name]' =>['equal','Doe'],
+            'Email' =>['contains','@gmail.com'],
+        ];
+
+        $platformly->mapPlatformlyFields('',[],[],[],$dynamicTagArray,'');
+
+        $I->deleteExistingPages();
+        $I->createNewPage($formName);
+        $I->wantTo('Fill the form with sample data');
+        $I->amOnUrl($pageUrl);
+
+        $I->wait(1);
+
+        $I->fillField(FieldSelectors::email, ($example['email']));
+        $I->fillField(FieldSelectors::first_name, "John ".($example['first_name']));
+        $I->fillField(FieldSelectors::last_name, 'Doe');
+        $I->click(FieldSelectors::submitButton);
+
+        $I->assertStringContainsStringIgnoringCase('Success',$I->checkAPICallStatus());
+
+//
+//        $I->wait(3);
+//        $remoteData = json_decode($platformly->fetchDataFromPlatformly($api,$example['email']));
+////        $remoteData = json_decode($integration->fetchDataFromPlatformly($api,'cojizuc@gmail.com'));
+//
+//        //retrieving tags from remote
+//        $remoteTag = $remoteData->project[0]->data->tags;
+//        $remoteTagArray = [];
+//        foreach ($remoteTag as $tag)
+//        {
+//            $remoteTagArray[] = $tag->name;
+//        }
+//        $I->wait(3);
+//
+//        //checking static tags
+//        foreach ($dynamicTagArray as $tag => $value)
+//        {
+//            $I->assertContains($tag, $remoteTagArray);
+//        }
+//        echo ' Hurray!! Dynamic Tag applied to platform.ly'. "\n";
+
+    }
+
 
 
 

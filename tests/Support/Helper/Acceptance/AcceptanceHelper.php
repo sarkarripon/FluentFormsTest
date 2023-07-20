@@ -112,6 +112,13 @@ class AcceptanceHelper extends WebDriver
         $this->enableImplicitWait();
     }
 
+    public function seeTextCaseInsensitive($text, $selector): void
+    {
+        $elementText = $this->grabTextFrom($selector);
+        $text = preg_quote($text, '/');
+        $this->assertRegExp("/$text/i", $elementText);
+    }
+
     /**
      * @author Sarkar Ripon
      * If element is found return true, if not, return false
