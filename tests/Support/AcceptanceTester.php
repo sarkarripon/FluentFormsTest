@@ -46,6 +46,7 @@ class AcceptanceTester extends \Codeception\Actor
 
     public function seeSuccess($message): void
     {
+        $this->wait(1);
         $this->assertStringContainsString('Success',
             $this->grabTextFrom("//div[@role='alert']//h2[normalize-space()='Success'][1]"), $message);
     }
@@ -163,10 +164,10 @@ class AcceptanceTester extends \Codeception\Actor
      */
     public function renameForm($formName):void
     {
+        $this->waitForElement(RenameFormSelec::rename, 10);
         $this->click(RenameFormSelec::rename);
         $this->fillField(RenameFormSelec::renameField, $formName);
         $this->click("Rename", RenameFormSelec::renameBtn);
-        $this->wait(1);
     }
 
     /**

@@ -9,7 +9,7 @@ use Tests\Support\Selectors\FluentFormsSettingsSelectors;
 class Platformly extends Pageobjects
 {
 
-    public function mapPlatformlyFields(string $optionalField=null, array $otherFields=[], string $staticTag=null, string $dynamicTag=null, array $conditionalLogic=[], string $conditionState=null): void
+    public function mapPlatformlyFields(string $optionalField=null, array $otherFields=[], array $staticTag=[], string $dynamicTag=null, array $conditionalLogic=[], string $conditionState=null): void
     {
         global $tags;
         $this->I->waitForElement(FluentFormsSelectors::feedName,20);
@@ -32,7 +32,6 @@ class Platformly extends Pageobjects
             foreach ($otherFields as $fieldValuePosition => $fieldValue)
             {
                 $this->I->clicked(FluentFormsSelectors::openFieldLabel($counter));
-
                 try {
                     $this->I->executeJS(FluentFormsSelectors::jsForFieldLabelFromTop($fieldValuePosition));
                 }catch (\Exception $e){
@@ -43,18 +42,22 @@ class Platformly extends Pageobjects
                 $this->I->clicked(FluentFormsSelectors::addField($counter));
                 $counter++;
             }
-
         }
+
         if (isset($staticTag) and !empty($staticTag)){
             $this->I->clicked(FluentFormsSelectors::contactTag);
-            $this->I->clickByJS("//span[normalize-space()='$tags[0]']");
-            $this->I->clickByJS("//span[normalize-space()='$tags[1]']");
+            foreach ($staticTag as $tag)
+            {
+                $this->I->clickByJS("//span[normalize-space()='$tag']");
+            }
         }
-        if (!empty($dynamicTag) and $dynamicTag == 'yes'){
+
+        if (isset($dynamicTag) and !empty($dynamicTag)){
             $this->I->clicked(FluentFormsSelectors::contactTag);
             $this->I->clickByJS("//span[normalize-space()='$tags[2]']");
             $this->I->clickByJS("//span[normalize-space()='$tags[3]']");
         }
+
         if(isset($conditionalLogic) and !empty($conditionalLogic))
         {
             if(!$this->I->checkElement(FluentFormsSelectors::conditionalLogicChecked))
@@ -65,8 +68,6 @@ class Platformly extends Pageobjects
                 {
                     $this->I->selectOption(FluentFormsSelectors::selectNotificationOption,$conditionState);
                 }
-
-
             global $fieldCounter;
             $fieldCounter = 1;
             $labelCounter = 1;
