@@ -1,6 +1,7 @@
 <?php
 namespace Tests\Acceptance;
 
+use Codeception\Example;
 use Tests\Support\AcceptanceTester;
 use Tests\Support\Helper\Acceptance\Integrations\Platformly;
 use Tests\Support\Selectors\FluentFormsAllEntries;
@@ -15,49 +16,28 @@ class PreCheckCest
         $I->wpLogin();
     }
 
-   public function check_test(AcceptanceTester $I, FluentFormsSelectors $fluentFormsSelectors)
+   public function check_test(AcceptanceTester $I)
    {
-//       $I->waitForElement(FluentFormsSelectors::feedName,20);
-//       if(!$I->checkElement(FluentFormsSelectors::conditionalLogicChecked))
-//       {
-//           $I->clicked(FluentFormsSelectors::conditionalLogicUnchecked);
-//       }
-//       $I->selectOption(FluentFormsSelectors::selectNotificationOption,'Any');
-//       $arrayForConditional= [
-//           'names[First Name]'=>['equal', 'John'],
-//           'names[Last Name]'=>['not equal', 'Doe'],
-//           'Email'=>['contains', '@gmail.com'],
-//       ];
-//
-//       global $fieldCounter;
-//       $fieldCounter = 1;
-//       $labelCounter = 1;
-//       foreach ($arrayForConditional as $key => $value)
-//       {
-//           $I->click(FluentFormsSelectors::openConditionalFieldLable($labelCounter));
-//           $I->clickOnText($key);
-//
-//           $I->click(FluentFormsSelectors::openConditionalFieldLable($labelCounter+1));
-//           $I->clickOnText($value[0]);
-//
-//           $I->fillField(FluentFormsSelectors::conditionalFieldValue($fieldCounter),$value[1]);
-//           $I->click(FluentFormsSelectors::addConditionalField($fieldCounter));
-//           $fieldCounter++;
-//           $labelCounter+=2;
-//       }
-//       $I->click(FluentFormsSelectors::removeConditionalField($fieldCounter));
 
-       $I->amOnPage(FluentFormsAllEntries::entriesPage);
-       $I->clicked(FluentFormsAllEntries::viewEntry);
+       $I->amOnPage("wp-admin/admin.php?page=fluent_forms&route=entries&form_id=40#/entries/25");
        $I->clicked(FluentFormsAllEntries::apiCalls);
-       $I->waitForElement(FluentFormsAllEntries::logStatus,10);
-       $apiCallStatus = $I->grabTextFrom(FluentFormsAllEntries::logStatus);
+       $I->waitForElement(FluentFormsAllEntries::noLogFound,10);
+       $text = $I->grabTextFrom(FluentFormsAllEntries::noLogFound);
+       echo $text;
+//
+//       if($example['dataState'] == 'valid')
+//       {
+//           $I->dontSee(FluentFormsAllEntries::noLogFound);
+//           $I->assertStringContainsStringIgnoringCase('Success',$I->checkAPICallStatus('Success', FluentFormsAllEntries::logSuccessStatusText));
+//       }
+//       if ($example['dataState'] == 'invalid')
+//       {
+//           $I->seeElement(FluentFormsAllEntries::noLogFound);
+//           $I->dontSee('Success',$I->checkAPICallStatus());
+//       }
 
 
 
-
-
-       exit();
 
    }
 

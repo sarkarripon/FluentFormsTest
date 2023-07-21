@@ -33,6 +33,25 @@ class FormData
             ]
         ];
     }
+    public static function fieldDataForConditionalForm(): array
+    {
+        $faker = \Faker\Factory::create();
+
+        return [
+            [
+                'id'=> 1,
+                'first_name' => 'John '.$faker->firstName,
+                'last_name' => $faker->lastName,
+                'email' => $faker->unique()->userName . '@gmail.com',
+            ],
+            [
+                'id'=> 2,
+                'first_name' => $faker->firstName,
+                'last_name' => 'Doe',
+                'email' => $faker->unique()->userName . '@live.com',
+            ]
+        ];
+    }
 
 
 }

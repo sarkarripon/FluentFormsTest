@@ -1,10 +1,14 @@
 <?php
 namespace Tests\Acceptance;
 
+use Codeception\Attribute\After;
+use Codeception\Attribute\Before;
+use Codeception\Attribute\Skip;
 use Codeception\Example;
 use Tests\Support\AcceptanceTester;
 use Tests\Support\Helper\Acceptance\Integrations\Platformly;
 use Tests\Support\Selectors\FieldSelectors;
+use Tests\Support\Selectors\FluentFormsAllEntries;
 use Tests\Support\Selectors\FluentFormsSelectors;
 
 class IntegrationsCest
@@ -53,10 +57,24 @@ class IntegrationsCest
         $I->fillField(FieldSelectors::phone, ($example['phone']));
         $I->click(FieldSelectors::submitButton);
 
-        $I->wait(3);
+//        $I->wait(3);
+//        $remoteData = json_decode($platformly->fetchDataFromPlatformly($api,'lac22@gmail.com'));
         $remoteData = json_decode($platformly->fetchDataFromPlatformly($api,$example['email']));
-        $I->wait(3);
-
+//        echo gettype($remoteData);
+        if(property_exists($remoteData, 'status'))
+        {
+            for ($i=0; $i<5; $i++)
+            {
+                $remoteData = json_decode($platformly->fetchDataFromPlatformly($api,$example['email']));
+                if(property_exists($remoteData, 'status'))
+                {
+                    $I->wait(10);
+                }else
+                {
+                    break;
+                }
+            }
+        }
         $referenceData = [
             'first_name' => $example['first_name'],
             'last_name' => $example['last_name'],
@@ -336,26 +354,146 @@ class IntegrationsCest
 
         $I->assertStringContainsStringIgnoringCase('Success',$I->checkAPICallStatus());
 
+    }
+
+//    /**
+//     * @dataProvider \Tests\Support\Factories\DataProvider\FormData::fieldData
+//     */
+//    public function test_platformly_activated_when_satisfy_any_condition(AcceptanceTester $I, Example $example, Platformly $platformly): void
+//    {
+//        global $pageUrl;
 //
-//        $I->wait(3);
-//        $remoteData = json_decode($platformly->fetchDataFromPlatformly($api,$example['email']));
-////        $remoteData = json_decode($integration->fetchDataFromPlatformly($api,'cojizuc@gmail.com'));
+//        $formName = 'test_platformly_activated_when_satisfy_any_condition';
+//        $integrationPositionNumber = 12;
+//        $api = '4XIamp9fiLokeugrcmxSLMQjoRyXyStw';
+//        $projectId = '2919';
 //
-//        //retrieving tags from remote
-//        $remoteTag = $remoteData->project[0]->data->tags;
-//        $remoteTagArray = [];
-//        foreach ($remoteTag as $tag)
-//        {
-//            $remoteTagArray[] = $tag->name;
-//        }
-//        $I->wait(3);
+//        $I->deleteExistingForms();
+//        $I->initiateNewForm();
+//        $requiredField = [
+//            'generalFields' =>['email','nameFields'],
+//        ];
+//        $I->createFormField($requiredField);
+//        $I->click(FluentFormsSelectors::saveForm);
+//        $I->wait(1);
+//        $I->seeSuccess('Form created successfully.');
+//        $I->renameForm($formName);
+//        $I->seeSuccess('Form renamed successfully.');
 //
-//        //checking static tags
-//        foreach ($dynamicTagArray as $tag => $value)
-//        {
-//            $I->assertContains($tag, $remoteTagArray);
-//        }
-//        echo ' Hurray!! Dynamic Tag applied to platform.ly'. "\n";
+//        $platformly->configurePlatformly($integrationPositionNumber, $api, $projectId);
+//        $dynamicTagArray = [
+//            'names[First Name]' =>['starts with','John'],
+//            'names[Last Name]' =>['not equal','Doe'],
+//            'Email' =>['equal','@gmail.com'],
+//        ];
+//
+//        $platformly->mapPlatformlyFields('',[],[],[],$dynamicTagArray,'Any');
+//
+//        $I->deleteExistingPages();
+//        $I->createNewPage($formName);
+//        $I->wantTo('Fill the form with sample data');
+//        $I->amOnUrl($pageUrl);
+//
+//        $I->wait(1);
+//
+//        $I->fillField(FieldSelectors::email, ($example['email']));
+//        $I->fillField(FieldSelectors::first_name, "John ".($example['first_name']));
+//        $I->fillField(FieldSelectors::last_name, 'Doe');
+//        $I->click(FieldSelectors::submitButton);
+//
+//        $I->dontSee(FluentFormsAllEntries::noLogFound);
+//        $I->assertStringContainsStringIgnoringCase('Success',$I->checkAPICallStatus());
+//
+////
+////        $I->wait(3);
+////        $remoteData = json_decode($platformly->fetchDataFromPlatformly($api,$example['email']));
+//////        $remoteData = json_decode($integration->fetchDataFromPlatformly($api,'cojizuc@gmail.com'));
+////
+////        //retrieving tags from remote
+////        $remoteTag = $remoteData->project[0]->data->tags;
+////        $remoteTagArray = [];
+////        foreach ($remoteTag as $tag)
+////        {
+////            $remoteTagArray[] = $tag->name;
+////        }
+////        $I->wait(3);
+////
+////        //checking static tags
+////        foreach ($dynamicTagArray as $tag => $value)
+////        {
+////            $I->assertContains($tag, $remoteTagArray);
+////        }
+////        echo ' Hurray!! Dynamic Tag applied to platform.ly'. "\n";
+//
+//    }
+    #[skip]
+    public function formPreparation_platformly_activated_when_satisfy_any_condition(AcceptanceTester $I, Platformly $platformly): void
+    {
+        global $pageUrl;
+
+        $formName = 'test_platformly_activated_when_satisfy_any_condition';
+        $integrationPositionNumber = 12;
+        $api = '4XIamp9fiLokeugrcmxSLMQjoRyXyStw';
+        $projectId = '2919';
+
+        $I->deleteExistingForms();
+        $I->initiateNewForm();
+        $requiredField = [
+            'generalFields' =>['email','nameFields'],
+        ];
+        $I->createFormField($requiredField);
+        $I->click(FluentFormsSelectors::saveForm);
+        $I->wait(1);
+        $I->seeSuccess('Form created successfully.');
+        $I->renameForm($formName);
+        $I->seeSuccess('Form renamed successfully.');
+
+        $platformly->configurePlatformly($integrationPositionNumber, $api, $projectId);
+        $dynamicTagArray = [
+            'names[First Name]' =>['starts with','John'],
+            'names[Last Name]' =>['not equal','Doe'],
+            'Email' =>['contains','@gmail.com'],
+        ];
+
+        $platformly->mapPlatformlyFields('',[],[],[],$dynamicTagArray,'Any');
+
+        $I->deleteExistingPages();
+        $I->createNewPage($formName);
+        return;
+    }
+
+    /**
+     * @dataProvider \Tests\Support\Factories\DataProvider\FormData::fieldDataForConditionalForm
+     */
+    public function test_platformly_activated_when_satisfy_any_condition(AcceptanceTester $I, Example $example, Platformly $platformly): void
+    {
+        if($example['id'] == 1)
+        {
+            $this->formPreparation_platformly_activated_when_satisfy_any_condition($I,$platformly);
+        }
+        global $pageUrl;
+
+        $I->wantTo('Fill the form with sample data');
+        $I->amOnUrl($pageUrl);
+        $I->wait(1);
+
+        $I->fillField(FieldSelectors::email, ($example['email']));
+        $I->fillField(FieldSelectors::first_name, ($example['first_name']));
+        $I->fillField(FieldSelectors::last_name, ($example['last_name']));
+        $I->click(FieldSelectors::submitButton);
+
+
+        if($example['id'] == 1)
+        {
+            $I->dontSee(FluentFormsAllEntries::noLogFound);
+            $I->assertStringContainsStringIgnoringCase('Success',$I->checkAPICallStatus('Success', FluentFormsAllEntries::logSuccessStatus));
+        }
+        if ($example['id'] == 2)
+        {
+            $I->dontSee(FluentFormsAllEntries::logSuccessStatus);
+            $I->assertStringContainsStringIgnoringCase('Sorry, No Logs found!',$I->checkAPICallStatus('Sorry',FluentFormsAllEntries::noLogFound));
+        }
+
 
     }
 
