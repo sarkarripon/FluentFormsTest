@@ -242,29 +242,26 @@ class AcceptanceTester extends \Codeception\Actor
         }
     }
 
-    public function checkAPICallStatus($text, $cssORXpath):string
+    public function checkAPICallStatus($text, $selector):string
     {
         $this->wait(5);
         $this->amOnPage(FluentFormsAllEntries::entriesPage);
         $this->clicked(FluentFormsAllEntries::viewEntry);
         $this->clicked(FluentFormsAllEntries::apiCalls);
-        $this->waitForElement($cssORXpath,10);
+        $this->waitForElement($selector,10);
 
         for ($i = 0; $i < 6; $i++) {
             try {
                 $this->clicked(FluentFormsAllEntries::apiCalls);
-                $this->waitForElement($cssORXpath,10);
-                $this->seeTextCaseInsensitive($text, $cssORXpath);
+                $this->waitForElement($selector,10);
+                $this->seeTextCaseInsensitive($text, $selector);
                 break;
             } catch (Exception $e) {
-                try {
-                    $this->wait(10);
+                    $this->wait(15);
                     $this->reloadPage();
-                } catch (Exception $e) {
-                }
             }
         }
-        return $this->grabTextFrom($cssORXpath);
+        return $this->grabTextFrom($selector);
     }
 
 
