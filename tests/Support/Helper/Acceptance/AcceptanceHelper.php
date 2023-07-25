@@ -3,9 +3,23 @@ namespace Tests\Support\Helper\Acceptance;
 
 use Codeception\Module\WebDriver;
 use Exception;
+use Dotenv;
 
 class AcceptanceHelper extends WebDriver
 {
+
+    public function environmentLoader(): void
+    {
+        $root = $_SERVER['PWD'];
+        $repository = Dotenv\Repository\RepositoryBuilder::createWithNoAdapters()
+            ->addAdapter(Dotenv\Repository\Adapter\EnvConstAdapter::class)
+            ->addWriter(Dotenv\Repository\Adapter\PutenvAdapter::class)
+            ->immutable()
+            ->make();
+
+        $dotenv = Dotenv\Dotenv::create($repository, $root);
+        $dotenv->load();
+    }
     /**
      * @author Sarkar Ripon
      * @return void
@@ -13,10 +27,12 @@ class AcceptanceHelper extends WebDriver
      */
     public function wpLogin(): void
     {
+        $this->environmentLoader();
+
         $this->amOnPage('/wp-login.php');
         $this->wait(1);
-        $this->fillField('Username',$this->config['wp_username']);
-        $this->fillField('Password',$this->config['wp_password']);
+        $this->fillField('Username',getenv('WORDPRESS_USERNAME'));
+        $this->fillField('Password',getenv('WORDPRESS_PASSWORD'));
         $this->click('Log In');
     }
 
