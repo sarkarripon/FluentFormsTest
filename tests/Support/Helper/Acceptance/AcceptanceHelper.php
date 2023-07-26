@@ -8,7 +8,7 @@ use Dotenv;
 class AcceptanceHelper extends WebDriver
 {
 
-    public function environmentLoader(): void
+    public function env(): void
     {
         $root = $_SERVER['PWD'];
         $repository = Dotenv\Repository\RepositoryBuilder::createWithNoAdapters()
@@ -27,7 +27,7 @@ class AcceptanceHelper extends WebDriver
      */
     public function wpLogin(): void
     {
-        $this->environmentLoader();
+        $this->env();
 
         $this->amOnPage('/wp-login.php');
         $this->wait(1);
