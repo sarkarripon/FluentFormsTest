@@ -3,10 +3,19 @@ namespace Tests\Support\Selectors;
 
 class FluentFormsSettingsSelectors
 {
-    const platformlyApiKey = "(//input[@placeholder='API Key'])";
-    const platformlyProjectID = "(//input[@placeholder='Project ID'])";
-    const platformlySaveButton = "//button[contains(@class,'el-button--primary')]";
-    const disconnectPlatformly = "//button[contains(@class,'el-button--danger')]";
+    const APISaveButton = "//button[contains(@class,'el-button--primary')]";
+    const APIDisconnect = "//button[contains(@class,'el-button--danger')]";
+
+
+    //Mailchimp
+    const MailchimpApiKey ="//label[normalize-space()='Mailchimp API Key']/following::input[@class='el-input__inner']";
+
+
+    //Platformly
+    const PlatformlyApiKey = "(//input[@placeholder='API Key'])";
+    const PlatformlyProjectID = "(//input[@placeholder='Project ID'])";
+
+
 
 
 

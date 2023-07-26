@@ -11,14 +11,8 @@ class Platformly extends Pageobjects
 
     public function mapPlatformlyFields(string $optionalField=null, array $otherFields=[], array $staticTag=[], array $dynamicTag=[], array $conditionalLogic=[], string $conditionState=null): void
     {
-        $this->I->waitForElement(FluentFormsSelectors::feedName,20);
-        $this->I->fillField(FluentFormsSelectors::feedName,'Platformly Integration');
-
-        $this->I->clicked(FluentFormsSelectors::plarformlySegmentDropDown);
-        $this->I->clicked(FluentFormsSelectors::plarformlySegment);
-
-        $this->I->clicked(FluentFormsSelectors::mapEmailDropdown);
-        $this->I->clicked(FluentFormsSelectors::mapEmail);
+        $general = new General($this->I);
+        $general->mapEmailInCommon("Platformly Integration");
 
         if (isset($optionalField) and !empty($optionalField)){
             $this->I->fillField(FluentFormsSelectors::mapField(1),'{inputs.names.first_name}');
@@ -110,18 +104,18 @@ class Platformly extends Pageobjects
         $this->I->clickWithLeftButton(FluentFormsSelectors::saveFeed);
         $this->I->wait(2);
     }
-    public function configurePlatformlyApiSettings($searchKey): void
-    {
-        $this->I->amOnPage(FluentFormsSelectors::fFormPage);
-        $this->I->waitForElement(FluentFormsSelectors::mouseHoverMenu,10);
-        $this->I->moveMouseOver(FluentFormsSelectors::mouseHoverMenu);
-        $this->I->clicked(FluentFormsSelectors::formSettings);
-        $this->I->clicked(FluentFormsSelectors::allIntegrations);
-        $this->I->clicked(FluentFormsSelectors::addNewIntegration);
-        $this->I->fillField(FluentFormsSelectors::searchIntegration,$searchKey);
-        $this->I->clicked(FluentFormsSelectors::searchResult);
-
-    }
+//    public function configurePlatformlyApiSettings($searchKey): void
+//    {
+//        $this->I->amOnPage(FluentFormsSelectors::fFormPage);
+//        $this->I->waitForElement(FluentFormsSelectors::mouseHoverMenu,10);
+//        $this->I->moveMouseOver(FluentFormsSelectors::mouseHoverMenu);
+//        $this->I->clicked(FluentFormsSelectors::formSettings);
+//        $this->I->clicked(FluentFormsSelectors::allIntegrations);
+//        $this->I->clicked(FluentFormsSelectors::addNewIntegration);
+//        $this->I->fillField(FluentFormsSelectors::searchIntegration,$searchKey);
+//        $this->I->clicked(FluentFormsSelectors::searchResult);
+//
+//    }
 
     /**
      *
@@ -185,17 +179,17 @@ class Platformly extends Pageobjects
 
         if($integrationPositionNumber == 12)
         {
-            $saveSettings = $this->I->checkElement(FluentFormsSettingsSelectors::disconnectPlatformly);
+            $saveSettings = $this->I->checkElement(FluentFormsSettingsSelectors::APIDisconnect);
 
             if (!$saveSettings) // Check if the platformly integration is already configured.
             {
-                $this->I->waitForElement(FluentFormsSettingsSelectors::platformlyApiKey,5);
-                $this->I->fillField(FluentFormsSettingsSelectors::platformlyApiKey,$api);
-                $this->I->waitForElement(FluentFormsSettingsSelectors::platformlyProjectID,5);
-                $this->I->fillField(FluentFormsSettingsSelectors::platformlyProjectID,$projectID);
-                $this->I->clicked(FluentFormsSettingsSelectors::platformlySaveButton);
+                $this->I->waitForElement(FluentFormsSettingsSelectors::PlatformlyApiKey,5);
+                $this->I->fillField(FluentFormsSettingsSelectors::PlatformlyApiKey,$api);
+                $this->I->waitForElement(FluentFormsSettingsSelectors::PlatformlyProjectID,5);
+                $this->I->fillField(FluentFormsSettingsSelectors::PlatformlyProjectID,$projectID);
+                $this->I->clicked(FluentFormsSettingsSelectors::APISaveButton);
             }
-            $this->configurePlatformlyApiSettings("Platformly");
+            $general->configureApiSettings("Platformly");
         }
 
     }
@@ -211,7 +205,7 @@ class Platformly extends Pageobjects
             CURLOPT_FOLLOWLOCATION => true,
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST => 'POST',
-            CURLOPT_POSTFIELDS => 'api_key='.$api.'&action=fetch_contact&value={"email":"' . $email . '"}',
+            CURLOPT_POSTFIELDS => 'api_key='.getenv('PLATFORMLY_API_KEY').'&action=fetch_contact&value={"email":"' . $email . '"}',
             CURLOPT_HTTPHEADER => array(
                 'Content-Type: application/x-www-form-urlencoded'
             ),

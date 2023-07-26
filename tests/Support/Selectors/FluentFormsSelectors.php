@@ -15,7 +15,6 @@ class FluentFormsSelectors extends Pageobjects
     const deleteBtn = "//a[normalize-space()='Delete']";
     const confirmBtn = "[class='el-popover el-popper']:last-child button:last-child";
     const formSettings = "//span[contains(@class,'ff_edit')]//a[contains(text(),'Settings')]";
-    const settingsAndIntegrations = "//a[normalize-space()='Settings & Integrations']";
     const allIntegrations = "//a[@data-route_key='/all-integrations']";
     const addNewIntegration = "//button[normalize-space()='Add New Integration']";
     const searchIntegration = "//input[@placeholder='Search Integration']";
@@ -105,24 +104,31 @@ class FluentFormsSelectors extends Pageobjects
         'coupon' => "//div[contains(@class,'vddl-draggable btn-element')]//span[normalize-space()='Coupon']",
     ];
 
-
-
-    // Add New Platformly Integration Feed selectors
-
-    const feedName = "//input[@placeholder='Your Feed Name']";
-    const plarformlySegmentDropDown = "(//i[contains(@class,'el-select__caret el-input__icon el-icon-arrow-up')])[1]";
-    const plarformlySegment = "//div[@x-placement='bottom-start']//ul[contains(@class,'el-scrollbar__view el-select-dropdown__list')]";
+    //common
     const mapEmailDropdown = "//tbody//div//div[@class='el-select']//i[contains(@class,'el-select__caret el-input__icon el-icon-arrow-up')]";
     const mapEmail = "//span[normalize-space()='Email']";
+    const saveFeed = "(//button[contains(@class,'el-button--primary')])";
+    const feedName = "//input[@placeholder='Your Feed Name']";
+    const SegmentDropDown = "(//i[contains(@class,'el-select__caret el-input__icon el-icon-arrow-up')])[1]";
+    const Segment = "(//div[@x-placement='bottom-start']//ul[contains(@class,'el-scrollbar__view el-select-dropdown__list')])[1]";
+
+    // Mailchimp
+    public static function mailchimpFormField($text): string
+    {
+        return "(//label[normalize-space()='{$text}']/following::input[@placeholder='Select a Field or Type Custom value'])[1]";
+    }
+
+
+
+
+    // Platformly
+
 
     public static function mapField($fieldPosition): string
     {
         return "(//input[@placeholder='Select a Field or Type Custom value'])[{$fieldPosition}]";
     }
-    const saveFeed = "(//button[contains(@class,'el-button--primary')])";
 
-
-    //Other Fields
     public static function addField($fieldOrder): string
     {
         return "(//i[contains(@class,'el-icon-plus')])[{$fieldOrder}]";
@@ -146,13 +152,9 @@ class FluentFormsSelectors extends Pageobjects
     {
         return "(//tbody/tr/td/div[contains(@class,'field_general')]/div/div[contains(@class,'el-input-group--append')]/input[contains(@class,'el-input__inner')])[$fieldPosition]";
     }
-
-    //tags
     const contactTag = "//input[contains(@class,'el-select')]";
-
     const dynamicTagChecked = "//div[@class='ff_field_routing']//span[contains(@class,'is-checked')]";
     const dynamicTagUnchecked = "//span[@class='el-checkbox__input']//span[@class='el-checkbox__inner']";
-
     public static function addDynamicTagField($position): string
     {
         return "(//span[normalize-space()='Enable Dynamic Tag Selection']/following::i[contains(@class,'el-icon-plus')])[{$position}]";
@@ -173,9 +175,6 @@ class FluentFormsSelectors extends Pageobjects
     {
         return "(//input[@placeholder='Enter a value'])[{$position}]";
     }
-
-
-    //Conditional Logic
     const conditionalLogicUnchecked = "//div[@class='ff-filter-fields-wrap']//span[@class='el-checkbox__inner']";
     const conditionalLogicChecked = "//div[@class='ff-filter-fields-wrap']//label[@class='el-checkbox is-checked']";
     public static function openConditionalFieldLable($position): string
@@ -194,8 +193,7 @@ class FluentFormsSelectors extends Pageobjects
     {
         return "(//input[@placeholder='Enter a value'])[{$fieldValuePosition}]";
     }
+        const selectNotificationOption = "//select[@class='ff-select ff-select-small ml-1 mr-1']";
 
-
-    const selectNotificationOption = "//select[@class='ff-select ff-select-small ml-1 mr-1']";
 
 }

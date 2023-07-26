@@ -7,6 +7,7 @@ use Codeception\Attribute\Before;
 use Codeception\Attribute\Skip;
 use Codeception\Example;
 use Tests\Support\AcceptanceTester;
+use Tests\Support\Helper\Acceptance\Integrations\General;
 use Tests\Support\Helper\Acceptance\Integrations\Platformly;
 use Tests\Support\Selectors\FieldSelectors;
 use Tests\Support\Selectors\FluentFormsAllEntries;
@@ -22,34 +23,14 @@ class IntegrationPlatformlyCest
     /**
      * @dataProvider \Tests\Support\Factories\DataProvider\FormData::fieldData
      */
-    public function test_platformly_push_data(AcceptanceTester $I, Example $example, Platformly $platformly): void
+    public function test_platformly_push_data(AcceptanceTester $I, Example $example, Platformly $platformly, General $general): void
     {
-        global $pageUrl;
+        $general->prepareForm('test_platformly_push_data', ['generalFields' => ['email', 'nameFields', 'phone']]);
 
-        $formName = 'test_platformly_push_data';
-        $integrationPositionNumber = 12;
-        $api = '4XIamp9fiLokeugrcmxSLMQjoRyXyStw';
-        $projectId = '2919';
-
-        $I->deleteExistingForms();
-        $I->initiateNewForm();
-        $requiredField = [
-            'generalFields' => ['nameFields', 'email', 'phone'],
-        ];
-        $I->createFormField($requiredField);
-        $I->click(FluentFormsSelectors::saveForm);
-        $I->wait(1);
-        $I->seeSuccess('Form created successfully.');
-        $I->renameForm($formName);
-        $I->seeSuccess('Form renamed successfully.');
-
-        $platformly->configurePlatformly($integrationPositionNumber, $api, $projectId);
+        $platformly->configurePlatformly(12, getenv('PLATFORMLY_API_KEY'), getenv('PLATFORMLY_PROJECT_ID'));
         $platformly->mapPlatformlyFields('yes', [], [], [], [], '');
 
-        $I->deleteExistingPages();
-        $I->createNewPage($formName);
-        $I->wantTo('Fill the form with sample data');
-        $I->amOnUrl($pageUrl);
+        $general->preparePage();
 
         $I->wait(1);
         $I->fillField(FieldSelectors::first_name, ($example['first_name']));
@@ -59,10 +40,10 @@ class IntegrationPlatformlyCest
         $I->click(FieldSelectors::submitButton);
         $I->wait(5);
 
-        $remoteData = json_decode($platformly->fetchDataFromPlatformly($api, $example['email']));
+        $remoteData = json_decode($platformly->fetchDataFromPlatformly(getenv('PLATFORMLY_PROJECT_ID'), $example['email']));
         if (property_exists($remoteData, 'status')) {
             for ($i = 0; $i < 6; $i++) {
-                $remoteData = json_decode($platformly->fetchDataFromPlatformly($api, $example['email']));
+                $remoteData = json_decode($platformly->fetchDataFromPlatformly(getenv('PLATFORMLY_PROJECT_ID'), $example['email']));
                 if (property_exists($remoteData, 'status')) {
                     $I->wait(20);
                 } else {

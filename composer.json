@@ -15,7 +15,7 @@
         "mailchimp/marketing": "^3.0"
     },
   "require": {
-    "ext-curl": "*",
+        "ext-curl": "*",
         "doctrine/orm": "^2.15",
         "vlucas/phpdotenv": "^5.5"
   }
