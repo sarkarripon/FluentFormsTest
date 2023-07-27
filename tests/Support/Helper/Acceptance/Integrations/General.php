@@ -53,7 +53,6 @@ class General extends Pageobjects
         $this->I->clicked(FluentFormsSelectors::addNewIntegration);
         $this->I->fillField(FluentFormsSelectors::searchIntegration,$searchKey);
         $this->I->clicked(FluentFormsSelectors::searchResult);
-
     }
 
     public function mapEmailInCommon($feedName): void
@@ -66,6 +65,12 @@ class General extends Pageobjects
 
         $this->I->clicked(FluentFormsSelectors::mapEmailDropdown);
         $this->I->clicked(FluentFormsSelectors::mapEmail);
+    }
+
+    public function mapDynamicTag(): void
+    {
+        $this->I->fillField(FluentFormsSelectors::dynamicTag);
+
     }
 
 }

@@ -70,6 +70,12 @@ class AcceptanceHelper extends WebDriver
         parent::clickWithLeftButton($selector);
     }
 
+    public function filledField($selector,$value): void
+    {
+        $this->clickWithLeftButton($selector);
+        parent::fillField($selector,$value);
+    }
+
     public function clickOnText($text): void
     {
         $xpathVariations = [
@@ -83,8 +89,10 @@ class AcceptanceHelper extends WebDriver
             "//a[contains(text(),'{$text}')]",
             "//h2[normalize-space()='{$text}']",
             "//p[contains(text(),'{$text}')]",
+            "//input[@placeholder='{$text}']",
         ];
 
+        $exception = [];
         foreach ($xpathVariations as $xpath) {
             try {
                 $this->seeElementInDOM($xpath);
@@ -92,10 +100,16 @@ class AcceptanceHelper extends WebDriver
                 $this->clickByJS($xpath);
                 break; // Exit the loop if the element is found and clicked successfully
             } catch (\Exception $e) {
+                $exception[] = $e->getMessage();
                 // If the element is not found or the click fails, continue to the next XPath variation
             }
         }
+        if(count($exception) === count($xpathVariations)){
+           $this->fail($text." not found");
+        }
     }
+
+
 
     public function prepareJSforXpath(string $cssORxpath):string
     {

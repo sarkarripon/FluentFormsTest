@@ -48,7 +48,7 @@ class Platformly extends Pageobjects
 
         if (isset($dynamicTag) and !empty($dynamicTag))
         {
-            $this->I->clicked(FluentFormsSelectors::dynamicTagUnchecked);
+            $this->I->clicked(FluentFormsSelectors::enableDynamicTag);
 
             global $dynamicTagField;
             $dynamicTagField = 1;
@@ -87,10 +87,10 @@ class Platformly extends Pageobjects
             $labelCounter = 1;
             foreach ($conditionalLogic as $key => $value)
             {
-                $this->I->click(FluentFormsSelectors::openConditionalFieldLable($labelCounter));
+                $this->I->click(FluentFormsSelectors::openConditionalFieldLabel($labelCounter));
                 $this->I->clickOnText($key);
 
-                $this->I->click(FluentFormsSelectors::openConditionalFieldLable($labelCounter+1));
+                $this->I->click(FluentFormsSelectors::openConditionalFieldLabel($labelCounter+1));
                 $this->I->clickOnText($value[0]);
 
                 $this->I->fillField(FluentFormsSelectors::conditionalFieldValue($fieldCounter),$value[1]);

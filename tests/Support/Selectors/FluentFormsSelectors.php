@@ -2,6 +2,7 @@
 
 namespace Tests\Support\Selectors;
 
+use http\Encoding\Stream\Inflate;
 use Tests\Support\Helper\Pageobjects;
 
 class FluentFormsSelectors extends Pageobjects
@@ -19,8 +20,6 @@ class FluentFormsSelectors extends Pageobjects
     const addNewIntegration = "//button[normalize-space()='Add New Integration']";
     const searchIntegration = "//input[@placeholder='Search Integration']";
     const searchResult = "[class$='el-dropdown-menu__item']:nth-child(2)";
-
-
 
 
     //general fields
@@ -82,6 +81,7 @@ class FluentFormsSelectors extends Pageobjects
     {
         return "(//i[contains(text(),'+')])[$containerNumber]";
     }
+
     const containerSection = "(//h5[normalize-space()='Container'])[1]";
 
     const containers = [
@@ -112,88 +112,108 @@ class FluentFormsSelectors extends Pageobjects
     const SegmentDropDown = "(//i[contains(@class,'el-select__caret el-input__icon el-icon-arrow-up')])[1]";
     const Segment = "(//div[@x-placement='bottom-start']//ul[contains(@class,'el-scrollbar__view el-select-dropdown__list')])[1]";
 
+    public static function addDynamicTagField($index): string
+    {
+        return "(//span[normalize-space()='Enable Dynamic Tag Selection' or 
+        normalize-space()='Enable Dynamic Tag Input']/following::i[contains(@class,'el-icon-plus')])[{$index}]";
+    }
+    public static function removeDynamicTagField($index): string
+    {
+        return "(//span[normalize-space()='Enable Dynamic Tag Selection' or 
+        normalize-space()='Enable Dynamic Tag Input']/following::i[contains(@class,'el-icon-minus')])[{$index}]";
+    }
+    public static function ifClause($index): string
+    {
+        return "(//span[normalize-space()='Enable Dynamic Tag Selection' or normalize-space()='Enable Dynamic Tag Input']/following::input[@placeholder='Select'])[{$index}]";
+    }
+    public static function addConditionalField($index): string
+    {
+        return "(//span[normalize-space()='Enable conditional logic']/following::i[contains(@class,'el-icon-plus')])[{$index}]";
+    }
+    public static function removeConditionalField($index): string
+    {
+        return "(//span[normalize-space()='Enable conditional logic']/following::i[contains(@class,'el-icon-minus')])[{$index}]";
+    }
+    public static function conditionalFieldValue($index): string
+    {
+        return "(//input[@placeholder='Enter a value'])[{$index}]";
+    }
+    public static function dynamicTagValue($index): string
+    {
+        return "(//input[@placeholder='Enter a value'])[{$index}]";
+    }
+    public static function enableOption($text): string
+    {
+        return "(//label[normalize-space()='$text']/following::span[contains(@class,'el-checkbox__input')]//span[contains(@class,'el-checkbox__inner')])[1]";
+    }
+    const enableDynamicTag = "//span[@class='el-checkbox__input']//span[contains(@class,'el-checkbox__inner')]";
+    const conditionalLogicUnchecked = "//div[@class='ff-filter-fields-wrap']//span[@class='el-checkbox__inner']";
+    const conditionalLogicChecked = "//div[@class='ff-filter-fields-wrap']//label[@class='el-checkbox is-checked']";
+    const selectNotificationOption = "//select[contains(@class,'ff-select ff-select-small ml-1 mr-1')]";
+
+
+
     // Mailchimp
     public static function mailchimpFormField($text): string
     {
         return "(//label[normalize-space()='{$text}']/following::input[@placeholder='Select a Field or Type Custom value'])[1]";
     }
 
+    const mailchimpStaticTag = "//label[normalize-space()='Tags']/following::input[@placeholder='Select a Field or Type Custom value']";
 
+    public static function mailchimpDynamicTag($index): string
+    {
+        return "(//input[@placeholder='Tag'])[{$index}]";
+    }
+    public static function openConditionalFieldLabel($index): string
+    {
+        return "//span[normalize-space()='Enable conditional logic']/following::input[@placeholder='Select'][{$index}]";
+    }
+    const mailchimpNote = "//label[normalize-space()='Note']/following::textarea[@placeholder='Select a Field or Type Custom value']";
 
 
     // Platformly
-
-
-    public static function mapField($fieldPosition): string
+    public static function mapField($index): string
     {
-        return "(//input[@placeholder='Select a Field or Type Custom value'])[{$fieldPosition}]";
+        return "(//input[@placeholder='Select a Field or Type Custom value'])[{$index}]";
     }
-
-    public static function addField($fieldOrder): string
+    public static function addField($index): string
     {
-        return "(//i[contains(@class,'el-icon-plus')])[{$fieldOrder}]";
+        return "(//i[contains(@class,'el-icon-plus')])[{$index}]";
     }
     const removeField = "(//i[contains(@class,'el-icon-minus')])[1]";
-    public static function openFieldLabel($fieldPosition): string
+
+    public static function openFieldLabel($index): string
     {
-        return "(//input[@placeholder='Select'])[{$fieldPosition}]";
+        return "(//input[@placeholder='Select'])[{$index}]";
     }
 
-    public static function jsForFieldLabelFromBottom($fieldValuePosition): string
+    public static function jsForFieldLabelFromBottom($index): string
     {
-        return "document.querySelector(\"div[x-placement='bottom-start'] li:nth-child($fieldValuePosition)\").click();";
-    }
-    public static function jsForFieldLabelFromTop($fieldValuePosition): string
-    {
-        return "document.querySelector(\"div[x-placement='top-start'] li:nth-child($fieldValuePosition)\").click();";
+        return "document.querySelector(\"div[x-placement='bottom-start'] li:nth-child($index)\").click();";
     }
 
-    public static function fieldValue($fieldPosition): string
+    public static function jsForFieldLabelFromTop($index): string
     {
-        return "(//tbody/tr/td/div[contains(@class,'field_general')]/div/div[contains(@class,'el-input-group--append')]/input[contains(@class,'el-input__inner')])[$fieldPosition]";
+        return "document.querySelector(\"div[x-placement='top-start'] li:nth-child($index)\").click();";
     }
+
+    public static function fieldValue($index): string
+    {
+        return "(//tbody/tr/td/div[contains(@class,'field_general')]/div/div[contains(@class,'el-input-group--append')]/input[contains(@class,'el-input__inner')])[$index]";
+    }
+
     const contactTag = "//input[contains(@class,'el-select')]";
     const dynamicTagChecked = "//div[@class='ff_field_routing']//span[contains(@class,'is-checked')]";
-    const dynamicTagUnchecked = "//span[@class='el-checkbox__input']//span[@class='el-checkbox__inner']";
-    public static function addDynamicTagField($position): string
+
+
+
+    public static function setTag($index): string
     {
-        return "(//span[normalize-space()='Enable Dynamic Tag Selection']/following::i[contains(@class,'el-icon-plus')])[{$position}]";
+        return "(//input[@placeholder='Set Tag'])[{$index}]";
     }
-    public static function removeDynamicTagField($position): string
-    {
-        return "(//span[normalize-space()='Enable Dynamic Tag Selection']/following::i[contains(@class,'el-icon-minus')])[{$position}]";
-    }
-    public static function setTag($position): string
-    {
-        return "(//input[@placeholder='Set Tag'])[{$position}]";
-    }
-    public static function ifClause($position): string
-    {
-        return "(//span[normalize-space()='Enable Dynamic Tag Selection']/following::input[@placeholder='Select'])[{$position}]";
-    }
-    public static function dynamicTagValue($position): string
-    {
-        return "(//input[@placeholder='Enter a value'])[{$position}]";
-    }
-    const conditionalLogicUnchecked = "//div[@class='ff-filter-fields-wrap']//span[@class='el-checkbox__inner']";
-    const conditionalLogicChecked = "//div[@class='ff-filter-fields-wrap']//label[@class='el-checkbox is-checked']";
-    public static function openConditionalFieldLable($position): string
-    {
-        return "//span[normalize-space()='Enable conditional logic']/following::input[@placeholder='Select'][{$position}]";
-    }
-    public static function addConditionalField($fieldValuePosition): string
-    {
-        return "(//span[normalize-space()='Enable conditional logic']/following::i[contains(@class,'el-icon-plus')])[{$fieldValuePosition}]";
-    }
-    public static function removeConditionalField($fieldValuePosition): string
-    {
-        return "(//span[normalize-space()='Enable conditional logic']/following::i[contains(@class,'el-icon-minus')])[{$fieldValuePosition}]";
-    }
-    public static function conditionalFieldValue($fieldValuePosition): string
-    {
-        return "(//input[@placeholder='Enter a value'])[{$fieldValuePosition}]";
-    }
-        const selectNotificationOption = "//select[@class='ff-select ff-select-small ml-1 mr-1']";
+
+
 
 
 }
