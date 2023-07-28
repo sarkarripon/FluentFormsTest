@@ -27,33 +27,41 @@ class Mailchimp extends Pageobjects
         }
     }
 
-    public function mapMailchimpFields($otherField,$otherFieldArray): void
+    public function mapMailchimpFields($otherField=null,array $otherFieldArray=null,string $staticTag=null, array $dynamicTag=null): void
     {
         $general = new General($this->I);
         $general->mapEmailInCommon("Mailchimp Integration");
 
         if ($otherField == "yes" and !empty($otherField)) {
-            foreach ($otherFieldArray as $field => $value) {
-                $this->I->fillField(FluentFormsSelectors::mailchimpFormField($field), $value);
+            $general->mapCommonFields($otherFieldArray);
             }
 
+        $this->I->clickOnText('Select Interest Category');
+        $this->I->clickOnText('Authlab');
+        $this->I->clickOnText('Select Interest');
+        $this->I->clickOnText('fluentforms');
 
+        if ($staticTag=='yes' and !empty($staticTag)) {
+            $this->I->fillField(FluentFormsSelectors::mailchimpStaticTag, $staticTag);
         }
+        if ($dynamicTag=='yes' and !empty($dynamicTag)) {
+            $general->mapDynamicTag('yes',$dynamicTag);
+        }
+
         $this->I->clickWithLeftButton(FluentFormsSelectors::saveFeed);
         $this->I->wait(2);
-
-
     }
 
     public static function fetchMailchimpData(): void
     {
         $client = new ApiClient();
         $client->setConfig([
-            'apiKey' => 'eadd373e53ebf26180ea284112909140-us21',
-            'server' => 'us21',
+            'apiKey' => getenv('MAILCHIMP_API_KEY'),
+            'server' => getenv('MAILCHIMP_SERVER_PREFIX')
         ]);
+        //make hash of email
 
-        $response = $client->lists->getListMember("9fb11faf47", "2f7b11e9b8b489dfdc015a3e87659e0c");
+        $response = $client->lists->getListMember(getenv('MAILCHIMP_AUDIENCE_ID'), "c3a40a9bc1d124295eff3392e897090c");
         print_r($response);
     }
 }

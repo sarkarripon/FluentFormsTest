@@ -2,7 +2,6 @@
 
 namespace Tests\Support\Selectors;
 
-use http\Encoding\Stream\Inflate;
 use Tests\Support\Helper\Pageobjects;
 
 class FluentFormsSelectors extends Pageobjects
@@ -105,9 +104,10 @@ class FluentFormsSelectors extends Pageobjects
     ];
 
     //common
-    const mapEmailDropdown = "//tbody//div//div[@class='el-select']//i[contains(@class,'el-select__caret el-input__icon el-icon-arrow-up')]";
+    const mapEmailDropdown = "//div[@class='el-select']//i[contains(@class,'el-select__caret') or //input[@placeholder='Select a Field']]";
     const mapEmail = "//span[normalize-space()='Email']";
     const saveFeed = "(//button[contains(@class,'el-button--primary')])";
+    const integrationFeed = "//form[contains(@class,'el-form')]";
     const feedName = "//input[@placeholder='Your Feed Name']";
     const SegmentDropDown = "(//i[contains(@class,'el-select__caret el-input__icon el-icon-arrow-up')])[1]";
     const Segment = "(//div[@x-placement='bottom-start']//ul[contains(@class,'el-scrollbar__view el-select-dropdown__list')])[1]";
@@ -144,7 +144,7 @@ class FluentFormsSelectors extends Pageobjects
     }
     public static function enableOption($text): string
     {
-        return "(//label[normalize-space()='$text']/following::span[contains(@class,'el-checkbox__input')]//span[contains(@class,'el-checkbox__inner')])[1]";
+        return "(//span[normalize-space()='$text']/preceding-sibling::span[contains(@class,'el-checkbox__input')]//span[contains(@class,'el-checkbox__inner')])[1]";
     }
     const enableDynamicTag = "//span[@class='el-checkbox__input']//span[contains(@class,'el-checkbox__inner')]";
     const conditionalLogicUnchecked = "//div[@class='ff-filter-fields-wrap']//span[@class='el-checkbox__inner']";
@@ -154,14 +154,14 @@ class FluentFormsSelectors extends Pageobjects
 
 
     // Mailchimp
-    public static function mailchimpFormField($text): string
+    public static function commonFields($text): string
     {
         return "(//label[normalize-space()='{$text}']/following::input[@placeholder='Select a Field or Type Custom value'])[1]";
     }
 
     const mailchimpStaticTag = "//label[normalize-space()='Tags']/following::input[@placeholder='Select a Field or Type Custom value']";
 
-    public static function mailchimpDynamicTag($index): string
+    public static function dynamicTagField($index): string
     {
         return "(//input[@placeholder='Tag'])[{$index}]";
     }

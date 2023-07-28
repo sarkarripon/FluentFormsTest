@@ -57,19 +57,64 @@ class General extends Pageobjects
 
     public function mapEmailInCommon($feedName): void
     {
-        $this->I->waitForElement(FluentFormsSelectors::feedName,20);
+        $this->I->waitForElement(FluentFormsSelectors::integrationFeed,20);
         $this->I->fillField(FluentFormsSelectors::feedName,$feedName);
 
         $this->I->clicked(FluentFormsSelectors::SegmentDropDown);
         $this->I->clicked(FluentFormsSelectors::Segment);
 
-        $this->I->clicked(FluentFormsSelectors::mapEmailDropdown);
-        $this->I->clicked(FluentFormsSelectors::mapEmail);
+        $this->I->clickByJS(FluentFormsSelectors::mapEmailDropdown);
+        $this->I->clickByJS(FluentFormsSelectors::mapEmail);
     }
 
-    public function mapDynamicTag(): void
+    /**
+     * Arr ex; 'Name'=>'{inputs.names}'
+     *
+     */
+    public function mapCommonFields($fields): void
     {
-        $this->I->fillField(FluentFormsSelectors::dynamicTag);
+        foreach ($fields as $field => $value) {
+            $this->I->fillField(FluentFormsSelectors::commonFields($field), $value);
+        }
+    }
+
+
+
+
+    public function mapDynamicTag($isDropDown, array $dynamicTagArray=null): void
+    {
+
+//        $this->I->clicked(FluentFormsSelectors::enableOption('Enable Dynamic Tag Input'));
+
+//        $dynamicTagArray = [
+//            'European' => ['names[First Name]', 'contains', 'John'],
+//        ];
+
+        global $dynamicTagField;
+        $dynamicTagField = 1;
+        $dynamicTagValue = 1;
+        foreach ($dynamicTagArray as $tag => $value)
+        {
+            if ($isDropDown == "yes" and !empty($isDropDown))
+            {
+                $this->I->clicked(FluentFormsSelectors::setTag($dynamicTagField));
+                $this->I->clickOnText($tag);
+            }else{
+                $this->I->fillField(FluentFormsSelectors::dynamicTagField($dynamicTagField),$tag);
+            }
+            $this->I->click(FluentFormsSelectors::ifClause($dynamicTagValue));
+            $this->I->clickOnText($value[0]);
+
+            $this->I->click(FluentFormsSelectors::ifClause($dynamicTagValue+1));
+            $this->I->clickOnText($value[1]);
+
+            $this->I->fillField(FluentFormsSelectors::dynamicTagValue($dynamicTagField),$value[2]);
+            $this->I->click(FluentFormsSelectors::addDynamicTagField($dynamicTagField));
+            $dynamicTagField++;
+            $dynamicTagValue+=2;
+
+        }
+        $this->I->click(FluentFormsSelectors::removeDynamicTagField($dynamicTagField));
 
     }
 

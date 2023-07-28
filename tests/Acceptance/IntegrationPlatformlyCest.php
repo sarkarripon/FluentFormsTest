@@ -27,33 +27,21 @@ class IntegrationPlatformlyCest
     {
         $general->prepareForm('test_platformly_push_data', ['generalFields' => ['email', 'nameFields', 'phone']]);
 
-        $platformly->configurePlatformly(12, getenv('PLATFORMLY_API_KEY'), getenv('PLATFORMLY_PROJECT_ID'));
+        $platformly->configurePlatformly(12, getenv('PLATFORMLY_PROJECT_ID'));
         $platformly->mapPlatformlyFields('yes', [], [], [], [], '');
 
         $general->preparePage();
 
         $I->wait(1);
-        $I->fillField(FieldSelectors::first_name, ($example['first_name']));
-        $I->fillField(FieldSelectors::last_name, ($example['last_name']));
-        $I->fillField(FieldSelectors::email, ($example['email']));
-        $I->fillField(FieldSelectors::phone, ($example['phone']));
+        $I->filledField(FieldSelectors::first_name, ($example['first_name']));
+        $I->filledField(FieldSelectors::last_name, ($example['last_name']));
+        $I->filledField(FieldSelectors::email, ($example['email']));
+        $I->filledField(FieldSelectors::phone, ($example['phone']));
         $I->click(FieldSelectors::submitButton);
         $I->wait(5);
 
-        $remoteData = json_decode($platformly->fetchDataFromPlatformly(getenv('PLATFORMLY_PROJECT_ID'), $example['email']));
-        if (property_exists($remoteData, 'status')) {
-            for ($i = 0; $i < 6; $i++) {
-                $remoteData = json_decode($platformly->fetchDataFromPlatformly(getenv('PLATFORMLY_PROJECT_ID'), $example['email']));
-                if (property_exists($remoteData, 'status')) {
-                    $I->wait(20);
-                } else {
-                    break;
-                }
-            }
-        }
-        if (property_exists($remoteData, 'status')) {
-            $I->fail($remoteData->message);
-        }
+        $remoteData = $platformly->fetchPlatformlyData($example['email']);
+
 
         $referenceData = [
             'first_name' => $example['first_name'],
@@ -128,10 +116,10 @@ class IntegrationPlatformlyCest
         $I->selectOption(FieldSelectors::country, ($example['country']));
         $I->click(FieldSelectors::submitButton);
 
-        $remoteData = json_decode($platformly->fetchDataFromPlatformly($api, $example['email']));
+        $remoteData = json_decode($platformly->fetchPlatformlyData($example['email']));
         if (property_exists($remoteData, 'status')) {
             for ($i = 0; $i < 6; $i++) {
-                $remoteData = json_decode($platformly->fetchDataFromPlatformly($api, $example['email']));
+                $remoteData = json_decode($platformly->fetchPlatformlyData($example['email']));
                 if (property_exists($remoteData, 'status')) {
                     $I->wait(20);
                 } else {
@@ -204,10 +192,10 @@ class IntegrationPlatformlyCest
         $I->fillField(FieldSelectors::email, ($example['email']));
         $I->click(FieldSelectors::submitButton);
 
-        $remoteData = json_decode($platformly->fetchDataFromPlatformly($api, $example['email']));
+        $remoteData = json_decode($platformly->fetchPlatformlyData($example['email']));
         if (property_exists($remoteData, 'status')) {
             for ($i = 0; $i < 6; $i++) {
-                $remoteData = json_decode($platformly->fetchDataFromPlatformly($api, $example['email']));
+                $remoteData = json_decode($platformly->fetchPlatformlyData($example['email']));
                 if (property_exists($remoteData, 'status')) {
                     $I->wait(20);
                 } else {
@@ -278,10 +266,10 @@ class IntegrationPlatformlyCest
         $I->click(FieldSelectors::submitButton);
 
         $I->wait(3);
-        $remoteData = json_decode($platformly->fetchDataFromPlatformly($api, $example['email']));
+        $remoteData = json_decode($platformly->fetchPlatformlyData($example['email']));
         if (property_exists($remoteData, 'status')) {
-            for ($i = 0; $i < 6; $i++) {
-                $remoteData = json_decode($platformly->fetchDataFromPlatformly($api, $example['email']));
+            for ($i = 0; $i < 5; $i++) {
+                $remoteData = json_decode($platformly->fetchPlatformlyData($example['email']));
                 if (property_exists($remoteData, 'status')) {
                     $I->wait(20);
                 } else {

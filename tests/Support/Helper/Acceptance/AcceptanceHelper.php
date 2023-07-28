@@ -128,6 +128,29 @@ class AcceptanceHelper extends WebDriver
 
 
     /**
+     * Convert an XPath expression to escape backslashes.
+     *
+     * @param string $selector
+     * @param string $value
+     * @return void The converted XPath expression.
+     * @throws Exception
+     */
+    public function fillByJS(string $selector, string $value): void
+    {
+        $escapeXpath = str_replace('\\', '\\\\', $selector);
+        $escapedXpath = addslashes($escapeXpath);
+        $this->waitForElementVisible($selector, 10);
+
+        $this->executeJS("
+        var xpathResult = document.evaluate('$escapedXpath', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null);
+        var element = xpathResult.singleNodeValue;
+        element.value = '$value';");
+
+    }
+
+
+
+    /**
      * @param string $text
      * @return void
      * @throws Exception
