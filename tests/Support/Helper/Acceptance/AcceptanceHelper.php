@@ -64,20 +64,24 @@ class AcceptanceHelper extends WebDriver
      */
     public function clicked(string $selector): void
     {
-        $this->wait(1);
-        $this->waitForElement($selector, 15);
+        $this->waitForElementVisible( $selector);
         $this->moveMouseOver($selector);
         parent::clickWithLeftButton($selector);
     }
 
-    public function filledField($selector,$value): void
+    /**
+     * @throws Exception
+     */
+    public function filledField($selector, $value): void
     {
+        $this->waitForElementVisible( $selector);
         $this->clickWithLeftButton($selector);
         parent::fillField($selector,$value);
     }
 
     public function clickOnText($text): void
     {
+        $this->wait(1);
         $xpathVariations = [
             "//div[@x-placement='bottom-start']//span[contains(text(),'{$text}')]",
             "//div[@x-placement='top-start']//span[contains(text(),'{$text}')]",
@@ -96,7 +100,7 @@ class AcceptanceHelper extends WebDriver
         foreach ($xpathVariations as $xpath) {
             try {
                 $this->seeElementInDOM($xpath);
-                $this->moveMouseOver();
+                $this->moveMouseOver($xpath);
                 $this->clickByJS($xpath);
                 break; // Exit the loop if the element is found and clicked successfully
             } catch (\Exception $e) {
@@ -110,22 +114,25 @@ class AcceptanceHelper extends WebDriver
     }
 
 
-
-    public function prepareJSforXpath(string $cssORxpath):string
+    /**
+     * @throws Exception
+     */
+    public function clickByJS(string $selector): void
     {
-        return <<<JS
-        var xpathExpression = "$cssORxpath";
+        $escapeXpath = str_replace('\\', '\\\\', $selector);
+        $escapedXpath = addslashes($escapeXpath);
+        $this->waitForElementClickable( $selector);
+        $js = <<<JS
+        var xpathExpression = "$escapedXpath";
         var element = document.evaluate(xpathExpression, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
         if (element) {
             element.click();
         }
         JS;
-    }
-    public function clickByJS(string $cssORxpath): void
-    {
-        $this->executeJS($this->prepareJSforXpath($cssORxpath));
-    }
 
+        $this->executeJS($js);
+
+    }
 
     /**
      * Convert an XPath expression to escape backslashes.
@@ -139,16 +146,13 @@ class AcceptanceHelper extends WebDriver
     {
         $escapeXpath = str_replace('\\', '\\\\', $selector);
         $escapedXpath = addslashes($escapeXpath);
-        $this->waitForElementVisible($selector, 10);
-
+        $this->waitForElementVisible($selector);
         $this->executeJS("
         var xpathResult = document.evaluate('$escapedXpath', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null);
         var element = xpathResult.singleNodeValue;
         element.value = '$value';");
 
     }
-
-
 
     /**
      * @param string $text
@@ -160,7 +164,7 @@ class AcceptanceHelper extends WebDriver
      */
     public function seeText(string $text): void
     {
-        $this->waitForText($text, 10);
+        $this->waitForText($text);
         parent::see($text);
         $this->enableImplicitWait();
     }
@@ -184,7 +188,6 @@ class AcceptanceHelper extends WebDriver
             $this->seeElementInDOM($element);
            return true;
         } catch (\Exception $e) {
-            echo $e->getMessage()."\n";
             return false;
         }
     }

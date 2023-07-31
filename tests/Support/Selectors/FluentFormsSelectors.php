@@ -107,7 +107,7 @@ class FluentFormsSelectors extends Pageobjects
     const mapEmailDropdown = "//div[@class='el-select']//i[contains(@class,'el-select__caret') or //input[@placeholder='Select a Field']]";
     const mapEmail = "//span[normalize-space()='Email']";
     const saveFeed = "(//button[contains(@class,'el-button--primary')])";
-    const integrationFeed = "//form[contains(@class,'el-form')]";
+    const integrationFeed = "(//div[contains(@class, 'ff_card_head_group')] | //button[@title='Show Video'])[1]";
     const feedName = "//input[@placeholder='Your Feed Name']";
     const SegmentDropDown = "(//i[contains(@class,'el-select__caret el-input__icon el-icon-arrow-up')])[1]";
     const Segment = "(//div[@x-placement='bottom-start']//ul[contains(@class,'el-scrollbar__view el-select-dropdown__list')])[1]";

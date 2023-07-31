@@ -27,7 +27,7 @@ class IntegrationPlatformlyCest
     {
         $general->prepareForm('test_platformly_push_data', ['generalFields' => ['email', 'nameFields', 'phone']]);
 
-        $platformly->configurePlatformly(12, getenv('PLATFORMLY_PROJECT_ID'));
+        $platformly->configurePlatformly(12);
         $platformly->mapPlatformlyFields('yes', [], [], [], [], '');
 
         $general->preparePage();
@@ -74,8 +74,6 @@ class IntegrationPlatformlyCest
 
         $formName = 'test_platformly_can_push_other_data';
         $integrationPositionNumber = 12;
-        $api = '4XIamp9fiLokeugrcmxSLMQjoRyXyStw';
-        $projectId = '2919';
         $tags = ['Non_US', 'Asian'];
 
         $I->deleteExistingForms();
@@ -90,7 +88,7 @@ class IntegrationPlatformlyCest
         $I->renameForm($formName);
         $I->seeSuccess('Form renamed successfully.');
 
-        $platformly->configurePlatformly($integrationPositionNumber, $api, $projectId);
+        $platformly->configurePlatformly($integrationPositionNumber,);
 
         $otherFieldsArray = [
             2 => '{inputs.address_1.address_line_1}',
@@ -163,8 +161,6 @@ class IntegrationPlatformlyCest
 
         $formName = 'test_platformly_static_tag_apply';
         $integrationPositionNumber = 12;
-        $api = '4XIamp9fiLokeugrcmxSLMQjoRyXyStw';
-        $projectId = '2919';
         $tags = ['Asian', 'Non_US'];
 
         $I->deleteExistingForms();
@@ -179,7 +175,7 @@ class IntegrationPlatformlyCest
         $I->renameForm($formName);
         $I->seeSuccess('Form renamed successfully.');
 
-        $platformly->configurePlatformly($integrationPositionNumber, $api, $projectId);
+        $platformly->configurePlatformly($integrationPositionNumber);
         $platformly->mapPlatformlyFields('', [], $tags, [], [], '');
 
         $I->deleteExistingPages();
@@ -294,7 +290,6 @@ class IntegrationPlatformlyCest
             $I->assertContains($tag, $remoteTagArray);
         }
         echo ' Hurray!! Dynamic Tag applied to platform.ly' . "\n";
-
     }
 
     /**
@@ -306,8 +301,6 @@ class IntegrationPlatformlyCest
 
         $formName = 'test_platformly_dynamic_tag_apply';
         $integrationPositionNumber = 12;
-        $api = '4XIamp9fiLokeugrcmxSLMQjoRyXyStw';
-        $projectId = '2919';
 
         $I->deleteExistingForms();
         $I->initiateNewForm();
@@ -321,7 +314,7 @@ class IntegrationPlatformlyCest
         $I->renameForm($formName);
         $I->seeSuccess('Form renamed successfully.');
 
-        $platformly->configurePlatformly($integrationPositionNumber, $api, $projectId);
+        $platformly->configurePlatformly($integrationPositionNumber);
         $dynamicTagArray = [
             'names[First Name]' => ['starts with', 'John'],
             'names[Last Name]' => ['equal', 'Doe'],
@@ -354,8 +347,6 @@ class IntegrationPlatformlyCest
 
         $formName = 'test_platformly_activated_when_satisfy_any_condition';
         $integrationPositionNumber = 12;
-        $api = '4XIamp9fiLokeugrcmxSLMQjoRyXyStw';
-        $projectId = '2919';
 
         $I->deleteExistingForms();
         $I->initiateNewForm();
@@ -369,7 +360,7 @@ class IntegrationPlatformlyCest
         $I->renameForm($formName);
         $I->seeSuccess('Form renamed successfully.');
 
-        $platformly->configurePlatformly($integrationPositionNumber, $api, $projectId);
+        $platformly->configurePlatformly($integrationPositionNumber);
         $dynamicTagArray = [
             'names[First Name]' => ['starts with', 'John'],
             'names[Last Name]' => ['not equal', 'Doe'],
@@ -380,7 +371,6 @@ class IntegrationPlatformlyCest
 
         $I->deleteExistingPages();
         $I->createNewPage($formName);
-        return;
     }
 
     /**

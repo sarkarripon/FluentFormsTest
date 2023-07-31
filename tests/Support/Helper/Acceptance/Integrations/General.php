@@ -7,11 +7,88 @@ use Tests\Support\Selectors\FluentFormsSelectors;
 class General extends Pageobjects
 {
 
-    public function prepareForm($formName,$requiredField): void
+/**
+ *
+ * [!] Use it as a reference of fields name.
+ * prepare array like
+ * ```
+ * ['generalFields' => ['email', 'nameFields', 'phone']]
+ * ```
+ * * generalFields
+ * ```
+ * nameFields
+email
+simpleText
+maskInput
+textArea
+addressFields
+countryList
+numaricField
+dropdown
+radioField
+checkBox
+multipleChoice
+websiteUrl
+timeDate
+imageUpload
+fileUpload
+customHtml
+phone
+ * ```
+ *
+ * * advancedFields
+ * ```
+ * hiddenField
+sectionBreak
+reCaptcha
+hCapcha
+turnstile
+shortCode
+tnc
+actionHook
+formStep
+rating
+checkableGrid
+gdpr
+passwordField
+customSubBtn
+rangeSlider
+netPromoter
+chainedSelect
+colorPicker
+repeat
+post_cpt
+richText
+save_resume
+ * ```
+ *
+ * * containers
+ * ```
+ * oneColumn
+twoColumns
+threeColumns
+fourColumns
+fiveColumns
+sixColumns
+ * ```
+ *
+ * * paymentFields
+ * ```
+ * paymentItem
+subscription
+customPaymentAmount
+itmQuantity
+paymentMethod
+paymentSummary
+coupon
+ * ```
+ */
+    public function prepareForm(string $formName, array $requiredField, string $isDelete='yes'): void
     {
-        $this->I->deleteExistingForms();
+        if ($isDelete === "yes") {
+            $this->I->deleteExistingForms();
+        }
         $this->I->initiateNewForm();
-
         $this->I->createFormField($requiredField);
         $this->I->click(FluentFormsSelectors::saveForm);
         $this->I->wait(1);
@@ -20,14 +97,16 @@ class General extends Pageobjects
         $this->I->seeSuccess('Form renamed successfully.');
     }
 
-    public function preparePage(): void
+    public function preparePage(string $isDelete='yes'): void
     {
         global $pageUrl;
-        $this->I->deleteExistingPages();
+        if ($isDelete === "yes") {
+            $this->I->deleteExistingPages();
+        }
         $this->I->createNewPage('Test Page');
         $this->I->wantTo('Fill the form with sample data');
         $this->I->amOnUrl($pageUrl);
-        return;
+
     }
     public function initiateIntegrationConfiguration(int $integrationPositionNumber): void
     {
@@ -57,8 +136,8 @@ class General extends Pageobjects
 
     public function mapEmailInCommon($feedName): void
     {
-        $this->I->waitForElement(FluentFormsSelectors::integrationFeed,20);
-        $this->I->fillField(FluentFormsSelectors::feedName,$feedName);
+        $this->I->waitForElementClickable(FluentFormsSelectors::integrationFeed,20);
+        $this->I->fillByJS(FluentFormsSelectors::feedName,$feedName);
 
         $this->I->clicked(FluentFormsSelectors::SegmentDropDown);
         $this->I->clicked(FluentFormsSelectors::Segment);
@@ -74,12 +153,9 @@ class General extends Pageobjects
     public function mapCommonFields($fields): void
     {
         foreach ($fields as $field => $value) {
-            $this->I->fillField(FluentFormsSelectors::commonFields($field), $value);
+            $this->I->fillByJS(FluentFormsSelectors::commonFields($field), $value);
         }
     }
-
-
-
 
     public function mapDynamicTag($isDropDown, array $dynamicTagArray=null): void
     {

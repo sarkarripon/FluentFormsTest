@@ -6,7 +6,7 @@ extensions:
         - Codeception\Extension\RunProcess:
               0: chromedriver --url-base=wd/hub
               sleep: 1
-              wait: 10
+              wait: 15
 
 modules:
     enabled:

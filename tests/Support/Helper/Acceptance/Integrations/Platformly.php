@@ -174,8 +174,6 @@ class Platformly extends Pageobjects
      *
      *
      * @param $integrationPositionNumber
-     * @param $api
-     * @param $projectID
      * @return void
      */
 
@@ -190,8 +188,8 @@ class Platformly extends Pageobjects
 
             if (!$saveSettings) // Check if the platformly integration is already configured.
             {
-                $this->I->waitForElement(FluentFormsSettingsSelectors::PlatformlyApiKey,5);
-                $this->I->fillField(FluentFormsSettingsSelectors::PlatformlyApiKey,getenv('PLATFORMLY_API_KEY'));
+                $this->I->waitForElement(FluentFormsSettingsSelectors::PlatformlyApiKey,10);
+                $this->I->fillField(FluentFormsSettingsSelectors::PlatformlyApiKeyField,getenv('PLATFORMLY_API_KEY'));
                 $this->I->waitForElement(FluentFormsSettingsSelectors::PlatformlyProjectID,5);
                 $this->I->fillField(FluentFormsSettingsSelectors::PlatformlyProjectID,getenv('PLATFORMLY_PROJECT_ID'));
                 $this->I->clicked(FluentFormsSettingsSelectors::APISaveButton);
@@ -219,21 +217,20 @@ class Platformly extends Pageobjects
         ));
         $response = curl_exec($curl);
         curl_close($curl);
-//        return $response;
 
         $remoteData = json_decode($response);
         if (property_exists($remoteData, 'status')) {
             for ($i = 0; $i < 5; $i++) {
                 $remoteData = json_decode($response);
                 if (property_exists($remoteData, 'status')) {
-                    $this->I->wait(20);
+                    $this->I->wait(20,'Platformly is taking too long to respond. Trying again...');
                 } else {
                     break;
                 }
             }
         }
         if (property_exists($remoteData, 'status')) {
-            $this->I->fail($remoteData->message);
+            $this->I->fail('Contact with '.$email.' not found in Platformly');
         }
         return $remoteData;
 

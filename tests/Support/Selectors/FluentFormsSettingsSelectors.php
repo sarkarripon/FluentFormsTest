@@ -8,11 +8,13 @@ class FluentFormsSettingsSelectors
 
 
     //Mailchimp
-    const MailchimpApiKey ="//label[normalize-space()='Mailchimp API Key']/following::input[@class='el-input__inner']";
+    const MailchimpApiKey ="//label[normalize-space()='Mailchimp API Key']";
+    const MailchimpApiKeyField ="//label[normalize-space()='Mailchimp API Key']/following::input[@class='el-input__inner']";
 
 
     //Platformly
-    const PlatformlyApiKey = "(//input[@placeholder='API Key'])";
+    const PlatformlyApiKey = "//label[normalize-space()='Platformly API Key']";
+    const PlatformlyApiKeyField = "(//input[@placeholder='API Key'])";
     const PlatformlyProjectID = "(//input[@placeholder='Project ID'])";
 
 

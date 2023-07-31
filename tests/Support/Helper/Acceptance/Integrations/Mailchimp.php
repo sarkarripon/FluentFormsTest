@@ -2,6 +2,7 @@
 
 namespace Tests\Support\Helper\Acceptance\Integrations;
 
+use GuzzleHttp\Exception\ClientException;
 use MailchimpMarketing\ApiClient;
 use Tests\Support\Helper\Pageobjects;
 use Tests\Support\Selectors\FluentFormsSelectors;
@@ -9,7 +10,7 @@ use Tests\Support\Selectors\FluentFormsSettingsSelectors;
 
 class Mailchimp extends Pageobjects
 {
-    public function configureMailchimp($integrationPositionNumber, $api): void
+    public function configureMailchimp($integrationPositionNumber): void
     {
         $general = new General($this->I);
         $general->initiateIntegrationConfiguration($integrationPositionNumber);
@@ -19,8 +20,7 @@ class Mailchimp extends Pageobjects
 
             if (!$saveSettings) // Check if the Mailchimp integration is already configured.
             {
-                $this->I->waitForElement(FluentFormsSettingsSelectors::MailchimpApiKey, 5);
-                $this->I->fillField(FluentFormsSettingsSelectors::MailchimpApiKey, $api);
+                $this->I->fillByJS(FluentFormsSettingsSelectors::MailchimpApiKeyField, getenv('MAILCHIMP_API_KEY'));
                 $this->I->clicked(FluentFormsSettingsSelectors::APISaveButton);
             }
             $general->configureApiSettings("Mailchimp");
@@ -52,16 +52,31 @@ class Mailchimp extends Pageobjects
         $this->I->wait(2);
     }
 
-    public static function fetchMailchimpData(): void
+    public function fetchMailchimpData($email)
     {
         $client = new ApiClient();
         $client->setConfig([
             'apiKey' => getenv('MAILCHIMP_API_KEY'),
             'server' => getenv('MAILCHIMP_SERVER_PREFIX')
         ]);
-        //make hash of email
 
-        $response = $client->lists->getListMember(getenv('MAILCHIMP_AUDIENCE_ID'), "c3a40a9bc1d124295eff3392e897090c");
-        print_r($response);
+        $response= null;
+        $e = null;
+
+        for ($i=0; $i<5; $i++)
+        {
+            try {
+                $response = $client->lists->getListMember(getenv('MAILCHIMP_AUDIENCE_ID'), hash('md5', $email));
+                break;
+            } catch (ClientException $e) {
+                $this->I->wait(2, 'Mailchimp is taking too long to respond. Trying again...');
+            }
+        }
+        if (isset($e) and $e->getCode() == 404) {
+            $this->I->fail('Contact with '.$email.' not found in Mailchimp');
+        }
+
+        return $response;
     }
+
 }
