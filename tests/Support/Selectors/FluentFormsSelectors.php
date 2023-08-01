@@ -106,7 +106,7 @@ class FluentFormsSelectors extends Pageobjects
     //common
     const mapEmailDropdown = "//div[@class='el-select']//i[contains(@class,'el-select__caret') or //input[@placeholder='Select a Field']]";
     const mapEmail = "//span[normalize-space()='Email']";
-    const saveFeed = "(//button[contains(@class,'el-button--primary')])";
+    const saveFeed = "//span[normalize-space()='Save Feed' and //button[contains(@class,'el-button--primary')]]";
     const integrationFeed = "(//div[contains(@class, 'ff_card_head_group')] | //button[@title='Show Video'])[1]";
     const feedName = "//input[@placeholder='Your Feed Name']";
     const SegmentDropDown = "(//i[contains(@class,'el-select__caret el-input__icon el-icon-arrow-up')])[1]";
@@ -205,8 +205,6 @@ class FluentFormsSelectors extends Pageobjects
 
     const contactTag = "//input[contains(@class,'el-select')]";
     const dynamicTagChecked = "//div[@class='ff_field_routing']//span[contains(@class,'is-checked')]";
-
-
 
     public static function setTag($index): string
     {

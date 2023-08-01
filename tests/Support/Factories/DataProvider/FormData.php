@@ -1,7 +1,7 @@
 <?php
 namespace Tests\Support\Factories\DataProvider;
 
-class FormData
+class FormData extends ShortCodes
 {
     public static function countryName(): string
     {
@@ -30,6 +30,7 @@ class FormData
                 'zip' => $faker->postcode,
                 'country' => self::countryName(),
                 'phone' => $faker->phoneNumber,
+                'dateTime' => $faker->date($format = 'Y-m-d', $max = 'now'),
             ]
         ];
     }

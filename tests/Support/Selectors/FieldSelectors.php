@@ -4,8 +4,8 @@ namespace Tests\Support\Selectors;
 
 class FieldSelectors
 {
-    const first_name = "//input[contains(@id,'names_first_name_')]";
-    const last_name = "//input[contains(@id,'names_last_name_')]";
+    const first_name = "//input[contains(@id,'_first_name_')]";
+    const last_name = "//input[contains(@id,'_last_name_')]";
     const email = "//input[contains(@id,'email')]";
     const address_line_1 = "//input[contains(@id,'address_line_1_')]";
     const address_line_2 = "//input[contains(@id,'address_line_2_')]";
@@ -14,5 +14,7 @@ class FieldSelectors
     const zip = "//input[contains(@id,'zip_')]";
     const country = "//select[contains(@id,'country_')]";
     const phone = "//input[contains(@id,'phone')]";
+    const dateTime = "//input[contains(@id,'_datetime')]";
     const submitButton = "//button[normalize-space()='Submit Form']";
+
 }

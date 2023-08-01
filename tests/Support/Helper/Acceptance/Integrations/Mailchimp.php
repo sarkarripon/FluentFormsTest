@@ -47,8 +47,8 @@ class Mailchimp extends Pageobjects
         if ($dynamicTag=='yes' and !empty($dynamicTag)) {
             $general->mapDynamicTag('yes',$dynamicTag);
         }
-
         $this->I->clickWithLeftButton(FluentFormsSelectors::saveFeed);
+        $this->I->seeSuccess('Integration successfully saved');
         $this->I->wait(2);
     }
 
@@ -69,7 +69,7 @@ class Mailchimp extends Pageobjects
                 $response = $client->lists->getListMember(getenv('MAILCHIMP_AUDIENCE_ID'), hash('md5', $email));
                 break;
             } catch (ClientException $e) {
-                $this->I->wait(2, 'Mailchimp is taking too long to respond. Trying again...');
+                $this->I->wait(20, 'Mailchimp is taking too long to respond. Trying again...');
             }
         }
         if (isset($e) and $e->getCode() == 404) {

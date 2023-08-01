@@ -90,21 +90,19 @@ coupon
         }
         $this->I->initiateNewForm();
         $this->I->createFormField($requiredField);
-        $this->I->click(FluentFormsSelectors::saveForm);
-        $this->I->wait(1);
+        $this->I->clicked(FluentFormsSelectors::saveForm);
         $this->I->seeSuccess('Form created successfully.');
         $this->I->renameForm($formName);
         $this->I->seeSuccess('Form renamed successfully.');
     }
 
-    public function preparePage(string $isDelete='yes'): void
+    public function preparePage(string $title=null, string $isDelete='yes'): void
     {
         global $pageUrl;
         if ($isDelete === "yes") {
             $this->I->deleteExistingPages();
         }
-        $this->I->createNewPage('Test Page');
-        $this->I->wantTo('Fill the form with sample data');
+        $this->I->createNewPage($title);
         $this->I->amOnUrl($pageUrl);
 
     }
@@ -153,19 +151,12 @@ coupon
     public function mapCommonFields($fields): void
     {
         foreach ($fields as $field => $value) {
-            $this->I->fillByJS(FluentFormsSelectors::commonFields($field), $value);
+            $this->I->fillField(FluentFormsSelectors::commonFields($field), $value);
         }
     }
 
     public function mapDynamicTag($isDropDown, array $dynamicTagArray=null): void
     {
-
-//        $this->I->clicked(FluentFormsSelectors::enableOption('Enable Dynamic Tag Input'));
-
-//        $dynamicTagArray = [
-//            'European' => ['names[First Name]', 'contains', 'John'],
-//        ];
-
         global $dynamicTagField;
         $dynamicTagField = 1;
         $dynamicTagValue = 1;
@@ -192,6 +183,21 @@ coupon
         }
         $this->I->click(FluentFormsSelectors::removeDynamicTagField($dynamicTagField));
 
+    }
+
+    public function missingFieldCheck(array $referenceData,array $remoteData): void
+    {
+        $absentData = array_diff_assoc($referenceData, $remoteData);
+
+        $message = '';
+        if (!empty($absentData)) {
+            foreach ($absentData as $missingField => $value) {
+                $message .= $missingField . ', ';
+            }
+            $this->I->fail($message . " is not present to the remote.");
+        } else {
+            echo ' Hurray!! Additional data has been sent to remote' . "\n";
+        }
     }
 
 }

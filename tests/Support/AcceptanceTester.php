@@ -47,7 +47,7 @@ class AcceptanceTester extends \Codeception\Actor
 
     public function seeSuccess($message): void
     {
-        $this->wait(1);
+        $this->wait(2);
         $this->assertStringContainsString('Success',
             $this->grabTextFrom("//div[@role='alert']//h2[normalize-space()='Success'][1]"), $message);
     }

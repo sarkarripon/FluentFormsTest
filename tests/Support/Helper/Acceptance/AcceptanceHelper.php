@@ -74,7 +74,7 @@ class AcceptanceHelper extends WebDriver
      */
     public function filledField($selector, $value): void
     {
-        $this->waitForElementVisible( $selector);
+        $this->wait(1);
         $this->clickWithLeftButton($selector);
         parent::fillField($selector,$value);
     }
