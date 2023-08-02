@@ -20,8 +20,10 @@ class Mailchimp extends Pageobjects
 
             if (!$saveSettings) // Check if the Mailchimp integration is already configured.
             {
-                $this->I->fillByJS(FluentFormsSettingsSelectors::MailchimpApiKeyField, getenv('MAILCHIMP_API_KEY'));
+                $this->I->reloadIfElementNotFound(FluentFormsSettingsSelectors::MailchimpApiKeyField);
+                $this->I->fillField(FluentFormsSettingsSelectors::MailchimpApiKeyField, getenv('MAILCHIMP_API_KEY'));
                 $this->I->clicked(FluentFormsSettingsSelectors::APISaveButton);
+                $this->I->seeSuccess('Your mailchimp api key has been verfied and successfully set');
             }
             $general->configureApiSettings("Mailchimp");
         }
@@ -63,17 +65,20 @@ class Mailchimp extends Pageobjects
         $response= null;
         $e = null;
 
-        for ($i=0; $i<5; $i++)
+        for ($i=0; $i<8; $i++)
         {
             try {
                 $response = $client->lists->getListMember(getenv('MAILCHIMP_AUDIENCE_ID'), hash('md5', $email));
+                print_r($response);
                 break;
             } catch (ClientException $e) {
-                $this->I->wait(20, 'Mailchimp is taking too long to respond. Trying again...');
+                $this->I->wait(15, 'Mailchimp is taking too long to respond. Trying again...');
             }
         }
+
         if (isset($e) and $e->getCode() == 404) {
-            $this->I->fail('Contact with '.$email.' not found in Mailchimp');
+            
+            $this->I->fail('Contact with '.$email.' is not found in Mailchimp');
         }
 
         return $response;

@@ -44,7 +44,6 @@ class FieldSelectors
                 $preparedArray[$xpathExpression] = $fieldData[$key];
             }
         }
-
         return $preparedArray;
     }
 

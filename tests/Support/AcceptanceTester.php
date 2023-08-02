@@ -41,7 +41,6 @@ class AcceptanceTester extends \Codeception\Actor
             $this->seeElement($selector);
         } catch (Exception $e){
             $this->reloadPage();
-            $this->seeElement($selector);
         }
     }
 

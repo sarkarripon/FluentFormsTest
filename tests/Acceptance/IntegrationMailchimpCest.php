@@ -27,20 +27,18 @@ class IntegrationMailchimpCest
     public function test_mailchimp_push_data(AcceptanceTester $I, Example $example, Mailchimp $mailchimp, General $general, ShortCodes $shortCodes): void
     {
         $general->prepareForm(__FUNCTION__,
-            ['generalFields' => ['email', 'nameFields', 'phone', 'addressFields', 'timeDate']]);
+            ['generalFields' => ['email', 'nameFields']]);
         $mailchimp->configureMailchimp(8);
 
-        $otherFieldArray = $shortCodes->getShortCodeArray(['First Name', 'Last Name', 'Phone Number', 'Address', 'Birthday']);
+        $otherFieldArray = $shortCodes->getShortCodeArray(['First Name', 'Last Name']);
 
         $mailchimp->mapMailchimpFields('yes', $otherFieldArray);
         $general->preparePage(__FUNCTION__);
 //        $I->amOnPage('/' . __FUNCTION__);
-
         $fillAbleDataArr = FieldSelectors::getFieldDataArray(
             ['first_name', 'last_name', 'email']);
 
         foreach ($fillAbleDataArr as $selector => $value) {
-            $I->wait(1);
             if ($selector == FieldSelectors::country) {
                 $I->selectOption($selector, $value);
             } elseif ($selector == FieldSelectors::dateTime) {
@@ -52,19 +50,32 @@ class IntegrationMailchimpCest
             }
         }
         $I->clicked(FieldSelectors::submitButton);
-        exit();
-        $remoteData = $mailchimp->fetchMailchimpData($example['email']);
-        print_r($remoteData);
 
+        $remoteData = $mailchimp->fetchMailchimpData($fillAbleDataArr["//input[contains(@id,'email')]"]);
 
-        $referenceData = [
+        $exceptions = [];
+        try {
+            $I->assertStringContainsString($fillAbleDataArr["//input[contains(@id,'email')]"], $remoteData->email_address);
+        } catch (Exception $e1) {
+            $exceptions[] = $e1->getMessage();
+        }
 
+        try {
+            $I->assertStringContainsString($fillAbleDataArr["//input[contains(@id,'_first_name_')]"], $remoteData->merge_fields->FNAME);
+        } catch (Exception $e2) {
+            $exceptions[] = $e2->getMessage();
+        }
 
-        ];
-        $general->missingFieldCheck('',$remoteData);
+        try {
+            $I->assertStringContainsString($fillAbleDataArr["//input[contains(@id,'_last_name_')]"], $remoteData->merge_fields->LNAME);
+        } catch (Exception $e3) {
+            $exceptions[] = $e3->getMessage();
+        }
 
-        dd('im here');
-
+        if (count($exceptions) > 0) {
+            $errorMessage = implode(PHP_EOL, $exceptions);
+            $I->fail('Some Data missing: ' . $errorMessage);
+        }
 
     }
 }
