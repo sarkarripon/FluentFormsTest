@@ -4,6 +4,8 @@
 namespace Tests\Acceptance;
 
 use Codeception\Example;
+use DateTime;
+use Exception;
 use Tests\Support\AcceptanceTester;
 use Tests\Support\Factories\DataProvider\ShortCodes;
 use Tests\Support\Helper\Acceptance\Integrations\General;
@@ -20,43 +22,40 @@ class IntegrationMailchimpCest
     /**
      * @dataProvider \Tests\Support\Factories\DataProvider\FormData::fieldData
      *
+     * @throws Exception
      */
     public function test_mailchimp_push_data(AcceptanceTester $I, Example $example, Mailchimp $mailchimp, General $general, ShortCodes $shortCodes): void
     {
-//        $general->prepareForm(__FUNCTION__,
-//            ['generalFields' => ['email', 'nameFields', 'phone', 'addressFields', 'timeDate']]);
-//        $mailchimp->configureMailchimp(8);
-//
-//        $otherFieldArray = $shortCodes->getPreparedArray(['First Name', 'Last Name', 'Phone Number', 'Address', 'Birthday']);
-//        $mailchimp->mapMailchimpFields('yes', $otherFieldArray);
-//        $general->preparePage(__FUNCTION__);
-        $I->amOnPage('/' . __FUNCTION__);
+        $general->prepareForm(__FUNCTION__,
+            ['generalFields' => ['email', 'nameFields', 'phone', 'addressFields', 'timeDate']]);
+        $mailchimp->configureMailchimp(8);
 
-        $fillAbleDataArr = [
-            FieldSelectors::first_name => $example['first_name'],
-            FieldSelectors::last_name => $example['last_name'],
-            FieldSelectors::email => $example['email'],
-            FieldSelectors::phone => $example['phone'],
-            FieldSelectors::address_line_1 => $example['address_line_1'],
-            FieldSelectors::address_line_2 => $example['address_line_2'],
-            FieldSelectors::city => $example['city'],
-            FieldSelectors::state => $example['state'],
-            FieldSelectors::zip => $example['zip'],
-            FieldSelectors::country => $example['country'],
-            FieldSelectors::dateTime => $example['dateTime'],
+        $otherFieldArray = $shortCodes->getShortCodeArray(['First Name', 'Last Name', 'Phone Number', 'Address', 'Birthday']);
 
-        ];
+        $mailchimp->mapMailchimpFields('yes', $otherFieldArray);
+        $general->preparePage(__FUNCTION__);
+//        $I->amOnPage('/' . __FUNCTION__);
+
+        $fillAbleDataArr = FieldSelectors::getFieldDataArray(
+            ['first_name', 'last_name', 'email']);
+
         foreach ($fillAbleDataArr as $selector => $value) {
+            $I->wait(1);
             if ($selector == FieldSelectors::country) {
                 $I->selectOption($selector, $value);
-            } else {
+            } elseif ($selector == FieldSelectors::dateTime) {
+                $dateTime = new DateTime($value);
+                $formattedDate = $dateTime->format('d/m');
+                $I->fillByJS($selector, $formattedDate);
+            }else {
                 $I->fillByJS($selector, $value);
             }
         }
         $I->clicked(FieldSelectors::submitButton);
+        exit();
         $remoteData = $mailchimp->fetchMailchimpData($example['email']);
         print_r($remoteData);
-        exit();
+
 
         $referenceData = [
 

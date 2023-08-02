@@ -2,6 +2,8 @@
 
 namespace Tests\Support\Selectors;
 
+use Tests\Support\Factories\DataProvider\FormData;
+
 class FieldSelectors
 {
     const first_name = "//input[contains(@id,'_first_name_')]";
@@ -17,4 +19,49 @@ class FieldSelectors
     const dateTime = "//input[contains(@id,'_datetime')]";
     const submitButton = "//button[normalize-space()='Submit Form']";
 
+    private static array $keyMap = [
+        'first_name' => self::first_name,
+        'last_name' => self::last_name,
+        'email' => self::email,
+        'address_line_1' => self::address_line_1,
+        'address_line_2' => self::address_line_2,
+        'city' => self::city,
+        'state' => self::state,
+        'zip' => self::zip,
+        'country' => self::country,
+        'phone' => self::phone,
+        'dateTime' => self::dateTime,
+    ];
+
+    public static function generalFieldDataPool(): array
+    {
+        $formData = new FormData();
+        $fieldData = $formData->fieldData()[0]; // Get the first entry from fieldData()
+
+        $preparedArray = [];
+        foreach (self::$keyMap as $key => $xpathExpression) {
+            if (array_key_exists($key, $fieldData)) {
+                $preparedArray[$xpathExpression] = $fieldData[$key];
+            }
+        }
+
+        return $preparedArray;
+    }
+
+    public static function getFieldDataArray(array $keys): array
+    {
+        $shortCodePool = self::generalFieldDataPool();
+        $preparedArray = [];
+
+        foreach ($keys as $key) {
+            if (array_key_exists($key, self::$keyMap)) {
+                $xpathExpression = self::$keyMap[$key];
+                if (array_key_exists($xpathExpression, $shortCodePool)) {
+                    $preparedArray[$xpathExpression] = $shortCodePool[$xpathExpression];
+                }
+            }
+        }
+
+        return $preparedArray;
+    }
 }

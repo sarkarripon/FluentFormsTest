@@ -20,16 +20,16 @@ class FormData extends ShortCodes
 
         return [
             [
-                'first_name' => $faker->firstName,
-                'last_name' => $faker->lastName,
-                'email' => $faker->unique()->userName . '@gmail.com',
-                'address_line_1' => $faker->streetAddress,
-                'address_line_2' => $faker->secondaryAddress,
-                'city' => $faker->city,
-                'state' => $faker->state,
-                'zip' => $faker->postcode,
+                'first_name' => $faker->firstName(),
+                'last_name' => $faker->lastName(),
+                'email' => $faker->unique()->userName() . '@gmail.com',
+                'address_line_1' => $faker->streetAddress(),
+                'address_line_2' => $faker->secondaryAddress(),
+                'city' => $faker->city(),
+                'state' => $faker->state(),
+                'zip' => $faker->postcode(),
                 'country' => self::countryName(),
-                'phone' => $faker->phoneNumber,
+                'phone' => $faker->tollFreePhoneNumber(),
                 'dateTime' => $faker->date($format = 'Y-m-d', $max = 'now'),
             ]
         ];

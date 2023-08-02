@@ -38,7 +38,7 @@ class ShortCodes
         ];
     }
 
-    public function getPreparedArray(array $keys): array
+    public function getShortCodeArray(array $keys): array
     {
         $shortCodePool = $this->shortCodePool();
         $preparedArray = [];
