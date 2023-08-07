@@ -17,6 +17,7 @@
         <cache>
           <versions>
             <info id="Local" version="5.0.10" />
+            <info id="Local/home/authlab/Desktop/FluentForms/vendor/codeception/codeception/codecept" version="5.0.10" />
           </versions>
         </cache>
       </tool>

@@ -17,6 +17,12 @@ class FluentFormsSettingsSelectors
     const PlatformlyApiKeyField = "(//input[@placeholder='API Key'])";
     const PlatformlyProjectID = "(//input[@placeholder='Project ID'])";
 
+    //Zoho crm
+    const accountUrl = "//label[normalize-space()='Account URL']/following::input[@placeholder='Select']";
+    const zohoCrmClientId = "//input[@placeholder='Zoho CRM Client ID']";
+    const zohoCrmClientSecret = "//input[@placeholder='Zoho CRM Client Secret']";
+
+
 
 
 

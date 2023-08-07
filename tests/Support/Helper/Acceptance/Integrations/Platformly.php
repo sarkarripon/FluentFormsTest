@@ -223,7 +223,7 @@ class Platformly extends Pageobjects
             for ($i = 0; $i < 8; $i++) {
                 $remoteData = json_decode($response);
                 if (property_exists($remoteData, 'status')) {
-                    $this->I->wait(15,'Platformly is taking too long to respond. Trying again...');
+                    $this->I->wait(20,'Platformly is taking too long to respond. Trying again...');
                 } else {
                     break;
                 }

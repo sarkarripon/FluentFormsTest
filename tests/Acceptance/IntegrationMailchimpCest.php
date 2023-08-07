@@ -24,7 +24,7 @@ class IntegrationMailchimpCest
      *
      * @throws Exception
      */
-    public function test_mailchimp_push_data(AcceptanceTester $I, Example $example, Mailchimp $mailchimp, General $general, ShortCodes $shortCodes): void
+    public function test_mailchimp_push_data(AcceptanceTester $I, Mailchimp $mailchimp, General $general, ShortCodes $shortCodes): void
     {
         $general->prepareForm(__FUNCTION__,
             ['generalFields' => ['email', 'nameFields']]);
@@ -53,29 +53,14 @@ class IntegrationMailchimpCest
 
         $remoteData = $mailchimp->fetchMailchimpData($fillAbleDataArr["//input[contains(@id,'email')]"]);
 
-        $exceptions = [];
-        try {
-            $I->assertStringContainsString($fillAbleDataArr["//input[contains(@id,'email')]"], $remoteData->email_address);
-        } catch (Exception $e1) {
-            $exceptions[] = $e1->getMessage();
-        }
+        $checkAbleArr = [
+            $fillAbleDataArr["//input[contains(@id,'email')]"] => $remoteData->email_address,
+            $fillAbleDataArr["//input[contains(@id,'_first_name_')]"] => $remoteData->merge_fields->FNAME,
+            $fillAbleDataArr["//input[contains(@id,'_last_name_')]"] => $remoteData->merge_fields->LNAME,
+        ];
+        $I->assertString($checkAbleArr);
 
-        try {
-            $I->assertStringContainsString($fillAbleDataArr["//input[contains(@id,'_first_name_')]"], $remoteData->merge_fields->FNAME);
-        } catch (Exception $e2) {
-            $exceptions[] = $e2->getMessage();
-        }
 
-        try {
-            $I->assertStringContainsString($fillAbleDataArr["//input[contains(@id,'_last_name_')]"], $remoteData->merge_fields->LNAME);
-        } catch (Exception $e3) {
-            $exceptions[] = $e3->getMessage();
-        }
-
-        if (count($exceptions) > 0) {
-            $errorMessage = implode(PHP_EOL, $exceptions);
-            $I->fail('Some Data missing: ' . $errorMessage);
-        }
 
     }
 }

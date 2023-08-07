@@ -63,24 +63,21 @@ class Mailchimp extends Pageobjects
         ]);
 
         $response= null;
-        $e = null;
+        $exception = [];
 
         for ($i=0; $i<8; $i++)
         {
             try {
                 $response = $client->lists->getListMember(getenv('MAILCHIMP_AUDIENCE_ID'), hash('md5', $email));
-                print_r($response);
                 break;
             } catch (ClientException $e) {
-                $this->I->wait(15, 'Mailchimp is taking too long to respond. Trying again...');
+                $exception [] = $e->getMessage();
+                    $this->I->wait(30, 'Mailchimp is taking too long to respond. Trying again...');
             }
         }
-
-        if (isset($e) and $e->getCode() == 404) {
-            
+        if (count($exception) === 8) {
             $this->I->fail('Contact with '.$email.' is not found in Mailchimp');
         }
-
         return $response;
     }
 

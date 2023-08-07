@@ -6,7 +6,7 @@ class FormData extends ShortCodes
     public static function countryName(): string
     {
         $faker = \Faker\Factory::create();
-        $singleWordCountry = explode('(', $faker->country);
+        $singleWordCountry = explode('(', $faker->country());
         if (strlen($singleWordCountry[0]) >= 4) {
             return trim($singleWordCountry[0]);
         } else {
@@ -41,15 +41,15 @@ class FormData extends ShortCodes
         return [
             [
                 'id'=> 1,
-                'first_name' => 'John '.$faker->firstName,
-                'last_name' => $faker->lastName,
-                'email' => $faker->unique()->userName . '@gmail.com',
+                'first_name' => 'John '.$faker->firstName(),
+                'last_name' => $faker->lastName(),
+                'email' => $faker->unique()->userName() . '@gmail.com',
             ],
             [
                 'id'=> 2,
-                'first_name' => $faker->firstName,
+                'first_name' => $faker->firstName(),
                 'last_name' => 'Doe',
-                'email' => $faker->unique()->userName . '@live.com',
+                'email' => $faker->unique()->userName() . '@live.com',
             ]
         ];
     }

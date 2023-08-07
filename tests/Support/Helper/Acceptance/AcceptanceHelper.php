@@ -113,7 +113,6 @@ class AcceptanceHelper extends WebDriver
         }
     }
 
-
     /**
      * @throws Exception
      */
@@ -129,13 +128,10 @@ class AcceptanceHelper extends WebDriver
             element.click();
         }
         JS;
-
         $this->executeJS($js);
-
     }
 
     /**
-     * Convert an XPath expression to escape backslashes.
      *
      * @param string $selector
      * @param string $value
@@ -177,8 +173,10 @@ class AcceptanceHelper extends WebDriver
     }
 
     /**
-     * @author Sarkar Ripon
+     * ```
      * If element is found return true, if not, return false
+     * ```
+     * @author Sarkar Ripon
      * @param $element
      * @return bool
      */
@@ -189,6 +187,30 @@ class AcceptanceHelper extends WebDriver
            return true;
         } catch (\Exception $e) {
             return false;
+        }
+    }
+
+    /**
+     * ```
+     * This will help to check if the string is present or not.
+     * Ex Arr: [$needle => $haystack]
+     * ```
+     * @param $checkAbleArr
+     * @return void
+     */
+    public function assertString($checkAbleArr): void
+    {
+        $exception = [];
+        foreach ($checkAbleArr as $needle => $haystack) {
+            try {
+                $this->assertStringContainsString($needle, $haystack);
+            } catch (Exception $e) {
+                $exception[] = $e->getMessage();
+            }
+        }
+        if (count($exception) > 0) {
+            $errorMessage = implode(PHP_EOL, $exception);
+            $this->fail('Some Data missing: ' . $errorMessage. PHP_EOL);
         }
     }
 
