@@ -17,6 +17,7 @@ class IntegrationPlatformlyCest
 {
     public function _before(AcceptanceTester $I): void
     {
+        $I->env();
         $I->wpLogin();
     }
 

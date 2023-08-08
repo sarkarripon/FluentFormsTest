@@ -6,6 +6,7 @@ use Exception;
 use Tests\Support\Selectors\AccepTestSelec;
 use Tests\Support\Selectors\FluentFormsAllEntries;
 use Tests\Support\Selectors\FluentFormsSelectors;
+use Tests\Support\Selectors\FluentFormsSettingsSelectors;
 use Tests\Support\Selectors\GlobalPageSelec;
 use Tests\Support\Selectors\NewPageSelectors;
 use Tests\Support\Selectors\RenameFormSelec;
@@ -263,7 +264,18 @@ class AcceptanceTester extends \Codeception\Actor
         return $this->grabTextFrom($selector);
     }
 
+    public function loginGoogle(): void
+    {
+        $this->amOnUrl("https://accounts.google.com/");
+        $this->waitForElement(FluentFormsSettingsSelectors::googleUserEmail,10);
+        $this->filledField(FluentFormsSettingsSelectors::googleUserEmail,getenv("GOOGLE_USER"));
+        $this->clicked(FluentFormsSettingsSelectors::googleNext);
+        $this->waitForElement(FluentFormsSettingsSelectors::googlePass,10);
+        $this->filledField(FluentFormsSettingsSelectors::googlePass,getenv("GOOGLE_PASSWORD"));
+        $this->clicked(FluentFormsSettingsSelectors::googleNext);
 
+
+    }
 
 
 }

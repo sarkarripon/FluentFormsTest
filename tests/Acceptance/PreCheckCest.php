@@ -1,8 +1,10 @@
 <?php
 namespace Tests\Acceptance;
 
+use Google\Exception;
 use Tests\Support\AcceptanceTester;
 use Tests\Support\Helper\Acceptance\DataFetcher;
+use Tests\Support\Helper\Acceptance\Integrations\Googlesheet;
 use Tests\Support\Helper\Acceptance\Integrations\Mailchimp;
 use Tests\Support\Helper\Acceptance\Integrations\Platformly;
 use Tests\Support\Helper\Acceptance\Integrations\Zoho;
@@ -12,16 +14,20 @@ use Tests\Support\Selectors\FluentFormsSelectors;
 class PreCheckCest
 {
 
-    public function _before(AcceptanceTester $I): void
+    public function _before(AcceptanceTester $I)
     {
-//        $I->wpLogin();
+        $I->env();
+        $I->wpLogin();
     }
 
-   public function check_test(AcceptanceTester $I, Zoho $zoho ): void
+    /**
+     * @throws Exception
+     */
+    public function check_test(AcceptanceTester $I, Googlesheet $sheet): void
    {
-       print_r($zoho->fetchZohoData());
+//       $sheet->configureGoogleSheet(25);
 
-       exit();
+        $I->loginGoogle();
 
    }
 

@@ -22,6 +22,16 @@ class FluentFormsSettingsSelectors
     const zohoCrmClientId = "//input[@placeholder='Zoho CRM Client ID']";
     const zohoCrmClientSecret = "//input[@placeholder='Zoho CRM Client Secret']";
 
+    //Google sheet
+    const googleSheetAccessCodeField = "//input[@placeholder='Access Code']";
+    const getAccessCode = "//a[normalize-space()='Get Google Sheet Access Code']";
+    const googleUserEmail = "//input[@id='identifierId']";
+    const googleNext = "//span[normalize-space()='Next']";
+    const googlePass = "//input[@name='password']";
+    const googleContinue = "//span[normalize-space()='Continue']";
+    const grabCode = "//textarea[@id='code']";
+
+
 
 
 

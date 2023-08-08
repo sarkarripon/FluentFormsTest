@@ -27,7 +27,7 @@ class AcceptanceHelper extends WebDriver
      */
     public function wpLogin(): void
     {
-        $this->env();
+//        $this->env();
 
         $this->amOnPage('/wp-login.php');
         $this->wait(1);
@@ -74,9 +74,10 @@ class AcceptanceHelper extends WebDriver
      */
     public function filledField($selector, $value): void
     {
-        $this->wait(1);
+        $this->wait(5);
         $this->clickWithLeftButton($selector);
         parent::fillField($selector,$value);
+        $this->wait(1);
     }
 
     public function clickOnText($text): void

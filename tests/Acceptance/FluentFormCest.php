@@ -15,6 +15,7 @@ class FluentFormCest
      */
     public function _before(AcceptanceTester $I): void
     {
+        $I->env();
         $I->wpLogin();
     }
 
