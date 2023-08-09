@@ -122,6 +122,18 @@ class FluentFormsSelectors extends Pageobjects
         return "(//span[normalize-space()='Enable Dynamic Tag Selection' or 
         normalize-space()='Enable Dynamic Tag Input']/following::i[contains(@class,'el-icon-minus')])[{$index}]";
     }
+
+    public static function addMappingField($text, $index): string
+    {
+        return "(//span[normalize-space()='$text'] | 
+        //label[normalize-space()='$text'])/following::i[contains(@class,'el-icon-plus')][$index]";
+    }
+    public static function removeMappingField($text, $index): string
+    {
+        return "(//span[normalize-space()='$text'] | 
+        //label[normalize-space()='$text'])/following::i[contains(@class,'el-icon-minus')][$index]";
+    }
+
     public static function ifClause($index): string
     {
         return "(//span[normalize-space()='Enable Dynamic Tag Selection' or normalize-space()='Enable Dynamic Tag Input']/following::input[@placeholder='Select'])[{$index}]";
@@ -198,6 +210,10 @@ class FluentFormsSelectors extends Pageobjects
         return "document.querySelector(\"div[x-placement='top-start'] li:nth-child($index)\").click();";
     }
 
+    public static function fieldLabel($index): string
+    {
+        return "(//input[@placeholder='Field Label'])[{$index}]";
+    }
     public static function fieldValue($index): string
     {
         return "(//tbody/tr/td/div[contains(@class,'field_general')]/div/div[contains(@class,'el-input-group--append')]/input[contains(@class,'el-input__inner')])[$index]";
@@ -210,6 +226,10 @@ class FluentFormsSelectors extends Pageobjects
     {
         return "(//input[@placeholder='Set Tag'])[{$index}]";
     }
+
+    // Google Sheets
+    const spreadSheetID = "//input[@placeholder='Spreadsheet ID']";
+    const workSheetName = "//input[@placeholder='Worksheet Name']";
 
 
 

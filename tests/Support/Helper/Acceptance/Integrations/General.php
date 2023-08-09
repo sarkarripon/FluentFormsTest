@@ -148,7 +148,7 @@ coupon
      * Arr ex; 'Name'=>'{inputs.names}'
      *
      */
-    public function mapCommonFields($fields): void
+    public function mapCommonFieldsWithLabel($fields): void
     {
         foreach ($fields as $field => $value) {
             $this->I->fillField(FluentFormsSelectors::commonFields($field), $value);

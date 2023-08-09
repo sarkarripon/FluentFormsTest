@@ -35,7 +35,7 @@ class Mailchimp extends Pageobjects
         $general->mapEmailInCommon("Mailchimp Integration");
 
         if ($otherField == "yes" and !empty($otherField)) {
-            $general->mapCommonFields($otherFieldArray);
+            $general->mapCommonFieldsWithLabel($otherFieldArray);
             }
 
         $this->I->clickOnText('Select Interest Category');

@@ -6,11 +6,33 @@ use Google\Exception;
 use Google_Client;
 use Google_Service_Sheets;
 use Tests\Support\Helper\Pageobjects;
+use Tests\Support\Selectors\FluentFormsSelectors;
 use Tests\Support\Selectors\FluentFormsSettingsSelectors;
 
 class Googlesheet extends Pageobjects
 {
 
+    public function mapGoogleSheetField(array $otherFieldArray): void
+    {
+        $this->I->waitForElement(FluentFormsSelectors::feedName, 30);
+        $this->I->fillField(FluentFormsSelectors::feedName, 'Google Sheets');
+        $this->I->fillField(FluentFormsSelectors::spreadSheetID, getenv("GOOGLE_SPREADSHEET_ID"));
+        $this->I->fillField(FluentFormsSelectors::workSheetName, getenv("GOOGLE_SHEET_NAME"));
+
+        global $fieldCounter;
+        $fieldCounter = 1;
+        $counter = 1;
+        foreach ($otherFieldArray as $fieldLabel => $fieldValue)
+        {
+            $this->I->fillField(FluentFormsSelectors::fieldLabel($counter), $fieldLabel);
+            $this->I->fillField(FluentFormsSelectors::fieldValue($counter), $fieldValue);
+            $this->I->clicked(FluentFormsSelectors::addMappingField('Spreadsheet Fields',$counter));
+            $counter++;
+            $fieldCounter++;
+        }
+        $this->I->click(FluentFormsSelectors::removeMappingField('Spreadsheet Fields',$fieldCounter));
+        $this->I->click(FluentFormsSelectors::saveFeed);
+    }
     public function configureGoogleSheet($integrationPositionNumber): void
     {
         $general = new General($this->I);
@@ -19,27 +41,13 @@ class Googlesheet extends Pageobjects
         if ($integrationPositionNumber == 25) {
             $saveSettings = $this->I->checkElement(FluentFormsSettingsSelectors::APIDisconnect);
 
-            if (!$saveSettings) // Check if the Google sheet integration is already configured.
+            if ($saveSettings) // Check if the Google sheet integration is already configured.
             {
-                $this->I->reloadIfElementNotFound(FluentFormsSettingsSelectors::googleSheetAccessCodeField);
-                $this->I->click(FluentFormsSettingsSelectors::getAccessCode);
-                $this->I->switchToNextTab();
-                $this->I->filledField(FluentFormsSettingsSelectors::googleUserEmail, getenv("GOOGLE_USER"));
-
-                $this->I->clicked(FluentFormsSettingsSelectors::googleNext);
-                $this->I->filledField(FluentFormsSettingsSelectors::googlePass, getenv("GOOGLE_PASSWORD"));
-                $this->I->clicked(FluentFormsSettingsSelectors::googleNext);
-
-                $this->I->clicked(FluentFormsSettingsSelectors::googleContinue);
-                $accessKey = $this->I->grabTextFrom(FluentFormsSettingsSelectors::grabCode);
-                $this->I->switchToPreviousTab();
-                $this->I->fillField(FluentFormsSettingsSelectors::googleSheetAccessCodeField, $accessKey);
-                $this->I->clicked(FluentFormsSettingsSelectors::APISaveButton);
-
-//                $this->I->seeSuccess('Your google sheet api key has been verfied and successfully set');
-
+                $general->configureApiSettings("Google");
+            }else{
+                $this->I->fail('Please connect the Google sheet integration manually.');
             }
-            $general->configureApiSettings("Google");
+
         }
 
     }
@@ -49,10 +57,10 @@ class Googlesheet extends Pageobjects
      */
     public function fetchGoogleSheetData(string $emailToSearch): array
     {
-        for ($i = 0; $i < 5; $i++) {
+        for ($i = 0; $i < 8; $i++) {
             $expectedRow = $this->fetchData($emailToSearch);
             if (empty($expectedRow)) {
-                $this->I->wait(3, 'Spreadsheet is taking too long to respond. Trying again...');
+                $this->I->wait(60, 'Spreadsheet is taking too long to respond. Trying again...');
             }else{
                 break;
             }

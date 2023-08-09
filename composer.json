@@ -13,7 +13,8 @@
         "codeception/module-cli": "^2.0",
         "fakerphp/faker": "^1.23",
         "mailchimp/marketing": "^3.0",
-        "zohocrm/php-sdk-2.0": "4.0.0"
+        "zohocrm/php-sdk-2.0": "4.0.0",
+        "mashape/unirest-php": "^3.0"
     },
   "require": {
         "ext-curl": "*",

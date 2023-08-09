@@ -266,15 +266,16 @@ class AcceptanceTester extends \Codeception\Actor
 
     public function loginGoogle(): void
     {
-        $this->amOnUrl("https://accounts.google.com/");
-        $this->waitForElement(FluentFormsSettingsSelectors::googleUserEmail,10);
-        $this->filledField(FluentFormsSettingsSelectors::googleUserEmail,getenv("GOOGLE_USER"));
-        $this->clicked(FluentFormsSettingsSelectors::googleNext);
-        $this->waitForElement(FluentFormsSettingsSelectors::googlePass,10);
-        $this->filledField(FluentFormsSettingsSelectors::googlePass,getenv("GOOGLE_PASSWORD"));
-        $this->clicked(FluentFormsSettingsSelectors::googleNext);
-
-
+        $cookiesFilePath = "tests/Support/Data/googlecookie.json";
+        $cookiesJson = file_get_contents($cookiesFilePath);
+        $cookiesData = json_decode($cookiesJson, true);
+        if (isset($cookiesData) && is_array($cookiesData)) {
+            foreach ($cookiesData as $cookie) {
+                if (isset($cookie['domain']) && isset($cookie['expirationDate']) && isset($cookie['hostOnly']) && isset($cookie['httpOnly']) && isset($cookie['name']) && isset($cookie['path']) && isset($cookie['sameSite']) && isset($cookie['secure']) && isset($cookie['session']) && isset($cookie['storeId']) && isset($cookie['value'])) {
+                    $this->setCookie($cookie['name'], $cookie['value'], $cookie['expirationDate'], $cookie['path'], $cookie['domain'], $cookie['secure'], $cookie['httpOnly'], $cookie['sameSite']);
+                }
+            }
+        }
     }
 
 

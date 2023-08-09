@@ -17,17 +17,19 @@ namespace Tests\Support\Factories\DataProvider;
 
 class ShortCodes
 {
-        private string $firstName = '\b[Ff]([A-Za-z]+)[ _-]?[Nn]?([A-Za-z]*)[ _-]?[Aa]?([A-Za-z]*)[ _-]?[Mm]?([A-Za-z]*)[ _-]?[Ee]?([A-Za-z]*)\b';
-        private  string $lastName = '\b[Ll]([A-Za-z]+)[ _-]?[Aa]?([A-Za-z]*)[ _-]?[Nn]?([A-Za-z]*)[ _-]?[Mm]?([A-Za-z]*)[ _-]?[Ee]?([Aza-z]*)\b';
-        private string $address = '\b[aA][dD]{2}[rR][eE][sS]{2}\b|\b[Aa][dD]{2}[rR]\b';
-        private string $address_1 = '\b[aA][dD]{2}[rR][eE][sS][sS]?[_-]?[lL]?[iI]?[nN]?[eE]?[_-]?1\b';
-        private string $address_2 = '\b[aA][dD]{2}[rR][eE][sS][sS]?[_-]?[lL]?[iI]?[nN]?[eE]?[_-]?2\b';
-        private string $phoneNumber = '\b[pP][hH][oO][nN][eE][ _-]?[nN]?[uU]?[mM]?[bB]?[eE]?[rR]?\b';
-        private string $birthDate = '\b[bB][iI][rR][tT][hH][-_]?[dD][aA][yY]?[-_]?[bB]?[iI]?[rR]?[tT]?[hH]?[dD]?[aA]?[tT]?[eE]?\b';
+    private string $email = '\b[eE][mM][aA][iI][lL]\b|\b[eE][mM][aA][iI][lL][ _-]?[aA][dD][dD][rR][eE][sS][sS]\b';
+    private string $firstName = '\b[Ff]([A-Za-z]+)[ _-]?[Nn]?([A-Za-z]*)[ _-]?[Aa]?([A-Za-z]*)[ _-]?[Mm]?([A-Za-z]*)[ _-]?[Ee]?([A-Za-z]*)\b';
+    private  string $lastName = '\b[Ll]([A-Za-z]+)[ _-]?[Aa]?([A-Za-z]*)[ _-]?[Nn]?([A-Za-z]*)[ _-]?[Mm]?([A-Za-z]*)[ _-]?[Ee]?([Aza-z]*)\b';
+    private string $address = '\b[aA][dD]{2}[rR][eE][sS]{2}\b|\b[Aa][dD]{2}[rR]\b';
+    private string $address_1 = '\b[aA][dD]{2}[rR][eE][sS][sS]?[_-]?[lL]?[iI]?[nN]?[eE]?[_-]?1\b';
+    private string $address_2 = '\b[aA][dD]{2}[rR][eE][sS][sS]?[_-]?[lL]?[iI]?[nN]?[eE]?[_-]?2\b';
+    private string $phoneNumber = '\b[pP][hH][oO][nN][eE][ _-]?[nN]?[uU]?[mM]?[bB]?[eE]?[rR]?\b';
+    private string $birthDate = '\b[bB][iI][rR][tT][hH][-_]?[dD][aA][yY]?[-_]?[bB]?[iI]?[rR]?[tT]?[hH]?[dD]?[aA]?[tT]?[eE]?\b';
 
     public function shortCodePool(): array
     {
         return [
+            $this->email => '{inputs.email}',
             $this->firstName => '{inputs.names.first_name}',
             $this->lastName => '{inputs.names.last_name}',
             $this->address => '{inputs.address_1}',

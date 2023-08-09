@@ -27,8 +27,7 @@ class IntegrationMailchimpCest
      */
     public function test_mailchimp_push_data(AcceptanceTester $I, Mailchimp $mailchimp, General $general, ShortCodes $shortCodes): void
     {
-        $general->prepareForm(__FUNCTION__,
-            ['generalFields' => ['email', 'nameFields']]);
+        $general->prepareForm(__FUNCTION__, ['generalFields' => ['email', 'nameFields']]);
         $mailchimp->configureMailchimp(8);
 
         $otherFieldArray = $shortCodes->getShortCodeArray(['First Name', 'Last Name']);
@@ -36,8 +35,7 @@ class IntegrationMailchimpCest
         $mailchimp->mapMailchimpFields('yes', $otherFieldArray);
         $general->preparePage(__FUNCTION__);
 //        $I->amOnPage('/' . __FUNCTION__);
-        $fillAbleDataArr = FieldSelectors::getFieldDataArray(
-            ['first_name', 'last_name', 'email']);
+        $fillAbleDataArr = FieldSelectors::getFieldDataArray(['first_name', 'last_name', 'email']);
 
         foreach ($fillAbleDataArr as $selector => $value) {
             if ($selector == FieldSelectors::country) {
