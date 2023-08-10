@@ -112,6 +112,14 @@ class FluentFormsSelectors extends Pageobjects
     const SegmentDropDown = "(//i[contains(@class,'el-select__caret el-input__icon el-icon-arrow-up')])[1]";
     const Segment = "(//div[@x-placement='bottom-start']//ul[contains(@class,'el-scrollbar__view el-select-dropdown__list')])[1]";
 
+    public static function commonFields($referenceText, $actionText ): string
+    {
+        return "(//label[normalize-space()='$referenceText']/following::input[@placeholder='$actionText'] | //textarea[@placeholder='$actionText'])[1]";
+    }
+    public static function dropdown(string $text, $index=1): string
+    {
+        return "(//label[normalize-space()='$text']/following::i[contains(@class,'el-select__caret')])[{$index}]";
+    }
     public static function addDynamicTagField($index): string
     {
         return "(//span[normalize-space()='Enable Dynamic Tag Selection' or 
@@ -125,13 +133,11 @@ class FluentFormsSelectors extends Pageobjects
 
     public static function addMappingField($text, $index): string
     {
-        return "(//span[normalize-space()='$text'] | 
-        //label[normalize-space()='$text'])/following::i[contains(@class,'el-icon-plus')][$index]";
+        return "(//span[normalize-space()='$text'] | //label[normalize-space()='$text'])/following::i[contains(@class,'el-icon-plus')][$index]";
     }
     public static function removeMappingField($text, $index): string
     {
-        return "(//span[normalize-space()='$text'] | 
-        //label[normalize-space()='$text'])/following::i[contains(@class,'el-icon-minus')][$index]";
+        return "(//span[normalize-space()='$text'] | //label[normalize-space()='$text'])/following::i[contains(@class,'el-icon-minus')][$index]";
     }
 
     public static function ifClause($index): string
@@ -166,10 +172,7 @@ class FluentFormsSelectors extends Pageobjects
 
 
     // Mailchimp
-    public static function commonFields($text): string
-    {
-        return "(//label[normalize-space()='{$text}']/following::input[@placeholder='Select a Field or Type Custom value'])[1]";
-    }
+
 
     const mailchimpStaticTag = "//label[normalize-space()='Tags']/following::input[@placeholder='Select a Field or Type Custom value']";
 
@@ -230,6 +233,9 @@ class FluentFormsSelectors extends Pageobjects
     // Google Sheets
     const spreadSheetID = "//input[@placeholder='Spreadsheet ID']";
     const workSheetName = "//input[@placeholder='Worksheet Name']";
+
+    // Trello
+
 
 
 

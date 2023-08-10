@@ -74,32 +74,36 @@ class AcceptanceHelper extends WebDriver
      */
     public function filledField($selector, $value): void
     {
-        $this->wait(5);
+        $this->waitForElementVisible($selector,15);
         $this->clickWithLeftButton($selector);
         parent::fillField($selector,$value);
         $this->wait(1);
     }
 
-    public function clickOnText($text): void
+    public function clickOnText(string $text, string $followingText =null): void
     {
-        $this->wait(1);
+        $following = null;
+        if (isset($followingText) and !empty($followingText)) {
+            $following = "label[normalize-space()='$followingText']/following::";
+        }
         $xpathVariations = [
-            "//div[@x-placement='bottom-start']//span[contains(text(),'{$text}')]",
-            "//div[@x-placement='top-start']//span[contains(text(),'{$text}')]",
-            "//label[normalize-space()='{$text}']",
-            "//label[contains(text(),'{$text}')]",
-            "//span[normalize-space()='{$text}']",
-            "//span[contains(text(),'{$text}')]",
-            "//button[contains(text(),'{$text}')]",
-            "//a[contains(text(),'{$text}')]",
-            "//h2[normalize-space()='{$text}']",
-            "//p[contains(text(),'{$text}')]",
-            "//input[@placeholder='{$text}']",
+            "//$following"."div[@x-placement='bottom-start']//span[contains(text(),'{$text}')]",
+            "//$following"."div[@x-placement='top-start']//span[contains(text(),'{$text}')]",
+            "//$following"."label[normalize-space()='{$text}']",
+            "//$following"."label[contains(text(),'{$text}')]",
+            "//$following"."span[normalize-space()='{$text}']",
+            "//$following"."span[contains(text(),'{$text}')]",
+            "//$following"."button[contains(text(),'{$text}')]",
+            "//$following"."a[contains(text(),'{$text}')]",
+            "//$following"."h2[normalize-space()='{$text}']",
+            "//$following"."p[contains(text(),'{$text}')]",
+            "//$following"."input[@placeholder='{$text}']",
         ];
 
         $exception = [];
         foreach ($xpathVariations as $xpath) {
             try {
+                $this->waitForElementVisible($xpath);
                 $this->seeElementInDOM($xpath);
                 $this->moveMouseOver($xpath);
                 $this->clickByJS($xpath);

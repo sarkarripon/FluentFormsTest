@@ -16,7 +16,7 @@ class General extends Pageobjects
  * ```
  * * generalFields
  * ```
- * nameFields
+nameFields
 email
 simpleText
 maskInput
@@ -38,7 +38,7 @@ phone
  *
  * * advancedFields
  * ```
- * hiddenField
+hiddenField
 sectionBreak
 reCaptcha
 hCapcha
@@ -64,7 +64,7 @@ save_resume
  *
  * * containers
  * ```
- * oneColumn
+oneColumn
 twoColumns
 threeColumns
 fourColumns
@@ -74,7 +74,7 @@ sixColumns
  *
  * * paymentFields
  * ```
- * paymentItem
+paymentItem
 subscription
 customPaymentAmount
 itmQuantity
