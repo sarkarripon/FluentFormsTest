@@ -3,7 +3,7 @@
 namespace Tests\Support\Factories\DataProvider;
 
 /**
- * possible patters:
+ * possible patterns:
  *
  * first name, First Name, FANME, first_name,First_Name, fname
  * last name, Last Name, LANME, last_name, Last_Name
@@ -12,10 +12,10 @@ namespace Tests\Support\Factories\DataProvider;
  * address_2, Address_2, address_line_2, Address_Line_2, ADDRESS_2, ADDR_2
  * phone, Phone, PHONE, phone_number, Phone_Number, PHONE_NUMBER, phone_number, Phone_Number
  * birthday, Birthday, BIRTHDAY, birth_date, Birth_Date, BIRTH_DATE, birthdate, Birthdate, BIRTHDATE, Birth_day, BIRTH_DAY, birth_day, Birth_Day
- *
+ * inputText , InputText, INPUTTEXT, input_text, Input_Text, INPUT_TEXT, input-text, Input-Text, INPUT-TEXT
  */
 
-class ShortCodes
+trait ShortCodes
 {
     private string $email = '\b[eE][mM][aA][iI][lL]\b|\b[eE][mM][aA][iI][lL][ _-]?[aA][dD][dD][rR][eE][sS][sS]\b';
     private string $firstName = '\b[Ff]([A-Za-z]+)[ _-]?[Nn]?([A-Za-z]*)[ _-]?[Aa]?([A-Za-z]*)[ _-]?[Mm]?([A-Za-z]*)[ _-]?[Ee]?([A-Za-z]*)\b';
@@ -25,6 +25,7 @@ class ShortCodes
     private string $address_2 = '\b[aA][dD]{2}[rR][eE][sS][sS]?[_-]?[lL]?[iI]?[nN]?[eE]?[_-]?2\b';
     private string $phoneNumber = '\b[pP][hH][oO][nN][eE][ _-]?[nN]?[uU]?[mM]?[bB]?[eE]?[rR]?\b';
     private string $birthDate = '\b[bB][iI][rR][tT][hH][-_]?[dD][aA][yY]?[-_]?[bB]?[iI]?[rR]?[tT]?[hH]?[dD]?[aA]?[tT]?[eE]?\b';
+    private string $inputText = '\b[iI][nN][pP][uU][tT][ _-]?[tT]?[eE]?[xX]?[tT]?\b';
 
     public function shortCodePool(): array
     {
@@ -37,6 +38,7 @@ class ShortCodes
             $this->address_2 => '{inputs.address_2}',
             $this->birthDate => '{inputs.datetime}',
             $this->phoneNumber => '{inputs.phone}',
+            $this->inputText => '{inputs.input_text}',
         ];
     }
 
@@ -49,7 +51,7 @@ class ShortCodes
             foreach ($shortCodePool as $pattern => $value) {
                 if (preg_match("/$pattern/", $key)) {
                     $preparedArray[$key] = $value;
-                    break; // Break the loop after finding a match
+                    break;
                 }
             }
         }

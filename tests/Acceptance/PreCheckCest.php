@@ -1,32 +1,39 @@
 <?php
 namespace Tests\Acceptance;
-
-use Google\Exception;
 use Tests\Support\AcceptanceTester;
-use Tests\Support\Factories\DataProvider\ShortCodes;
+use Tests\Support\Helper\Acceptance\Integrations\Activecampaign;
+use Tests\Support\Helper\Acceptance\Integrations\IntegrationHelper;
 use Tests\Support\Helper\Acceptance\Integrations\General;
 use Tests\Support\Helper\Acceptance\Integrations\Googlesheet;
+use Tests\Support\Helper\Acceptance\Integrations\Mailchimp;
+use Tests\Support\Helper\Acceptance\Integrations\Platformly;
 use Tests\Support\Helper\Acceptance\Integrations\Trello;
-use Tests\Support\Selectors\FieldSelectors;
-use Tests\Support\Selectors\FluentFormsSelectors;
-use Unirest;
 
 
 class PreCheckCest
 {
+    use IntegrationHelper;
 
     public function _before(AcceptanceTester $I): void
     {
         $I->env();
-        $I->wpLogin();
+//        $I->wpLogin();
     }
 
 
-    public function check_test(AcceptanceTester $I, Trello $trello)
+    public function check_test(AcceptanceTester $I, Activecampaign $activecampaign, General $general, Googlesheet $googlesheet,
+                               Trello $trello, Mailchimp $mailchimp, Platformly $platformly): void
     {
+//        print_r($activecampaign->fetchActivecampaignData('qa@wpmanageninja.co'));
+//        print_r($googlesheet->fetchGoogleSheetData('ugoldner@gmail.com'));
+        print_r($trello->fetchTrelloData('Aut deleniti dolore.'));
 
 
-        $trello->fetchTrelloData('this is title');
+
+
+
+
+
 
     }
 

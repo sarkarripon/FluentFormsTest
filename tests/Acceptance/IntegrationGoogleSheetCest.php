@@ -17,10 +17,6 @@ class IntegrationGoogleSheetCest
         $I->env();
         $I->wpLogin();
     }
-
-    /**
-     * @throws Exception
-     */
     public function test_google_sheet_push_data(AcceptanceTester $I, Googlesheet $sheet, General $general, ShortCodes $shortCodes): void
     {
         $general->prepareForm(__FUNCTION__, ['generalFields' => ['email', 'nameFields']]);

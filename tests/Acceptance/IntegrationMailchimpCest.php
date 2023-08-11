@@ -8,12 +8,14 @@ use DateTime;
 use Exception;
 use Tests\Support\AcceptanceTester;
 use Tests\Support\Factories\DataProvider\ShortCodes;
+use Tests\Support\Helper\Acceptance\Integrations\IntegrationHelper;
 use Tests\Support\Helper\Acceptance\Integrations\General;
 use Tests\Support\Helper\Acceptance\Integrations\Mailchimp;
 use Tests\Support\Selectors\FieldSelectors;
 
 class IntegrationMailchimpCest
 {
+    use IntegrationHelper;
     public function _before(AcceptanceTester $I): void
     {
         $I->env();
@@ -27,13 +29,13 @@ class IntegrationMailchimpCest
      */
     public function test_mailchimp_push_data(AcceptanceTester $I, Mailchimp $mailchimp, General $general, ShortCodes $shortCodes): void
     {
-        $general->prepareForm(__FUNCTION__, ['generalFields' => ['email', 'nameFields']]);
+        $this->prepareForm($I,__FUNCTION__, ['generalFields' => ['email', 'nameFields']]);
         $mailchimp->configureMailchimp(8);
 
         $otherFieldArray = $shortCodes->getShortCodeArray(['First Name', 'Last Name']);
 
         $mailchimp->mapMailchimpFields('yes', $otherFieldArray);
-        $general->preparePage(__FUNCTION__);
+        $this->preparePage($I,__FUNCTION__);
 //        $I->amOnPage('/' . __FUNCTION__);
         $fillAbleDataArr = FieldSelectors::getFieldDataArray(['first_name', 'last_name', 'email']);
 

@@ -1,18 +1,19 @@
 <?php
 namespace Tests\Support\Helper\Acceptance\Integrations;
 
+use Tests\Support\AcceptanceTester;
 use Tests\Support\Helper\Pageobjects;
 use Tests\Support\Selectors\FluentFormsAddonsSelectors;
 use Tests\Support\Selectors\FluentFormsSelectors;
 use Tests\Support\Selectors\FluentFormsSettingsSelectors;
 
-class Platformly extends Pageobjects
+trait Platformly
 {
+    use IntegrationHelper;
 
-    public function mapPlatformlyFields(string $optionalField=null, array $otherFields=[], array $staticTag=[], array $dynamicTag=[], array $conditionalLogic=[], string $conditionState=null): void
+    public function mapPlatformlyFields(AcceptanceTester $I, string $optionalField=null, array $otherFields=[], array $staticTag=[], array $dynamicTag=[], array $conditionalLogic=[], string $conditionState=null): void
     {
-        $general = new General($this->I);
-        $general->mapEmailInCommon("Platformly Integration");
+        $this->mapEmailInCommon($I,"Platformly Integration");
 
         if (isset($optionalField) and !empty($optionalField)){
             $optionalFieldArr = [
@@ -21,7 +22,7 @@ class Platformly extends Pageobjects
                 'Phone Number' => '{inputs.phone}',
             ];
             foreach ($optionalFieldArr as $key => $value) {
-                $this->I->fillByJS(FluentFormsSelectors::commonFields($key),$value);
+                $I->fillByJS(FluentFormsSelectors::commonFields($key),$value);
             }
         }
 
@@ -30,97 +31,97 @@ class Platformly extends Pageobjects
             $counter = 1;
             foreach ($otherFields as $fieldValuePosition => $fieldValue)
             {
-                $this->I->clicked(FluentFormsSelectors::openFieldLabel($counter));
+                $I->clicked(FluentFormsSelectors::openFieldLabel($counter));
                 try {
-                    $this->I->executeJS(FluentFormsSelectors::jsForFieldLabelFromTop($fieldValuePosition));
+                    $I->executeJS(FluentFormsSelectors::jsForFieldLabelFromTop($fieldValuePosition));
                 }catch (\Exception $e){
-                    $this->I->executeJS(FluentFormsSelectors::jsForFieldLabelFromBottom($fieldValuePosition));
+                    $I->executeJS(FluentFormsSelectors::jsForFieldLabelFromBottom($fieldValuePosition));
                     echo $e->getMessage();
                 }
-                $this->I->fillField(FluentFormsSelectors::fieldValue($counter), $fieldValue);
-                $this->I->clicked(FluentFormsSelectors::addField($counter));
+                $I->fillField(FluentFormsSelectors::fieldValue($counter), $fieldValue);
+                $I->clicked(FluentFormsSelectors::addField($counter));
                 $counter++;
             }
         }
 
         if (isset($staticTag) and !empty($staticTag)){
-            $this->I->clicked(FluentFormsSelectors::contactTag);
+            $I->clicked(FluentFormsSelectors::contactTag);
             foreach ($staticTag as $tag)
             {
-                $this->I->clickByJS("//span[normalize-space()='$tag']");
+                $I->clickByJS("//span[normalize-space()='$tag']");
             }
         }
 
         if (isset($dynamicTag) and !empty($dynamicTag))
         {
-            $this->I->clicked(FluentFormsSelectors::enableDynamicTag);
+            $I->clicked(FluentFormsSelectors::enableDynamicTag);
 
-            $general->mapDynamicTag('yes',$dynamicTag);
+            $this->mapDynamicTag($I,'yes',$dynamicTag);
 
 //            global $dynamicTagField;
 //            $dynamicTagField = 1;
 //            $dynamicTagValue = 1;
 //            foreach ($dynamicTag as $key => $value)
 //            {
-//                $this->I->clicked(FluentFormsSelectors::setTag($dynamicTagField));
-//                $this->I->clickOnText($key);
+//                $I->clicked(FluentFormsSelectors::setTag($dynamicTagField));
+//                $I->clickOnText($key);
 //
-//                $this->I->click(FluentFormsSelectors::ifClause($dynamicTagValue));
-//                $this->I->clickOnText($value[0]);
+//                $I->click(FluentFormsSelectors::ifClause($dynamicTagValue));
+//                $I->clickOnText($value[0]);
 //
-//                $this->I->click(FluentFormsSelectors::ifClause($dynamicTagValue+1));
-//                $this->I->clickOnText($value[1]);
+//                $I->click(FluentFormsSelectors::ifClause($dynamicTagValue+1));
+//                $I->clickOnText($value[1]);
 //
-//                $this->I->fillField(FluentFormsSelectors::dynamicTagValue($dynamicTagField),$value[2]);
-//                $this->I->click(FluentFormsSelectors::addDynamicTagField($dynamicTagField));
+//                $I->fillField(FluentFormsSelectors::dynamicTagValue($dynamicTagField),$value[2]);
+//                $I->click(FluentFormsSelectors::addDynamicTagField($dynamicTagField));
 //                $dynamicTagField++;
 //                $dynamicTagValue+=2;
 //            }
-//            $this->I->click(FluentFormsSelectors::removeDynamicTagField($dynamicTagField));
+//            $I->click(FluentFormsSelectors::removeDynamicTagField($dynamicTagField));
         }
 
         if(isset($conditionalLogic) and !empty($conditionalLogic))
         {
-            if(!$this->I->checkElement(FluentFormsSelectors::conditionalLogicChecked))
+            if(!$I->checkElement(FluentFormsSelectors::conditionalLogicChecked))
             {
-                $this->I->clicked(FluentFormsSelectors::conditionalLogicUnchecked);
+                $I->clicked(FluentFormsSelectors::conditionalLogicUnchecked);
             }
                 if (isset($conditionState) and !empty($conditionState))
                 {
-                    $this->I->selectOption(FluentFormsSelectors::selectNotificationOption,$conditionState);
+                    $I->selectOption(FluentFormsSelectors::selectNotificationOption,$conditionState);
                 }
             global $fieldCounter;
             $fieldCounter = 1;
             $labelCounter = 1;
             foreach ($conditionalLogic as $key => $value)
             {
-                $this->I->click(FluentFormsSelectors::openConditionalFieldLabel($labelCounter));
-                $this->I->clickOnText($key);
+                $I->click(FluentFormsSelectors::openConditionalFieldLabel($labelCounter));
+                $I->clickOnText($key);
 
-                $this->I->click(FluentFormsSelectors::openConditionalFieldLabel($labelCounter+1));
-                $this->I->clickOnText($value[0]);
+                $I->click(FluentFormsSelectors::openConditionalFieldLabel($labelCounter+1));
+                $I->clickOnText($value[0]);
 
-                $this->I->fillField(FluentFormsSelectors::conditionalFieldValue($fieldCounter),$value[1]);
-                $this->I->click(FluentFormsSelectors::addConditionalField($fieldCounter));
+                $I->fillField(FluentFormsSelectors::conditionalFieldValue($fieldCounter),$value[1]);
+                $I->click(FluentFormsSelectors::addConditionalField($fieldCounter));
                 $fieldCounter++;
                 $labelCounter+=2;
             }
-            $this->I->click(FluentFormsSelectors::removeConditionalField($fieldCounter));
+            $I->click(FluentFormsSelectors::removeConditionalField($fieldCounter));
         }
 
-        $this->I->clickWithLeftButton(FluentFormsSelectors::saveFeed);
-        $this->I->wait(2);
+        $I->clickWithLeftButton(FluentFormsSelectors::saveFeed);
+        $I->wait(2);
     }
 //    public function configurePlatformlyApiSettings($searchKey): void
 //    {
-//        $this->I->amOnPage(FluentFormsSelectors::fFormPage);
-//        $this->I->waitForElement(FluentFormsSelectors::mouseHoverMenu,10);
-//        $this->I->moveMouseOver(FluentFormsSelectors::mouseHoverMenu);
-//        $this->I->clicked(FluentFormsSelectors::formSettings);
-//        $this->I->clicked(FluentFormsSelectors::allIntegrations);
-//        $this->I->clicked(FluentFormsSelectors::addNewIntegration);
-//        $this->I->fillField(FluentFormsSelectors::searchIntegration,$searchKey);
-//        $this->I->clicked(FluentFormsSelectors::searchResult);
+//        $I->amOnPage(FluentFormsSelectors::fFormPage);
+//        $I->waitForElement(FluentFormsSelectors::mouseHoverMenu,10);
+//        $I->moveMouseOver(FluentFormsSelectors::mouseHoverMenu);
+//        $I->clicked(FluentFormsSelectors::formSettings);
+//        $I->clicked(FluentFormsSelectors::allIntegrations);
+//        $I->clicked(FluentFormsSelectors::addNewIntegration);
+//        $I->fillField(FluentFormsSelectors::searchIntegration,$searchKey);
+//        $I->clicked(FluentFormsSelectors::searchResult);
 //
 //    }
 
@@ -177,28 +178,27 @@ class Platformly extends Pageobjects
      * @return void
      */
 
-    public function configurePlatformly($integrationPositionNumber): void
+    public function configurePlatformly(AcceptanceTester $I, $integrationPositionNumber): void
     {
-        $general = new General($this->I);
-        $general->initiateIntegrationConfiguration($integrationPositionNumber);
+        $this->initiateIntegrationConfiguration($I,$integrationPositionNumber);
 
         if($integrationPositionNumber == 12)
         {
-            $saveSettings = $this->I->checkElement(FluentFormsSettingsSelectors::APIDisconnect);
+            $saveSettings = $I->checkElement(FluentFormsSettingsSelectors::APIDisconnect);
 
             if (!$saveSettings) // Check if the platformly integration is already configured.
             {
-                $this->I->waitForElement(FluentFormsSettingsSelectors::PlatformlyApiKey,10);
-                $this->I->fillField(FluentFormsSettingsSelectors::PlatformlyApiKeyField,getenv('PLATFORMLY_API_KEY'));
-                $this->I->waitForElement(FluentFormsSettingsSelectors::PlatformlyProjectID,5);
-                $this->I->fillField(FluentFormsSettingsSelectors::PlatformlyProjectID,getenv('PLATFORMLY_PROJECT_ID'));
-                $this->I->clicked(FluentFormsSettingsSelectors::APISaveButton);
+                $I->waitForElement(FluentFormsSettingsSelectors::PlatformlyApiKey,10);
+                $I->fillField(FluentFormsSettingsSelectors::PlatformlyApiKeyField,getenv('PLATFORMLY_API_KEY'));
+                $I->waitForElement(FluentFormsSettingsSelectors::PlatformlyProjectID,5);
+                $I->fillField(FluentFormsSettingsSelectors::PlatformlyProjectID,getenv('PLATFORMLY_PROJECT_ID'));
+                $I->clicked(FluentFormsSettingsSelectors::APISaveButton);
             }
-            $general->configureApiSettings("Platformly");
+            $this->configureApiSettings($I,"Platformly");
         }
 
     }
-    public function fetchPlatformlyData($email): string
+    public function fetchPlatformlyData(AcceptanceTester $I, $email): string
     {
         $curl = curl_init();
         curl_setopt_array($curl, array(
@@ -223,14 +223,14 @@ class Platformly extends Pageobjects
             for ($i = 0; $i < 8; $i++) {
                 $remoteData = json_decode($response);
                 if (property_exists($remoteData, 'status')) {
-                    $this->I->wait(20,'Platformly is taking too long to respond. Trying again...');
+                    $I->wait(20,'Platformly is taking too long to respond. Trying again...');
                 } else {
                     break;
                 }
             }
         }
         if (property_exists($remoteData, 'status')) {
-            $this->I->fail('Contact with '.$email.' not found in Platformly');
+            $I->fail('Contact with '.$email.' not found in Platformly');
         }
         return $remoteData;
 

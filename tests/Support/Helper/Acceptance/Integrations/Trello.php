@@ -9,6 +9,7 @@ use Unirest;
 
 class Trello extends Pageobjects
 {
+    use IntegrationHelper;
 
     public function mapTrelloField(): void
     {
@@ -57,15 +58,9 @@ class Trello extends Pageobjects
     }
     public function fetchTrelloData($titleToSearch): array
     {
-        for ($i = 0; $i < 8; $i++) {
-            $expectedData = $this->fetchData($titleToSearch);
-            if ($expectedData['title'] != $titleToSearch) {
-                $this->I->wait(60, 'Trello is taking too long to respond. Trying again...');
-            }else{
-                break;
-            }
-        }
-        if ($expectedData['title'] != $titleToSearch) {
+        $expectedData = $this->retryFetchingData([$this, 'fetchData'], $titleToSearch, $this->I);
+
+        if (empty($expectedData)) {
             $this->I->fail('The row with the title ' . $titleToSearch . ' was not found in the Trello.');
         }
         return $expectedData;
@@ -82,15 +77,13 @@ class Trello extends Pageobjects
         );
 
         $response = Unirest\Request::get(
-            'https://api.trello.com/1/search',
-            $headers,
-            $query
+            'https://api.trello.com/1/search', $headers, $query
         );
 
         $cards = $response->body->cards;
 
-        $title= '';
-        $cardContent = '';
+        $title= null;
+        $cardContent = null;
         foreach ($cards as $card) {
             $cardContent = $card->desc;
             $title = $card->name;
