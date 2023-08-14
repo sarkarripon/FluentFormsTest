@@ -1,11 +1,11 @@
 <?php
-namespace Tests\Support\Helper\Acceptance\Integrations;
-use Tests\Support\Helper\Pageobjects;
-use Tests\Support\Selectors\FluentFormsAddonsSelectors;
-use Tests\Support\Selectors\FluentFormsSelectors;
-
-class General extends Pageobjects
-{
+//namespace Tests\Support\Helper\Acceptance\Integrations;
+//use Tests\Support\Helper\Pageobjects;
+//use Tests\Support\Selectors\FluentFormsAddonsSelectors;
+//use Tests\Support\Selectors\FluentFormsSelectors;
+//
+//class General extends Pageobjects
+//{
 
 ///**
 // *
@@ -192,4 +192,4 @@ class General extends Pageobjects
 
 
 
-}
+//}

@@ -7,7 +7,7 @@ use com\zoho\crm\api\ParameterMap;
 use com\zoho\crm\api\record\GetRecordsParam;
 use com\zoho\crm\api\record\RecordOperations;
 
-class Zoho
+trait Zoho
 {
     public function fetchZohoData()
     {

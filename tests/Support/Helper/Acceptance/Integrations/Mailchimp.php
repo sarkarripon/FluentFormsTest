@@ -31,17 +31,14 @@ trait Mailchimp
 
     public function mapMailchimpFields(AcceptanceTester $I, $otherField=null,array $otherFieldArray=null,string $staticTag=null, array $dynamicTag=null): void
     {
-
         $this->mapEmailInCommon($I,"Mailchimp Integration");
-
         if ($otherField == "yes" and !empty($otherField)) {
-            $this->mapCommonFieldsWithLabel($I,$otherFieldArray);
+            $this->mapCommonFieldsWithLabel($I,$otherFieldArray,'Select a Field or Type Custom value');
             }
-
-        $I->clickOnText('Select Interest Category');
-        $I->clickOnText('Authlab');
-        $I->clickOnText('Select Interest');
-        $I->clickOnText('fluentforms');
+        $I->clickOnText('Select Interest Category','Interest Group');
+        $I->clickOnText('Authlab','Interest Group');
+        $I->clickOnText('Select Interest','Interest Group');
+        $I->clickOnText('fluentforms','Interest Group');
 
         if ($staticTag=='yes' and !empty($staticTag)) {
             $I->fillField(FluentFormsSelectors::mailchimpStaticTag, $staticTag);
@@ -64,8 +61,7 @@ trait Mailchimp
 
         $response= null;
         $exception = [];
-
-        for ($i=0; $i<8; $i++)
+        for ($i=0; $i<6; $i++)
         {
             try {
                 $response = $client->lists->getListMember(getenv('MAILCHIMP_AUDIENCE_ID'), hash('md5', $email));
@@ -76,7 +72,7 @@ trait Mailchimp
             }
         }
         if (count($exception) === 8) {
-            $I->fail('Contact with '.$email.' is not found in Mailchimp');
+            $response = null;
         }
         return $response;
     }

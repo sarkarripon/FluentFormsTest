@@ -1,7 +1,7 @@
 <?php
 namespace Tests\Support\Factories\DataProvider;
 
-class FormData extends ShortCodes
+class FormData
 {
     public static function countryName(): string
     {

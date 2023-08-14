@@ -3,11 +3,11 @@
 
 namespace Tests\Acceptance;
 
+use Codeception\Attribute\Group;
 use Tests\Support\Helper\Acceptance\Integrations\IntegrationHelper;
 use Tests\Support\AcceptanceTester;
 use Tests\Support\Factories\DataProvider\ShortCodes;
 use Tests\Support\Helper\Acceptance\Integrations\Activecampaign;
-use Tests\Support\Helper\Acceptance\Integrations\General;
 use Tests\Support\Selectors\FieldSelectors;
 
 class IntegrationActivecampaignCest
@@ -19,7 +19,7 @@ class IntegrationActivecampaignCest
         $I->wpLogin();
     }
 
-
+    #[Group('Integration')]
     public function test_activecampaign_push_data(AcceptanceTester $I): void
     {
         $this->prepareForm($I,__FUNCTION__, ['generalFields' => ['email', 'nameFields', 'phone']]);
@@ -27,8 +27,6 @@ class IntegrationActivecampaignCest
         $otherFieldArray = $this->getShortCodeArray(['First Name', 'Last Name', 'Phone Number']);
         $this->mapActivecampaignField($I,$otherFieldArray);
         $this->preparePage($I,__FUNCTION__);
-
-//        $I->amOnPage('/' . __FUNCTION__);
         $fillAbleDataArr = FieldSelectors::getFieldDataArray(['email', 'first_name', 'last_name', 'phone']);
 
         foreach ($fillAbleDataArr as $selector => $value) {
@@ -37,6 +35,19 @@ class IntegrationActivecampaignCest
         $I->clicked(FieldSelectors::submitButton);
 
         $remoteData = $this->fetchActivecampaignData($I,$fillAbleDataArr["//input[contains(@id,'email')]"]);
+//        print_r($remoteData['contacts']);
+
+        // retry to submit form again if data not found
+        if (empty($remoteData['contacts'])){
+            $I->amOnPage('/' . __FUNCTION__);
+            $fillAbleDataArr = FieldSelectors::getFieldDataArray(['email', 'first_name', 'last_name', 'phone']);
+
+            foreach ($fillAbleDataArr as $selector => $value) {
+                $I->fillByJS($selector, $value);
+            }
+            $I->clicked(FieldSelectors::submitButton);
+            $remoteData = $this->fetchActivecampaignData($I,$fillAbleDataArr["//input[contains(@id,'email')]"]);
+        }
 
         if (!empty($remoteData['contacts'])) {
             $contact = $remoteData['contacts'][0];
@@ -52,7 +63,5 @@ class IntegrationActivecampaignCest
                 $fillAbleDataArr["//input[contains(@id,'phone')]"] => $phone,
             ]);
         }
-
-
     }
 }

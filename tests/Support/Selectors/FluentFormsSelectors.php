@@ -4,7 +4,7 @@ namespace Tests\Support\Selectors;
 
 use Tests\Support\Helper\Pageobjects;
 
-class FluentFormsSelectors extends Pageobjects
+class FluentFormsSelectors
 {
     const fFormPage = '/wp-admin/admin.php?page=fluent_forms';
     const createFirstForm = "(//button[contains(@class,'el-button el-button--primary el-button--large')])[1]";

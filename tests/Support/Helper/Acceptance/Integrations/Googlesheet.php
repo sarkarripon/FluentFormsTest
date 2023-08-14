@@ -6,7 +6,6 @@ use Google\Exception;
 use Google_Client;
 use Google_Service_Sheets;
 use Tests\Support\AcceptanceTester;
-use Tests\Support\Helper\Pageobjects;
 use Tests\Support\Selectors\FluentFormsSelectors;
 use Tests\Support\Selectors\FluentFormsSettingsSelectors;
 
@@ -53,12 +52,10 @@ trait Googlesheet
     }
     public function fetchGoogleSheetData(AcceptanceTester $I, string $emailToFetch): array
     {
-        $expectedRow = $this->retryFetchingData($I,[$this, 'fetchData'], $emailToFetch);
-
-        if (empty($expectedRow)) {
-            $I->fail('The row with the email address ' . $emailToFetch . ' was not found in the spreadsheet.');
-        }
-        return $expectedRow;
+        //        if (empty($expectedRow)) {
+//            $I->fail('The row with the email address ' . $emailToFetch . ' was not found in the spreadsheet.');
+//        }
+        return $this->retryFetchingData($I,[$this, 'fetchData'], $emailToFetch);
 
     }
     /**

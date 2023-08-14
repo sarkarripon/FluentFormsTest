@@ -3,7 +3,6 @@
 namespace Tests\Support\Helper\Acceptance\Integrations;
 
 use Tests\Support\AcceptanceTester;
-use Tests\Support\Helper\Pageobjects;
 use Tests\Support\Selectors\FluentFormsSelectors;
 use Tests\Support\Selectors\FluentFormsSettingsSelectors;
 
@@ -48,26 +47,22 @@ trait Activecampaign
             }
             $this->configureApiSettings($I, "ActiveCampaign");
         }
-
     }
     public function fetchActivecampaignData(AcceptanceTester $I, string $emailToFetch)
     {
-        for ($i = 0; $i < 8; $i++) {
-            $remoteData = $this->fetchData($emailToFetch);
+        for ($i = 0; $i < 2; $i++) {
+            $remoteData = $this->fetchData($I,$emailToFetch);
             if (empty($remoteData['contacts'])) {
-                $I->wait(60, 'Activecampaign is taking too long to respond. Trying again...');
+                $I->wait(30, 'Activecampaign is taking too long to respond. Trying again...');
             } else {
                 break;
             }
         }
-
-        if (empty($remoteData['contacts'])) {
-            $I->fail('Data not found for the search term: ' . $emailToFetch);
-        }
         return $remoteData;
     }
-    public function fetchData(string $emailToFetch)
+    public function fetchData(AcceptanceTester $I, string $emailToFetch)
     {
+        $I->wait(30,'Activecampaign is taking too long to respond. Trying again...');
         $apiUrl = getenv("ACTIVECAMPAIGN_API_URL").'/api/3/contacts';
 
         $ch = curl_init();

@@ -214,7 +214,7 @@ class AcceptanceTester extends \Codeception\Actor
         $this->clicked( NewPageSelectors::publishBtn);
         $this->waitForElementClickable(NewPageSelectors::confirmPublish);
         $this->clicked( NewPageSelectors::confirmPublish);
-        $this->wait(1);
+        $this->waitForElement(NewPageSelectors::viewPage);
         $pageUrl = $this->grabAttributeFrom(NewPageSelectors::viewPage, 'href');
         return $pageUrl; // it will return the page url and assign it to $pageUrl global variable above.
     }

@@ -80,30 +80,30 @@ class AcceptanceHelper extends WebDriver
         $this->wait(1);
     }
 
-    public function clickOnText(string $text, string $followingText =null): void
+    public function clickOnText(string $actionText, string $followingText =null, $index=1): void
     {
         $following = null;
         if (isset($followingText) and !empty($followingText)) {
             $following = "label[normalize-space()='$followingText']/following::";
         }
         $xpathVariations = [
-            "//$following"."div[@x-placement='bottom-start']//span[contains(text(),'{$text}')]",
-            "//$following"."div[@x-placement='top-start']//span[contains(text(),'{$text}')]",
-            "//$following"."label[normalize-space()='{$text}']",
-            "//$following"."label[contains(text(),'{$text}')]",
-            "//$following"."span[normalize-space()='{$text}']",
-            "//$following"."span[contains(text(),'{$text}')]",
-            "//$following"."button[contains(text(),'{$text}')]",
-            "//$following"."a[contains(text(),'{$text}')]",
-            "//$following"."h2[normalize-space()='{$text}']",
-            "//$following"."p[contains(text(),'{$text}')]",
-            "//$following"."input[@placeholder='{$text}']",
+            "(//$following"."div[@x-placement='bottom-start']//span[contains(text(),'{$actionText}')])[$index]",
+            "(//$following"."div[@x-placement='top-start']//span[contains(text(),'{$actionText}')])[$index]",
+            "(//$following"."label[normalize-space()='{$actionText}'])[$index]",
+            "(//$following"."label[contains(text(),'{$actionText}')])[$index]",
+            "(//$following"."span[normalize-space()='{$actionText}'])[$index]",
+            "(//$following"."span[contains(text(),'{$actionText}')])[$index]",
+            "(//$following"."button[contains(text(),'{$actionText}')])[$index]",
+            "(//$following"."a[contains(text(),'{$actionText}')])[$index]",
+            "(//$following"."h2[normalize-space()='{$actionText}'])[$index]",
+            "(//$following"."p[contains(text(),'{$actionText}')])[$index]",
+            "(//$following"."input[@placeholder='{$actionText}'])[$index]",
         ];
 
         $exception = [];
         foreach ($xpathVariations as $xpath) {
             try {
-                $this->waitForElementVisible($xpath);
+                $this->waitForElementVisible($xpath,1);
                 $this->seeElementInDOM($xpath);
                 $this->moveMouseOver($xpath);
                 $this->clickByJS($xpath);
@@ -114,7 +114,7 @@ class AcceptanceHelper extends WebDriver
             }
         }
         if(count($exception) === count($xpathVariations)){
-           $this->fail($text." not found");
+           $this->fail($actionText." not found");
         }
     }
 
@@ -156,25 +156,25 @@ class AcceptanceHelper extends WebDriver
     }
 
     /**
-     * @param string $text
+     * @param string $actionText
      * @return void
      * @throws Exception
      * @author Sarkar Ripon
      * This function will wait for the element until it can be seen.
      * This is a workaround for the issue of Codeception not waiting for the element to be visible before seen it.
      */
-    public function seeText(string $text): void
+    public function seeText(string $actionText): void
     {
-        $this->waitForText($text);
-        parent::see($text);
+        $this->waitForText($actionText);
+        parent::see($actionText);
         $this->enableImplicitWait();
     }
 
-    public function seeTextCaseInsensitive($text, $selector): void
+    public function seeTextCaseInsensitive($actionText, $selector): void
     {
         $elementText = $this->grabTextFrom($selector);
-        $text = preg_quote($text, '/');
-        $this->assertRegExp("/$text/i", $elementText);
+        $actionText = preg_quote($actionText, '/');
+        $this->assertRegExp("/$actionText/i", $elementText);
     }
 
     /**

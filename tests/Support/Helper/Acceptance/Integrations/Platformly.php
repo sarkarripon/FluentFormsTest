@@ -2,8 +2,6 @@
 namespace Tests\Support\Helper\Acceptance\Integrations;
 
 use Tests\Support\AcceptanceTester;
-use Tests\Support\Helper\Pageobjects;
-use Tests\Support\Selectors\FluentFormsAddonsSelectors;
 use Tests\Support\Selectors\FluentFormsSelectors;
 use Tests\Support\Selectors\FluentFormsSettingsSelectors;
 
@@ -11,7 +9,7 @@ trait Platformly
 {
     use IntegrationHelper;
 
-    public function mapPlatformlyFields(AcceptanceTester $I, string $optionalField=null, array $otherFields=[], array $staticTag=[], array $dynamicTag=[], array $conditionalLogic=[], string $conditionState=null): void
+    public function mapPlatformlyFields(AcceptanceTester $I, string $actionText =null, string $optionalField=null, array $otherFields=[], array $staticTag=[], array $dynamicTag=[], array $conditionalLogic=[], string $conditionState=null): void
     {
         $this->mapEmailInCommon($I,"Platformly Integration");
 
@@ -22,10 +20,9 @@ trait Platformly
                 'Phone Number' => '{inputs.phone}',
             ];
             foreach ($optionalFieldArr as $key => $value) {
-                $I->fillByJS(FluentFormsSelectors::commonFields($key),$value);
+                $I->fillByJS(FluentFormsSelectors::commonFields($key,$actionText),$value);
             }
         }
-
         if (isset($otherFields) and !empty($otherFields))
         {
             $counter = 1;
@@ -43,7 +40,6 @@ trait Platformly
                 $counter++;
             }
         }
-
         if (isset($staticTag) and !empty($staticTag)){
             $I->clicked(FluentFormsSelectors::contactTag);
             foreach ($staticTag as $tag)
@@ -51,33 +47,10 @@ trait Platformly
                 $I->clickByJS("//span[normalize-space()='$tag']");
             }
         }
-
         if (isset($dynamicTag) and !empty($dynamicTag))
         {
             $I->clicked(FluentFormsSelectors::enableDynamicTag);
-
             $this->mapDynamicTag($I,'yes',$dynamicTag);
-
-//            global $dynamicTagField;
-//            $dynamicTagField = 1;
-//            $dynamicTagValue = 1;
-//            foreach ($dynamicTag as $key => $value)
-//            {
-//                $I->clicked(FluentFormsSelectors::setTag($dynamicTagField));
-//                $I->clickOnText($key);
-//
-//                $I->click(FluentFormsSelectors::ifClause($dynamicTagValue));
-//                $I->clickOnText($value[0]);
-//
-//                $I->click(FluentFormsSelectors::ifClause($dynamicTagValue+1));
-//                $I->clickOnText($value[1]);
-//
-//                $I->fillField(FluentFormsSelectors::dynamicTagValue($dynamicTagField),$value[2]);
-//                $I->click(FluentFormsSelectors::addDynamicTagField($dynamicTagField));
-//                $dynamicTagField++;
-//                $dynamicTagValue+=2;
-//            }
-//            $I->click(FluentFormsSelectors::removeDynamicTagField($dynamicTagField));
         }
 
         if(isset($conditionalLogic) and !empty($conditionalLogic))
@@ -112,18 +85,6 @@ trait Platformly
         $I->clickWithLeftButton(FluentFormsSelectors::saveFeed);
         $I->wait(2);
     }
-//    public function configurePlatformlyApiSettings($searchKey): void
-//    {
-//        $I->amOnPage(FluentFormsSelectors::fFormPage);
-//        $I->waitForElement(FluentFormsSelectors::mouseHoverMenu,10);
-//        $I->moveMouseOver(FluentFormsSelectors::mouseHoverMenu);
-//        $I->clicked(FluentFormsSelectors::formSettings);
-//        $I->clicked(FluentFormsSelectors::allIntegrations);
-//        $I->clicked(FluentFormsSelectors::addNewIntegration);
-//        $I->fillField(FluentFormsSelectors::searchIntegration,$searchKey);
-//        $I->clicked(FluentFormsSelectors::searchResult);
-//
-//    }
 
     /**
      *
@@ -174,6 +135,7 @@ trait Platformly
      *
      *
      *
+     * @param AcceptanceTester $I
      * @param $integrationPositionNumber
      * @return void
      */
@@ -196,7 +158,6 @@ trait Platformly
             }
             $this->configureApiSettings($I,"Platformly");
         }
-
     }
     public function fetchPlatformlyData(AcceptanceTester $I, $email): string
     {
@@ -233,12 +194,6 @@ trait Platformly
             $I->fail('Contact with '.$email.' not found in Platformly');
         }
         return $remoteData;
-
     }
-
-
-
-
-
 }
 

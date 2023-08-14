@@ -85,8 +85,9 @@ trait IntegrationHelper
     coupon
      * ```
      */
-    public function prepareForm(AcceptanceTester $I,string $formName, array $requiredField, string $isDelete='yes'): void
+    public function prepareForm(AcceptanceTester $I,string $formName, array $requiredField): void
     {
+        $isDelete = getenv("EXISTING_FORM_DELETE");
         if ($isDelete === "yes") {
             $I->deleteExistingForms();
         }
@@ -98,9 +99,10 @@ trait IntegrationHelper
         $I->seeSuccess('Form renamed successfully.');
     }
 
-    public function preparePage(AcceptanceTester $I, string $title=null, string $isDelete='yes'): void
+    public function preparePage(AcceptanceTester $I, string $title=null): void
     {
         global $pageUrl;
+        $isDelete= getenv("EXISTING_PAGE_DELETE");
         if ($isDelete === "yes") {
             $I->deleteExistingPages();
         }
@@ -151,10 +153,10 @@ trait IntegrationHelper
      * Arr ex; 'Name'=>'{inputs.names}'
      *
      */
-    public function mapCommonFieldsWithLabel(AcceptanceTester $I, $fields): void
+    public function mapCommonFieldsWithLabel(AcceptanceTester $I, $fields, $actionText): void
     {
         foreach ($fields as $field => $value) {
-            $I->fillField(FluentFormsSelectors::commonFields($field), $value);
+            $I->fillField(FluentFormsSelectors::commonFields($field,$actionText), $value);
         }
     }
 
@@ -203,7 +205,7 @@ trait IntegrationHelper
         }
     }
 
-    public function retryFetchingData(AcceptanceTester $I, $fetchFunction, $searchTerm, $retries = 5)
+    public function retryFetchingData(AcceptanceTester $I, $fetchFunction, $searchTerm, $retries = 2)
     {
         $expectedRow = null;
 
@@ -212,7 +214,7 @@ trait IntegrationHelper
             $data = self::searchData($I, $expectedRow, '/' . preg_quote($searchTerm, '/') . '/');
 
             if (empty($data)) {
-                $I->wait(60, 'Taking too long to respond. Trying again...');
+                $I->wait(60, 'API response Taking too long, Trying again...');
             } else {
                 break;
             }

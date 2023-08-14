@@ -2,66 +2,65 @@
 
 namespace Tests\Support\Helper\Acceptance\Integrations;
 
-use Tests\Support\Helper\Pageobjects;
+use Tests\Support\AcceptanceTester;
 use Tests\Support\Selectors\FluentFormsSelectors;
 use Tests\Support\Selectors\FluentFormsSettingsSelectors;
 use Unirest;
 
-class Trello extends Pageobjects
+trait Trello
 {
     use IntegrationHelper;
 
-    public function mapTrelloField(): void
+    public function mapTrelloField(AcceptanceTester $I): void
     {
-        $this->I->waitForElement(FluentFormsSelectors::feedName, 30);
-        $this->I->fillField(FluentFormsSelectors::feedName, 'Trello');
-        $this->I->clickByJS(FluentFormsSelectors::dropdown('Trello Configuration'));
-        $this->I->clickOnText('fluentforms','Trello Configuration');
+        $I->waitForElement(FluentFormsSelectors::feedName, 30);
+        $I->fillField(FluentFormsSelectors::feedName, 'Trello');
+        $I->clickByJS(FluentFormsSelectors::dropdown('Trello Configuration'));
+        $I->clickOnText('fluentforms','Trello Configuration');
 
-        $this->I->clickByJS(FluentFormsSelectors::dropdown('Select List'));
-        $this->I->clickOnText('To Do','Select List');
+        $I->clickByJS(FluentFormsSelectors::dropdown('Select List'));
+        $I->clickOnText('To Do','Select List');
 
-        $this->I->clickByJS(FluentFormsSelectors::dropdown('Select Card Label'));
-        $this->I->clickOnText('blue','Select Card Label');
+        $I->clickByJS(FluentFormsSelectors::dropdown('Select Card Label'));
+        $I->clickOnText('blue','Select Card Label');
 
-        $this->I->clickByJS(FluentFormsSelectors::dropdown('Select Members'));
-        $this->I->clickOnText('Ripon Sarkar','Select Members');
+        $I->clickByJS(FluentFormsSelectors::dropdown('Select Members'));
+        $I->clickOnText('Ripon Sarkar','Select Members');
 
-        $this->I->filledField(FluentFormsSelectors::commonFields(
+        $I->filledField(FluentFormsSelectors::commonFields(
             'Card Title','Select a Field or Type Custom value'),"{inputs.description}");
-        $this->I->filledField(FluentFormsSelectors::commonFields(
+        $I->filledField(FluentFormsSelectors::commonFields(
             'Card Content','Select a Field or Type Custom value'),"{inputs.description_1}");
 
-        $this->I->clicked(FluentFormsSelectors::saveFeed);
-        $this->I->seeSuccess("Integration successfully saved");
+        $I->clicked(FluentFormsSelectors::saveFeed);
+        $I->seeSuccess("Integration successfully saved");
     }
-    public function configureTrello($integrationPositionNumber): void
+    public function configureTrello(AcceptanceTester $I, $integrationPositionNumber): void
     {
-        $integrationHelper = new General($this->I);
-        $integrationHelper->initiateIntegrationConfiguration($integrationPositionNumber);
+        $this->initiateIntegrationConfiguration($I,$integrationPositionNumber);
 
         $trelloIntegrationPosition = 13;
 
         if ($integrationPositionNumber === $trelloIntegrationPosition) {
-            $isTrelloConfigured = $this->I->checkElement(FluentFormsSettingsSelectors::APIDisconnect);
+            $isTrelloConfigured = $I->checkElement(FluentFormsSettingsSelectors::APIDisconnect);
 
             if (!$isTrelloConfigured) {
-                $this->I->fillField(
+                $I->fillField(
                     FluentFormsSelectors::commonFields("Trello access Key", "access token Key"),
                     getenv("TRELLO_ACCESS_KEY")
                 );
-                $this->I->clicked(FluentFormsSettingsSelectors::APISaveButton);
+                $I->clicked(FluentFormsSettingsSelectors::APISaveButton);
             }
-            $integrationHelper->configureApiSettings("Trello");
+            $this->configureApiSettings($I,"Trello");
         }
 
     }
-    public function fetchTrelloData($titleToSearch): array
+    public function fetchTrelloData(AcceptanceTester $I, $titleToSearch): array
     {
-        $expectedData = $this->retryFetchingData([$this, 'fetchData'], $titleToSearch, $this->I);
+        $expectedData = $this->retryFetchingData($I,[$this, 'fetchData'], $titleToSearch);
 
         if (empty($expectedData)) {
-            $this->I->fail('The row with the title ' . $titleToSearch . ' was not found in the Trello.');
+            $I->fail('The row with the title ' . $titleToSearch . ' was not found in the Trello.');
         }
         return $expectedData;
     }
