@@ -142,7 +142,6 @@ class AcceptanceTester extends \Codeception\Actor
                 $this->clicked(FluentFormsSelectors::confirmBtn);
                 $this->reloadPage();
             } while ($this->tryToClick(FluentFormsSelectors::deleteBtn)==true);
-
         }
     }
     /**
@@ -241,7 +240,6 @@ class AcceptanceTester extends \Codeception\Actor
             }
         }
     }
-
     public function checkAPICallStatus($text, $selector):string
     {
         $this->wait(5);

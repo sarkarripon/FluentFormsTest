@@ -114,13 +114,10 @@ trait IntegrationHelper
     public function initiateIntegrationConfiguration( AcceptanceTester $I, int $integrationPositionNumber): void
     {
         $I->amOnPage(FluentFormsAddonsSelectors::integrationsPage);
-
         $element = $I->checkElement("(//div[@class='ff_card_footer'])[{$integrationPositionNumber}]//i[@class='el-icon-setting']");
-
         if (!$element) {
             $I->clickWithLeftButton("(//span[@class='el-switch__core'])[{$integrationPositionNumber}]");
         }
-
         $I->clickWithLeftButton("(//DIV[@class='ff_card_footer_group'])[{$integrationPositionNumber}]//I[@class='el-icon-setting']");
 
     }
@@ -208,21 +205,17 @@ trait IntegrationHelper
     public function retryFetchingData(AcceptanceTester $I, $fetchFunction, $searchTerm, $retries = 2)
     {
         $expectedRow = null;
-
         for ($i = 0; $i < $retries; $i++) {
             $expectedRow = $fetchFunction($searchTerm, $I, $expectedRow);
             $data = self::searchData($I, $expectedRow, '/' . preg_quote($searchTerm, '/') . '/');
-
             if (empty($data)) {
-                $I->wait(60, 'API response Taking too long, Trying again...');
+                $I->wait(30, 'API response Taking too long, Trying again...');
             } else {
                 break;
             }
         }
-
         return $expectedRow;
     }
-
     public static function searchData(AcceptanceTester $I, $data, $searchTerm): ?string
     {
         if (is_array($data) || is_object($data)) {

@@ -7,7 +7,6 @@ use Dotenv;
 
 class AcceptanceHelper extends WebDriver
 {
-
     public function env(): void
     {
         $root = $_SERVER['PWD'];
@@ -74,6 +73,7 @@ class AcceptanceHelper extends WebDriver
      */
     public function filledField($selector, $value): void
     {
+//        $this->waitForJs('return document.readyState === "complete"', 30);
         $this->waitForElementVisible($selector,15);
         $this->clickWithLeftButton($selector);
         parent::fillField($selector,$value);
@@ -82,6 +82,8 @@ class AcceptanceHelper extends WebDriver
 
     public function clickOnText(string $actionText, string $followingText =null, $index=1): void
     {
+//        $this->waitForJs('return document.readyState === "complete"', 30);
+        $this->wait(1);
         $following = null;
         if (isset($followingText) and !empty($followingText)) {
             $following = "label[normalize-space()='$followingText']/following::";
@@ -95,7 +97,10 @@ class AcceptanceHelper extends WebDriver
             "(//$following"."span[contains(text(),'{$actionText}')])[$index]",
             "(//$following"."button[contains(text(),'{$actionText}')])[$index]",
             "(//$following"."a[contains(text(),'{$actionText}')])[$index]",
+            "(//$following"."h1[normalize-space()='{$actionText}'])[$index]",
             "(//$following"."h2[normalize-space()='{$actionText}'])[$index]",
+            "(//$following"."h3[normalize-space()='{$actionText}'])[$index]",
+            "(//$following"."h4[normalize-space()='{$actionText}'])[$index]",
             "(//$following"."p[contains(text(),'{$actionText}')])[$index]",
             "(//$following"."input[@placeholder='{$actionText}'])[$index]",
         ];
@@ -103,7 +108,7 @@ class AcceptanceHelper extends WebDriver
         $exception = [];
         foreach ($xpathVariations as $xpath) {
             try {
-                $this->waitForElementVisible($xpath,1);
+//                $this->waitForElementVisible($xpath,1);
                 $this->seeElementInDOM($xpath);
                 $this->moveMouseOver($xpath);
                 $this->clickByJS($xpath);

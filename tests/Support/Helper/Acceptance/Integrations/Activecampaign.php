@@ -18,11 +18,9 @@ trait Activecampaign
             foreach ($otherFieldArray as $fieldLabel => $fieldValue)
             {
                 $I->fillField(FluentFormsSelectors::commonFields($fieldLabel,'Select a Field or Type Custom value'), $fieldValue);
-
             }
         }
         $I->clicked(FluentFormsSelectors::saveFeed);
-
     }
 
     public function configureActivecampaign(AcceptanceTester $I, $integrationPositionNumber): void

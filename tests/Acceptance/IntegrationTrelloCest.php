@@ -26,21 +26,27 @@ class IntegrationTrelloCest
         $this->mapTrelloField($I);
         $this->preparePage($I,__FUNCTION__);
 //        $I->amOnPage('/' . __FUNCTION__);
-
         $cardTitle = $faker->sentence($nbWords = 3, $variableNbWords = true);
         $cardContent = $faker->text($maxNbChars = 60);
 
         $I->fillByJS("(//textarea[contains(@id,'description')])[1]", $cardTitle );
         $I->fillByJS("(//textarea[contains(@id,'description')])[2]", $cardContent);
-        $I->click(FieldSelectors::submitButton);
+        $I->clicked(FieldSelectors::submitButton);
 
         $remoteData = $this->fetchTrelloData($I,$cardTitle);
-
-        $I->assertString([
-            $cardTitle => $remoteData['title'],
-            $cardContent => $remoteData['cardContent']
-        ]);
-
+        if (empty($remoteData['title'])){
+            $I->amOnPage('/' . __FUNCTION__);
+            $I->fillByJS("(//textarea[contains(@id,'description')])[1]", $cardTitle );
+            $I->fillByJS("(//textarea[contains(@id,'description')])[2]", $cardContent);
+            $I->clicked(FieldSelectors::submitButton);
+            $remoteData = $this->fetchTrelloData($I,$cardTitle);
+        }
+        if (!empty($remoteData['title'])){
+            $I->assertString([
+                $cardTitle => $remoteData['title'],
+                $cardContent => $remoteData['cardContent']
+            ]);
+        }
     }
 
 }

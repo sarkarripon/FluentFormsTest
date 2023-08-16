@@ -11,7 +11,7 @@ class FluentFormsSelectors
     const addNewForm = "//button[contains(@class,'el-button el-button--primary')][1]";
     const blankForm = "(//div[contains(@class,'ff_card ff_card_form_action ff_card_shadow_lg hover-zoom')])[1]";
     const saveForm = "(//button[normalize-space()='Save Form'])[1]";
-    const mouseHoverMenu = "//tbody/tr[contains(@class,'el-table__row')]/td[2]/div[1]";
+    const mouseHoverMenu = "(//td[contains(@class,'el-table__cell')])[2]";
     const deleteBtn = "//a[normalize-space()='Delete']";
     const confirmBtn = "[class='el-popover el-popper']:last-child button:last-child";
     const formSettings = "//span[contains(@class,'ff_edit')]//a[contains(text(),'Settings')]";

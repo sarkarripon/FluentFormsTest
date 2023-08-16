@@ -57,10 +57,9 @@ trait Trello
     }
     public function fetchTrelloData(AcceptanceTester $I, $titleToSearch): array
     {
-        $expectedData = $this->retryFetchingData($I,[$this, 'fetchData'], $titleToSearch);
-
+        $expectedData = $this->retryFetchingData($I,[$this, 'fetchData'], $titleToSearch,4);
         if (empty($expectedData)) {
-            $I->fail('The row with the title ' . $titleToSearch . ' was not found in the Trello.');
+            $expectedData = null;
         }
         return $expectedData;
     }

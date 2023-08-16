@@ -40,7 +40,7 @@ class IntegrationGoogleSheetCest
         $I->clicked(FieldSelectors::submitButton);
 
         $remoteData = $this->fetchGoogleSheetData($I, $fillAbleDataArr["//input[contains(@id,'email')]"]);
-        print_r($remoteData);
+//        print_r($remoteData);
 
         // retry to submit form again if data not found
         if (empty($remoteData)) {

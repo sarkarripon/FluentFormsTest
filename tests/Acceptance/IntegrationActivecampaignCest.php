@@ -27,8 +27,8 @@ class IntegrationActivecampaignCest
         $otherFieldArray = $this->getShortCodeArray(['First Name', 'Last Name', 'Phone Number']);
         $this->mapActivecampaignField($I,$otherFieldArray);
         $this->preparePage($I,__FUNCTION__);
-        $fillAbleDataArr = FieldSelectors::getFieldDataArray(['email', 'first_name', 'last_name', 'phone']);
 
+        $fillAbleDataArr = FieldSelectors::getFieldDataArray(['email', 'first_name', 'last_name', 'phone']);
         foreach ($fillAbleDataArr as $selector => $value) {
             $I->fillByJS($selector, $value);
         }
@@ -48,7 +48,6 @@ class IntegrationActivecampaignCest
             $I->clicked(FieldSelectors::submitButton);
             $remoteData = $this->fetchActivecampaignData($I,$fillAbleDataArr["//input[contains(@id,'email')]"]);
         }
-
         if (!empty($remoteData['contacts'])) {
             $contact = $remoteData['contacts'][0];
             $email = $contact['email'];

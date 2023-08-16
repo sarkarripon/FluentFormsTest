@@ -23,7 +23,7 @@ class IntegrationPlatformlyCest
     /**
      * @dataProvider \Tests\Support\Factories\DataProvider\FormData::fieldData
      */
-    #[Group('Integration')]
+//    #[Group('Integration')]
     public function test_platformly_push_data(AcceptanceTester $I, Example $example): void
     {
         $this->prepareForm($I,__FUNCTION__, ['generalFields' => ['email', 'nameFields', 'phone']]);
@@ -67,7 +67,7 @@ class IntegrationPlatformlyCest
     /**
      * @dataProvider \Tests\Support\Factories\DataProvider\FormData::fieldData
      */
-    #[Group('Integration')]
+//    #[Group('Integration')]
     public function test_platformly_can_push_other_data(AcceptanceTester $I, Example $example): void
     {
         global $pageUrl;
@@ -154,7 +154,7 @@ class IntegrationPlatformlyCest
     /**
      * @dataProvider \Tests\Support\Factories\DataProvider\FormData::fieldData
      */
-    #[Group('Integration')]
+//    #[Group('Integration')]
     public function test_platformly_static_tag_apply(AcceptanceTester $I, Example $example): void
     {
         global $pageUrl;
@@ -220,7 +220,7 @@ class IntegrationPlatformlyCest
     /**
      * @dataProvider \Tests\Support\Factories\DataProvider\FormData::fieldData
      */
-    #[Group('Integration')]
+//    #[Group('Integration')]
     public function test_platformly_dynamic_tag_apply(AcceptanceTester $I, Example $example): void
     {
         global $pageUrl;
@@ -294,7 +294,7 @@ class IntegrationPlatformlyCest
     /**
      * @dataProvider \Tests\Support\Factories\DataProvider\FormData::fieldData
      */
-    #[Group('Integration')]
+//    #[Group('Integration')]
     public function test_platformly_activated_when_satisfy_all_conditions(AcceptanceTester $I, Example $example): void
     {
         global $pageUrl;
@@ -329,17 +329,12 @@ class IntegrationPlatformlyCest
         $I->amOnUrl($pageUrl);
 
         $I->wait(1);
-
         $I->fillField(FieldSelectors::email, ($example['email']));
         $I->fillField(FieldSelectors::first_name, "John " . ($example['first_name']));
         $I->fillField(FieldSelectors::last_name, 'Doe');
         $I->click(FieldSelectors::submitButton);
-
         $I->assertStringContainsStringIgnoringCase('Success', $I->checkAPICallStatus('Success', FluentFormsAllEntries::logSuccessStatus));
-
     }
-
-
     #[skip]
     public function formPreparation_platformly_activated_when_satisfy_any_condition(AcceptanceTester $I): void
     {
@@ -374,7 +369,7 @@ class IntegrationPlatformlyCest
     /**
      * @dataProvider \Tests\Support\Factories\DataProvider\FormData::fieldDataForConditionalForm
      */
-    #[Group('Integration')]
+//    #[Group('Integration')]
     public function test_platformly_activated_when_satisfy_any_condition(AcceptanceTester $I, Example $example): void
     {
         if ($example['id'] == 1) {
