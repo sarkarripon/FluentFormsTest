@@ -15,13 +15,16 @@ class PreCheckCest
 
     public function _before(AcceptanceTester $I): void
     {
-//        $I->env();
-//        $I->wpLogin();
+        $I->env();
+        $I->wpLogin();
     }
 
 
     public function check_test(AcceptanceTester $I): void
     {
+        $I->amOnPage("wp-admin/admin.php?page=fluent_forms_add_ons");
+       $text= $I->grabTextFrom("(//div[contains(@class,'card_footer_group')])[4]");
+       echo $text;
 
 
     }

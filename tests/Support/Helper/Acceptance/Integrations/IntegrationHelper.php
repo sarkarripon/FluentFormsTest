@@ -18,74 +18,74 @@ trait IntegrationHelper
      * ```
      * * generalFields
      * ```
-    nameFields
-    email
-    simpleText
-    maskInput
-    textArea
-    addressFields
-    countryList
-    numaricField
-    dropdown
-    radioField
-    checkBox
-    multipleChoice
-    websiteUrl
-    timeDate
-    imageUpload
-    fileUpload
-    customHtml
-    phone
+     * nameFields
+     * email
+     * simpleText
+     * maskInput
+     * textArea
+     * addressFields
+     * countryList
+     * numaricField
+     * dropdown
+     * radioField
+     * checkBox
+     * multipleChoice
+     * websiteUrl
+     * timeDate
+     * imageUpload
+     * fileUpload
+     * customHtml
+     * phone
      * ```
      *
      * * advancedFields
      * ```
-    hiddenField
-    sectionBreak
-    reCaptcha
-    hCapcha
-    turnstile
-    shortCode
-    tnc
-    actionHook
-    formStep
-    rating
-    checkableGrid
-    gdpr
-    passwordField
-    customSubBtn
-    rangeSlider
-    netPromoter
-    chainedSelect
-    colorPicker
-    repeat
-    post_cpt
-    richText
-    save_resume
+     * hiddenField
+     * sectionBreak
+     * reCaptcha
+     * hCapcha
+     * turnstile
+     * shortCode
+     * tnc
+     * actionHook
+     * formStep
+     * rating
+     * checkableGrid
+     * gdpr
+     * passwordField
+     * customSubBtn
+     * rangeSlider
+     * netPromoter
+     * chainedSelect
+     * colorPicker
+     * repeat
+     * post_cpt
+     * richText
+     * save_resume
      * ```
      *
      * * containers
      * ```
-    oneColumn
-    twoColumns
-    threeColumns
-    fourColumns
-    fiveColumns
-    sixColumns
+     * oneColumn
+     * twoColumns
+     * threeColumns
+     * fourColumns
+     * fiveColumns
+     * sixColumns
      * ```
      *
      * * paymentFields
      * ```
-    paymentItem
-    subscription
-    customPaymentAmount
-    itmQuantity
-    paymentMethod
-    paymentSummary
-    coupon
+     * paymentItem
+     * subscription
+     * customPaymentAmount
+     * itmQuantity
+     * paymentMethod
+     * paymentSummary
+     * coupon
      * ```
      */
-    public function prepareForm(AcceptanceTester $I,string $formName, array $requiredField): void
+    public function prepareForm(AcceptanceTester $I, string $formName, array $requiredField): void
     {
         $isDelete = getenv("EXISTING_FORM_DELETE");
         if ($isDelete === "yes") {
@@ -99,45 +99,51 @@ trait IntegrationHelper
         $I->seeSuccess('Form renamed successfully.');
     }
 
-    public function preparePage(AcceptanceTester $I, string $title=null): void
+    public function preparePage(AcceptanceTester $I, string $title = null): void
     {
         global $pageUrl;
-        $isDelete= getenv("EXISTING_PAGE_DELETE");
+        $isDelete = getenv("EXISTING_PAGE_DELETE");
         if ($isDelete === "yes") {
             $I->deleteExistingPages();
         }
         $I->createNewPage($title);
         $I->amOnUrl($pageUrl);
-
     }
 
-    public function initiateIntegrationConfiguration( AcceptanceTester $I, int $integrationPositionNumber): void
+    public function initiateIntegrationConfiguration(AcceptanceTester $I, int $integrationPositionNumber): void
     {
         $I->amOnPage(FluentFormsAddonsSelectors::integrationsPage);
-        $element = $I->checkElement("(//div[@class='ff_card_footer'])[{$integrationPositionNumber}]//i[@class='el-icon-setting']");
-        if (!$element) {
-            $I->clickWithLeftButton("(//span[@class='el-switch__core'])[{$integrationPositionNumber}]");
+        $isEnabled = $I->grabTextFrom("(//div[contains(@class,'card_footer_group')])[{$integrationPositionNumber}]");
+        if ($isEnabled === "Disabled") {
+            $I->clickWithLeftButton("(//span[contains(@class,'el-switch__core')])[{$integrationPositionNumber}]");
         }
-        $I->clickWithLeftButton("(//DIV[@class='ff_card_footer_group'])[{$integrationPositionNumber}]//I[@class='el-icon-setting']");
-
+        $gearIcon = $I->checkElement("(//div[@class='ff_card_footer'])[{$integrationPositionNumber}]//i[@class='el-icon-setting']");
+        if ($gearIcon) {
+            $I->clickWithLeftButton("(//DIV[contains(@class,'card_footer_group')])[{$integrationPositionNumber}]//I[contains(@class,'el-icon-setting')]");
+        }
     }
 
-    public function configureApiSettings(AcceptanceTester $I, $searchKey): void
+    public function takeMeToConfigurationPage(AcceptanceTester $I): void
     {
         $I->amOnPage(FluentFormsSelectors::fFormPage);
-        $I->waitForElement(FluentFormsSelectors::mouseHoverMenu,10);
+        $I->waitForElement(FluentFormsSelectors::mouseHoverMenu, 10);
         $I->moveMouseOver(FluentFormsSelectors::mouseHoverMenu);
         $I->clicked(FluentFormsSelectors::formSettings);
+
+    }
+    public function configureApiSettings(AcceptanceTester $I, $searchKey): void
+    {
+        $this->takeMeToConfigurationPage($I);
         $I->clicked(FluentFormsSelectors::allIntegrations);
         $I->clicked(FluentFormsSelectors::addNewIntegration);
-        $I->fillField(FluentFormsSelectors::searchIntegration,$searchKey);
+        $I->fillField(FluentFormsSelectors::searchIntegration, $searchKey);
         $I->clicked(FluentFormsSelectors::searchResult);
     }
 
     public function mapEmailInCommon(AcceptanceTester $I, $feedName): void
     {
-        $I->waitForElementClickable(FluentFormsSelectors::integrationFeed,20);
-        $I->fillByJS(FluentFormsSelectors::feedName,$feedName);
+        $I->waitForElementClickable(FluentFormsSelectors::integrationFeed, 20);
+        $I->fillByJS(FluentFormsSelectors::feedName, $feedName);
 
         $I->clicked(FluentFormsSelectors::SegmentDropDown);
         $I->clicked(FluentFormsSelectors::Segment);
@@ -153,41 +159,38 @@ trait IntegrationHelper
     public function mapCommonFieldsWithLabel(AcceptanceTester $I, $fields, $actionText): void
     {
         foreach ($fields as $field => $value) {
-            $I->fillField(FluentFormsSelectors::commonFields($field,$actionText), $value);
+            $I->fillField(FluentFormsSelectors::commonFields($field, $actionText), $value);
         }
     }
 
-    public function mapDynamicTag(AcceptanceTester $I, $isDropDown, array $dynamicTagArray=null): void
+    public function mapDynamicTag(AcceptanceTester $I, $isDropDown, array $dynamicTagArray = null): void
     {
         global $dynamicTagField;
         $dynamicTagField = 1;
         $dynamicTagValue = 1;
-        foreach ($dynamicTagArray as $tag => $value)
-        {
-            if ($isDropDown == "yes" and !empty($isDropDown))
-            {
+        foreach ($dynamicTagArray as $tag => $value) {
+            if ($isDropDown == "yes" and !empty($isDropDown)) {
                 $I->clicked(FluentFormsSelectors::setTag($dynamicTagField));
                 $I->clickOnText($tag);
-            }else{
-                $I->fillField(FluentFormsSelectors::dynamicTagField($dynamicTagField),$tag);
+            } else {
+                $I->fillField(FluentFormsSelectors::dynamicTagField($dynamicTagField), $tag);
             }
             $I->click(FluentFormsSelectors::ifClause($dynamicTagValue));
             $I->clickOnText($value[0]);
 
-            $I->click(FluentFormsSelectors::ifClause($dynamicTagValue+1));
+            $I->click(FluentFormsSelectors::ifClause($dynamicTagValue + 1));
             $I->clickOnText($value[1]);
 
-            $I->fillField(FluentFormsSelectors::dynamicTagValue($dynamicTagField),$value[2]);
+            $I->fillField(FluentFormsSelectors::dynamicTagValue($dynamicTagField), $value[2]);
             $I->click(FluentFormsSelectors::addDynamicTagField($dynamicTagField));
             $dynamicTagField++;
-            $dynamicTagValue+=2;
-
+            $dynamicTagValue += 2;
         }
         $I->click(FluentFormsSelectors::removeDynamicTagField($dynamicTagField));
 
     }
 
-    public function missingFieldCheck(AcceptanceTester $I, array $referenceData,array $remoteData): void
+    public function missingFieldCheck(AcceptanceTester $I, array $referenceData, array $remoteData): void
     {
         $absentData = array_diff_assoc($referenceData, $remoteData);
 
@@ -216,6 +219,7 @@ trait IntegrationHelper
         }
         return $expectedRow;
     }
+
     public static function searchData(AcceptanceTester $I, $data, $searchTerm): ?string
     {
         if (is_array($data) || is_object($data)) {
@@ -232,8 +236,6 @@ trait IntegrationHelper
         }
         return null;
     }
-
-
 
 
 }

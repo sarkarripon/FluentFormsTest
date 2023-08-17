@@ -82,28 +82,19 @@ class AcceptanceHelper extends WebDriver
 
     public function clickOnText(string $actionText, string $followingText =null, $index=1): void
     {
-//        $this->waitForJs('return document.readyState === "complete"', 30);
-        $this->wait(1);
+        $this->wait(2);
         $following = null;
         if (isset($followingText) and !empty($followingText)) {
-            $following = "label[normalize-space()='$followingText']/following::";
+            $following .= "*[normalize-space()='$followingText' or contains(text(),'$followingText')]/following::";
         }
         $xpathVariations = [
             "(//$following"."div[@x-placement='bottom-start']//span[contains(text(),'{$actionText}')])[$index]",
             "(//$following"."div[@x-placement='top-start']//span[contains(text(),'{$actionText}')])[$index]",
-            "(//$following"."label[normalize-space()='{$actionText}'])[$index]",
-            "(//$following"."label[contains(text(),'{$actionText}')])[$index]",
-            "(//$following"."span[normalize-space()='{$actionText}'])[$index]",
-            "(//$following"."span[contains(text(),'{$actionText}')])[$index]",
-            "(//$following"."button[contains(text(),'{$actionText}')])[$index]",
-            "(//$following"."a[contains(text(),'{$actionText}')])[$index]",
-            "(//$following"."h1[normalize-space()='{$actionText}'])[$index]",
-            "(//$following"."h2[normalize-space()='{$actionText}'])[$index]",
-            "(//$following"."h3[normalize-space()='{$actionText}'])[$index]",
-            "(//$following"."h4[normalize-space()='{$actionText}'])[$index]",
-            "(//$following"."p[contains(text(),'{$actionText}')])[$index]",
-            "(//$following"."input[@placeholder='{$actionText}'])[$index]",
+            "(//$following"."*[normalize-space()='{$actionText}'])[$index]",
+            "(//$following"."*[contains(text(),'{$actionText}')])[$index]",
+            "(//$following"."*[@placeholder='{$actionText}'])[$index]",
         ];
+//        print_r($xpathVariations);
 
         $exception = [];
         foreach ($xpathVariations as $xpath) {
@@ -111,7 +102,7 @@ class AcceptanceHelper extends WebDriver
 //                $this->waitForElementVisible($xpath,1);
                 $this->seeElementInDOM($xpath);
                 $this->moveMouseOver($xpath);
-                $this->clickByJS($xpath);
+                $this->clicked($xpath);
                 break; // Exit the loop if the element is found and clicked successfully
             } catch (\Exception $e) {
                 $exception[] = $e->getMessage();

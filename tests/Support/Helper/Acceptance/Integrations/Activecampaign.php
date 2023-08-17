@@ -26,12 +26,9 @@ trait Activecampaign
     public function configureActivecampaign(AcceptanceTester $I, $integrationPositionNumber): void
     {
         $this->initiateIntegrationConfiguration($I,$integrationPositionNumber);
-
         $activecampaignPosition = 11;
-
         if ($integrationPositionNumber === $activecampaignPosition) {
             $isConfigured = $I->checkElement(FluentFormsSettingsSelectors::APIDisconnect);
-
             if (!$isConfigured) {
                 $I->fillField(
                     FluentFormsSelectors::commonFields("ActiveCampaign API URL", "API URL"),
