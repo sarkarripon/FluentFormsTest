@@ -63,7 +63,7 @@ class AcceptanceHelper extends WebDriver
      */
     public function clicked(string $selector): void
     {
-        $this->waitForElementVisible( $selector);
+        $this->waitForElementClickable( $selector);
         $this->moveMouseOver($selector);
         parent::clickWithLeftButton($selector);
     }
@@ -73,11 +73,13 @@ class AcceptanceHelper extends WebDriver
      */
     public function filledField($selector, $value): void
     {
-//        $this->waitForJs('return document.readyState === "complete"', 30);
-        $this->waitForElementVisible($selector,15);
-        $this->clickWithLeftButton($selector);
-        parent::fillField($selector,$value);
-        $this->wait(1);
+        $this->performOn($selector, function (WebDriver $I) use ($selector, $value) {
+            $I->moveMouseOver($selector);
+            $I->fillField($selector, $value);
+        });
+//        $this->waitForElementVisible($selector);
+//        $this->clickWithLeftButton($selector);
+//        parent::fillField($selector,$value);
     }
 
     public function clickOnText(string $actionText, string $followingText =null, $index=1): void
@@ -88,8 +90,8 @@ class AcceptanceHelper extends WebDriver
             $following .= "*[normalize-space()='$followingText' or contains(text(),'$followingText')]/following::";
         }
         $xpathVariations = [
-            "(//$following"."div[@x-placement='bottom-start']//span[contains(text(),'{$actionText}')])[$index]",
-            "(//$following"."div[@x-placement='top-start']//span[contains(text(),'{$actionText}')])[$index]",
+            "(//$following"."*[@x-placement]//*[contains(text(),'{$actionText}')])[$index]",
+            "(//$following"."*[@x-placement]//*[normalize-space()='{$actionText}')])[$index]",
             "(//$following"."*[normalize-space()='{$actionText}'])[$index]",
             "(//$following"."*[contains(text(),'{$actionText}')])[$index]",
             "(//$following"."*[@placeholder='{$actionText}'])[$index]",
@@ -99,7 +101,6 @@ class AcceptanceHelper extends WebDriver
         $exception = [];
         foreach ($xpathVariations as $xpath) {
             try {
-//                $this->waitForElementVisible($xpath,1);
                 $this->seeElementInDOM($xpath);
                 $this->moveMouseOver($xpath);
                 $this->clicked($xpath);
@@ -148,7 +149,6 @@ class AcceptanceHelper extends WebDriver
         var xpathResult = document.evaluate('$escapedXpath', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null);
         var element = xpathResult.singleNodeValue;
         element.value = '$value';");
-
     }
 
     /**
@@ -159,13 +159,23 @@ class AcceptanceHelper extends WebDriver
      * This function will wait for the element until it can be seen.
      * This is a workaround for the issue of Codeception not waiting for the element to be visible before seen it.
      */
-    public function seeText(string $actionText): void
+    public function seeText(array $texts): void
     {
-        $this->waitForText($actionText);
-        parent::see($actionText);
-        $this->enableImplicitWait();
+        $this->waitForText($texts[0]);
+        $exception =[];
+        foreach ($texts as $text){
+            try {
+//                $this->waitForText($text);
+                parent::see($text);
+            } catch (\Exception $e) {
+                $exception[] = $e->getMessage();
+            }
+        }
+        if (count($exception) > 0) {
+            $errorMessage = implode(PHP_EOL, $exception);
+            $this->fail('Some texts are missing: ' . $errorMessage . PHP_EOL);
+        }
     }
-
     public function seeTextCaseInsensitive($actionText, $selector): void
     {
         $elementText = $this->grabTextFrom($selector);
@@ -184,14 +194,13 @@ class AcceptanceHelper extends WebDriver
     public function checkElement($element): bool
     {
         try {
-            $this->waitForElement($element);
+//            $this->waitForElement($element);
             $this->seeElementInDOM($element);
            return true;
         } catch (\Exception $e) {
             return false;
         }
     }
-
     /**
      * ```
      * This will help to check if the string is present or not.
@@ -213,6 +222,8 @@ class AcceptanceHelper extends WebDriver
         if (count($exception) > 0) {
             $errorMessage = implode(PHP_EOL, $exception);
             $this->fail('Some Data missing: ' . $errorMessage. PHP_EOL);
+        }else{
+            echo "Hurray......! All data found.";
         }
     }
 

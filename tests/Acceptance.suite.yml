@@ -5,9 +5,8 @@ extensions:
     enabled:
         - Codeception\Extension\RunProcess:
               0: chromedriver --url-base=wd/hub
-              sleep: 1
+              sleep: 0
               wait: 15
-
 modules:
     enabled:
         - Tests\Support\Helper\Acceptance\AcceptanceHelper:

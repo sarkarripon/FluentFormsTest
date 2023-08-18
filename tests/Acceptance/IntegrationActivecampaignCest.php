@@ -1,6 +1,4 @@
 <?php
-
-
 namespace Tests\Acceptance;
 
 use Codeception\Attribute\Group;

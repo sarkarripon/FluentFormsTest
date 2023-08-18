@@ -14,8 +14,8 @@ trait Zapier
         $this->takeMeToConfigurationPage($I);
         $I->clickOnText("Zapier","Conditional Confirmations");
         $I->clickOnText("Add Webhook","Zapier Integration");
-        $I->fillField("(//input[@type='text'])[1]","Zapier");
-        $I->fillField("(//input[@type='text'])[2]",getenv("ZAPIER_WEBHOOK_URL"));
+        $I->filledField("(//input[@type='text'])[1]","Zapier");
+        $I->filledField("(//input[@type='text'])[2]",getenv("ZAPIER_WEBHOOK_URL"));
         $I->clicked(FluentFormsSelectors::saveFeed);
 
     }

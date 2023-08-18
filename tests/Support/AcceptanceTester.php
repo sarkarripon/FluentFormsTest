@@ -32,6 +32,9 @@ class AcceptanceTester extends \Codeception\Actor
     use _generated\AcceptanceTesterActions;
 
     /**
+     * ```
+     * This function will check if the element is present or not first, then reload once if not found.
+     * ```
      * @author Sarkar Ripon
      * @param $selector
      * @return void
@@ -45,6 +48,14 @@ class AcceptanceTester extends \Codeception\Actor
         }
     }
 
+    /**
+     * ```
+     * This function will check the Success message
+     * ```
+     * @author Sarkar Ripon
+     * @param $message
+     * @return void
+     */
     public function seeSuccess($message): void
     {
         $this->wait(2);
@@ -53,6 +64,9 @@ class AcceptanceTester extends \Codeception\Actor
     }
 
     /**
+     * ```
+     * This function will install the plugin from the Data directory.
+     * ```
      * @author Sarkar Ripon
      * @param string $pluginName
      * @return void
@@ -72,8 +86,10 @@ class AcceptanceTester extends \Codeception\Actor
     }
 
     /**
-     * @author Sarkar Ripon
+     * ```
      * Activate FluentForm Pro plugin
+     * ```
+     * @author Sarkar Ripon
      * @return void
      */
     public function activateFluentFormPro(): void
@@ -94,9 +110,11 @@ class AcceptanceTester extends \Codeception\Actor
     }
 
     /**
+     * ```
+     * Remove FluentForm Pro license
+     * ```
      * @author Sarkar Ripon
      * @return void
-     * Remove FluentForm Pro license
      */
     public function removeFluentFormProLicense():void
     {
@@ -104,10 +122,13 @@ class AcceptanceTester extends \Codeception\Actor
         $this->see('Enter your license key', AccepTestSelec::licenseBtn);
     }
     /**
+     * ```
+     * Uninstall plugin
+     * ```
      * @author Sarkar Ripon
      * @param string $pluginSlug
      * @return void
-     * Uninstall plugin
+     *
      */
     public function uninstallPlugin(string $pluginSlug):void
     {
@@ -123,8 +144,10 @@ class AcceptanceTester extends \Codeception\Actor
     }
 
     /**
-     * @return void
+     * ```
      * This function will delete all the existing forms
+     * ```
+     * @return void
      * @author Sarkar Ripon
      */
     public function deleteExistingForms(): void
@@ -145,9 +168,11 @@ class AcceptanceTester extends \Codeception\Actor
         }
     }
     /**
+     * ```
+     * Create a new form
+     * ```
      * @author Sarkar Ripon
      * @return void
-     * Create a new form
      */
     public function initiateNewForm(): void
     {
@@ -157,22 +182,25 @@ class AcceptanceTester extends \Codeception\Actor
     }
 
     /**
+     * ```
+     * This function will rename the form
+     * ```
      * @author Sarkar Ripon
      * @param $formName
      * @return void
-     * This function will rename the form
      */
     public function renameForm($formName):void
     {
-        $this->waitForElement(RenameFormSelec::rename, 10);
+        $this->waitForElementVisible(RenameFormSelec::rename, 10);
         $this->click(RenameFormSelec::rename);
         $this->fillField(RenameFormSelec::renameField, $formName);
         $this->click("Rename", RenameFormSelec::renameBtn);
     }
 
     /**
-     *
+     *```
      * This function will delete all the existing pages
+     * ```
      * @author Sarkar Ripon
      * @return void
      */
@@ -191,10 +219,12 @@ class AcceptanceTester extends \Codeception\Actor
     }
 
     /**
+     * ```
+     * This function will create a new page with title and content
+     * ```
      * @param $title
      * @param $content
      * @return string
-     * This function will create a new page with title and content
      * @author Sarkar Ripon
      */
     public function createNewPage($title, $content=null): string
@@ -219,6 +249,9 @@ class AcceptanceTester extends \Codeception\Actor
     }
 
     /**
+     * ```
+     * This function will click on different field from different section.
+     * ```
      * @author Sarkar Ripon
      * @param $data
      * @return void
@@ -240,6 +273,16 @@ class AcceptanceTester extends \Codeception\Actor
             }
         }
     }
+
+    /**
+     * ```
+     * This function will check API status from the entries page
+     * ```
+     * @author Sarkar Ripon
+     * @param $text
+     * @param $selector
+     * @return string
+     */
     public function checkAPICallStatus($text, $selector):string
     {
         $this->wait(5);
