@@ -1,4 +1,4 @@
 !.gitignore
 .env
 /vendor/
-.idea/
+.idea
