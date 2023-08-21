@@ -26,13 +26,12 @@ class AcceptanceHelper extends WebDriver
      */
     public function wpLogin(): void
     {
-//        $this->env();
-
         $this->amOnPage('/wp-login.php');
         $this->wait(1);
         $this->fillField('Username',getenv('WORDPRESS_USERNAME'));
         $this->fillField('Password',getenv('WORDPRESS_PASSWORD'));
         $this->click('Log In');
+        $this->saveSessionSnapshot("wpLogin");
     }
 
     /**
