@@ -16,7 +16,7 @@ trait Zapier
         $I->clickOnText("Add Webhook","Zapier Integration");
         $I->filledField("(//input[@type='text'])[1]","Zapier");
         $I->filledField("(//input[@type='text'])[2]",getenv("ZAPIER_WEBHOOK_URL"));
-        $I->clicked(FluentFormsSelectors::saveFeed);
+        $I->clicked(FluentFormsSelectors::saveButton("Save Feed"));
 
     }
 

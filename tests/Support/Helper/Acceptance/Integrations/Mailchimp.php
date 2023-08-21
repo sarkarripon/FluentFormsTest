@@ -46,7 +46,7 @@ trait Mailchimp
         if ($dynamicTag=='yes' and !empty($dynamicTag)) {
             $this->mapDynamicTag($I,'yes',$dynamicTag);
         }
-        $I->clickWithLeftButton(FluentFormsSelectors::saveFeed);
+        $I->clickWithLeftButton(FluentFormsSelectors::saveButton("Save Feed"));
         $I->seeSuccess('Integration successfully saved');
         $I->wait(2);
     }

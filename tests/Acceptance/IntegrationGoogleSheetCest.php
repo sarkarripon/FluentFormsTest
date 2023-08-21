@@ -15,8 +15,8 @@ class IntegrationGoogleSheetCest
     use IntegrationHelper, Googlesheet, ShortCodes;
     public function _before(AcceptanceTester $I): void
     {
-        $I->env();
-        $I->wpLogin();
+        $I->loadDotEnvFile();
+        $I->loginWordpress();
     }
     #[Group('Integration')]
     public function test_google_sheet_push_data(AcceptanceTester $I): void

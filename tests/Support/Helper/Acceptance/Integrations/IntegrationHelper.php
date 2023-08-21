@@ -112,14 +112,15 @@ trait IntegrationHelper
 
     public function initiateIntegrationConfiguration(AcceptanceTester $I, int $integrationPositionNumber): void
     {
+        $I->retry(4,200);
         $I->amOnPage(FluentFormsAddonsSelectors::integrationsPage);
-        $isEnabled = $I->grabTextFrom("(//div[contains(@class,'card_footer_group')])[{$integrationPositionNumber}]");
+        $isEnabled = $I->retryGrabTextFrom("(//div[contains(@class,'card_footer_group')])[{$integrationPositionNumber}]");
         if ($isEnabled === "Disabled") {
-            $I->clickWithLeftButton("(//span[contains(@class,'el-switch__core')])[{$integrationPositionNumber}]");
+            $I->retryClickWithLeftButton("(//span[contains(@class,'el-switch__core')])[{$integrationPositionNumber}]");
         }
-        $gearIcon = $I->checkElement("(//div[@class='ff_card_footer'])[{$integrationPositionNumber}]//i[@class='el-icon-setting']");
+        $gearIcon = $I->retryCheckElement("(//div[@class='ff_card_footer'])[{$integrationPositionNumber}]//i[@class='el-icon-setting']");
         if ($gearIcon) {
-            $I->clickWithLeftButton("(//DIV[contains(@class,'card_footer_group')])[{$integrationPositionNumber}]//I[contains(@class,'el-icon-setting')]");
+            $I->retryClickWithLeftButton("(//DIV[contains(@class,'card_footer_group')])[{$integrationPositionNumber}]//I[contains(@class,'el-icon-setting')]");
         }
     }
 

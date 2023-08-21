@@ -32,7 +32,7 @@ trait Trello
         $I->filledField(FluentFormsSelectors::commonFields(
             'Card Content','Select a Field or Type Custom value'),"{inputs.description_1}");
 
-        $I->clicked(FluentFormsSelectors::saveFeed);
+        $I->clicked(FluentFormsSelectors::saveButton("Save Feed"));
         $I->seeSuccess("Integration successfully saved");
     }
     public function configureTrello(AcceptanceTester $I, $integrationPositionNumber): void

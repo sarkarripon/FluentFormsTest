@@ -106,12 +106,16 @@ class FluentFormsSelectors
     //common
     const mapEmailDropdown = "//div[@class='el-select']//i[contains(@class,'el-select__caret') or //input[@placeholder='Select a Field']]";
     const mapEmail = "//span[normalize-space()='Email']";
-    const saveFeed = "//span[normalize-space()='Save Feed' and //button[contains(@class,'el-button--primary')]]";
+//    const saveButton("Save Feed") = "//span[normalize-space()='Save Feed' and //button[contains(@class,'el-button--primary')]]";
     const integrationFeed = "(//div[contains(@class, 'ff_card_head_group')] | //button[@title='Show Video'])[1]";
     const feedName = "//input[@placeholder='Your Feed Name']";
     const SegmentDropDown = "(//i[contains(@class,'el-select__caret el-input__icon el-icon-arrow-up')])[1]";
     const Segment = "(//div[@x-placement='bottom-start']//ul[contains(@class,'el-scrollbar__view el-select-dropdown__list')])[1]";
 
+    public static function saveButton($buttonText): string
+    {
+        return "//span[normalize-space()='$buttonText' and //button[contains(@class,'el-button--primary')]]";
+    }
     public static function commonFields($referenceText, $actionText ): string
     {
         return "(//label[normalize-space()='$referenceText']/following::input[@placeholder='$actionText'] | //textarea[@placeholder='$actionText'])[1]";
@@ -160,7 +164,7 @@ class FluentFormsSelectors
     {
         return "(//input[@placeholder='Enter a value'])[{$index}]";
     }
-    public static function enableOption($text): string
+    public static function radioButton($text): string
     {
         return "(//span[normalize-space()='$text']/preceding-sibling::span[contains(@class,'el-checkbox__input')]//span[contains(@class,'el-checkbox__inner')])[1]";
     }

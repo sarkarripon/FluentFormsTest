@@ -7,7 +7,7 @@ use Dotenv;
 
 class AcceptanceHelper extends WebDriver
 {
-    public function env(): void
+    public function loadDotEnvFile(): void
     {
         $root = $_SERVER['PWD'];
         $repository = Dotenv\Repository\RepositoryBuilder::createWithNoAdapters()
@@ -15,7 +15,6 @@ class AcceptanceHelper extends WebDriver
             ->addWriter(Dotenv\Repository\Adapter\PutenvAdapter::class)
             ->immutable()
             ->make();
-
         $dotenv = Dotenv\Dotenv::create($repository, $root);
         $dotenv->load();
     }
@@ -24,7 +23,7 @@ class AcceptanceHelper extends WebDriver
      * @return void
      * Login to WordPress
      */
-    public function wpLogin(): void
+    public function loginWordpress(): void
     {
         $this->amOnPage('/wp-login.php');
         $this->wait(1);
@@ -150,31 +149,7 @@ class AcceptanceHelper extends WebDriver
         element.value = '$value';");
     }
 
-    /**
-     * @param string $actionText
-     * @return void
-     * @throws Exception
-     * @author Sarkar Ripon
-     * This function will wait for the element until it can be seen.
-     * This is a workaround for the issue of Codeception not waiting for the element to be visible before seen it.
-     */
-    public function seeText(array $texts): void
-    {
-        $this->waitForText($texts[0]);
-        $exception =[];
-        foreach ($texts as $text){
-            try {
-//                $this->waitForText($text);
-                parent::see($text);
-            } catch (\Exception $e) {
-                $exception[] = $e->getMessage();
-            }
-        }
-        if (count($exception) > 0) {
-            $errorMessage = implode(PHP_EOL, $exception);
-            $this->fail('Some texts are missing: ' . $errorMessage . PHP_EOL);
-        }
-    }
+
     public function seeTextCaseInsensitive($actionText, $selector): void
     {
         $elementText = $this->grabTextFrom($selector);

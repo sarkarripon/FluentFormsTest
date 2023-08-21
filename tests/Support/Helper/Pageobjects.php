@@ -12,7 +12,7 @@ abstract class Pageobjects
     protected AcceptanceTester $I;
 
     /**
-     * Pageobjects constructor.
+     * Page objects constructor.
      * @param AcceptanceTester $I Actor
      *
      */

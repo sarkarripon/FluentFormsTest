@@ -32,7 +32,7 @@ trait Googlesheet
             $fieldCounter++;
         }
         $I->click(FluentFormsSelectors::removeMappingField('Spreadsheet Fields',$fieldCounter));
-        $I->click(FluentFormsSelectors::saveFeed);
+        $I->click(FluentFormsSelectors::saveButton("Save Feed"));
     }
     public function configureGoogleSheet(AcceptanceTester $I, $integrationPositionNumber): void
     {

@@ -1,6 +1,7 @@
 <?php
 namespace Tests\Acceptance;
 
+use Codeception\Attribute\Group;
 use Tests\Support\AcceptanceTester;
 use Tests\Support\Helper\Acceptance\Integrations\Googlesheet;
 use Tests\Support\Helper\Acceptance\Integrations\IntegrationHelper;
@@ -12,8 +13,9 @@ class IntegrationZapierCest
     use IntegrationHelper, Zapier, Googlesheet;
     public function _before(AcceptanceTester $I): void
     {
-        $I->env(); $I->wpLogin();
+        $I->loadDotEnvFile(); $I->loginWordpress();
     }
+    #[Group('Integration')]
     public function test_zapier_push_data(AcceptanceTester $I): void
     {
         $this->prepareForm($I,__FUNCTION__, ['generalFields' => ['email', 'nameFields']]);

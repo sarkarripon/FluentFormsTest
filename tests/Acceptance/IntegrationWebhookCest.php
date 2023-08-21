@@ -3,35 +3,38 @@
 
 namespace Tests\Acceptance;
 
+use Codeception\Attribute\Group;
 use Tests\Support\AcceptanceTester;
+use Tests\Support\Helper\Acceptance\Integrations\IntegrationHelper;
+use Tests\Support\Helper\Acceptance\Integrations\Webhook;
+use Tests\Support\Selectors\FieldSelectors;
 
 class IntegrationWebhookCest
 {
-    public function _before(AcceptanceTester $I)
+    use IntegrationHelper, Webhook;
+    public function _before(AcceptanceTester $I): void
     {
+        $I->loadDotEnvFile();
+        $I->loginWordpress();
     }
-    public function test_webhook_push_data(AcceptanceTester $I)
+    #[Group('Integration')]
+    public function test_webhook_push_data(AcceptanceTester $I): void
     {
-        $I->amOnUrl("https://webhook.site/#!/13284a9f-30b5-457f-9952-c158c10a194d/5dcc21df-09ea-4cb1-a425-dd7b20552bbc/1");
+        $this->prepareForm($I,__FUNCTION__, ['generalFields' => ['email', 'nameFields']]);
+        $this->configureWebhook($I,6);
+        $this->preparePage($I,__FUNCTION__);
 
-        $exception = [];
-        $texts =array('lyle','Gikysyfiw@mailinator.com');
-        for ($i = 0; $i < 3; $i++) {
-            foreach ($texts as $text){
-                try {
-                    $I->retryClicked("(//*[@class='select ng-binding'])[1]");
-                    $I->seeText(array($text));
-                    break;
-                }catch (\Exception $e){
-                    $exception[] = $e->getMessage();
-                    $I->wait(15,"");
-                    $I->reloadPage();
-                }
-            }
+        $fillAbleDataArr = FieldSelectors::getFieldDataArray(['email', 'first_name', 'last_name']);
+        foreach ($fillAbleDataArr as $selector => $value) {
+            $I->fillByJS($selector, $value);
         }
-        if (count($exception) > 0) {
-            $errorMessage = implode(PHP_EOL, $exception);
-            $I->fail('Some texts are missing: ' . $errorMessage . PHP_EOL);
-        }
+        $I->clicked(FieldSelectors::submitButton);
+
+        $texts =array(
+            $fillAbleDataArr["//input[contains(@id,'email')]"],
+            $fillAbleDataArr["//input[contains(@id,'_first_name_')]"],
+            $fillAbleDataArr["//input[contains(@id,'_last_name_')]"],
+        );
+        $this->fetchWebhookData($I,$texts);
     }
 }

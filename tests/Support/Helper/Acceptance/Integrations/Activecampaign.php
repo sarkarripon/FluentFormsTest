@@ -20,7 +20,7 @@ trait Activecampaign
                 $I->fillField(FluentFormsSelectors::commonFields($fieldLabel,'Select a Field or Type Custom value'), $fieldValue);
             }
         }
-        $I->clicked(FluentFormsSelectors::saveFeed);
+        $I->clicked(FluentFormsSelectors::saveButton("Save Feed"));
     }
 
     public function configureActivecampaign(AcceptanceTester $I, $integrationPositionNumber): void

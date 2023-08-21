@@ -82,7 +82,7 @@ trait Platformly
             $I->click(FluentFormsSelectors::removeConditionalField($fieldCounter));
         }
 
-        $I->clickWithLeftButton(FluentFormsSelectors::saveFeed);
+        $I->clickWithLeftButton(FluentFormsSelectors::saveButton("Save Feed"));
         $I->wait(2);
     }
 

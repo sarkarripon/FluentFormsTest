@@ -13,8 +13,8 @@ class IntegrationActivecampaignCest
     use IntegrationHelper,Activecampaign,ShortCodes;
     public function _before(AcceptanceTester $I): void
     {
-        $I->env();
-        $I->wpLogin();
+        $I->loadDotEnvFile();
+        $I->loginWordpress();
     }
 
     #[Group('Integration')]

@@ -15,8 +15,8 @@ class PreCheckCest
 
     public function _before(AcceptanceTester $I): void
     {
-        $I->env();
-        $I->wpLogin();
+        $I->loadDotEnvFile();
+        $I->loginWordpress();
     }
 
 

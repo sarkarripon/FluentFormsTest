@@ -12,8 +12,8 @@ class IntegrationZohoCest
     use IntegrationHelper, Zoho;
     public function _before(AcceptanceTester $I): void
     {
-        $I->env();
-        $I->wpLogin();
+        $I->loadDotEnvFile();
+        $I->loginWordpress();
     }
     public function test_zoho_push_data(AcceptanceTester $I)
     {

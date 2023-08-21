@@ -17,8 +17,8 @@ class IntegrationPlatformlyCest
     use IntegrationHelper, Platformly;
     public function _before(AcceptanceTester $I): void
     {
-        $I->env();
-        $I->wpLogin();
+        $I->loadDotEnvFile();
+        $I->loginWordpress();
     }
     /**
      * @dataProvider \Tests\Support\Factories\DataProvider\FormData::fieldData
