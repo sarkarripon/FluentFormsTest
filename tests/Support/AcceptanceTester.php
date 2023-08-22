@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Tests\Support;
 
+use Codeception\Exception\ModuleException;
 use Codeception\Lib\Actor\Shared\Retry;
 use Exception;
 use Tests\Support\Selectors\AccepTestSelec;
@@ -199,8 +200,8 @@ class AcceptanceTester extends \Codeception\Actor
             do {
                 $this->wait(1);
                 $this->moveMouseOver(FluentFormsSelectors::mouseHoverMenu);
-                $this->clicked(FluentFormsSelectors::deleteBtn);
-                $this->clicked(FluentFormsSelectors::confirmBtn);
+                $this->retryClicked(FluentFormsSelectors::deleteBtn);
+                $this->retryClicked(FluentFormsSelectors::confirmBtn);
                 $this->reloadPage();
             } while ($this->tryToClick(FluentFormsSelectors::deleteBtn) == true);
         }
@@ -261,23 +262,24 @@ class AcceptanceTester extends \Codeception\Actor
      * This function will create a new page with title and content
      * ```
      * @param $title
-     * @param $content
+     * @param $formID
      * @return string
      * @author Sarkar Ripon
      */
-    public function createNewPage($title, $content = null): string
+    public function createNewPage(string $title): string
     {
         global $pageUrl;
-        $this->amOnPage(FluentFormsSelectors::fFormPage);
-        if (!isset($content)) {
+        global $formID;
+        if (isset($formID) and !empty($formID)) {
+            $this->amOnPage(FluentFormsSelectors::fFormPage);
             $this->waitForElement(NewPageSelectors::formShortCode, 10);
-            $content = $this->grabTextFrom(NewPageSelectors::formShortCode);
+            $formID = $this->grabTextFrom(NewPageSelectors::formShortCode);
         }
         $this->amOnPage(GlobalPageSelec::newPageCreationPage);
         $this->clicked(NewPageSelectors::addNewPage);
         $this->wait(1);
         $this->executeJS(sprintf(NewPageSelectors::jsForTitle, $title));
-        $this->executeJS(sprintf(NewPageSelectors::jsForContent, $content));
+        $this->executeJS(sprintf(NewPageSelectors::jsForContent, $formID));
         $this->clicked(NewPageSelectors::publishBtn);
         $this->waitForElementClickable(NewPageSelectors::confirmPublish);
         $this->clicked(NewPageSelectors::confirmPublish);
@@ -356,6 +358,7 @@ class AcceptanceTester extends \Codeception\Actor
             }
         }
     }
+
 
 
 }

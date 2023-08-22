@@ -12,7 +12,6 @@ modules:
         - Tests\Support\Helper\Acceptance\AcceptanceHelper:
         - \Codeception\Module\Asserts:
 #        - Tests\EnvironmentLoader:
-
 #        - Db:
 
     config:

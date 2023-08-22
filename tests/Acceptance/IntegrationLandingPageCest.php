@@ -10,21 +10,18 @@ use Tests\Support\Helper\Acceptance\Integrations\LandingPage;
 class IntegrationLandingPageCest
 {
     use IntegrationHelper, LandingPage;
-    public function _before(AcceptanceTester $I)
+    public function _before(AcceptanceTester $I): void
     {
-        $I->loadDotEnvFile();
-        $I->loginWordpress();
+        $I->loadDotEnvFile(); $I->loginWordpress();
     }
 
-    public function test_landing_page(AcceptanceTester $I)
+    public function test_landing_page(AcceptanceTester $I): void
     {
         global $landingPageUrl;
         $this->prepareForm($I, __FUNCTION__, ['generalFields' => ['email', 'nameFields']]);
         $this->configureLandingPage($I,2);
         $I->amOnUrl($landingPageUrl);
         $I->dontSee(getenv("WORDPRESS_USERNAME"));
-
-
     }
 
 

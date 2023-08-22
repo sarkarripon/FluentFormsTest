@@ -13,6 +13,7 @@ namespace Tests\Support\Factories\DataProvider;
  * phone, Phone, PHONE, phone_number, Phone_Number, PHONE_NUMBER, phone_number, Phone_Number
  * birthday, Birthday, BIRTHDAY, birth_date, Birth_Date, BIRTH_DATE, birthdate, Birthdate, BIRTHDATE, Birth_day, BIRTH_DAY, birth_day, Birth_Day
  * inputText , InputText, INPUTTEXT, input_text, Input_Text, INPUT_TEXT, input-text, Input-Text, INPUT-TEXT
+ * password, Password, PASSWORD, pass_word, Pass_Word, PASS_WORD, pass-word, Pass-Word, PASS-WORD, pass, Pass, PASS
  */
 
 trait ShortCodes
@@ -26,6 +27,7 @@ trait ShortCodes
     private string $phoneNumber = '\b[pP][hH][oO][nN][eE][ _-]?[nN]?[uU]?[mM]?[bB]?[eE]?[rR]?\b';
     private string $birthDate = '\b[bB][iI][rR][tT][hH][-_]?[dD][aA][yY]?[-_]?[bB]?[iI]?[rR]?[tT]?[hH]?[dD]?[aA]?[tT]?[eE]?\b';
     private string $inputText = '\b[iI][nN][pP][uU][tT][ _-]?[tT]?[eE]?[xX]?[tT]?\b';
+    private string $password = '\b[pP][aA][sS]{2}[_-]?[wW]?[oO]?[rR]?[dD]?[-_]?\b';
 
     public function shortCodePool(): array
     {
@@ -39,6 +41,7 @@ trait ShortCodes
             $this->birthDate => '{inputs.datetime}',
             $this->phoneNumber => '{inputs.phone}',
             $this->inputText => '{inputs.input_text}',
+            $this->password => '{inputs.password}',
         ];
     }
 

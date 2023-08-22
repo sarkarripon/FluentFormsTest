@@ -85,18 +85,21 @@ trait IntegrationHelper
      * coupon
      * ```
      */
-    public function prepareForm(AcceptanceTester $I, string $formName, array $requiredField): void
+    public function prepareForm(AcceptanceTester $I, string $formName, array $requiredField)
     {
+        global $formID;
         $isDelete = getenv("EXISTING_FORM_DELETE");
         if ($isDelete === "yes") {
             $I->deleteExistingForms();
         }
         $I->initiateNewForm();
         $I->createFormField($requiredField);
+        $formID = $I->grabTextFrom("button[title='Click to Copy']");
         $I->clicked(FluentFormsSelectors::saveForm);
         $I->seeSuccess('Form created successfully.');
         $I->renameForm($formName);
         $I->seeSuccess('Form renamed successfully.');
+        return $formID;
     }
 
     public function preparePage(AcceptanceTester $I, string $title = null): void

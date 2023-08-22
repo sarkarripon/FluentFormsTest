@@ -1,34 +1,34 @@
 <?php
 
-namespace Tests\Support\Helper\Acceptance;
-
-use MailchimpMarketing\ApiClient;
-use Tests\Support\Helper\Pageobjects;
-
-class DataFetcher extends Pageobjects
-{
-    public function fetchAPIData(string $integration, $email): void
-    {
-        $response = "";
-        if($integration == "mailchimp") {
-            $response = $this->fetchMailchimpData($email);
-        }elseif ($integration == "platformly") {
-            $response = $this->fetchPlatformlyData($email);
-        }
-
-
-    }
-
-    public static function fetchMailchimpData($email)
-    {
-        $client = new ApiClient();
-        $client->setConfig([
-            'apiKey' => getenv('MAILCHIMP_API_KEY'),
-            'server' => getenv('MAILCHIMP_SERVER_PREFIX')
-        ]);
-
-        return $client->lists->getListMember(getenv('MAILCHIMP_AUDIENCE_ID'), hash('md5', $email));
-    }
+//namespace Tests\Support\Helper\Acceptance;
+//
+//use MailchimpMarketing\ApiClient;
+//use Tests\Support\Helper\Pageobjects;
+//
+//class DataFetcher extends Pageobjects
+//{
+//    public function fetchAPIData(string $integration, $email): void
+//    {
+//        $response = "";
+//        if($integration == "mailchimp") {
+//            $response = $this->fetchMailchimpData($email);
+//        }elseif ($integration == "platformly") {
+//            $response = $this->fetchPlatformlyData($email);
+//        }
+//
+//
+//    }
+//
+//    public static function fetchMailchimpData($email)
+//    {
+//        $client = new ApiClient();
+//        $client->setConfig([
+//            'apiKey' => getenv('MAILCHIMP_API_KEY'),
+//            'server' => getenv('MAILCHIMP_SERVER_PREFIX')
+//        ]);
+//
+//        return $client->lists->getListMember(getenv('MAILCHIMP_AUDIENCE_ID'), hash('md5', $email));
+//    }
 
 //    public function fetchPlatformlyData($email): string
 //    {
@@ -71,4 +71,4 @@ class DataFetcher extends Pageobjects
 
 
 
-}
+//}
