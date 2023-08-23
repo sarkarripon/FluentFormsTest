@@ -266,20 +266,19 @@ class AcceptanceTester extends \Codeception\Actor
      * @return string
      * @author Sarkar Ripon
      */
-    public function createNewPage(string $title): string
+    public function createNewPage(string $title, string $content= null): string
     {
         global $pageUrl;
-        global $formID;
-        if (isset($formID) and !empty($formID)) {
+        if (empty($content)) {
             $this->amOnPage(FluentFormsSelectors::fFormPage);
             $this->waitForElement(NewPageSelectors::formShortCode, 10);
-            $formID = $this->grabTextFrom(NewPageSelectors::formShortCode);
+            $content = $this->grabTextFrom(NewPageSelectors::formShortCode);
         }
         $this->amOnPage(GlobalPageSelec::newPageCreationPage);
         $this->clicked(NewPageSelectors::addNewPage);
         $this->wait(1);
         $this->executeJS(sprintf(NewPageSelectors::jsForTitle, $title));
-        $this->executeJS(sprintf(NewPageSelectors::jsForContent, $formID));
+        $this->executeJS(sprintf(NewPageSelectors::jsForContent, $content));
         $this->clicked(NewPageSelectors::publishBtn);
         $this->waitForElementClickable(NewPageSelectors::confirmPublish);
         $this->clicked(NewPageSelectors::confirmPublish);

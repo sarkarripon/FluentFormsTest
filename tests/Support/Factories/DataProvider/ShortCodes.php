@@ -4,7 +4,7 @@ namespace Tests\Support\Factories\DataProvider;
 
 /**
  * possible patterns:
- *
+ *```
  * first name, First Name, FANME, first_name,First_Name, fname
  * last name, Last Name, LANME, last_name, Last_Name
  * address, Address, ADDRESS
@@ -14,6 +14,7 @@ namespace Tests\Support\Factories\DataProvider;
  * birthday, Birthday, BIRTHDAY, birth_date, Birth_Date, BIRTH_DATE, birthdate, Birthdate, BIRTHDATE, Birth_day, BIRTH_DAY, birth_day, Birth_Day
  * inputText , InputText, INPUTTEXT, input_text, Input_Text, INPUT_TEXT, input-text, Input-Text, INPUT-TEXT
  * password, Password, PASSWORD, pass_word, Pass_Word, PASS_WORD, pass-word, Pass-Word, PASS-WORD, pass, Pass, PASS
+ * ```
  */
 
 trait ShortCodes

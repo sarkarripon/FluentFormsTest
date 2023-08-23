@@ -87,19 +87,19 @@ trait IntegrationHelper
      */
     public function prepareForm(AcceptanceTester $I, string $formName, array $requiredField)
     {
-        global $formID;
+//        global $formID;
         $isDelete = getenv("EXISTING_FORM_DELETE");
         if ($isDelete === "yes") {
             $I->deleteExistingForms();
         }
         $I->initiateNewForm();
         $I->createFormField($requiredField);
-        $formID = $I->grabTextFrom("button[title='Click to Copy']");
+//        $formID = $I->grabTextFrom("button[title='Click to Copy']");
         $I->clicked(FluentFormsSelectors::saveForm);
         $I->seeSuccess('Form created successfully.');
         $I->renameForm($formName);
         $I->seeSuccess('Form renamed successfully.');
-        return $formID;
+//        return $formID;
     }
 
     public function preparePage(AcceptanceTester $I, string $title = null): void
@@ -144,16 +144,22 @@ trait IntegrationHelper
         $I->clicked(FluentFormsSelectors::searchResult);
     }
 
-    public function mapEmailInCommon(AcceptanceTester $I, $feedName): void
+    public function mapEmailInCommon(AcceptanceTester $I, $feedName, array $extraListOrService=null): void
     {
         $I->waitForElementClickable(FluentFormsSelectors::integrationFeed, 20);
         $I->fillByJS(FluentFormsSelectors::feedName, $feedName);
 
-        $I->clicked(FluentFormsSelectors::SegmentDropDown);
-        $I->clicked(FluentFormsSelectors::Segment);
-
-        $I->clickByJS(FluentFormsSelectors::mapEmailDropdown);
-        $I->clickByJS(FluentFormsSelectors::mapEmail);
+        if (empty($extraListOrService)) {
+            $I->clicked(FluentFormsSelectors::SegmentDropDown);
+            $I->clicked(FluentFormsSelectors::Segment);
+            $I->clickByJS(FluentFormsSelectors::mapEmailDropdown);
+            $I->clickByJS(FluentFormsSelectors::mapEmail);
+        }else{
+            foreach ($extraListOrService as $key => $value) {
+                $I->clicked(FluentFormsSelectors::dropdown($key));
+                $I->clickOnText($value, $key);
+            }
+        }
     }
 
     /**

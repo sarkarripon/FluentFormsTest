@@ -17,8 +17,7 @@ class IntegrationMailchimpCest
     use IntegrationHelper, Mailchimp, ShortCodes;
     public function _before(AcceptanceTester $I): void
     {
-        $I->loadDotEnvFile();
-        $I->loginWordpress();
+        $I->loadDotEnvFile(); $I->loginWordpress();
     }
 
     /**

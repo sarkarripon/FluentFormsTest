@@ -17,6 +17,7 @@ class FormData
     public static function fieldData(): array
     {
         $faker = \Faker\Factory::create();
+        $password = "#".$faker->word().$faker->randomNumber(2).$faker->word()."@";
 
         return [
             [
@@ -31,6 +32,9 @@ class FormData
                 'country' => self::countryName(),
                 'phone' => $faker->tollFreePhoneNumber(),
                 'dateTime' => $faker->date($format = 'Y-m-d', $max = 'now'),
+                'password' => $password,
+                'reTypePassword' => $password,
+                'userName' => $faker->userName(),
             ]
         ];
     }

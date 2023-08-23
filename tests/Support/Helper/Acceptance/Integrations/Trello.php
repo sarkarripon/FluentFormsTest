@@ -9,7 +9,7 @@ use Unirest;
 
 trait Trello
 {
-    use IntegrationHelper;
+    use IntegrationHelper, UserRegistration;
 
     public function mapTrelloField(AcceptanceTester $I): void
     {
@@ -87,6 +87,11 @@ trait Trello
             $title = $card->name;
         }
         return ['title'=> $title, 'cardContent' => $cardContent];
+    }
+
+    public function someMethod(): void
+    {
+        $this->someMethods();
     }
 
 }

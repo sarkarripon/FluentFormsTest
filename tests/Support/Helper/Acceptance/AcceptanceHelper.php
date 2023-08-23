@@ -18,10 +18,12 @@ class AcceptanceHelper extends WebDriver
         $dotenv = Dotenv\Dotenv::create($repository, $root);
         $dotenv->load();
     }
+
     /**
-     * @author Sarkar Ripon
      * @return void
      * Login to WordPress
+     * @throws Exception
+     * @author Sarkar Ripon
      */
     public function loginWordpress(string $username=null, string $password=null): void
     {
@@ -32,6 +34,8 @@ class AcceptanceHelper extends WebDriver
         $this->fillField('Username',$username);
         $this->fillField('Password',$password);
         $this->click('Log In');
+        $this->waitForText('Dashboard',5);
+        $this->see("Dashboard");
         $this->saveSessionSnapshot("loginWordpress");
 
     }
@@ -78,13 +82,13 @@ class AcceptanceHelper extends WebDriver
      */
     public function filledField($selector, $value): void
     {
-        $this->performOn($selector, function (WebDriver $I) use ($selector, $value) {
-            $I->moveMouseOver($selector);
-            $I->fillField($selector, $value);
-        });
-//        $this->waitForElementVisible($selector);
-//        $this->clickWithLeftButton($selector);
-//        parent::fillField($selector,$value);
+//        $this->performOn($selector, function (WebDriver $I) use ($selector, $value) {
+//            $I->moveMouseOver($selector);
+//            $I->fillField($selector, $value);
+//        });
+        $this->waitForElementVisible($selector);
+        $this->clickWithLeftButton($selector);
+        parent::fillField($selector,$value);
     }
 
     public function clickOnText(string $actionText, string $followingText =null, $index=1): void

@@ -17,6 +17,10 @@ class FieldSelectors
     const country = "//select[contains(@id,'country_')]";
     const phone = "//input[contains(@id,'phone')]";
     const dateTime = "//input[contains(@id,'_datetime')]";
+    const password = "//input[contains(@id,'password')]";
+    const reTypePassword = "//input[contains(@id,'password_')]";
+
+
     const submitButton = "//button[normalize-space()='Submit Form']";
 
     private static array $keyMap = [
@@ -31,6 +35,8 @@ class FieldSelectors
         'country' => self::country,
         'phone' => self::phone,
         'dateTime' => self::dateTime,
+        'password' => self::password,
+        'reTypePassword' => self::reTypePassword,
     ];
 
     public static function generalFieldDataPool(): array
