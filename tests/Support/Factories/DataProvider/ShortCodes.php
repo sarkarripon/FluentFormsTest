@@ -5,6 +5,7 @@ namespace Tests\Support\Factories\DataProvider;
 /**
  * possible patterns:
  *```
+ * email , Email, EMAIL, email_address, Email_Address, EMAIL_ADDRESS, email-address, Email-Address, EMAIL-ADDRESS, emailaddress, Emailaddress, EMAILADDRESS
  * first name, First Name, FANME, first_name,First_Name, fname
  * last name, Last Name, LANME, last_name, Last_Name
  * address, Address, ADDRESS
@@ -19,7 +20,7 @@ namespace Tests\Support\Factories\DataProvider;
 
 trait ShortCodes
 {
-    private string $email = '\b[eE][mM][aA][iI][lL]\b|\b[eE][mM][aA][iI][lL][ _-]?[aA][dD][dD][rR][eE][sS][sS]\b';
+    private string $email = '\b[eE][mM][aA][iI][lL](_[- ])?([aA][dD][dD][rR][eE][sS][sS]|[_ ]?[aA][dD][dD][rR][eE][sS][sS])?\b';
     private string $firstName = '\b[Ff]([A-Za-z]+)[ _-]?[Nn]?([A-Za-z]*)[ _-]?[Aa]?([A-Za-z]*)[ _-]?[Mm]?([A-Za-z]*)[ _-]?[Ee]?([A-Za-z]*)\b';
     private  string $lastName = '\b[Ll]([A-Za-z]+)[ _-]?[Aa]?([A-Za-z]*)[ _-]?[Nn]?([A-Za-z]*)[ _-]?[Mm]?([A-Za-z]*)[ _-]?[Ee]?([Aza-z]*)\b';
     private string $address = '\b[aA][dD]{2}[rR][eE][sS]{2}\b|\b[Aa][dD]{2}[rR]\b';

@@ -104,6 +104,10 @@ class FluentFormsSelectors
     ];
 
     //common
+    public static function fillAbleArea($label): string
+    {
+        return "(//label[normalize-space()='$label']/following::input | //label[normalize-space()='$label']/following::textarea)[1]";
+    }
     const mapEmailDropdown = "//div[@class='el-select']//i[contains(@class,'el-select__caret') or //input[@placeholder='Select a Field']]";
     const mapEmail = "//span[normalize-space()='Email']";
 //    const saveButton("Save Feed") = "//span[normalize-space()='Save Feed' and //button[contains(@class,'el-button--primary')]]";
@@ -123,6 +127,10 @@ class FluentFormsSelectors
     public static function dropdown(string $text, $index=1): string
     {
         return "(//label[normalize-space()='$text']/following::i[contains(@class,'el-select__caret')])[{$index}]";
+    }
+    public static function shortcodeDropdown(string $text, $index=1): string
+    {
+        return "(//label[normalize-space()='$text']/following::button[@type='button'])[{$index}]";
     }
     public static function addDynamicTagField($index): string
     {

@@ -45,7 +45,8 @@ class AcceptanceTester extends \Codeception\Actor
     public function seeText(array $texts): void
     {
         $this->retry(4, 200);
-        $foundTexts = []; $missingTexts = [];
+        $foundTexts = [];
+        $missingTexts = [];
         foreach ($texts as $text) {
             try {
                 $this->retrySee($text);
@@ -266,19 +267,20 @@ class AcceptanceTester extends \Codeception\Actor
      * @return string
      * @author Sarkar Ripon
      */
-    public function createNewPage(string $title, string $content= null): string
+    public function createNewPage(string $title): string
     {
         global $pageUrl;
-        if (empty($content)) {
+        global $formID;
+        if (empty($formID)) {
             $this->amOnPage(FluentFormsSelectors::fFormPage);
             $this->waitForElement(NewPageSelectors::formShortCode, 10);
-            $content = $this->grabTextFrom(NewPageSelectors::formShortCode);
+            $formID = $this->grabTextFrom(NewPageSelectors::formShortCode);
         }
         $this->amOnPage(GlobalPageSelec::newPageCreationPage);
         $this->clicked(NewPageSelectors::addNewPage);
         $this->wait(1);
         $this->executeJS(sprintf(NewPageSelectors::jsForTitle, $title));
-        $this->executeJS(sprintf(NewPageSelectors::jsForContent, $content));
+        $this->executeJS(sprintf(NewPageSelectors::jsForContent, $formID));
         $this->clicked(NewPageSelectors::publishBtn);
         $this->waitForElementClickable(NewPageSelectors::confirmPublish);
         $this->clicked(NewPageSelectors::confirmPublish);
@@ -302,8 +304,8 @@ class AcceptanceTester extends \Codeception\Actor
 
         foreach ($data as $fieldType => $fields) {
             $sectionType = match ($fieldType) {
-                'advancedFields' => 'advancedSection',
                 default => 'generalSection',
+                'advancedFields' => 'advancedSection',
             };
             $this->clicked(constant(FluentFormsSelectors::class . '::' . $sectionType));
             foreach ($fields as $inputField) {
@@ -312,6 +314,89 @@ class AcceptanceTester extends \Codeception\Actor
             }
         }
     }
+
+    public function createCustomFormField($data, array $customNameArr = null): void
+    {
+        $this->wantTo('Create a form for integrations');
+        $this->clicked(FluentFormsSelectors::generalSection);
+
+        $counter = 1;
+        foreach ($data as $fieldType => $fields) {
+            $sectionType = match ($fieldType) {
+                default => 'generalSection',
+                'advancedFields' => 'advancedSection',
+            };
+            $this->clicked(constant(FluentFormsSelectors::class . '::' . $sectionType));
+            foreach ($fields as $inputField) {
+                $customNames = $customNameArr[$inputField] ?? null;
+                if (is_array($customNames)) {
+                    foreach ($customNames as $customName) {
+                        $selector = constant(FluentFormsSelectors::class . '::' . $fieldType)[$inputField];
+                        $this->clicked($selector);
+                        $this->clickByJS("(//div[contains(@class,'item-actions-wrapper')])[{$counter}]");
+
+                        if ($inputField == 'nameFields') {
+                            $this->filledField("//div[@edititem='[object Object]']//input[@type='text']", $customName);
+                        } else {
+                            $this->filledField("//div[@prop='label']//input[@type='text']", $customName);
+                        }
+                        $this->clicked("//a[normalize-space()='Input Fields']");
+                        $counter++;
+                    }
+                } else {
+                    $selector = constant(FluentFormsSelectors::class . '::' . $fieldType)[$inputField];
+                    $this->clicked($selector);
+                    $this->clickByJS("(//div[contains(@class,'item-actions-wrapper')])[{$counter}]");
+
+                    if ($inputField == 'nameFields') {
+                        $this->filledField("//div[@edititem='[object Object]']//input[@type='text']", $customNames);
+                    } else {
+                        $this->filledField("//div[@prop='label']//input[@type='text']", $customNames);
+                    }
+                    $this->clicked("//a[normalize-space()='Input Fields']");
+                    $counter++;
+                }
+            }
+        }
+    }
+
+
+//    public function createCustomFormField($data, array $customNameArr = null): void
+//    {
+//        $this->wantTo('Create a form for integrations');
+//        $this->clicked(FluentFormsSelectors::generalSection);
+//
+//        $counter = 1;
+//
+//        foreach ($data as $fieldType => $fields) {
+//            $sectionType = match ($fieldType) {
+//                default => 'generalSection',
+//                'advancedFields' => 'advancedSection',
+//            };
+//            $this->clicked(constant(FluentFormsSelectors::class . '::' . $sectionType));
+//
+//            foreach ($fields as $inputField) {
+//                $selector = constant(FluentFormsSelectors::class . '::' . $fieldType)[$inputField];
+//                $this->clicked($selector);
+//                $this->clickByJS("(//div[contains(@class,'item-actions-wrapper')])[{$counter}]");
+//
+//                $customNames = is_array($customNameArr[$inputField] ?? null) ? $customNameArr[$inputField] : [$customNameArr[$inputField]];
+//
+//                foreach ($customNames as $customName) {
+//                    if ($customName) {
+//                        if ($inputField == 'nameFields') {
+//                            $this->filledField("//div[@edititem='[object Object]']//input[@type='text']", $customName);
+//                        } else {
+//                            $this->filledField("//div[@prop='label']//input[@type='text']", $customName);
+//                        }
+//                    }
+//                }
+//
+//                $this->clicked("//a[normalize-space()='Input Fields']");
+//                $counter++;
+//            }
+//        }
+//    }
 
     /**
      * ```
@@ -357,7 +442,6 @@ class AcceptanceTester extends \Codeception\Actor
             }
         }
     }
-
 
 
 }

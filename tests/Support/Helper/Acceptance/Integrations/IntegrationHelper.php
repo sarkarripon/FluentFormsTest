@@ -85,21 +85,26 @@ trait IntegrationHelper
      * coupon
      * ```
      */
-    public function prepareForm(AcceptanceTester $I, string $formName, array $requiredField)
+    public function prepareForm(AcceptanceTester $I, string $formName, array $requiredField, $isCustomName='no', array $customName=null)
     {
-//        global $formID;
+        global $formID;
         $isDelete = getenv("EXISTING_FORM_DELETE");
         if ($isDelete === "yes") {
             $I->deleteExistingForms();
         }
         $I->initiateNewForm();
-        $I->createFormField($requiredField);
-//        $formID = $I->grabTextFrom("button[title='Click to Copy']");
+        if ($isCustomName == 'yes') {
+            $I->createCustomFormField($requiredField,$customName);
+        }else{
+            $I->createFormField($requiredField);
+        }
+
+        $formID = $I->grabTextFrom("button[title='Click to Copy']");
         $I->clicked(FluentFormsSelectors::saveForm);
         $I->seeSuccess('Form created successfully.');
         $I->renameForm($formName);
         $I->seeSuccess('Form renamed successfully.');
-//        return $formID;
+        return $formID;
     }
 
     public function preparePage(AcceptanceTester $I, string $title = null): void
@@ -143,7 +148,6 @@ trait IntegrationHelper
         $I->fillField(FluentFormsSelectors::searchIntegration, $searchKey);
         $I->clicked(FluentFormsSelectors::searchResult);
     }
-
     public function mapEmailInCommon(AcceptanceTester $I, $feedName, array $extraListOrService=null): void
     {
         $I->waitForElementClickable(FluentFormsSelectors::integrationFeed, 20);
@@ -172,6 +176,24 @@ trait IntegrationHelper
             $I->fillField(FluentFormsSelectors::commonFields($field, $actionText), $value);
         }
     }
+
+    public function assignShortCode(AcceptanceTester $I, $customName): void
+    {
+        foreach ($customName as $field => $labels) {
+            if (is_array($labels)) {
+                foreach ($labels as $label) {
+                    $I->clicked(FluentFormsSelectors::shortcodeDropdown($label));
+                    $I->clickOnText($label, $label);  // Use the field name as the following text
+                    $I->pressKey(FluentFormsSelectors::shortcodeDropdown($label), \Facebook\WebDriver\WebDriverKeys::ESCAPE);
+                }
+            } else {
+                $I->clicked(FluentFormsSelectors::shortcodeDropdown($labels));
+                $I->clickOnText($labels, $labels);  // Use the field name as the following text
+                $I->pressKey(FluentFormsSelectors::shortcodeDropdown($labels), \Facebook\WebDriver\WebDriverKeys::ESCAPE);
+            }
+        }
+    }
+
 
     public function mapDynamicTag(AcceptanceTester $I, $isDropDown, array $dynamicTagArray = null): void
     {
