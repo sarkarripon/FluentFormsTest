@@ -16,7 +16,7 @@ trait UserRegistration
     {
         $this->mapEmailInCommon($I,"User Registration",$extraListOrService);
         $this->assignShortCode($I,$customName);
-        $I->clickWithLeftButton(FluentFormsSelectors::saveButton("Save Feed"));
+        $I->clicked(FluentFormsSelectors::saveButton("Save Feed"));
 
 
     }

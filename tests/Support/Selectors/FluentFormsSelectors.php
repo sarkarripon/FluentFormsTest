@@ -130,7 +130,7 @@ class FluentFormsSelectors
     }
     public static function shortcodeDropdown(string $text, $index=1): string
     {
-        return "(//label[normalize-space()='$text']/following::button[@type='button'])[{$index}]";
+        return "(//label[normalize-space()='$text']/following::button | //label[normalize-space()='$text']/following::i)[{$index}]";
     }
     public static function addDynamicTagField($index): string
     {

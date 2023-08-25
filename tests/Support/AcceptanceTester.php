@@ -42,11 +42,15 @@ class AcceptanceTester extends \Codeception\Actor
      * This function will wait for the element until it can be seen.
      * This is a workaround for the issue of Codeception not waiting for the element to be visible before seen it.
      */
-    public function seeText(array $texts): void
+    public function seeText($texts): void
     {
+        if (!is_array($texts)) {
+            $texts = [$texts]; // Convert single string to array
+        }
         $this->retry(4, 200);
         $foundTexts = [];
         $missingTexts = [];
+
         foreach ($texts as $text) {
             try {
                 $this->retrySee($text);
@@ -70,6 +74,31 @@ class AcceptanceTester extends \Codeception\Actor
             $this->fail($message);
         }
     }
+    public function checkText($texts): ?bool
+    {
+        if (!is_array($texts)) {
+            $texts = [$texts]; // Convert single string to array
+        }
+
+        $this->retry(4, 200);
+        $missingTexts = [];
+
+        foreach ($texts as $text) {
+            try {
+                $this->retrySee($text);
+            } catch (\Exception $e) {
+                $missingTexts[] = $text;
+            }
+        }
+
+        if (count($missingTexts) > 0) {
+            return false; // Some texts are missing
+        }
+
+        return true; // All texts are found
+    }
+
+
 
     /**
      * ```
@@ -267,20 +296,20 @@ class AcceptanceTester extends \Codeception\Actor
      * @return string
      * @author Sarkar Ripon
      */
-    public function createNewPage(string $title): string
+    public function createNewPage(string $title, string $content=null): string
     {
         global $pageUrl;
-        global $formID;
-        if (empty($formID)) {
+//        global $formID;
+        if (empty($content)) {
             $this->amOnPage(FluentFormsSelectors::fFormPage);
             $this->waitForElement(NewPageSelectors::formShortCode, 10);
-            $formID = $this->grabTextFrom(NewPageSelectors::formShortCode);
+            $content = $this->grabTextFrom(NewPageSelectors::formShortCode);
         }
         $this->amOnPage(GlobalPageSelec::newPageCreationPage);
         $this->clicked(NewPageSelectors::addNewPage);
         $this->wait(1);
         $this->executeJS(sprintf(NewPageSelectors::jsForTitle, $title));
-        $this->executeJS(sprintf(NewPageSelectors::jsForContent, $formID));
+        $this->executeJS(sprintf(NewPageSelectors::jsForContent, $content));
         $this->clicked(NewPageSelectors::publishBtn);
         $this->waitForElementClickable(NewPageSelectors::confirmPublish);
         $this->clicked(NewPageSelectors::confirmPublish);
