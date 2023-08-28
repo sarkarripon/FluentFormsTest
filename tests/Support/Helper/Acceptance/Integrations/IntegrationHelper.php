@@ -87,7 +87,7 @@ trait IntegrationHelper
      */
     public function prepareForm(AcceptanceTester $I, string $formName, array $requiredField, $isCustomName='no', array $customName=null)
     {
-//        global $formID;
+        global $formID;
         $isDelete = getenv("EXISTING_FORM_DELETE");
         if ($isDelete === "yes") {
             $I->deleteExistingForms();
@@ -99,12 +99,12 @@ trait IntegrationHelper
             $I->createFormField($requiredField);
         }
 
-//        $formID = $I->grabTextFrom("button[title='Click to Copy']");
+        $formID = $I->grabTextFrom("button[title='Click to Copy']");
         $I->clicked(FluentFormsSelectors::saveForm);
         $I->seeSuccess('Form created successfully.');
         $I->renameForm($formName);
         $I->seeSuccess('Form renamed successfully.');
-//        return $formID;
+        return $formID;
     }
 
     public function preparePage(AcceptanceTester $I, string $title = null): void

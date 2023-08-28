@@ -24,27 +24,35 @@ class IntegrationUserRegistrationCest
        $I->loginWordpress();
     }
 
+//    public function testing(AcceptanceTester $I): void
+//    {
+////        $I->cleanCookies();
+//        $I->amOnPage('/test_user_registration');
+//        exit();
+//    }
+
     public function test_user_registration(AcceptanceTester $I,DataGenerator $faker): array
     {
         global $newUser;
+        $pageName = __FUNCTION__.'_'.rand(1,100);
+
         $extraListOrService =['Services'=>'User Registration'];
         $customName=[
             'email'=>'Email Address',
             'simpleText'=>['Username','First Name','Last Name'],
             'passwordField'=>'Password'
         ];
-        $this->prepareForm($I, __FUNCTION__, [
+        $this->prepareForm($I, $pageName, [
             'generalFields' => ['email','simpleText'],
             'advancedFields' => ['passwordField']
         ],'yes',$customName);
 
         $this->configureUserRegistration($I, 1);
         $this->mapUserRegistrationField($I,$customName,$extraListOrService);
-        $this->preparePage($I, __FUNCTION__);
+        $this->preparePage($I, $pageName);
 
         $I->restartSession();
-        $I->amOnPage('/' . __FUNCTION__);
-        $I->cleanCookies();
+        $I->amOnPage('/' . $pageName);
         $fillAbleDataArr = [
             'Email Address'=>'email',
             'Username'=>'userName',
@@ -52,41 +60,33 @@ class IntegrationUserRegistrationCest
             'Last Name'=>'lastName',
             'Password'=>'password',
         ];
-        $data = $faker->generatedData($fillAbleDataArr);
-        foreach ($data as $selector => $value) {
+        $returnedFakeData = $faker->generatedData($fillAbleDataArr);
+        foreach ($returnedFakeData as $selector => $value) {
             $I->tryToFilledField(FluentFormsSelectors::fillAbleArea($selector), $value);
         }
+        $I->wait(1);
         $I->clicked(FieldSelectors::submitButton);
-        $err = $I->checkText('Sorry, No corresponding form found');
-        echo $err;
-        if ($err){
-            $I->amOnPage('/' . __FUNCTION__);
-            foreach ($data as $selector => $value) {
-                $I->tryToFilledField(FluentFormsSelectors::fillAbleArea($selector), $value);
-            }
-            $I->clicked(FieldSelectors::submitButton);
-        }
+        $I->wait(1);
 
-        $I->loginWordpress($data['Username'],$data['Password']);
+        $I->loginWordpress($returnedFakeData['Username'],$returnedFakeData['Password']);
         $I->seeText([
-            $data['First Name'],
+            $returnedFakeData['First Name'],
         ]);
         $newUser =[
-            'user' => $data['Username'],
-            'password' => $data['Password'],
+            'user' => $returnedFakeData['Username'],
+            'password' => $returnedFakeData['Password'],
         ];
         return $newUser;
     }
 
-    /**
-     */
-    #[Before('test_user_registration')]
     public function test_user_update(AcceptanceTester $I, DataGenerator $faker): void
     {
-        $I->wait(2);
-        $I->loginWordpress();
         global $newUser;
-//        $faker = \Faker\Factory::create();
+        $pageName = __FUNCTION__.'_'.rand(1,100);
+        if (empty($newUser)) {
+            $newUser = $this->test_user_registration($I,$faker);
+        }
+        $I->loginWordpress();
         $extraListOrService =['Services'=>'User Update'];
         $customName=[
             'simpleText'=>['Username','First Name','Last Name','Nickname'],
@@ -95,31 +95,17 @@ class IntegrationUserRegistrationCest
             'email'=>'Email Address',
             'passwordField'=>['Password','Repeat Password'],
         ];
-        $this->prepareForm($I, __FUNCTION__, [
+        $this->prepareForm($I, $pageName, [
             'generalFields' => ['simpleText','email','websiteUrl','textArea'],
             'advancedFields' => ['passwordField']
         ],'yes',$customName);
 
         $this->configureUserRegistration($I, 1);
         $this->mapUserRegistrationField($I,$customName,$extraListOrService);
-        $this->preparePage($I, __FUNCTION__);
-//        exit();
+        $this->preparePage($I, $pageName);
         $I->restartSession();
         $I->loginWordpress($newUser['user'],$newUser['password']);
-//        $fillAbleDataArr = FieldSelectors::getFieldDataArray(['email','first_name', 'last_name','password']);
-//        $password='#'.$faker->word().$faker->randomNumber(2).$faker->word().'@';
-//        $fillAbleDataArr = [
-//            'Username'=>$faker->userName(),
-//            'First Name'=>$faker->firstName(),
-//            'Last Name'=>$faker->lastName(),
-//            'Nickname'=>$faker->name(),
-//            'Biographical Info'=>$faker->text(),
-//            'Website Url'=>$faker->url(),
-//            'Email Address'=>$faker->email(),
-//            'Password'=>$password,
-//            'Repeat Password'=>$password
-//        ];
-        $I->amOnPage('/' . __FUNCTION__);
+        $I->amOnPage('/' . $pageName);
         $fillAbleDataArr = [
             'Username'=>'userName',
             'First Name'=>'firstName',
@@ -131,16 +117,17 @@ class IntegrationUserRegistrationCest
             'Password'=>'password',
             'Repeat Password'=>'password',
         ];
-        $data = $faker->generatedData($fillAbleDataArr);
-        foreach ($data as $selector => $value) {
+        $returnedFakeData = $faker->generatedData($fillAbleDataArr);
+        foreach ($returnedFakeData as $selector => $value) {
             $I->tryToFilledField(FluentFormsSelectors::fillAbleArea($selector), $value);
         }
-        print_r($data);
+        $I->wait(1);
         $I->clicked(FieldSelectors::submitButton);
-        $I->wait(2);
-        $I->loginWordpress($data['Email Address'],$data['Password']);
+        $I->wait(1);
+
+        $I->loginWordpress($returnedFakeData['Email Address'],$returnedFakeData['Password']);
         $I->seeText([
-            $data['First Name'],
+            $returnedFakeData['First Name'],
         ]);
     }
 }

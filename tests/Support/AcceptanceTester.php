@@ -284,6 +284,8 @@ class AcceptanceTester extends \Codeception\Actor
             $this->click(NewPageSelectors::applyBtn);
             $this->assertStringContainsString('moved to the Trash',
                 $this->grabTextFrom('#message'), 'Existing pages were deleted successfully!');
+            $this->clicked("//li[@class='trash']");
+            $this->clicked("(//input[@id='delete_all'])[1]");
         }
     }
 
@@ -291,25 +293,25 @@ class AcceptanceTester extends \Codeception\Actor
      * ```
      * This function will create a new page with title and content
      * ```
-     * @param $title
-     * @param $formID
+     * @param string $title
+     * @param string|null $content
      * @return string
      * @author Sarkar Ripon
      */
-    public function createNewPage(string $title, string $content=null): string
+    public function createNewPage(string $title, string $formID=null): string
     {
         global $pageUrl;
-//        global $formID;
-        if (empty($content)) {
+        global $formID;
+        if (empty($formID)) {
             $this->amOnPage(FluentFormsSelectors::fFormPage);
             $this->waitForElement(NewPageSelectors::formShortCode, 10);
-            $content = $this->grabTextFrom(NewPageSelectors::formShortCode);
+            $formID = $this->grabTextFrom(NewPageSelectors::formShortCode);
         }
         $this->amOnPage(GlobalPageSelec::newPageCreationPage);
         $this->clicked(NewPageSelectors::addNewPage);
         $this->wait(1);
         $this->executeJS(sprintf(NewPageSelectors::jsForTitle, $title));
-        $this->executeJS(sprintf(NewPageSelectors::jsForContent, $content));
+        $this->executeJS(sprintf(NewPageSelectors::jsForContent, $formID));
         $this->clicked(NewPageSelectors::publishBtn);
         $this->waitForElementClickable(NewPageSelectors::confirmPublish);
         $this->clicked(NewPageSelectors::confirmPublish);

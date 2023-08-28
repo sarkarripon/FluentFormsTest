@@ -21,6 +21,7 @@
         "doctrine/orm": "^2.15",
         "vlucas/phpdotenv": "^5.5",
         "google/apiclient": "^2.15",
-        "ext-json": "*"
+        "ext-json": "*",
+        "hackzilla/password-generator": "^1.6"
   }
 }

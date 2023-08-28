@@ -1,32 +1,51 @@
 <?php
 
 namespace Tests\Support\Factories\DataProvider;
+use Hackzilla\PasswordGenerator\Generator\RequirementPasswordGenerator;
+
 
 class DataGenerator
 {
     protected $faker;
-
     public function __construct()
     {
         $this->faker = \Faker\Factory::create();
     }
-
     public function generatedData(array $keys): array
     {
-        $data = [];
-        $password = "#" . $this->faker->word() . $this->faker->randomNumber(2) . $this->faker->word() . "@";
+        $generatedData = [];
+        // this is conditional password generator.
+//        $generator = new RequirementPasswordGenerator();
+//        $generator
+//            ->setLength(16)
+//            ->setOptionValue(RequirementPasswordGenerator::OPTION_UPPER_CASE, true)
+//            ->setOptionValue(RequirementPasswordGenerator::OPTION_LOWER_CASE, true)
+//            ->setOptionValue(RequirementPasswordGenerator::OPTION_NUMBERS, true)
+//            ->setOptionValue(RequirementPasswordGenerator::OPTION_SYMBOLS, true)
+//            ->setMinimumCount(RequirementPasswordGenerator::OPTION_UPPER_CASE, 2)
+//            ->setMinimumCount(RequirementPasswordGenerator::OPTION_LOWER_CASE, 2)
+//            ->setMinimumCount(RequirementPasswordGenerator::OPTION_NUMBERS, 2)
+//            ->setMinimumCount(RequirementPasswordGenerator::OPTION_SYMBOLS, 2)
+//            ->setMaximumCount(RequirementPasswordGenerator::OPTION_UPPER_CASE, 8)
+//            ->setMaximumCount(RequirementPasswordGenerator::OPTION_LOWER_CASE, 8)
+//            ->setMaximumCount(RequirementPasswordGenerator::OPTION_NUMBERS, 8)
+//            ->setMaximumCount(RequirementPasswordGenerator::OPTION_SYMBOLS, 8)
+//        ;
+//        $password = $generator->generatePasswords()[0];
+
+        $password = $this->faker->password(10, 18);
 
         foreach ($keys as $key => $value) {
             if ($value == 'password') {
-                $data[$key] = $password;
+                $generatedData[$key] = $password;
             } elseif ($key == 'Repeat Password') {
-                $data[$key] = $password;
+                $generatedData[$key] = $password;
             }elseif ($value == 'url') {
-                $data[$key] = "https://www.sarkarripon.com/".$this->faker->userName();
+                $generatedData[$key] = "https://www.sarkarripon.com/".$this->faker->userName();
             } else {
-                $data[$key] = $this->faker->{$value}();
+                $generatedData[$key] = $this->faker->{$value}();
             }
         }
-        return $data;
+        return $generatedData;
     }
 }
