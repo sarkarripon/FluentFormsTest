@@ -3,7 +3,6 @@
 namespace Tests\Support\Factories\DataProvider;
 use Hackzilla\PasswordGenerator\Generator\RequirementPasswordGenerator;
 
-
 class DataGenerator
 {
     protected $faker;
@@ -14,26 +13,26 @@ class DataGenerator
     public function generatedData(array $keys): array
     {
         $generatedData = [];
-        // this is conditional password generator.
-//        $generator = new RequirementPasswordGenerator();
-//        $generator
-//            ->setLength(16)
-//            ->setOptionValue(RequirementPasswordGenerator::OPTION_UPPER_CASE, true)
-//            ->setOptionValue(RequirementPasswordGenerator::OPTION_LOWER_CASE, true)
-//            ->setOptionValue(RequirementPasswordGenerator::OPTION_NUMBERS, true)
-//            ->setOptionValue(RequirementPasswordGenerator::OPTION_SYMBOLS, true)
-//            ->setMinimumCount(RequirementPasswordGenerator::OPTION_UPPER_CASE, 2)
-//            ->setMinimumCount(RequirementPasswordGenerator::OPTION_LOWER_CASE, 2)
-//            ->setMinimumCount(RequirementPasswordGenerator::OPTION_NUMBERS, 2)
-//            ->setMinimumCount(RequirementPasswordGenerator::OPTION_SYMBOLS, 2)
-//            ->setMaximumCount(RequirementPasswordGenerator::OPTION_UPPER_CASE, 8)
-//            ->setMaximumCount(RequirementPasswordGenerator::OPTION_LOWER_CASE, 8)
-//            ->setMaximumCount(RequirementPasswordGenerator::OPTION_NUMBERS, 8)
-//            ->setMaximumCount(RequirementPasswordGenerator::OPTION_SYMBOLS, 8)
-//        ;
-//        $password = $generator->generatePasswords()[0];
+         // This is conditional password generator.
+        $generator = new RequirementPasswordGenerator();
+        $generator
+            ->setLength(16)
+            ->setOptionValue(RequirementPasswordGenerator::OPTION_UPPER_CASE, true)
+            ->setOptionValue(RequirementPasswordGenerator::OPTION_LOWER_CASE, true)
+            ->setOptionValue(RequirementPasswordGenerator::OPTION_NUMBERS, true)
+            ->setOptionValue(RequirementPasswordGenerator::OPTION_SYMBOLS, true)
+            ->setMinimumCount(RequirementPasswordGenerator::OPTION_UPPER_CASE, 2)
+            ->setMinimumCount(RequirementPasswordGenerator::OPTION_LOWER_CASE, 2)
+            ->setMinimumCount(RequirementPasswordGenerator::OPTION_NUMBERS, 2)
+            ->setMinimumCount(RequirementPasswordGenerator::OPTION_SYMBOLS, 2)
+            ->setMaximumCount(RequirementPasswordGenerator::OPTION_UPPER_CASE, 8)
+            ->setMaximumCount(RequirementPasswordGenerator::OPTION_LOWER_CASE, 8)
+            ->setMaximumCount(RequirementPasswordGenerator::OPTION_NUMBERS, 8)
+            ->setMaximumCount(RequirementPasswordGenerator::OPTION_SYMBOLS, 8)
+        ;
+        $password = $generator->generatePasswords()[0];
 
-        $password = $this->faker->password(10, 18);
+//        $password = $this->faker->password(10, 18);
 
         foreach ($keys as $key => $value) {
             if ($value == 'password') {

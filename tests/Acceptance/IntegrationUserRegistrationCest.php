@@ -24,12 +24,6 @@ class IntegrationUserRegistrationCest
        $I->loginWordpress();
     }
 
-//    public function testing(AcceptanceTester $I): void
-//    {
-////        $I->cleanCookies();
-//        $I->amOnPage('/test_user_registration');
-//        exit();
-//    }
 
     public function test_user_registration(AcceptanceTester $I,DataGenerator $faker): array
     {
@@ -47,7 +41,8 @@ class IntegrationUserRegistrationCest
             'advancedFields' => ['passwordField']
         ],'yes',$customName);
 
-        $this->configureUserRegistration($I, 1);
+
+        $this->configureUserRegistration($I, "User Registration or Update");
         $this->mapUserRegistrationField($I,$customName,$extraListOrService);
         $this->preparePage($I, $pageName);
 
@@ -100,7 +95,7 @@ class IntegrationUserRegistrationCest
             'advancedFields' => ['passwordField']
         ],'yes',$customName);
 
-        $this->configureUserRegistration($I, 1);
+        $this->configureUserRegistration($I, "User Registration or Update");
         $this->mapUserRegistrationField($I,$customName,$extraListOrService);
         $this->preparePage($I, $pageName);
         $I->restartSession();

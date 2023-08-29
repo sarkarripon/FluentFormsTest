@@ -366,7 +366,7 @@ class AcceptanceTester extends \Codeception\Actor
                         $this->clicked($selector);
                         $this->clickByJS("(//div[contains(@class,'item-actions-wrapper')])[{$counter}]");
 
-                        if ($inputField == 'nameFields') {
+                        if ($inputField === 'nameFields') {
                             $this->filledField("//div[@edititem='[object Object]']//input[@type='text']", $customName);
                         } else {
                             $this->filledField("//div[@prop='label']//input[@type='text']", $customName);
