@@ -129,7 +129,6 @@ class AcceptanceHelper extends WebDriver
         foreach ($xpathVariations as $xpath) {
             try {
                 $this->seeElementInDOM($xpath);
-                $this->moveMouseOver($xpath);
                 $this->clicked($xpath);
                 break; // Exit the loop if the element is found and clicked successfully
             } catch (\Exception $e) {
@@ -141,6 +140,36 @@ class AcceptanceHelper extends WebDriver
            $this->fail($actionText." not found");
         }
     }
+//    public function clickedByJs(string $actionText, string $followingText =null, $index=1): void
+//    {
+//        $this->wait(2);
+//        $following = null;
+//        if (isset($followingText) and !empty($followingText)) {
+//            $following .= "*[normalize-space()='$followingText' or contains(text(),'$followingText')]/following::";
+//        }
+//        $xpathVariations = [
+//            "(//$following"."*[@x-placement]//*[contains(text(),'{$actionText}')])[$index]",
+//            "(//$following"."*[@x-placement]//*[normalize-space()='{$actionText}')])[$index]",
+//            "(//$following"."*[normalize-space()='{$actionText}'])[$index]",
+//            "(//$following"."*[contains(text(),'{$actionText}')])[$index]",
+//            "(//$following"."*[@placeholder='{$actionText}'])[$index]",
+//        ];
+//        print_r($xpathVariations);
+//
+//        $exception = [];
+//        foreach ($xpathVariations as $xpath) {
+//            try {
+//                $this->clickByJS($xpath);
+//                break; // Exit the loop if the element is found and clicked successfully
+//            } catch (\Exception $e) {
+//                $exception[] = $e->getMessage();
+//                // If the element is not found or the click fails, continue to the next XPath variation
+//            }
+//        }
+//        if(count($exception) === count($xpathVariations)){
+//           $this->fail($actionText." not found");
+//        }
+//    }
 
     /**
      * @throws Exception
@@ -149,7 +178,6 @@ class AcceptanceHelper extends WebDriver
     {
         $escapeXpath = str_replace('\\', '\\\\', $selector);
         $escapedXpath = addslashes($escapeXpath);
-        $this->waitForElementNotVisible( $selector);
         $js = <<<JS
         var xpathExpression = "$escapedXpath";
         var element = document.evaluate(xpathExpression, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;

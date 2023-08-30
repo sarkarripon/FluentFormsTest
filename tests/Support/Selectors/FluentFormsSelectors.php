@@ -208,7 +208,10 @@ class FluentFormsSelectors
     {
         return "(//i[contains(@class,'el-icon-plus')])[{$index}]";
     }
-    const removeField = "(//i[contains(@class,'el-icon-minus')])[1]";
+    public static function removeField($index): string
+    {
+        return "(//i[contains(@class,'el-icon-minus')])[{$index}]";
+    }
 
     public static function openFieldLabel($index): string
     {

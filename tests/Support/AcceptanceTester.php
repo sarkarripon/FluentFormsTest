@@ -294,25 +294,27 @@ class AcceptanceTester extends \Codeception\Actor
      * This function will create a new page with title and content
      * ```
      * @param string $title
-     * @param string|null $content
+     * @param string|null $formID
      * @return string
      * @author Sarkar Ripon
      */
     public function createNewPage(string $title, string $formID=null): string
     {
+        $this->wait(2);
         global $pageUrl;
         global $formID;
+        echo $formID;
         if (empty($formID)) {
             $this->amOnPage(FluentFormsSelectors::fFormPage);
             $this->waitForElement(NewPageSelectors::formShortCode, 10);
             $formID = $this->grabTextFrom(NewPageSelectors::formShortCode);
         }
         $this->amOnPage(GlobalPageSelec::newPageCreationPage);
-        $this->clicked(NewPageSelectors::addNewPage);
-        $this->wait(1);
-        $this->executeJS(sprintf(NewPageSelectors::jsForTitle, $title));
-        $this->executeJS(sprintf(NewPageSelectors::jsForContent, $formID));
-        $this->clicked(NewPageSelectors::publishBtn);
+        $this->tryToClicked(NewPageSelectors::addNewPage);
+
+        $this->tryToExecuteJS(sprintf(NewPageSelectors::jsForTitle, $title));
+        $this->tryToExecuteJS(sprintf(NewPageSelectors::jsForContent, $formID));
+        $this->tryToClicked(NewPageSelectors::publishBtn);
         $this->waitForElementClickable(NewPageSelectors::confirmPublish);
         $this->clicked(NewPageSelectors::confirmPublish);
         $this->waitForElement(NewPageSelectors::viewPage);
