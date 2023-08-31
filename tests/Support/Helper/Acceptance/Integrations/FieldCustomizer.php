@@ -117,17 +117,14 @@ trait FieldCustomizer
         // Options
         if (isset($basicOperand) && is_array($basicOperand['options'])) {
 
-            global $removeField;
-            $removeField = 1;
-            $fieldCounter = 1;
+            global $removeField; $removeField = 1; $fieldCounter = 1;
 
             foreach ($basicOperand['options'] as $value) {
                 $I->filledField("(//input[@placeholder='label'])[$fieldCounter]", $value);
                 if ($fieldCounter >= 3) {
                     $I->clicked(FluentFormsSelectors::addField($fieldCounter));
                 }
-                $fieldCounter++;
-                $removeField += 1;
+                $fieldCounter++; $removeField += 1;
             }
 
             $I->clicked(FluentFormsSelectors::removeField($removeField));
@@ -146,9 +143,7 @@ trait FieldCustomizer
                 $stockCounter++;
             }
         }
-
         $I->clicked(FluentFormsSelectors::saveForm);
-
     }
 
     public function customizeMultipleChoice()

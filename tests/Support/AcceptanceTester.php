@@ -35,6 +35,24 @@ class AcceptanceTester extends \Codeception\Actor
     use _generated\AcceptanceTesterActions;
     use \Codeception\Lib\Actor\Shared\Retry;
 
+
+    public function runShellCommand(AcceptanceTester $I, $commands): void
+    {
+        if (!is_array($commands)) {
+            $commands = [$commands]; // Convert single string to array
+        }
+        foreach ($commands as $command) {
+            // Execute a shell command
+            $output = [];
+            exec($command, $output);
+
+            // Display the output
+            foreach ($output as $line) {
+                $I->comment($line);
+            }
+        }
+    }
+
     /**
      * @param array $texts
      * @return void
@@ -276,8 +294,10 @@ class AcceptanceTester extends \Codeception\Actor
      */
     public function deleteExistingPages(): void
     {
+        $this->wait(1);
         $this->amOnPage(GlobalPageSelec::newPageCreationPage);
         $existingPage = $this->checkElement(NewPageSelectors::previousPageAvailable);
+
         if ($existingPage) {
             $this->clicked(NewPageSelectors::selectAllCheckMark);
             $this->selectOption(NewPageSelectors::selectMoveToTrash, "Move to Trash");
@@ -300,7 +320,7 @@ class AcceptanceTester extends \Codeception\Actor
      */
     public function createNewPage(string $title, string $formID=null): string
     {
-        $this->wait(2);
+        $this->wait(1);
         global $pageUrl;
         global $formID;
         echo $formID;
