@@ -96,7 +96,7 @@
 //        $this->I->seeSuccess('Form renamed successfully.');
 //    }
 //
-//    public function initiateIntegrationConfiguration(int $integrationPositionNumber): void
+//    public function turnOnIntegration(int $integrationPositionNumber): void
 //    {
 //        $this->I->amOnPage(FluentFormsAddonsSelectors::integrationsPage);
 //

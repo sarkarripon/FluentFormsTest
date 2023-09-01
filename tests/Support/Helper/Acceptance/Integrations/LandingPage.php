@@ -11,7 +11,7 @@ trait LandingPage
     public function configureLandingPage(AcceptanceTester $I,$integrationPositionNumber)
     {
         global $landingPageUrl;
-        $this->initiateIntegrationConfiguration($I,$integrationPositionNumber);
+        $this->turnOnIntegration($I,$integrationPositionNumber);
         $this->takeMeToConfigurationPage($I);
         $I->clickOnText("Landing Page","Conditional Confirmations");
         $I->clicked(FluentFormsSelectors::radioButton("Enable Form Landing Page Mode"));

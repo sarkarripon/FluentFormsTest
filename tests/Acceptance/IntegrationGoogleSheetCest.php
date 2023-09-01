@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Tests\Acceptance;
 
 use Codeception\Attribute\Group;
@@ -15,20 +14,21 @@ class IntegrationGoogleSheetCest
     use IntegrationHelper, Googlesheet, ShortCodes;
     public function _before(AcceptanceTester $I): void
     {
-        $I->loadDotEnvFile();
-        $I->loginWordpress();
+        $I->loadDotEnvFile(); $I->loginWordpress();
     }
     #[Group('Integration')]
     public function test_google_sheet_push_data(AcceptanceTester $I): void
     {
-        $this->prepareForm($I, __FUNCTION__, ['generalFields' => ['email', 'nameFields']]);
-        $this->configureGoogleSheet($I, 25);
+        $pageName = __FUNCTION__.'_'.rand(1,100);
+        
+        $this->prepareForm($I, $pageName, ['generalFields' => ['email', 'nameFields']]);
+        $this->configureGoogleSheet($I, "Google");
 
         $otherFieldArray = $this->getShortCodeArray(['Email', 'First Name', 'Last Name']);
         $this->mapGoogleSheetField($I, $otherFieldArray);
-        $this->preparePage($I, __FUNCTION__);
+        $this->preparePage($I, $pageName);
 
-//        $I->amOnPage('/' . __FUNCTION__);
+//        $I->amOnPage('/' . $pageName);
         $fillAbleDataArr = FieldSelectors::getFieldDataArray(['email', 'first_name', 'last_name',]);
         foreach ($fillAbleDataArr as $selector => $value) {
             if ($selector == FieldSelectors::country) {
@@ -44,7 +44,7 @@ class IntegrationGoogleSheetCest
 
         // retry to submit form again if data not found
         if (empty($remoteData)) {
-            $I->amOnPage('/' . __FUNCTION__);
+            $I->amOnPage('/' . $pageName);
             $fillAbleDataArr = FieldSelectors::getFieldDataArray(['email', 'first_name', 'last_name',]);
             foreach ($fillAbleDataArr as $selector => $value) {
                 $I->fillByJS($selector, $value);

@@ -37,7 +37,7 @@ trait Trello
     }
     public function configureTrello(AcceptanceTester $I, $integrationPositionNumber): void
     {
-        $this->initiateIntegrationConfiguration($I,$integrationPositionNumber);
+        $this->turnOnIntegration($I,$integrationPositionNumber);
 
         $trelloIntegrationPosition = 13;
 

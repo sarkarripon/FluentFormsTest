@@ -28,12 +28,29 @@ class IntegrationMailchimpCest
     #[Group('Integration')]
     public function test_mailchimp_push_data(AcceptanceTester $I): void
     {
-        $this->prepareForm($I,__FUNCTION__, ['generalFields' => ['email', 'nameFields']]);
-        $this->configureMailchimp($I,8);
-        $otherFieldArray = $this->getShortCodeArray(['First Name', 'Last Name']);
-        $this->mapMailchimpFields($I,'yes', $otherFieldArray);
-        $this->preparePage($I,__FUNCTION__);
-//        $I->amOnPage('/' . __FUNCTION__);
+        $pageName = __FUNCTION__.'_'.rand(1,100);
+
+        $extraListOrService =['Mailchimp List'=>getenv('MAILCHIMP_LIST_NAME')];
+        $customName=[
+            'email'=>'Email Address',
+            'addressFields'=>'Address',
+            'nameFields'=>'Name',
+            'phone'=>'Phone Number',
+        ];
+        $this->prepareForm($I, $pageName, [
+            'generalFields' => ['email','addressFields', 'nameFields','phone'],
+        ],'yes',$customName);
+        $this->configureMailchimp($I, "Mailchimp");
+        $fieldMapping=[
+            'email'=>'Email Address',
+            'addressFields'=>'Address',
+            'nameFields'=>['First Name','Last Name'],
+            'phone'=>'Phone Number',
+        ];
+        $this->mapMailchimpFields($I,$fieldMapping,$extraListOrService);
+
+        $this->preparePage($I,$pageName);
+//        $I->amOnPage('/' . __FUNCTION__)
         $fillAbleDataArr = FieldSelectors::getFieldDataArray(['first_name', 'last_name', 'email']);
         foreach ($fillAbleDataArr as $selector => $value) {
             if ($selector == FieldSelectors::country) {
@@ -41,15 +58,15 @@ class IntegrationMailchimpCest
             } elseif ($selector == FieldSelectors::dateTime) {
                 $dateTime = new DateTime($value);
                 $formattedDate = $dateTime->format('d/m');
-                $I->fillByJS($selector, $formattedDate);
+                $I->filledField($selector, $formattedDate);
             }else {
-                $I->fillByJS($selector, $value);
+                $I->filledField($selector, $value);
             }
         }
         $I->clicked(FieldSelectors::submitButton);
         $remoteData = $this->fetchMailchimpData($I,$fillAbleDataArr["//input[contains(@id,'email')]"]);
         if (empty($remoteData)) {
-            $I->amOnPage('/' . __FUNCTION__);
+            $I->amOnPage('/' . $pageName);
             $fillAbleDataArr = FieldSelectors::getFieldDataArray(['first_name', 'last_name', 'email']);
             foreach ($fillAbleDataArr as $selector => $value) {
                 if ($selector == FieldSelectors::country) {

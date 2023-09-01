@@ -142,7 +142,7 @@ trait Platformly
 
     public function configurePlatformly(AcceptanceTester $I, $integrationPositionNumber): void
     {
-        $this->initiateIntegrationConfiguration($I,$integrationPositionNumber);
+        $this->turnOnIntegration($I,$integrationPositionNumber);
 
         if($integrationPositionNumber == 12)
         {

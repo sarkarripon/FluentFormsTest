@@ -123,14 +123,15 @@ class AcceptanceHelper extends WebDriver
             "(//$following"."*[contains(text(),'{$actionText}')])[$index]",
             "(//$following"."*[@placeholder='{$actionText}'])[$index]",
         ];
-        print_r($xpathVariations);
+//        print_r($xpathVariations);
 
         $exception = [];
         foreach ($xpathVariations as $xpath) {
             try {
                 $this->seeElementInDOM($xpath);
-                $this->waitForElementClickable($xpath, 2);
+                $this->waitForElementClickable($xpath);
                 $this->clicked($xpath);
+                echo "Clicked on ".$xpath.PHP_EOL;
                 break; // Exit the loop if the element is found and clicked successfully
             } catch (\Exception $e) {
                 $exception[] = $e->getMessage();
@@ -160,18 +161,20 @@ class AcceptanceHelper extends WebDriver
             "(//$following"."*[contains(text(),'{$actionText}')])$indexPart",
             "(//$following"."*[@placeholder='{$actionText}'])$indexPart",
         ];
+//        print_r($xpathVariations);
 
         $exception = [];
         foreach ($xpathVariations as $xpath) {
             try {
                 $this->seeElementInDOM($xpath);
-                $this->waitForElementClickable($xpath, 2);
+                $this->waitForElementClickable($xpath);
                 $isMultiple = count($this->grabMultiple($xpath));
                 if ($isMultiple >=2) {
                     $this->clickWithLeftButton($xpath. "[$isMultiple]",10,10).PHP_EOL;
-                    echo "Multiple element found, So I clicked on last element ".$xpath. "[$isMultiple]".PHP_EOL;
+                    echo "Multiple found,clicked on ".$xpath. "[$isMultiple]".PHP_EOL;
                 }else{
                     $this->clickWithLeftButton($xpath,10,10);
+                    echo "Clicked on ".$xpath.PHP_EOL;
                 }
                 break; // Exit the loop if the element is found and clicked successfully
             } catch (\Exception $e) {
@@ -183,10 +186,50 @@ class AcceptanceHelper extends WebDriver
             $this->fail($actionText." not found");
         }
     }
+    public function clickOnExactText(string $actionText, string $followingText = null, $index = null): void
+    {
+        $following = "";
+        if (!empty($followingText)) {
+            $following = "*[normalize-space()='$followingText']/following::";
+        }
 
+        $indexPart = "";
+        if ($index !== null) {
+            $indexPart = "[$index]";
+        }
 
+        $xpathVariations = [
+            "(//$following"."*[@x-placement]//*[text()='{$actionText}'])$indexPart",
+            "(//$following"."*[@x-placement]//*[normalize-space()='{$actionText}'])$indexPart",
+            "(//$following"."*[normalize-space()='{$actionText}'])$indexPart",
+            "(//$following"."*[text()='{$actionText}'])$indexPart",
+            "(//$following"."*[@placeholder='{$actionText}'])$indexPart",
+        ];
+//        print_r($xpathVariations);
 
-
+        $exception = [];
+        foreach ($xpathVariations as $xpath) {
+            try {
+                $this->seeElementInDOM($xpath);
+                $this->waitForElementClickable($xpath);
+                $isMultiple = count($this->grabMultiple($xpath));
+                if ($isMultiple >=2) {
+                    $this->clickWithLeftButton($xpath. "[$isMultiple]",10,10).PHP_EOL;
+                    echo "Multiple found,clicked on ".$xpath. "[$isMultiple]".PHP_EOL;
+                }else{
+                    $this->clickWithLeftButton($xpath,10,10);
+                    echo "Clicked on ".$xpath.PHP_EOL;
+                }
+                break; // Exit the loop if the element is found and clicked successfully
+            } catch (\Exception $e) {
+                $exception[] = $e->getMessage();
+                // If the element is not found or the click fails, continue to the next XPath variation
+            }
+        }
+        if (count($exception) === count($xpathVariations)) {
+            $this->fail($actionText." not found");
+        }
+    }
 
     /**
      * @throws Exception

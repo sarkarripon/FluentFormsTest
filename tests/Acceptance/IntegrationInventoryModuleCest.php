@@ -14,7 +14,7 @@ use \Codeception\Util\Debug;
 
 class IntegrationInventoryModuleCest
 {
-    use IntegrationHelper, FieldCustomizer;
+    use IntegrationHelper, FieldCustomizer, DataGenerator;
 
     public function _before(AcceptanceTester $I): void
     {
@@ -24,9 +24,11 @@ class IntegrationInventoryModuleCest
     }
 
     // tests
-    public function test_inventory_module(AcceptanceTester $I, DataGenerator $faker): void
+    public function test_inventory_module(AcceptanceTester $I): void
     {
         $pageName = __FUNCTION__.'_'.rand(1,100);
+
+        $this->turnOnIntegration($I, "Inventory Module");
         $customName = [
             'nameFields' => 'Name',
             'email' => 'Email Address',
@@ -49,7 +51,7 @@ class IntegrationInventoryModuleCest
             'First Name'=>'firstName',
             'Last Name'=>'lastName',
         ];
-        $returnedFakeData = $faker->generatedData($fillAbleDataArr);
+        $returnedFakeData = $this->generatedData($fillAbleDataArr);
         foreach ($returnedFakeData as $selector => $value) {
             $I->tryToFilledField(FluentFormsSelectors::fillAbleArea($selector), $value);
         }

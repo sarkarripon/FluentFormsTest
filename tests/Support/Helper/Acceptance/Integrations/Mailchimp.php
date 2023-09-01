@@ -11,44 +11,44 @@ use Tests\Support\Selectors\FluentFormsSettingsSelectors;
 trait Mailchimp
 {
     use IntegrationHelper;
-    public function configureMailchimp(AcceptanceTester $I, $integrationPositionNumber): void
+    public function configureMailchimp(AcceptanceTester $I, $integrationName): void
     {
-        $this->InitiateIntegrationConfiguration($I,$integrationPositionNumber);
-
-        if ($integrationPositionNumber == 8) {
+        $this->turnOnIntegration($I,$integrationName);
             $saveSettings = $I->checkElement(FluentFormsSettingsSelectors::APIDisconnect);
-
             if (!$saveSettings) // Check if the Mailchimp integration is already configured.
             {
                 $I->reloadIfElementNotFound(FluentFormsSettingsSelectors::MailchimpApiKeyField);
                 $I->fillField(FluentFormsSettingsSelectors::MailchimpApiKeyField, getenv('MAILCHIMP_API_KEY'));
                 $I->clicked(FluentFormsSettingsSelectors::APISaveButton);
-                $I->seeSuccess('Your mailchimp api key has been verfied and successfully set');
+                $I->seeSuccess("Success");
             }
             $this->configureApiSettings($I,"Mailchimp");
-        }
     }
 
-    public function mapMailchimpFields(AcceptanceTester $I, $otherField=null,array $otherFieldArray=null,string $staticTag=null, array $dynamicTag=null): void
+    public function mapMailchimpFields(AcceptanceTester $I, array $customName, array $extraListOrService=null): void
     {
-        $this->mapEmailInCommon($I,"Mailchimp Integration");
-        if ($otherField == "yes" and !empty($otherField)) {
-            $this->mapCommonFieldsWithLabel($I,$otherFieldArray,'Select a Field or Type Custom value');
-            }
-        $I->clickOnText('Select Interest Category','Interest Group');
-        $I->clickOnText('Authlab','Interest Group');
-        $I->clickOnText('Select Interest','Interest Group');
-        $I->clickOnText('fluentforms','Interest Group');
+        $this->mapEmailInCommon($I,"Mailchimp Integration",$extraListOrService);
+        $this->assignShortCode($I,$customName);
+//
+//        if ($otherField == "yes" and !empty($otherField)) {
+//            $this->mapCommonFieldsWithLabel($I,$otherFieldArray,'Select a Field or Type Custom value');
+//            }
 
-        if ($staticTag=='yes' and !empty($staticTag)) {
-            $I->fillField(FluentFormsSelectors::mailchimpStaticTag, $staticTag);
-        }
-        if ($dynamicTag=='yes' and !empty($dynamicTag)) {
-            $this->mapDynamicTag($I,'yes',$dynamicTag);
-        }
+        $I->clicked(FluentFormsSelectors::dropdown("Select Interest Category"));
+        $I->clickedOnText(getenv('MAILCHIMP_INTEREST_GROUP_NAME'),'Interest Group');
+//        $I->waitForElementClickable(FluentFormsSelectors::dropdown("Select Interest"));
+        $I->clickByJS(FluentFormsSelectors::dropdown("Select Interest"));
+        $I->retryClickOnText(getenv('MAILCHIMP_INTEREST'),'Interest Group');
+
+//        if ($staticTag=='yes' and !empty($staticTag)) {
+//            $I->fillField(FluentFormsSelectors::mailchimpStaticTag, $staticTag);
+//        }
+//        if ($dynamicTag=='yes' and !empty($dynamicTag)) {
+//            $this->mapDynamicTag($I,'yes',$dynamicTag);
+//        }
         $I->clickWithLeftButton(FluentFormsSelectors::saveButton("Save Feed"));
         $I->seeSuccess('Integration successfully saved');
-        $I->wait(2);
+        $I->wait(1);
     }
 
     public function fetchMailchimpData(AcceptanceTester $I, $email)

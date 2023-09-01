@@ -18,9 +18,11 @@ class IntegrationZapierCest
     #[Group('Integration')]
     public function test_zapier_push_data(AcceptanceTester $I): void
     {
-        $this->prepareForm($I,__FUNCTION__, ['generalFields' => ['email', 'nameFields']]);
+        $pageName = __FUNCTION__.'_'.rand(1,100);
+        
+        $this->prepareForm($I,$pageName, ['generalFields' => ['email', 'nameFields']]);
         $this->configureZapier($I, 7);
-        $this->preparePage($I,__FUNCTION__);
+        $this->preparePage($I,$pageName);
 
         $fillAbleDataArr = FieldSelectors::getFieldDataArray(['email', 'first_name', 'last_name']);
         foreach ($fillAbleDataArr as $selector => $value) {
@@ -30,7 +32,7 @@ class IntegrationZapierCest
         $remoteData = $this->fetchGoogleSheetData($I, $fillAbleDataArr["//input[contains(@id,'email')]"]);
 
         if (empty($remoteData)) {
-            $I->amOnPage('/' . __FUNCTION__);
+            $I->amOnPage('/' . $pageName);
             $fillAbleDataArr = FieldSelectors::getFieldDataArray(['email', 'first_name', 'last_name',]);
             foreach ($fillAbleDataArr as $selector => $value) {
                 $I->fillByJS($selector, $value);

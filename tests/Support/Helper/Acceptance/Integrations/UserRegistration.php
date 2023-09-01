@@ -6,9 +6,9 @@ use Tests\Support\Selectors\FluentFormsSettingsSelectors;
 
 trait UserRegistration
 {
-    public function configureUserRegistration(AcceptanceTester $I, $integrationPositionNumber): void
+    public function configureUserRegistration(AcceptanceTester $I, $integrationName): void
     {
-        $this->initiateIntegrationConfiguration($I,$integrationPositionNumber);
+        $this->turnOnIntegration($I,$integrationName);
         $this->configureApiSettings($I,"UserRegistration");
     }
 

@@ -15,9 +15,7 @@ use Tests\Support\Selectors\FluentFormsSelectors;
 
 class IntegrationUserRegistrationCest
 {
-    use IntegrationHelper;
-    use UserRegistration;
-    use ShortCodes;
+    use IntegrationHelper, UserRegistration, DataGenerator;
     public function _before(AcceptanceTester $I): void
     {
        $I->loadDotEnvFile();
@@ -25,7 +23,7 @@ class IntegrationUserRegistrationCest
     }
 
 
-    public function test_user_registration(AcceptanceTester $I,DataGenerator $faker): array
+    public function test_user_registration(AcceptanceTester $I): array
     {
         global $newUser;
         $pageName = __FUNCTION__.'_'.rand(1,100);
@@ -55,7 +53,7 @@ class IntegrationUserRegistrationCest
             'Last Name'=>'lastName',
             'Password'=>'password',
         ];
-        $returnedFakeData = $faker->generatedData($fillAbleDataArr);
+        $returnedFakeData = $this->generatedData($fillAbleDataArr);
         foreach ($returnedFakeData as $selector => $value) {
             $I->tryToFilledField(FluentFormsSelectors::fillAbleArea($selector), $value);
         }
@@ -74,12 +72,12 @@ class IntegrationUserRegistrationCest
         return $newUser;
     }
 
-    public function test_user_update(AcceptanceTester $I, DataGenerator $faker): void
+    public function test_user_update(AcceptanceTester $I ): void
     {
         global $newUser;
         $pageName = __FUNCTION__.'_'.rand(1,100);
         if (empty($newUser)) {
-            $newUser = $this->test_user_registration($I,$faker);
+            $newUser = $this->test_user_registration($I);
         }
         $I->loginWordpress();
         $extraListOrService =['Services'=>'User Update'];
@@ -112,7 +110,7 @@ class IntegrationUserRegistrationCest
             'Password'=>'password',
             'Repeat Password'=>'password',
         ];
-        $returnedFakeData = $faker->generatedData($fillAbleDataArr);
+        $returnedFakeData = $this->generatedData($fillAbleDataArr);
         foreach ($returnedFakeData as $selector => $value) {
             $I->tryToFilledField(FluentFormsSelectors::fillAbleArea($selector), $value);
         }

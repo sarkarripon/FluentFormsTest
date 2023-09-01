@@ -118,7 +118,7 @@ trait IntegrationHelper
         $I->amOnUrl($pageUrl);
     }
 
-    public function initiateIntegrationConfiguration(AcceptanceTester $I, string $integrationName): void
+    public function turnOnIntegration(AcceptanceTester $I, string $integrationName): void
     {
         $I->retry(4,200);
         $I->amOnPage(FluentFormsAddonsSelectors::integrationsPage);
@@ -147,7 +147,7 @@ trait IntegrationHelper
         $this->takeMeToConfigurationPage($I);
         $I->clicked(FluentFormsSelectors::allIntegrations);
         $I->clicked(FluentFormsSelectors::addNewIntegration);
-        $I->fillField(FluentFormsSelectors::searchIntegration, $searchKey);
+        $I->filledField(FluentFormsSelectors::searchIntegration, $searchKey);
         $I->clicked(FluentFormsSelectors::searchResult);
     }
     public function mapEmailInCommon(AcceptanceTester $I, $feedName, array $extraListOrService=null): void
@@ -185,12 +185,20 @@ trait IntegrationHelper
             if (is_array($labels)) {
                 foreach ($labels as $label) {
                     $I->clicked(FluentFormsSelectors::shortcodeDropdown($label));
-                    $I->clickOnText($label, $label);  // Using the field label as the following text
+                    try {
+                        $I->clickOnExactText($label, $label);  // Using the field label as the following text
+                    } catch (\Exception $e) {
+                        $I->clickOnText($label, $label);  // Using the field label as the following text
+                    }
                     $I->tryToPressKey(FluentFormsSelectors::shortcodeDropdown($label), \Facebook\WebDriver\WebDriverKeys::ESCAPE);
                 }
             } else {
                 $I->clicked(FluentFormsSelectors::shortcodeDropdown($labels));
-                $I->clickOnText($labels, $labels);  // Using the field label as the following text
+                try {
+                    $I->clickOnExactText($labels, $labels);  // Using the field label as the following text
+                } catch (\Exception $e) {
+                    $I->clickOnText($labels, $labels);  // Using the field label as the following text
+                }
                 $I->tryToPressKey(FluentFormsSelectors::shortcodeDropdown($labels), \Facebook\WebDriver\WebDriverKeys::ESCAPE);
             }
         }

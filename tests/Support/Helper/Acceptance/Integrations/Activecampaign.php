@@ -10,24 +10,16 @@ trait Activecampaign
 {
     use IntegrationHelper;
 
-    public function mapActivecampaignField(AcceptanceTester $I, array $otherFieldArray=null): void
+    public function mapActivecampaignField(AcceptanceTester $I, array $customName, array $extraListOrService=null): void
     {
-        $this->mapEmailInCommon($I, "Activecampaign Integration");
-        if (isset($otherFieldArray) and !empty($otherFieldArray))
-        {
-            foreach ($otherFieldArray as $fieldLabel => $fieldValue)
-            {
-                $I->fillField(FluentFormsSelectors::commonFields($fieldLabel,'Select a Field or Type Custom value'), $fieldValue);
-            }
-        }
+        $this->mapEmailInCommon($I, "Activecampaign Integration",$extraListOrService);
+        $this->assignShortCode($I,$customName);
         $I->clicked(FluentFormsSelectors::saveButton("Save Feed"));
     }
 
-    public function configureActivecampaign(AcceptanceTester $I, $integrationPositionNumber): void
+    public function configureActivecampaign(AcceptanceTester $I, $integrationName): void
     {
-        $this->initiateIntegrationConfiguration($I,$integrationPositionNumber);
-        $activecampaignPosition = 11;
-        if ($integrationPositionNumber === $activecampaignPosition) {
+        $this->turnOnIntegration($I,$integrationName);
             $isConfigured = $I->checkElement(FluentFormsSettingsSelectors::APIDisconnect);
             if (!$isConfigured) {
                 $I->fillField(
@@ -42,7 +34,7 @@ trait Activecampaign
             }
             $this->configureApiSettings($I, "ActiveCampaign");
         }
-    }
+
     public function fetchActivecampaignData(AcceptanceTester $I, string $emailToFetch)
     {
         for ($i = 0; $i < 2; $i++) {

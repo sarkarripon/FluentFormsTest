@@ -10,7 +10,7 @@ trait Zapier
     use IntegrationHelper;
     public function configureZapier(AcceptanceTester $I, $integrationPositionNumber): void
     {
-        $this->initiateIntegrationConfiguration($I,$integrationPositionNumber);
+        $this->turnOnIntegration($I,$integrationPositionNumber);
         $this->takeMeToConfigurationPage($I);
         $I->clickOnText("Zapier","Conditional Confirmations");
         $I->clickOnText("Add Webhook","Zapier Integration");

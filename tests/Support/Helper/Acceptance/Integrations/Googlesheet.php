@@ -34,20 +34,16 @@ trait Googlesheet
         $I->click(FluentFormsSelectors::removeMappingField('Spreadsheet Fields',$fieldCounter));
         $I->click(FluentFormsSelectors::saveButton("Save Feed"));
     }
-    public function configureGoogleSheet(AcceptanceTester $I, $integrationPositionNumber): void
+    public function configureGoogleSheet(AcceptanceTester $I, $integrationName): void
     {
-
-        $this->initiateIntegrationConfiguration($I,$integrationPositionNumber);
-
-        if ($integrationPositionNumber == 25) {
-            $saveSettings = $I->checkElement(FluentFormsSettingsSelectors::APIDisconnect);
-
-            if ($saveSettings) // Check if the Google sheet integration is already configured.
-            {
-                $this->configureApiSettings($I,"Google");
-            }else{
-                $I->fail('Please connect the Google sheet integration manually.');
-            }
+        $this->turnOnIntegration($I,$integrationName);
+        
+        $saveSettings = $I->checkElement(FluentFormsSettingsSelectors::APIDisconnect);
+        if ($saveSettings) // Check if the Google sheet integration is already configured.
+        {
+            $this->configureApiSettings($I,"Google");
+        }else{
+            $I->fail('Please connect the Google sheet integration manually.');
         }
     }
     public function fetchGoogleSheetData(AcceptanceTester $I, string $emailToFetch): array

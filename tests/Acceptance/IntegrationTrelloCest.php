@@ -20,12 +20,14 @@ class IntegrationTrelloCest
     #[Group('Integration')]
     public function test_trello_push_data(AcceptanceTester $I): void
     {
+        $pageName = __FUNCTION__.'_'.rand(1,100);
+        
         $faker = \Faker\Factory::create();
-        $this->prepareForm($I,__FUNCTION__, ['generalFields' => ['textArea', 'textArea']]);
+        $this->prepareForm($I,$pageName, ['generalFields' => ['textArea', 'textArea']]);
         $this->configureTrello($I,13);
         $this->mapTrelloField($I);
-        $this->preparePage($I,__FUNCTION__);
-//        $I->amOnPage('/' . __FUNCTION__);
+        $this->preparePage($I,$pageName);
+//        $I->amOnPage('/' . $pageName);
         $cardTitle = $faker->sentence($nbWords = 3, $variableNbWords = true);
         $cardContent = $faker->text($maxNbChars = 60);
 
@@ -35,7 +37,7 @@ class IntegrationTrelloCest
 
         $remoteData = $this->fetchTrelloData($I,$cardTitle);
         if (empty($remoteData['title'])){
-            $I->amOnPage('/' . __FUNCTION__);
+            $I->amOnPage('/' . $pageName);
             $I->fillByJS("(//textarea[contains(@id,'description')])[1]", $cardTitle );
             $I->fillByJS("(//textarea[contains(@id,'description')])[2]", $cardContent);
             $I->clicked(FieldSelectors::submitButton);

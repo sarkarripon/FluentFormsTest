@@ -14,15 +14,16 @@ class IntegrationWebhookCest
     use IntegrationHelper, Webhook;
     public function _before(AcceptanceTester $I): void
     {
-        $I->loadDotEnvFile();
-        $I->loginWordpress();
+        $I->loadDotEnvFile(); $I->loginWordpress();
     }
     #[Group('Integration')]
     public function test_webhook_push_data(AcceptanceTester $I): void
     {
-        $this->prepareForm($I,__FUNCTION__, ['generalFields' => ['email', 'nameFields']]);
+        $pageName = __FUNCTION__.'_'.rand(1,100);
+        
+        $this->prepareForm($I,$pageName, ['generalFields' => ['email', 'nameFields']]);
         $this->configureWebhook($I,6);
-        $this->preparePage($I,__FUNCTION__);
+        $this->preparePage($I,$pageName);
 
         $fillAbleDataArr = FieldSelectors::getFieldDataArray(['email', 'first_name', 'last_name']);
         foreach ($fillAbleDataArr as $selector => $value) {

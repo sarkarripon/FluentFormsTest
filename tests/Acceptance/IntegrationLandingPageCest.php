@@ -17,8 +17,10 @@ class IntegrationLandingPageCest
 
     public function test_landing_page(AcceptanceTester $I): void
     {
+        $pageName = __FUNCTION__.'_'.rand(1,100);
+        
         global $landingPageUrl;
-        $this->prepareForm($I, __FUNCTION__, ['generalFields' => ['email', 'nameFields']]);
+        $this->prepareForm($I, $pageName, ['generalFields' => ['email', 'nameFields']]);
         $this->configureLandingPage($I,2);
         $I->amOnUrl($landingPageUrl);
         $I->dontSee(getenv("WORDPRESS_USERNAME"));

@@ -2,49 +2,67 @@
 namespace Tests\Acceptance;
 
 use Codeception\Attribute\Group;
+use Tests\Support\Factories\DataProvider\DataGenerator;
 use Tests\Support\Helper\Acceptance\Integrations\IntegrationHelper;
 use Tests\Support\AcceptanceTester;
 use Tests\Support\Factories\DataProvider\ShortCodes;
 use Tests\Support\Helper\Acceptance\Integrations\Activecampaign;
 use Tests\Support\Selectors\FieldSelectors;
+use Tests\Support\Selectors\FluentFormsSelectors;
 
 class IntegrationActivecampaignCest
 {
-    use IntegrationHelper,Activecampaign,ShortCodes;
+    use IntegrationHelper,Activecampaign,ShortCodes, DataGenerator;
     public function _before(AcceptanceTester $I): void
     {
-        $I->loadDotEnvFile();
-        $I->loginWordpress();
+        $I->loadDotEnvFile(); $I->loginWordpress();
     }
 
     #[Group('Integration')]
     public function test_activecampaign_push_data(AcceptanceTester $I): void
     {
-        $this->prepareForm($I,__FUNCTION__, ['generalFields' => ['email', 'nameFields', 'phone']]);
-        $this->configureActivecampaign($I,11);
-        $otherFieldArray = $this->getShortCodeArray(['First Name', 'Last Name', 'Phone Number']);
-        $this->mapActivecampaignField($I,$otherFieldArray);
-        $this->preparePage($I,__FUNCTION__);
+        $pageName = __FUNCTION__.'_'.rand(1,100);
 
-        $fillAbleDataArr = FieldSelectors::getFieldDataArray(['email', 'first_name', 'last_name', 'phone']);
-        foreach ($fillAbleDataArr as $selector => $value) {
-            $I->fillByJS($selector, $value);
+        $extraListOrService =['ActiveCampaign List'=>'Master Contact List'];
+        $customName=[
+            'email'=>'Email Address',
+            'simpleText'=>['First Name','Last Name','Phone Number','Organization Name'],
+        ];
+        $this->prepareForm($I, $pageName, [
+            'generalFields' => ['email','simpleText'],
+        ],'yes',$customName);
+
+        $this->configureActivecampaign($I, "ActiveCampaign");
+        $this->mapActivecampaignField($I,$customName,$extraListOrService);
+
+        $this->preparePage($I,$pageName);
+
+        $fillAbleDataArr = [
+            'Email Address'=>'email',
+            'First Name'=>'firstName',
+            'Last Name'=>'lastName',
+            'Phone Number'=>'phoneNumber',
+            'Organization Name'=>'company',
+        ];
+        $returnedFakeData = $this->generatedData($fillAbleDataArr);
+//        print_r($returnedFakeData);
+        foreach ($returnedFakeData as $selector => $value) {
+            $I->tryToFilledField(FluentFormsSelectors::fillAbleArea($selector), $value);
         }
         $I->clicked(FieldSelectors::submitButton);
-
-        $remoteData = $this->fetchActivecampaignData($I,$fillAbleDataArr["//input[contains(@id,'email')]"]);
+        $remoteData = $this->fetchActivecampaignData($I,$returnedFakeData['Email Address']);
 //        print_r($remoteData['contacts']);
 
         // retry to submit form again if data not found
         if (empty($remoteData['contacts'])){
-            $I->amOnPage('/' . __FUNCTION__);
-            $fillAbleDataArr = FieldSelectors::getFieldDataArray(['email', 'first_name', 'last_name', 'phone']);
+            $I->amOnPage('/' . $pageName);
 
-            foreach ($fillAbleDataArr as $selector => $value) {
-                $I->fillByJS($selector, $value);
+            $returnedFakeData = $this->generatedData($fillAbleDataArr);
+            foreach ($returnedFakeData as $selector => $value) {
+                $I->tryToFilledField(FluentFormsSelectors::fillAbleArea($selector), $value);
             }
             $I->clicked(FieldSelectors::submitButton);
-            $remoteData = $this->fetchActivecampaignData($I,$fillAbleDataArr["//input[contains(@id,'email')]"]);
+            $remoteData = $this->fetchActivecampaignData($I,$returnedFakeData['Email Address']);
         }
         if (!empty($remoteData['contacts'])) {
             $contact = $remoteData['contacts'][0];
@@ -54,10 +72,10 @@ class IntegrationActivecampaignCest
             $phone = $contact['phone'];
 
             $I->assertString([
-                $fillAbleDataArr["//input[contains(@id,'email')]"] => $email,
-                $fillAbleDataArr["//input[contains(@id,'_first_name_')]"] => $firstName,
-                $fillAbleDataArr["//input[contains(@id,'_last_name_')]"] => $lastName,
-                $fillAbleDataArr["//input[contains(@id,'phone')]"] => $phone,
+                $returnedFakeData['Email Address'] => $email,
+                $returnedFakeData['First Name'] => $firstName,
+                $returnedFakeData['Last Name'] => $lastName,
+                $returnedFakeData['Phone Number'] => $phone,
             ]);
         }
     }

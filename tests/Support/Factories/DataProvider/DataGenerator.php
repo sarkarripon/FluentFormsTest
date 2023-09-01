@@ -3,7 +3,7 @@
 namespace Tests\Support\Factories\DataProvider;
 use Hackzilla\PasswordGenerator\Generator\RequirementPasswordGenerator;
 
-class DataGenerator
+trait DataGenerator
 {
     protected $faker;
     public function __construct()
@@ -37,6 +37,8 @@ class DataGenerator
         foreach ($keys as $key => $value) {
             if ($value == 'password') {
                 $generatedData[$key] = $password;
+            }elseif ($value=='email'){
+                $generatedData[$key] = $this->faker->userName() . '@' . $this->randEmailTld();
             } elseif ($key == 'Repeat Password') {
                 $generatedData[$key] = $password;
             }elseif ($value == 'url') {
@@ -46,5 +48,10 @@ class DataGenerator
             }
         }
         return $generatedData;
+    }
+    public function randEmailTld(): string
+    {
+        $TLDs =['gmail.com', 'live.com','yahoo.com','hotmail.com','outlook.com','aol.com','zoho.com','yandex.com','protonmail.com','icloud.com','mail.com','gmx.com'];
+        return $TLDs[array_rand($TLDs)];
     }
 }

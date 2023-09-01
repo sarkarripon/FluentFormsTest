@@ -12,7 +12,7 @@ trait Webhook
     public function configureWebhook(AcceptanceTester $I, $integrationPositionNumber): void
     {
         $webhookUrl ="https://webhook.site/".getenv("WEBHOOK");
-        $this->initiateIntegrationConfiguration($I,$integrationPositionNumber);
+        $this->turnOnIntegration($I,$integrationPositionNumber);
         $this->takeMeToConfigurationPage($I);
         $I->clickOnText("WebHook","Conditional Confirmations");
         $I->clickOnText("Add New","WebHooks Integration");
