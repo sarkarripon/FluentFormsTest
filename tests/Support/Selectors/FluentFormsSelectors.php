@@ -109,7 +109,7 @@ class FluentFormsSelectors
         return "(//label[normalize-space()='$label']/following::input | //label[normalize-space()='$label']/following::textarea)[1]";
     }
     const mapEmailDropdown = "//div[@class='el-select']//i[contains(@class,'el-select__caret') or //input[@placeholder='Select a Field']]";
-    const mapEmail = "//span[normalize-space()='Email']";
+    const mapEmail = "(//span[contains(text(),'Email')])[1]";
 //    const saveButton("Save Feed") = "//span[normalize-space()='Save Feed' and //button[contains(@class,'el-button--primary')]]";
     const integrationFeed = "(//div[contains(@class, 'ff_card_head_group')] | //button[@title='Show Video'])[1]";
     const feedName = "//input[@placeholder='Your Feed Name']";

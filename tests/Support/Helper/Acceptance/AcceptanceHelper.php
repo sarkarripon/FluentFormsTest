@@ -99,10 +99,6 @@ class AcceptanceHelper extends WebDriver
      */
     public function filledField($selector, $value): void
     {
-//        $this->performOn($selector, function (WebDriver $I) use ($selector, $value) {
-//            $I->moveMouseOver($selector);
-//            $I->fillField($selector, $value);
-//        });
         $this->waitForElementClickable($selector);
         $this->clearField($selector);
         $this->clickWithLeftButton($selector);

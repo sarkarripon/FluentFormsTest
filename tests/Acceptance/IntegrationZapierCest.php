@@ -7,7 +7,7 @@ use Tests\Support\Helper\Acceptance\Integrations\Googlesheet;
 use Tests\Support\Helper\Acceptance\Integrations\IntegrationHelper;
 use Tests\Support\Helper\Acceptance\Integrations\Zapier;
 use Tests\Support\Selectors\FieldSelectors;
-
+#[Group('Integration')]
 class IntegrationZapierCest
 {
     use IntegrationHelper, Zapier, Googlesheet;

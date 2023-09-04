@@ -3,6 +3,12 @@ namespace Tests\Support\Selectors;
 
 class FluentFormsSettingsSelectors
 {
+    // common
+    public static function apiField(string $followingText, int $index = 1): string
+    {
+        return "(//label[normalize-space()='{$followingText}']/following::input[contains(@class,'el-input__inner')])[{$index}]";
+    }
+//    const apiField = "//input[contains(@class,'el-input__inner')]";
     const APISaveButton = "//button[contains(@class,'el-button--primary')]";
     const APIDisconnect = "//button[contains(@class,'el-button--danger')]";
 

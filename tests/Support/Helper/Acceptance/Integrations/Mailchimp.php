@@ -29,10 +29,6 @@ trait Mailchimp
     {
         $this->mapEmailInCommon($I,"Mailchimp Integration",$extraListOrService);
         $this->assignShortCode($I,$customName);
-//
-//        if ($otherField == "yes" and !empty($otherField)) {
-//            $this->mapCommonFieldsWithLabel($I,$otherFieldArray,'Select a Field or Type Custom value');
-//            }
 
         $I->clicked(FluentFormsSelectors::dropdown("Select Interest Category"));
         $I->clickedOnText(getenv('MAILCHIMP_INTEREST_GROUP_NAME'),'Interest Group');

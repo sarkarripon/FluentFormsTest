@@ -156,10 +156,8 @@ trait IntegrationHelper
         $I->fillByJS(FluentFormsSelectors::feedName, $feedName);
 
         if (empty($extraListOrService)) {
-            $I->clicked(FluentFormsSelectors::SegmentDropDown);
-            $I->clicked(FluentFormsSelectors::Segment);
-            $I->clickByJS(FluentFormsSelectors::mapEmailDropdown);
-            $I->clickByJS(FluentFormsSelectors::mapEmail);
+            $I->clicked(FluentFormsSelectors::mapEmailDropdown);
+            $I->clicked(FluentFormsSelectors::mapEmail);
         }else{
             foreach ($extraListOrService as $key => $value) {
                 $I->clicked(FluentFormsSelectors::dropdown($key));
@@ -245,7 +243,7 @@ trait IntegrationHelper
         }
     }
 
-    public function retryFetchingData(AcceptanceTester $I, $fetchFunction, $searchTerm, $retries = 2)
+    public function retryFetchingData(AcceptanceTester $I, $fetchFunction, $searchTerm, $retries = 3)
     {
         $expectedRow = null;
         for ($i = 0; $i < $retries; $i++) {

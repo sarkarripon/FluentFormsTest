@@ -62,6 +62,8 @@ class IntegrationGoogleSheetCest
                 $fillAbleDataArr["//input[contains(@id,'_first_name_')]"] => $firstName,
                 $fillAbleDataArr["//input[contains(@id,'_last_name_')]"] => $lastName,
             ]);
+        }else{
+            $I->fail("Data not found in Google Sheet");
         }
     }
 }

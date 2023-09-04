@@ -329,7 +329,11 @@ class AcceptanceTester extends \Codeception\Actor
             $this->waitForElement(NewPageSelectors::formShortCode, 10);
             $formID = $this->grabTextFrom(NewPageSelectors::formShortCode);
         }
-        $this->amOnPage(GlobalPageSelec::newPageCreationPage);
+        $uri = $this->tryToSeeCurrentUrlMatches('edit\.php');
+        if (!$uri) {
+            $this->amOnPage(GlobalPageSelec::newPageCreationPage);
+        }
+//        $this->amOnPage(GlobalPageSelec::newPageCreationPage);
         $this->tryToClicked(NewPageSelectors::addNewPage);
 
         $this->tryToExecuteJS(sprintf(NewPageSelectors::jsForTitle, $title));

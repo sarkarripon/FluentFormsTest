@@ -89,9 +89,5 @@ trait Trello
         return ['title'=> $title, 'cardContent' => $cardContent];
     }
 
-    public function someMethod(): void
-    {
-        $this->someMethods();
-    }
 
 }
