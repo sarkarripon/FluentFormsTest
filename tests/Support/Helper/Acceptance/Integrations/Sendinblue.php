@@ -8,33 +8,34 @@ use Tests\Support\Selectors\FluentFormsSettingsSelectors;
 
 trait Sendinblue
 {
-    public function mapSendinblueFields(AcceptanceTester $I,$customName, $extraListOrService): void
-    {
-        $this->mapEmailInCommon($I,"Sendinblue Integration",$extraListOrService);
-        $this->assignShortCode($I,$customName);
 
-        $I->clickWithLeftButton(FluentFormsSelectors::saveButton("Save Feed"));
-        $I->seeSuccess('Integration successfully saved');
-        $I->wait(1);
-
-    }
     public function configureSendinblue(AcceptanceTester $I, $integrationName): void
     {
         $this->turnOnIntegration($I,$integrationName);
-        $saveSettings = $I->checkElement(FluentFormsSettingsSelectors::APIDisconnect);
-        if (!$saveSettings)
+        $isSaveSettings = $I->checkElement(FluentFormsSettingsSelectors::APIDisconnect);
+        if (!$isSaveSettings)
         {
             $I->filledField(FluentFormsSettingsSelectors::apiField('Sendinblue V3 API Key'), getenv('SENDINBLUE_API_KEY'));
             $I->clicked(FluentFormsSettingsSelectors::APISaveButton);
             $I->seeSuccess("Success");
         }
         $this->configureApiSettings($I,"Sendinblue");
+    }
+
+    public function mapSendinblueFields(AcceptanceTester $I,array $fieldMapping, $extraListOrService): void
+    {
+        $this->mapEmailInCommon($I,"Sendinblue Integration",$extraListOrService);
+        $this->assignShortCode($I,$fieldMapping);
+
+        $I->clickWithLeftButton(FluentFormsSelectors::saveButton("Save Feed"));
+        $I->seeSuccess('Integration successfully saved');
+        $I->wait(1);
 
     }
 
     public function fetchSendinblueData(AcceptanceTester $I, string $emailToFetch): array
     {
-        return $this->retryFetchingData($I,[$this, 'fetchData'], $emailToFetch,5);
+        return $this->retryFetchingData($I,[$this, 'fetchData'], $emailToFetch,8);
     }
     public function fetchData(string $emailToFetch)
     {

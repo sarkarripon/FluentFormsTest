@@ -3,27 +3,37 @@
 
 namespace Tests\Acceptance;
 
-use Tests\Support\Factories\DataProvider\DataGenerator;
-use Tests\Support\Helper\Acceptance\Integrations\Sendinblue;
+use Tests\Support\Helper\Acceptance\Integrations\IContact;
 use Tests\Support\AcceptanceTester;
 use Tests\Support\Helper\Acceptance\Integrations\IntegrationHelper;
 use Tests\Support\Selectors\FieldSelectors;
 use Tests\Support\Selectors\FluentFormsSelectors;
 
-class IntegrationSendinblueCest
+class IntegrationIContactCest
 {
-    use IntegrationHelper, SendinBlue, DataGenerator;
-    public function _before(AcceptanceTester $I): void
+    use IntegrationHelper, IContact;
+    public function _before(AcceptanceTester $I)
     {
         $I->loadDotEnvFile();
-        $I->loginWordpress();
+//        $I->loginWordpress();
     }
 
     // tests
-    public function test_sendinblue_push_data(AcceptanceTester $I): void
+    public function test_iContact_push_data(AcceptanceTester $I): void
     {
+        $cjnj= $this->fetchData('qa@wpmanageninja.com');
+        print_r($cjnj);
+        exit();
+
+
+
+
+
+
+
+
         $pageName = __FUNCTION__.'_'.rand(1,100);
-        $extraListOrService =['Sendinblue Segment'=>getenv('SENDINBLUE_LIST_NAME')];
+        $extraListOrService =['iContact List'=>getenv('ICONTACT_CONTACT_LIST')];
         $customName=[
             'email'=>'Email Address',
             'nameFields'=>'Name',
