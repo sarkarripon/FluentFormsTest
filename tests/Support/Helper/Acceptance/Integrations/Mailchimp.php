@@ -14,11 +14,11 @@ trait Mailchimp
     public function configureMailchimp(AcceptanceTester $I, $integrationName): void
     {
         $this->turnOnIntegration($I,$integrationName);
-            $saveSettings = $I->checkElement(FluentFormsSettingsSelectors::APIDisconnect);
-            if (!$saveSettings) // Check if the Mailchimp integration is already configured.
+            $isSaveSettings = $I->checkElement(FluentFormsSettingsSelectors::APIDisconnect);
+            if (!$isSaveSettings) // Check if the Mailchimp integration is already configured.
             {
                 $I->reloadIfElementNotFound(FluentFormsSettingsSelectors::MailchimpApiKeyField);
-                $I->fillField(FluentFormsSettingsSelectors::MailchimpApiKeyField, getenv('MAILCHIMP_API_KEY'));
+                $I->retryFilledField(FluentFormsSettingsSelectors::MailchimpApiKeyField, getenv('MAILCHIMP_API_KEY'));
                 $I->clicked(FluentFormsSettingsSelectors::APISaveButton);
                 $I->seeSuccess("Success");
             }

@@ -19,6 +19,42 @@ trait FieldCustomizer
         }
         return $indexArray;
     }
+//    public function buildArrayWithKey(array $customName): array
+//    {
+//        $new = [];
+//        foreach ($customName as $key => $value) {
+//            if ($key !== 'email') {
+//                if (is_array($value)) {
+//                    foreach ($value as $item) {
+//                        $new[$item] = $item;
+//                    }
+//                } else {
+//                    $new[$value] = $value;
+//                }
+//            }
+//        }
+//        return $new;
+//    }
+    public function buildArrayWithKey(array $customName): array
+    {
+        $new = [];
+        foreach ($customName as $key => $value) {
+            if ($key !== 'email') {
+                if (is_array($value)) {
+                    foreach ($value as $item) {
+                        $new[$item] = $item;
+                    }
+                } elseif ($key === 'nameFields') {
+                    $new['First Name'] = 'First Name';
+                    $new['Last Name'] = 'Last Name';
+                } else {
+                    $new[$value] = $value;
+                }
+            }
+        }
+
+        return $new;
+    }
 
     public function customizeNameFields()
     {

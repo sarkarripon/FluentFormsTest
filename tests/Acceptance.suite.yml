@@ -16,8 +16,8 @@ modules:
 
     config:
         Tests\Support\Helper\Acceptance\AcceptanceHelper:
-            url: 'https://dev-fluentforms-v1.pantheonsite.io'
-#            url: 'https://fluentsmtp.com'
+#            url: 'https://dev-fluentforms-v1.pantheonsite.io'
+            url: 'https://fluentsmtp.com'
             browser: chrome
             request_timeout: 60
             clear_cookies: true
@@ -31,7 +31,7 @@ modules:
                 acceptInsecureCerts: true
                 chromeOptions:
                     args:
-                        - "--headless"
+#                        - "--headless"
                         - "--disable-gpu"
                         - "disable-infobars"
                         - "--window-size=1920,1080"

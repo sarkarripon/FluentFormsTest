@@ -128,9 +128,9 @@ class FluentFormsSelectors
     {
         return "(//*[@placeholder='$text' or normalize-space()='$text'])/following::i[contains(@class,'el-select__caret')][{$index}]";
     }
-    public static function shortcodeDropdown(string $text, $index=1): string
+    public static function shortcodeDropdown(string $text, string $sectionText = 'Email Address', $index=1): string
     {
-        return "(//label[normalize-space()='$text']/following::button | //label[normalize-space()='$text']/following::i)[{$index}]";
+        return "(//label[normalize-space()='{$sectionText}']/following::label[normalize-space()='{$text}']/following::button | //label[normalize-space()='{$sectionText}']/following::label[normalize-space()='{$text}']/following::i)[{$index}]";
     }
     public static function addDynamicTagField($index): string
     {

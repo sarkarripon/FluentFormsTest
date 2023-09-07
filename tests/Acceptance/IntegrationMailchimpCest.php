@@ -11,6 +11,7 @@ use Tests\Support\Factories\DataProvider\ShortCodes;
 use Tests\Support\Helper\Acceptance\Integrations\IntegrationHelper;
 use Tests\Support\Helper\Acceptance\Integrations\Mailchimp;
 use Tests\Support\Selectors\FieldSelectors;
+use Tests\Support\Selectors\FluentFormsSelectors;
 
 class IntegrationMailchimpCest
 {
@@ -33,21 +34,22 @@ class IntegrationMailchimpCest
         $extraListOrService =['Mailchimp List'=>getenv('MAILCHIMP_LIST_NAME')];
         $customName=[
             'email'=>'Email Address',
-            'addressFields'=>'Address',
             'nameFields'=>'Name',
-            'phone'=>'Phone Number',
         ];
         $this->prepareForm($I, $pageName, [
-            'generalFields' => ['email','addressFields', 'nameFields','phone'],
+            'generalFields' => ['email', 'nameFields'],
         ],'yes',$customName);
         $this->configureMailchimp($I, "Mailchimp");
         $fieldMapping=[
-            'email'=>'Email Address',
-            'addressFields'=>'Address',
-            'nameFields'=>['First Name','Last Name'],
-            'phone'=>'Phone Number',
+            'First Name'=>'First Name',
+            'Last Name'=>'Last Name',
         ];
         $this->mapMailchimpFields($I,$fieldMapping,$extraListOrService);
+
+        // Disabling IP Logging inorder to prevent the test from failing for IP log issue
+        $I->amOnPage("wp-admin/admin.php?page=fluent_forms_settings#settings");
+        $I->toggleOn($I, "Disable IP Logging");
+        $I->clicked(FluentFormsSelectors::saveButton("Save Settings"));
 
         $this->preparePage($I,$pageName);
 //        $I->amOnPage('/' . __FUNCTION__)

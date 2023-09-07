@@ -10,10 +10,10 @@ trait Activecampaign
 {
     use IntegrationHelper;
 
-    public function mapActivecampaignField(AcceptanceTester $I, array $customName, array $extraListOrService=null): void
+    public function mapActivecampaignField(AcceptanceTester $I, array $fieldMapping, array $extraListOrService=null): void
     {
         $this->mapEmailInCommon($I, "Activecampaign Integration",$extraListOrService);
-        $this->assignShortCode($I,$customName);
+        $this->assignShortCode($I,$fieldMapping);
         $I->clicked(FluentFormsSelectors::saveButton("Save Feed"));
     }
 

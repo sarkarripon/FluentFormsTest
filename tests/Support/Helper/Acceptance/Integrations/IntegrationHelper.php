@@ -2,6 +2,8 @@
 
 namespace Tests\Support\Helper\Acceptance\Integrations;
 
+use Exception;
+use Facebook\WebDriver\WebDriverKeys;
 use Tests\Support\AcceptanceTester;
 use Tests\Support\Selectors\FluentFormsAddonsSelectors;
 use Tests\Support\Selectors\FluentFormsSelectors;
@@ -85,7 +87,7 @@ trait IntegrationHelper
      * coupon
      * ```
      */
-    public function prepareForm(AcceptanceTester $I, string $formName, array $requiredField, $isCustomName='no', array $customName=null)
+    public function prepareForm(AcceptanceTester $I, string $formName, array $requiredField, $isCustomName = 'no', array $fieldMappingArray = null)
     {
         global $formID;
         $isDelete = getenv("EXISTING_FORM_DELETE");
@@ -94,8 +96,8 @@ trait IntegrationHelper
         }
         $I->initiateNewForm();
         if ($isCustomName == 'yes') {
-            $I->createCustomFormField($requiredField,$customName);
-        }else{
+            $I->createCustomFormField($requiredField, $fieldMappingArray);
+        } else {
             $I->createFormField($requiredField);
         }
 
@@ -120,7 +122,7 @@ trait IntegrationHelper
 
     public function turnOnIntegration(AcceptanceTester $I, string $integrationName): void
     {
-        $I->retry(4,200);
+        $I->retry(4, 200);
         $I->amOnPage(FluentFormsAddonsSelectors::integrationsPage);
         $I->filledField("//input[@placeholder='Search Modules']", $integrationName);
 
@@ -134,14 +136,6 @@ trait IntegrationHelper
         }
     }
 
-    public function takeMeToConfigurationPage(AcceptanceTester $I): void
-    {
-        $I->amOnPage(FluentFormsSelectors::fFormPage);
-        $I->waitForElement(FluentFormsSelectors::mouseHoverMenu, 10);
-        $I->moveMouseOver(FluentFormsSelectors::mouseHoverMenu);
-        $I->clicked(FluentFormsSelectors::formSettings);
-
-    }
     public function configureApiSettings(AcceptanceTester $I, $searchKey): void
     {
         $this->takeMeToConfigurationPage($I);
@@ -150,20 +144,28 @@ trait IntegrationHelper
         $I->filledField(FluentFormsSelectors::searchIntegration, $searchKey);
         $I->clicked(FluentFormsSelectors::searchResult);
     }
-    public function mapEmailInCommon(AcceptanceTester $I, $feedName, array $extraListOrService=null): void
+
+    public function takeMeToConfigurationPage(AcceptanceTester $I): void
+    {
+        $I->amOnPage(FluentFormsSelectors::fFormPage);
+        $I->waitForElement(FluentFormsSelectors::mouseHoverMenu, 10);
+        $I->moveMouseOver(FluentFormsSelectors::mouseHoverMenu);
+        $I->clicked(FluentFormsSelectors::formSettings);
+
+    }
+
+    public function mapEmailInCommon(AcceptanceTester $I, string $feedName, array $extraListOrService = null): void
     {
         $I->waitForElementClickable(FluentFormsSelectors::integrationFeed, 20);
         $I->fillByJS(FluentFormsSelectors::feedName, $feedName);
-
-        if (empty($extraListOrService)) {
-            $I->clicked(FluentFormsSelectors::mapEmailDropdown);
-            $I->clicked(FluentFormsSelectors::mapEmail);
-        }else{
+        if ($extraListOrService) {
             foreach ($extraListOrService as $key => $value) {
-                $I->clicked(FluentFormsSelectors::dropdown($key));
-                $I->clickOnText($value, $key);
+                $I->retryClicked(FluentFormsSelectors::dropdown($key));
+                $I->retryClickOnText($value, $key);
             }
         }
+        $I->clicked(FluentFormsSelectors::mapEmailDropdown);
+        $I->clicked(FluentFormsSelectors::mapEmail);
     }
 
     /**
@@ -177,30 +179,44 @@ trait IntegrationHelper
         }
     }
 
-    public function assignShortCode(AcceptanceTester $I, $customName): void
+//    public function assignShortCode(AcceptanceTester $I, array $fieldMappingArray): void
+//    {
+//        foreach ($fieldMappingArray as $field => $labels) {
+//            if (is_array($labels)) {
+//                foreach ($labels as $label) {
+//                    $I->clicked(FluentFormsSelectors::shortcodeDropdown($label));
+//                    try {
+//                        $I->clickOnExactText($label, $label);  // Using the field label as the following text
+//                    } catch (\Exception $e) {
+//                        $I->clickOnText($label, $label);  // Using the field label as the following text
+//                    }
+//                    $I->tryToPressKey(FluentFormsSelectors::shortcodeDropdown($label), \Facebook\WebDriver\WebDriverKeys::ESCAPE);
+//                }
+//            } else {
+//                $I->clicked(FluentFormsSelectors::shortcodeDropdown($labels));
+//                try {
+//                    $I->clickOnExactText($labels, $labels);  // Using the field label as the following text
+//                } catch (\Exception $e) {
+//                    $I->clickOnText($labels, $labels);  // Using the field label as the following text
+//                }
+//                $I->tryToPressKey(FluentFormsSelectors::shortcodeDropdown($labels), \Facebook\WebDriver\WebDriverKeys::ESCAPE);
+//            }
+//        }
+//    }
+    public function assignShortCode(AcceptanceTester $I, array $fieldMappingArray): void
     {
-        foreach ($customName as $field => $labels) {
-            if (is_array($labels)) {
-                foreach ($labels as $label) {
-                    $I->clicked(FluentFormsSelectors::shortcodeDropdown($label));
-                    try {
-                        $I->clickOnExactText($label, $label);  // Using the field label as the following text
-                    } catch (\Exception $e) {
-                        $I->clickOnText($label, $label);  // Using the field label as the following text
-                    }
-                    $I->tryToPressKey(FluentFormsSelectors::shortcodeDropdown($label), \Facebook\WebDriver\WebDriverKeys::ESCAPE);
-                }
-            } else {
-                $I->clicked(FluentFormsSelectors::shortcodeDropdown($labels));
-                try {
-                    $I->clickOnExactText($labels, $labels);  // Using the field label as the following text
-                } catch (\Exception $e) {
-                    $I->clickOnText($labels, $labels);  // Using the field label as the following text
-                }
-                $I->tryToPressKey(FluentFormsSelectors::shortcodeDropdown($labels), \Facebook\WebDriver\WebDriverKeys::ESCAPE);
+        foreach ($fieldMappingArray as $field => $label) {
+            echo $field . " => " . $label . "\n";
+            $I->clicked(FluentFormsSelectors::shortcodeDropdown($field));
+            try {
+                $I->clickOnExactText($label, $field);  // Using the field label as the following text
+            } catch (Exception $e) {
+                $I->clickOnText($label, $field);  // Using the field label as the following text
             }
+            $I->tryToPressKey(FluentFormsSelectors::shortcodeDropdown($label), WebDriverKeys::ESCAPE);
         }
     }
+
     public function mapDynamicTag(AcceptanceTester $I, $isDropDown, array $dynamicTagArray = null): void
     {
         global $dynamicTagField;

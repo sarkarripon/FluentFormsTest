@@ -6,58 +6,52 @@ use Tests\Support\AcceptanceTester;
 use Tests\Support\Selectors\FluentFormsSelectors;
 use Tests\Support\Selectors\FluentFormsSettingsSelectors;
 
-
-trait MooSend
+trait SendFox
 {
-    use IntegrationHelper;
-    public function configureMooSend(AcceptanceTester $I, string $integrationName): void
+
+    public function configureSendFox(AcceptanceTester $I, string $integrationName): void
     {
         $this->turnOnIntegration($I,$integrationName);
         $isSaveSettings = $I->checkElement(FluentFormsSettingsSelectors::APIDisconnect);
         if (!$isSaveSettings)
         {
-            $I->filledField(FluentFormsSettingsSelectors::apiField('MooSend API Key'), getenv('MOOSEND_API_KEY'));
+            $I->filledField(FluentFormsSettingsSelectors::apiField('SendFox API Key'), getenv('SENDFOX_ACCESS_TOKEN'));
             $I->clicked(FluentFormsSettingsSelectors::APISaveButton);
             $I->seeSuccess("Success");
         }
-        $this->configureApiSettings($I,"MooSend");
-
+        $this->configureApiSettings($I,"SendFox");
     }
-    public function mapMooSendFields(AcceptanceTester $I, array $fieldMapping, array $extraListOrService): void
+
+    public function mapSendFoxFields(AcceptanceTester $I, array $fieldMapping, array $extraListOrService)
     {
-        $this->mapEmailInCommon($I,"Moosend Integration",$extraListOrService);
+        $this->mapEmailInCommon($I,"SendFox Integration",$extraListOrService);
         $this->assignShortCode($I,$fieldMapping);
 
         $I->clickWithLeftButton(FluentFormsSelectors::saveButton("Save Feed"));
         $I->seeSuccess('Integration successfully saved');
         $I->wait(1);
-
     }
-    public function fetchMooSendData(AcceptanceTester $I, string $emailToFetch)
+
+    public function fetchSendFoxData(AcceptanceTester $I, string $emailToFetch)
     {
         return $this->retryFetchingData($I,[$this, 'fetchData'], $emailToFetch,8);
-
     }
+
     public function fetchData(string $emailToFetch)
     {
-        $hostname = 'api.moosend.com';
-        $mailingListId = getenv('MOOSEND_LIST_ID');
-        $format = 'json';
-        $apiKey = getenv('MOOSEND_API_KEY');
-        $apiEndpoint = "https://{$hostname}/v3/subscribers/{$mailingListId}/view.{$format}?apikey={$apiKey}&Email={$emailToFetch}";
-
-//        dd($apiEndpoint);
+        $accessToken = getenv("SENDFOX_ACCESS_TOKEN");
+        $apiEndpoint = "https://api.sendfox.com/contacts?email={$emailToFetch}";
         $curl = curl_init($apiEndpoint);
-//        dd($curl);
+        curl_setopt($curl, CURLOPT_HTTPHEADER, [
+            'Authorization: Bearer ' . $accessToken,
+            'Accept: application/json',
+        ]);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
         $response = curl_exec($curl);
-//        dd($response);
         if (curl_errno($curl)) {
             echo 'cURL Error: ' . curl_error($curl);
         }
         curl_close($curl);
         return json_decode($response, true);
     }
-
-
 }

@@ -301,7 +301,13 @@ class AcceptanceHelper extends WebDriver
         $exception = [];
         foreach ($checkAbleArr as $needle => $haystack) {
             try {
-                $this->assertStringContainsString($needle, $haystack);
+                if (isset($haystack) and !empty($haystack))
+                {
+                    $this->assertStringContainsString($needle, $haystack);
+                }else{
+                    $this->fail($needle." not found");
+                }
+
             } catch (Exception $e) {
                 $exception[] = $e->getMessage();
             }

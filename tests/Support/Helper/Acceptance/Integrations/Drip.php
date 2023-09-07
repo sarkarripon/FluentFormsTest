@@ -8,10 +8,10 @@ use Tests\Support\Selectors\FluentFormsSettingsSelectors;
 
 trait Drip
 {
-    public function mapDripFields(AcceptanceTester $I,$customName): void
+    public function mapDripFields(AcceptanceTester $I,array $fieldMapping): void
     {
         $this->mapEmailInCommon($I,"Drip Integration");
-        $this->assignShortCode($I,$customName);
+        $this->assignShortCode($I,$fieldMapping);
 
         $I->clickWithLeftButton(FluentFormsSelectors::saveButton("Save Feed"));
         $I->seeSuccess('Integration successfully saved');

@@ -36,6 +36,23 @@ class AcceptanceTester extends \Codeception\Actor
     use \Codeception\Lib\Actor\Shared\Retry;
 
 
+    public function toggleOn(AcceptanceTester $I, string $followingText, bool $isToggleRight= true ): void
+    {
+        if ($isToggleRight) {
+            $selector = "(//span[normalize-space()='$followingText']/following::*[contains(@class, 'el-checkbox__input') or contains(@class, 'el-switch') or contains(@class, 'el-radio')])[1]";
+        } else {
+            $selector = "(//span[normalize-space()='$followingText']/preceding::*[contains(@class, 'el-checkbox__input') or contains(@class, 'el-switch') or contains(@class, 'el-radio')])[1]";
+        }
+        try {
+            $I->waitForElementVisible($selector);
+            $classAttribute = $I->grabAttributeFrom($selector, 'class');
+            if (!str_contains($classAttribute, 'is-checked')) {
+                $I->clicked($selector);
+            }
+        }catch (Exception $e){
+        }
+    }
+
     public function runShellCommand(AcceptanceTester $I, $commands): void
     {
         if (!is_array($commands)) {
@@ -53,7 +70,13 @@ class AcceptanceTester extends \Codeception\Actor
         }
     }
 
-    /**
+    /**(//span[normalize-space()='{$followingText}']/preceding::*[contains(@class, 'el-checkbox') or contains(@class, 'el-switch') or contains(@class, 'el-radio')])[1]";
+        }
+        try {
+            $I->waitForElementVisible($selector);
+            $classAttribute = $I->grabAttributeFrom($selector, 'class');
+            if (!str_contains($classAttribute, 'is-checked')) {
+                $I->clicked($selector);
      * @param array $texts
      * @return void
      * @author Sarkar Ripon
@@ -129,7 +152,7 @@ class AcceptanceTester extends \Codeception\Actor
     public function reloadIfElementNotFound($selector): void
     {
         try {
-            $this->seeElement($selector);
+            $this->seeElementInDOM($selector);
         } catch (Exception $e) {
             $this->reloadPage();
         }
@@ -211,6 +234,8 @@ class AcceptanceTester extends \Codeception\Actor
     /**
      * ```
      * Uninstall plugin
+
+
      * ```
      * @param string $pluginSlug
      * @return void
@@ -228,6 +253,8 @@ class AcceptanceTester extends \Codeception\Actor
         $this->tryToAcceptPopup();
         $this->waitForText('successfully deleted.');
         $this->see('successfully deleted.');
+
+
     }
 
     /**

@@ -3,6 +3,7 @@ namespace Tests\Acceptance;
 
 use Codeception\Attribute\Group;
 use Tests\Support\Factories\DataProvider\DataGenerator;
+use Tests\Support\Helper\Acceptance\Integrations\FieldCustomizer;
 use Tests\Support\Helper\Acceptance\Integrations\IntegrationHelper;
 use Tests\Support\AcceptanceTester;
 use Tests\Support\Factories\DataProvider\ShortCodes;
@@ -12,7 +13,7 @@ use Tests\Support\Selectors\FluentFormsSelectors;
 
 class IntegrationActivecampaignCest
 {
-    use IntegrationHelper,Activecampaign,ShortCodes, DataGenerator;
+    use IntegrationHelper,Activecampaign,ShortCodes, DataGenerator, FieldCustomizer;
     public function _before(AcceptanceTester $I): void
     {
         $I->loadDotEnvFile(); $I->loginWordpress();
@@ -26,15 +27,17 @@ class IntegrationActivecampaignCest
         $extraListOrService =['ActiveCampaign List'=>'Master Contact List'];
         $customName=[
             'email'=>'Email Address',
-            'simpleText'=>['First Name','Last Name','Phone Number','Organization Name'],
+            'simpleText'=>['First Name','Last Name','Organization Name'],
+            'phone'=>'Phone Number',
         ];
         $this->prepareForm($I, $pageName, [
-            'generalFields' => ['email','simpleText'],
+            'generalFields' => ['email','simpleText','phone'],
         ],'yes',$customName);
 
         $this->configureActivecampaign($I, "ActiveCampaign");
-        $this->mapActivecampaignField($I,$customName,$extraListOrService);
-
+        $fieldMapping = $this->buildArrayWithKey($customName);
+        print_r($fieldMapping);
+        $this->mapActivecampaignField($I,$fieldMapping,$extraListOrService);
         $this->preparePage($I,$pageName);
 
         $fillAbleDataArr = [
