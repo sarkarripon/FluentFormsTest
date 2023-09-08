@@ -23,10 +23,6 @@ class IntegrationSendFoxCest
     // tests
     public function test_sendFox_push_data(AcceptanceTester $I)
     {
-//        $jhhdf = $this->fetchData("gebuwo@gmail.cm");
-//        print_r($jhhdf);
-//        exit();
-
         $pageName = __FUNCTION__.'_'.rand(1,100);
         $extraListOrService =['SendFox Mailing Lists'=>getenv('SENDFOX_LIST_NAME')];
         $customName=[
@@ -49,14 +45,14 @@ class IntegrationSendFoxCest
             'Last Name'=>'lastName',
         ];
         $returnedFakeData = $this->generatedData($fillAbleDataArr);
-        print_r($returnedFakeData);
+//        print_r($returnedFakeData);
 
         foreach ($returnedFakeData as $selector => $value) {
             $I->tryToFilledField(FluentFormsSelectors::fillAbleArea($selector), $value);
         }
         $I->clicked(FieldSelectors::submitButton);
         $remoteData = $this->fetchSendFoxData($I, $returnedFakeData['Email Address'],);
-        print_r($remoteData);
+//        print_r($remoteData);
 
         if (isset($remoteData['data'])) {
             $email = $remoteData['data'][0]['email'];
@@ -71,7 +67,5 @@ class IntegrationSendFoxCest
         }else{
             $I->fail("Data not found");
         }
-
-
     }
 }

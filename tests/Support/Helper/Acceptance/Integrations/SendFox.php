@@ -15,7 +15,7 @@ trait SendFox
         $isSaveSettings = $I->checkElement(FluentFormsSettingsSelectors::APIDisconnect);
         if (!$isSaveSettings)
         {
-            $I->filledField(FluentFormsSettingsSelectors::apiField('SendFox API Key'), getenv('SENDFOX_ACCESS_TOKEN'));
+            $I->filledField("//textarea[@placeholder='API Key']", getenv('SENDFOX_ACCESS_TOKEN'));
             $I->clicked(FluentFormsSettingsSelectors::APISaveButton);
             $I->seeSuccess("Success");
         }

@@ -120,7 +120,6 @@ class AcceptanceTester extends \Codeception\Actor
         if (!is_array($texts)) {
             $texts = [$texts]; // Convert single string to array
         }
-
         $this->retry(4, 200);
         $missingTexts = [];
 
@@ -131,11 +130,9 @@ class AcceptanceTester extends \Codeception\Actor
                 $missingTexts[] = $text;
             }
         }
-
         if (count($missingTexts) > 0) {
             return false; // Some texts are missing
         }
-
         return true; // All texts are found
     }
 
@@ -168,7 +165,7 @@ class AcceptanceTester extends \Codeception\Actor
      */
     public function seeSuccess($message): void
     {
-        $this->wait(2);
+        $this->waitForElementVisible("//div[@role='alert']//h2[normalize-space()='Success'][1]");
         $this->assertStringContainsString('Success',
             $this->grabTextFrom("//div[@role='alert']//h2[normalize-space()='Success'][1]"), $message);
     }

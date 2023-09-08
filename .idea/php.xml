@@ -111,6 +111,7 @@
       <path value="$PROJECT_DIR$/vendor/mashape/unirest-php" />
       <path value="$PROJECT_DIR$/vendor/codeception/module-cli" />
       <path value="$PROJECT_DIR$/vendor/hackzilla/password-generator" />
+      <path value="$PROJECT_DIR$/vendor/twilio/sdk" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="8.0">
