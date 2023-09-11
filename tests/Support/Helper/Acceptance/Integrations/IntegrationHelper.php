@@ -154,7 +154,7 @@ trait IntegrationHelper
 
     }
 
-    public function mapEmailInCommon(AcceptanceTester $I, string $feedName, array $extraListOrService = null): void
+    public function mapEmailInCommon(AcceptanceTester $I, string $feedName, array $extraListOrService = null,bool $email= true): void
     {
         $I->waitForElementClickable(FluentFormsSelectors::integrationFeed, 20);
         $I->fillByJS(FluentFormsSelectors::feedName, $feedName);
@@ -164,8 +164,10 @@ trait IntegrationHelper
                 $I->retryClickOnText($value, $key);
             }
         }
-        $I->clicked(FluentFormsSelectors::mapEmailDropdown);
-        $I->clicked(FluentFormsSelectors::mapEmail);
+        if ($email){
+            $I->clicked(FluentFormsSelectors::mapEmailDropdown);
+            $I->clicked(FluentFormsSelectors::mapEmail);
+        }
     }
 
     /**
@@ -203,17 +205,17 @@ trait IntegrationHelper
 //            }
 //        }
 //    }
-    public function assignShortCode(AcceptanceTester $I, array $fieldMappingArray): void
+    public function assignShortCode(AcceptanceTester $I, array $fieldMappingArray, string $sectionText=null): void
     {
         foreach ($fieldMappingArray as $field => $label) {
             echo $field . " => " . $label . "\n";
-            $I->clicked(FluentFormsSelectors::shortcodeDropdown($field));
+            $I->clicked(FluentFormsSelectors::shortcodeDropdown($field, $sectionText));
             try {
                 $I->clickOnExactText($label, $field);  // Using the field label as the following text
             } catch (Exception $e) {
                 $I->clickOnText($label, $field);  // Using the field label as the following text
             }
-            $I->tryToPressKey(FluentFormsSelectors::shortcodeDropdown($label), WebDriverKeys::ESCAPE);
+            $I->tryToPressKey(FluentFormsSelectors::shortcodeDropdown($label,$sectionText), WebDriverKeys::ESCAPE);
         }
     }
 
@@ -259,7 +261,7 @@ trait IntegrationHelper
         }
     }
 
-    public function retryFetchingData(AcceptanceTester $I, $fetchFunction, $searchTerm, $retries = 3)
+    public function retryFetchingData(AcceptanceTester $I, $fetchFunction, string $searchTerm, int $retries = 3)
     {
         $expectedRow = null;
         for ($i = 0; $i < $retries; $i++) {

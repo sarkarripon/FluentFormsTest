@@ -9,7 +9,7 @@ use Tests\Support\Helper\Acceptance\Integrations\ConvertKit;
 class IntegrationCovertKitCest
 {
     use ConvertKit;
-    public function _before(AcceptanceTester $I)
+    public function _before(AcceptanceTester $I): void
     {
         $I->loadDotEnvFile();
 //        $I->loginWordpress();
