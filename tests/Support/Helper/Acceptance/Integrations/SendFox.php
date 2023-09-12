@@ -22,7 +22,7 @@ trait SendFox
         $this->configureApiSettings($I,"SendFox");
     }
 
-    public function mapSendFoxFields(AcceptanceTester $I, array $fieldMapping, array $extraListOrService)
+    public function mapSendFoxFields(AcceptanceTester $I, array $fieldMapping, array $extraListOrService): void
     {
         $this->mapEmailInCommon($I,"SendFox Integration",$extraListOrService);
         $this->assignShortCode($I,$fieldMapping);

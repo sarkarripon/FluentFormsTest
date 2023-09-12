@@ -3,27 +3,53 @@
 namespace Tests\Support\Helper\Acceptance\Integrations;
 
 use Tests\Support\AcceptanceTester;
+use Tests\Support\Selectors\FluentFormsSelectors;
+use Tests\Support\Selectors\FluentFormsSettingsSelectors;
 
 trait GetGist
 {
+    use IntegrationHelper;
 
-    public function configure(AcceptanceTester $I, string $integrationName)
+    public function configureGetGist(AcceptanceTester $I, string $integrationName): void
     {
-        // TODO: Implement configure() method.
+        $this->turnOnIntegration($I,$integrationName);
+        $isSaveSettings = $I->checkElement(FluentFormsSettingsSelectors::APIDisconnect);
+        if (!$isSaveSettings)
+        {
+            $I->tryToFilledField(FluentFormsSettingsSelectors::apiField("GetGist API Key"), getenv('GETGIST_API'));
+            $I->clicked(FluentFormsSettingsSelectors::APISaveButton);
+            $I->seeSuccess("Success");
+        }
+        $this->configureApiSettings($I,"GetGist");
     }
 
-    public function mapFields(AcceptanceTester $I, array $fieldMapping, array $extraListOrService)
+    public function mapGetGistFields(AcceptanceTester $I, array $fieldMapping, array $extraListOrService=null)
     {
-        // TODO: Implement mapFields() method.
+        $this->mapEmailInCommon($I,"GetGist Integration",$extraListOrService);
+        $this->assignShortCode($I,$fieldMapping,'Map Fields');
+
+        $I->clickWithLeftButton(FluentFormsSelectors::saveButton("Save Feed"));
+        $I->seeSuccess('Integration successfully saved');
+        $I->wait(1);
     }
 
-    public function fetchRemoteData(AcceptanceTester $I, string $emailToFetch)
+    public function fetchGetGistData(AcceptanceTester $I, string $emailToFetch)
     {
-        // TODO: Implement fetchRemoteData() method.
+        for ($i = 0; $i < 4; $i++) {
+            $remoteData = $this->fetchData($I,$emailToFetch);
+            if (isset($remoteData['errors']) && $remoteData['errors'][0]['code'] === 'not_found') {
+                $I->wait(30, 'GetGist is taking too long to respond. Trying again...');
+            } else {
+                break;
+            }
+        }
+        return $remoteData;
     }
 
-    public function fetchData(string $emailToFetch)
+    public function fetchData(AcceptanceTester $I, string $emailToFetch)
     {
+        $I->wait(10,'GetGist is taking too long to respond. Trying again...');
+
         $apiKey = getenv('GETGIST_API');
         $url = 'https://api.getgist.com/contacts?email=' . urlencode($emailToFetch);
         $curl = curl_init($url);

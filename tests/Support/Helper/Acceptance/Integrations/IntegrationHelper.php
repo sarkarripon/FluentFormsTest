@@ -209,6 +209,7 @@ trait IntegrationHelper
     {
         foreach ($fieldMappingArray as $field => $label) {
             echo $field . " => " . $label . "\n";
+            echo FluentFormsSelectors::shortcodeDropdown($field, $sectionText) . "\n";
             $I->clicked(FluentFormsSelectors::shortcodeDropdown($field, $sectionText));
             try {
                 $I->clickOnExactText($label, $field);  // Using the field label as the following text

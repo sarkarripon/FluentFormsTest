@@ -9,7 +9,7 @@ use Tests\Support\Selectors\FluentFormsSettingsSelectors;
 trait MailerLite
 {
     use IntegrationHelper;
-    public function configureMailerLite(AcceptanceTester $I, string $integrationName)
+    public function configureMailerLite(AcceptanceTester $I, string $integrationName): void
     {
         $this->turnOnIntegration($I,$integrationName);
         $isSaveSettings = $I->checkElement(FluentFormsSettingsSelectors::APIDisconnect);
@@ -22,7 +22,7 @@ trait MailerLite
         $this->configureApiSettings($I,"MailerLite");
     }
 
-    public function mapMailerLiteFields(AcceptanceTester $I, array $fieldMapping, array $extraListOrService)
+    public function mapMailerLiteFields(AcceptanceTester $I, array $fieldMapping, array $extraListOrService): void
     {
         $this->mapEmailInCommon($I,"SendFox Integration",$extraListOrService, false);
         $this->assignShortCode($I,$fieldMapping,'Map Fields');
