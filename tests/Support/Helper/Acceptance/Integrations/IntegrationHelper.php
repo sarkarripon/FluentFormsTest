@@ -154,7 +154,7 @@ trait IntegrationHelper
 
     }
 
-    public function mapEmailInCommon(AcceptanceTester $I, string $feedName, array $extraListOrService = null,bool $email= true): void
+    public function mapEmailInCommon(AcceptanceTester $I, string $feedName, array $extraListOrService = null,bool $emailField= true): void
     {
         $I->waitForElementClickable(FluentFormsSelectors::integrationFeed, 20);
         $I->fillByJS(FluentFormsSelectors::feedName, $feedName);
@@ -164,7 +164,7 @@ trait IntegrationHelper
                 $I->retryClickOnText($value, $key);
             }
         }
-        if ($email){
+        if ($emailField){
             $I->clicked(FluentFormsSelectors::mapEmailDropdown);
             $I->clicked(FluentFormsSelectors::mapEmail);
         }
@@ -205,7 +205,7 @@ trait IntegrationHelper
 //            }
 //        }
 //    }
-    public function assignShortCode(AcceptanceTester $I, array $fieldMappingArray, string $sectionText=null): void
+    public function assignShortCode(AcceptanceTester $I, array $fieldMappingArray, string $sectionText): void
     {
         foreach ($fieldMappingArray as $field => $label) {
             echo $field . " => " . $label . "\n";

@@ -126,7 +126,7 @@ class FluentFormsSelectors
     }
     public static function dropdown(string $text, $index=1): string
     {
-        return "(//*[@placeholder='$text' or normalize-space()='$text'])/following::i[contains(@class,'el-select__caret')][{$index}]";
+        return "((//*[@placeholder='$text' or normalize-space()='$text'])/following::i[contains(@class,'el-select__caret')])[{$index}]";
     }
     public static function shortcodeDropdown(string $text, string $sectionText = 'Email Address', $index=1): string
     {
