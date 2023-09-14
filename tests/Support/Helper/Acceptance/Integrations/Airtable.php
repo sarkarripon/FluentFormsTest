@@ -4,30 +4,61 @@ namespace Tests\Support\Helper\Acceptance\Integrations;
 
 use Support\Helper\Acceptance\Integrations\IntegrationInterface;
 use Tests\Support\AcceptanceTester;
+use Tests\Support\Selectors\FluentFormsSelectors;
+use Tests\Support\Selectors\FluentFormsSettingsSelectors;
 
 trait Airtable
 {
+    use IntegrationHelper;
     public function configureAirtable(AcceptanceTester $I, string $integrationName)
     {
+        $this->turnOnIntegration($I,$integrationName);
+        $isSaveSettings = $I->checkElement(FluentFormsSettingsSelectors::APIDisconnect);
+        if (!$isSaveSettings)
+        {
+            $I->filledField(FluentFormsSettingsSelectors::apiField('Airtable Access Token'), getenv('AIRTABLE_ACCESS_TOKEN'));
+            $I->clicked(FluentFormsSettingsSelectors::APISaveButton);
+            $I->seeSuccess("Success");
+        }
+        $this->configureApiSettings($I,"Airtable");
 
     }
 
     public function mapAirtableFields(AcceptanceTester $I, array $fieldMapping, array $extraListOrService = null)
     {
-        // TODO: Implement mapFields() method.
+        $this->mapEmailInCommon($I,"Airtable Integration",$extraListOrService, false);
+
+        $I->retryClicked(FluentFormsSelectors::dropdown('Select Table'));
+        $I->retryClickOnText(getenv('AIRTABLE_TABLE_NAME'));
+
+        $this->assignShortCode($I,$fieldMapping,'Airtable Configuration');
+
+        $I->clickWithLeftButton(FluentFormsSelectors::saveButton("Save Feed"));
+        $I->seeSuccess('Integration successfully saved');
+        $I->wait(1);
     }
 
-    public function fetchAirtableData(AcceptanceTester $I, string $emailToFetch)
+    public function fetchAirtableData(AcceptanceTester $I, string $searchTerm)
     {
-        // TODO: Implement fetchRemoteData() method.
+        for ($i = 0; $i < 8; $i++) {
+            $remoteData = $this->fetchData($searchTerm);
+            if (empty($remoteData)) {
+                $I->wait(30, 'Airtable is taking too long to respond. Trying again...');
+            } else {
+                break;
+            }
+        }
+        return $remoteData;
+
+
     }
 
-    public function fetchData(string $searchTerm=null)
+    public function fetchData(string $searchTerm)
     {
-        $baseId = 'app8UPQIUXqroMhCP';
-        $tableIdOrName = 'Projects';
-        $recordId = 'rect30WSupWhxtq97';
-        $accessToken = 'patHfSjlEdwOqwKiK.cd186837a833f0ad61390e3198e70fcd35d63947a6a16059f52c2d3a3dbcaae3';
+        $baseId = getenv('AIRTABLE_BASE_ID');
+        $tableIdOrName = getenv('AIRTABLE_TABLE_NAME');
+//        $recordId = 'rect30WSupWhxtq97';
+        $accessToken = getenv('AIRTABLE_ACCESS_TOKEN');
 
         $url = "https://api.airtable.com/v0/{$baseId}/{$tableIdOrName}";
         $curl = curl_init($url);
@@ -42,11 +73,14 @@ trait Airtable
         }
         curl_close($curl);
         $data = json_decode($response, true);
-        if (isset($data['error'])) {
-            echo 'Airtable Error: ' . $data['error']['message'];
-            return false;
+
+        foreach ($data['records'] as $record) {
+            if (isset($record['fields']['Name']) && $record['fields']['Name'] === $searchTerm) {
+                return $record;
+            }
         }
-        return $data;
+        return null; // Return null if no matching record is found
+
     }
 
 }

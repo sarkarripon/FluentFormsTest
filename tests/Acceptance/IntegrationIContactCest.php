@@ -3,6 +3,8 @@
 
 namespace Tests\Acceptance;
 
+use Tests\Support\Factories\DataProvider\DataGenerator;
+use Tests\Support\Helper\Acceptance\Integrations\FieldCustomizer;
 use Tests\Support\Helper\Acceptance\Integrations\IContact;
 use Tests\Support\AcceptanceTester;
 use Tests\Support\Helper\Acceptance\Integrations\IntegrationHelper;
@@ -11,25 +13,19 @@ use Tests\Support\Selectors\FluentFormsSelectors;
 
 class IntegrationIContactCest
 {
-    use IntegrationHelper, IContact;
+    use IntegrationHelper, IContact, DataGenerator, FieldCustomizer;
     public function _before(AcceptanceTester $I)
     {
         $I->loadDotEnvFile();
-//        $I->loginWordpress();
+        $I->loginWordpress();
     }
 
     // tests
     public function test_iContact_push_data(AcceptanceTester $I): void
     {
-        $cjnj= $this->fetchData('qa@wpmanageninja.com');
-        print_r($cjnj);
-        exit();
-
-
-
-
-
-
+//        $cjnj= $this->fetchIContactData($I,'qa@wpmanageninja.com');
+//        print_r($cjnj);
+//        exit();
 
 
         $pageName = __FUNCTION__.'_'.rand(1,100);
@@ -41,13 +37,10 @@ class IntegrationIContactCest
         $this->prepareForm($I, $pageName, [
             'generalFields' => ['email', 'nameFields'],
         ],'yes',$customName);
-        $this->configureSendinblue($I, "Sendinblue");
+        $this->configureIContact($I, "iContact");
 
-        $fieldMapping=[
-            'email'=>'Email Address',
-            'nameFields'=>['First Name','Last Name'],
-        ];
-        $this->mapSendinblueFields($I,$fieldMapping,$extraListOrService);
+        $fieldMapping= $this->buildArrayWithKey($customName);
+        $this->mapIContactFields($I,$fieldMapping,$extraListOrService);
         $this->preparePage($I,$pageName);
 
         $fillAbleDataArr = [
@@ -62,12 +55,12 @@ class IntegrationIContactCest
             $I->tryToFilledField(FluentFormsSelectors::fillAbleArea($selector), $value);
         }
         $I->clicked(FieldSelectors::submitButton);
-        $remoteData = $this->fetchSendinblueData($I, $returnedFakeData['Email Address'],);
+        $remoteData = $this->fetchIContactData($I, $returnedFakeData['Email Address'],);
 //        print_r($remoteData);
-        if (!isset($remoteData['message'])) {
+        if (isset($remoteData) and !empty($remoteData)) {
             $email = $remoteData['email'];
-            $firstName = $remoteData['attributes']['FIRSTNAME'];
-            $lastName = $remoteData['attributes']['LASTNAME'];
+            $firstName = $remoteData['firstName'];
+            $lastName = $remoteData['lastName'];
 
             $I->assertString([
                 $returnedFakeData['Email Address'] => $email,

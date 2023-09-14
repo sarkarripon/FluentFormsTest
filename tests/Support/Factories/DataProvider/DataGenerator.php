@@ -37,21 +37,40 @@ trait DataGenerator
         foreach ($keys as $key => $value) {
             if ($value == 'password') {
                 $generatedData[$key] = $password;
+
             }elseif ($value=='email'){
-                $generatedData[$key] = $this->faker->userName() . '@' . $this->randEmailTld();
+                $generatedData[$key] = $this->faker->userName() . '@' . self::randEmailTld();
+
             } elseif ($key == 'Repeat Password') {
                 $generatedData[$key] = $password;
+
             }elseif ($value == 'url') {
                 $generatedData[$key] = "https://www.sarkarripon.com/".$this->faker->userName();
+
+            } elseif (!is_array($value) && strcasecmp($value, 'status') === 0) {
+                $generatedData[$key] = self::taskStatus();
+
             } else {
-                $generatedData[$key] = $this->faker->{$value}();
+                if (is_array($value)) {
+                    foreach ($value as $method => $argument) {
+                        $generatedData[$key] = $this->faker->{$method}($argument);
+                    }
+                }else{
+                    $generatedData[$key] = $this->faker->{$value}();
+                }
             }
         }
         return $generatedData;
     }
-    public function randEmailTld(): string
+    public static function randEmailTld(): string
     {
         $TLDs =['gmail.com', 'live.com','yahoo.com','hotmail.com','outlook.com','aol.com','zoho.com','yandex.com','protonmail.com','icloud.com','mail.com','gmx.com'];
         return $TLDs[array_rand($TLDs)];
+    }
+
+    public static function taskStatus(): string
+    {
+        $status = ['To do','In progress','Done'];
+        return $status[array_rand($status)];
     }
 }

@@ -138,14 +138,14 @@ trait IntegrationHelper
 
     public function configureApiSettings(AcceptanceTester $I, $searchKey): void
     {
-        $this->takeMeToConfigurationPage($I);
+        self::takeMeToConfigurationPage($I);
         $I->clicked(FluentFormsSelectors::allIntegrations);
         $I->clicked(FluentFormsSelectors::addNewIntegration);
         $I->filledField(FluentFormsSelectors::searchIntegration, $searchKey);
         $I->clicked(FluentFormsSelectors::searchResult);
     }
 
-    public function takeMeToConfigurationPage(AcceptanceTester $I): void
+    public static function takeMeToConfigurationPage(AcceptanceTester $I): void
     {
         $I->amOnPage(FluentFormsSelectors::fFormPage);
         $I->waitForElement(FluentFormsSelectors::mouseHoverMenu, 10);
@@ -161,7 +161,13 @@ trait IntegrationHelper
         if ($extraListOrService) {
             foreach ($extraListOrService as $key => $value) {
                 $I->retryClicked(FluentFormsSelectors::dropdown($key));
-                $I->retryClickOnText($value, $key);
+                try {
+                    $I->clickOnExactText($value, $key);
+                } catch (Exception $e) {
+                    $I->retryClickOnText($value, $key);
+                }
+
+//                $I->retryClickOnText($value, $key);
             }
         }
         if ($emailField){
@@ -205,7 +211,7 @@ trait IntegrationHelper
 //            }
 //        }
 //    }
-    public function assignShortCode(AcceptanceTester $I, array $fieldMappingArray, string $sectionText): void
+    public function assignShortCode(AcceptanceTester $I, array $fieldMappingArray, string $sectionText=null): void
     {
         foreach ($fieldMappingArray as $field => $label) {
             echo $field . " => " . $label . "\n";
