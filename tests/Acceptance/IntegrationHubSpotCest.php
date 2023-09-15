@@ -5,29 +5,28 @@ namespace Tests\Acceptance;
 
 use Tests\Support\AcceptanceTester;
 use Tests\Support\Factories\DataProvider\DataGenerator;
-use Tests\Support\Helper\Acceptance\Integrations\ConvertKit;
 use Tests\Support\Helper\Acceptance\Integrations\FieldCustomizer;
+use Tests\Support\Helper\Acceptance\Integrations\HubSpot;
+use Tests\Support\Helper\Acceptance\Integrations\IntegrationHelper;
 use Tests\Support\Selectors\FieldSelectors;
 use Tests\Support\Selectors\FluentFormsSelectors;
 
-class IntegrationCovertKitCest
+class IntegrationHubSpotCest
 {
-    use ConvertKit, FieldCustomizer, DataGenerator;
-    public function _before(AcceptanceTester $I): void
+    use HubSpot, IntegrationHelper, FieldCustomizer, DataGenerator;
+    public function _before(AcceptanceTester $I)
     {
         $I->loadDotEnvFile();
         $I->loginWordpress();
     }
 
     // tests
-    public function test_convertKit_push_data(AcceptanceTester $I)
+    public function test_hubspot_push_data(AcceptanceTester $I)
     {
-//        $kjnfdj = $this->fetchConvertKitData($I,'jasitowe@gmail.com');
-//        dd($kjnfdj);
-
+//        $jvbh = $this->fetchHubSpotData($I,'bh@hubspot.com');
+//        dd($jvbh);
 
         $pageName = __FUNCTION__.'_'.rand(1,100);
-        $extraListOrService =['ConvertKit Form'=>getenv('CONVERTKIT_LIST')];
         $customName=[
             'email' => 'Email Address',
             'nameFields'=>'Name',
@@ -35,21 +34,21 @@ class IntegrationCovertKitCest
         $this->prepareForm($I, $pageName, [
             'generalFields' => ['email', 'nameFields'],
         ],'yes',$customName);
-        $this->configureConvertKit($I, "ConvertKit");
+        $this->configureHubSpot($I, "HubSpot");
 
         $fieldMapping = $this->buildArrayWithKey($customName);
-        unset($fieldMapping['Last Name']);
-
-        $this->mapConvertKitFields($I,$fieldMapping,$extraListOrService);
+//        unset($fieldMapping['Last Name']);
+        $this->mapHubSpotFields($I,$fieldMapping);
         $this->preparePage($I,$pageName);
 
 //        $I->amOnPage("test_airtable_push_data_57/");
         $fillAbleDataArr = [
             'Email Address'=>'email',
             'First Name'=>'firstName',
+            'Last Name'=>'lastName',
         ];
         $returnedFakeData = $this->generatedData($fillAbleDataArr);
-        print_r($returnedFakeData);
+//        print_r($returnedFakeData);
 //        exit();
 
         foreach ($returnedFakeData as $selector => $value) {
@@ -57,16 +56,18 @@ class IntegrationCovertKitCest
         }
         $I->clicked(FieldSelectors::submitButton);
 
-        $remoteData = $this->fetchConvertKitData($I, $returnedFakeData['Email Address']);
+        $remoteData = $this->fetchHubSpotData($I, $returnedFakeData['Email Address']);
 //        print_r($remoteData);
 
         if (isset($remoteData)) {
-            $firstName =  $remoteData['first_name'];;
-            $email = $remoteData['email_address'];
+            $firstName =  $remoteData['properties']['firstname'];;
+            $LastName =  $remoteData['properties']['lastname'];;
+            $email = $remoteData['properties']['email'];
 
             $I->assertString([
                 $returnedFakeData['Email Address'] => $email,
                 $returnedFakeData['First Name'] => $firstName,
+                $returnedFakeData['Last Name'] => $LastName,
             ]);
         }else{
             $I->fail("Data not found");

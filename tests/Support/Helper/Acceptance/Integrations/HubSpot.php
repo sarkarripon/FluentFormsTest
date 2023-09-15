@@ -6,26 +6,26 @@ use Tests\Support\AcceptanceTester;
 use Tests\Support\Selectors\FluentFormsSelectors;
 use Tests\Support\Selectors\FluentFormsSettingsSelectors;
 
-trait ConvertKit
+trait HubSpot
 {
-    use IntegrationHelper;
-    public function configureConvertKit(AcceptanceTester $I, string $integrationName)
+
+    public function configureHubSpot(AcceptanceTester $I, string $integrationName)
     {
         $this->turnOnIntegration($I,$integrationName);
         $isSaveSettings = $I->checkElement(FluentFormsSettingsSelectors::APIDisconnect);
         if (!$isSaveSettings)
         {
-            $I->filledField(FluentFormsSettingsSelectors::apiField('ConvertKit API Key'), getenv('CONVERTKIT_API'));
-            $I->filledField(FluentFormsSettingsSelectors::apiField('ConvertKit API Secret'), getenv('CONVERTKIT_SECRET'));
+            $I->filledField(FluentFormsSettingsSelectors::apiField('Hubspot Access Token'), getenv('HUBSPOT_ACCESS_TOKEN'));
+
             $I->clicked(FluentFormsSettingsSelectors::APISaveButton);
             $I->seeSuccess("Success");
         }
-        $this->configureApiSettings($I,"ConvertKit");
+        $this->configureApiSettings($I,"HubSpot");
     }
 
-    public function mapConvertKitFields(AcceptanceTester $I, array $fieldMapping, array $extraListOrService)
+    public function mapHubSpotFields(AcceptanceTester $I, array $fieldMapping, array $extraListOrService = null)
     {
-        $this->mapEmailInCommon($I,"ConvertKit Integration",$extraListOrService);
+        $this->mapEmailInCommon($I,"HubSpot Integration");
         $this->assignShortCode($I,$fieldMapping,'Map Fields');
 
         $I->clickWithLeftButton(FluentFormsSelectors::saveButton("Save Feed"));
@@ -33,12 +33,12 @@ trait ConvertKit
         $I->wait(1);
     }
 
-    public function fetchConvertKitData(AcceptanceTester $I, string $searchTerm)
+    public function fetchHubSpotData(AcceptanceTester $I, string $searchTerm)
     {
         for ($i = 0; $i < 8; $i++) {
             $remoteData = $this->fetchData($searchTerm);
             if (empty($remoteData)) {
-                $I->wait(30, 'ConvertKit is taking too long to respond. Trying again...');
+                $I->wait(30, 'Hubspot is taking too long to respond. Trying again...');
             } else {
                 break;
             }
@@ -48,28 +48,36 @@ trait ConvertKit
 
     public function fetchData(string $searchTerm)
     {
-        $apiSecretKey = getenv("CONVERTKIT_SECRET");
-        $fromDate = date('Y-m-d', strtotime('-2 day'));
-        $toDate = date('Y-m-d');
+        $accessToken = getenv('HUBSPOT_ACCESS_TOKEN');
+        $url = "https://api.hubapi.com/crm/v3/objects/contacts";
 
-        $url = "https://api.convertkit.com/v3/subscribers?api_secret={$apiSecretKey}&from={$fromDate}&to={$toDate}";
         $curl = curl_init($url);
+
+        curl_setopt($curl, CURLOPT_HTTPHEADER, [
+            'authorization: Bearer ' . $accessToken,
+        ]);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+
         $response = curl_exec($curl);
 
         if (curl_errno($curl)) {
             echo 'cURL Error: ' . curl_error($curl);
+            return null;
         }
+
         curl_close($curl);
 
         $data = json_decode($response, true);
 
-        foreach ($data['subscribers'] as $subscriber) {
-            if (isset($subscriber['email_address']) && $subscriber['email_address'] === $searchTerm) {
+        if (isset($data['status']) && $data['status'] === 'error') {
+            echo 'API Error: ' . $data['message'];
+            return null;
+        }
+        foreach ($data['results'] as $subscriber) {
+            if (isset($subscriber['properties']['email']) && $subscriber['properties']['email'] === $searchTerm) {
                 return $subscriber;
             }
         }
-        return null; // Return null if no matching record is found
+        return null;
     }
-
 }

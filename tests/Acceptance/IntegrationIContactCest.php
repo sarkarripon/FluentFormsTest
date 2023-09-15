@@ -27,7 +27,6 @@ class IntegrationIContactCest
 //        print_r($cjnj);
 //        exit();
 
-
         $pageName = __FUNCTION__.'_'.rand(1,100);
         $extraListOrService =['iContact List'=>getenv('ICONTACT_CONTACT_LIST')];
         $customName=[
@@ -55,7 +54,7 @@ class IntegrationIContactCest
             $I->tryToFilledField(FluentFormsSelectors::fillAbleArea($selector), $value);
         }
         $I->clicked(FieldSelectors::submitButton);
-        $remoteData = $this->fetchIContactData($I, $returnedFakeData['Email Address'],);
+        $remoteData = $this->fetchIContactData($I, $returnedFakeData['Email Address']);
 //        print_r($remoteData);
         if (isset($remoteData) and !empty($remoteData)) {
             $email = $remoteData['email'];
