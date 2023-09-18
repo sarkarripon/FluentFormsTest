@@ -19,6 +19,7 @@ modules:
             url: 'https://dev-fluentforms-v1.pantheonsite.io'
 #            url: 'https://fluentsmtp.com'
             browser: chrome
+            window_size: 1920x1080
             request_timeout: 60
             clear_cookies: true
             stop_on_failure: false
@@ -34,7 +35,7 @@ modules:
 #                        - "--headless"
                         - "--disable-gpu"
                         - "disable-infobars"
-                        - "--window-size=1920,1080"
+#                        - "--window-size=1920,1080"
 
 #        Db:
 #            dsn: 'mysql:host=localhost;dbname=fluentsmtp'

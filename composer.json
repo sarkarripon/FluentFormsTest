@@ -23,6 +23,7 @@
         "vlucas/phpdotenv": "^5.5",
         "google/apiclient": "^2.15",
         "ext-json": "*",
-        "hackzilla/password-generator": "^1.6"
+        "hackzilla/password-generator": "^1.6",
+        "ext-zlib": "*"
   }
 }
