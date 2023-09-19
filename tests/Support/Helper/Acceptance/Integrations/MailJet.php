@@ -8,8 +8,6 @@ use Tests\Support\Selectors\FluentFormsSettingsSelectors;
 
 trait MailJet
 {
-
-
     public function configureMailJet(AcceptanceTester $I, string $integrationName)
     {
         $this->turnOnIntegration($I,$integrationName);

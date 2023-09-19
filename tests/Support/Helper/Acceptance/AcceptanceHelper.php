@@ -320,6 +320,35 @@ class AcceptanceHelper extends WebDriver
         }
     }
 
+    public function checkValuesInArray($dataArray, $searchStrings) {
+        $foundValues = [];
+        $notFoundValues = [];
+
+        foreach ($searchStrings as $searchString) {
+            $found = false;
+
+            array_walk_recursive($dataArray, function ($value) use ($searchString, &$found) {
+                if (is_string($value) && stripos($value, $searchString) !== false) {
+                    $found = true;
+                }
+            });
+
+            if ($found) {
+                $foundValues[] = $searchString;
+            } else {
+                $notFoundValues[] = $searchString;
+            }
+        }
+
+        return [
+            'found' => $foundValues,
+            'notFound' => $notFoundValues,
+        ];
+    }
+
+
+
+
 
 
 

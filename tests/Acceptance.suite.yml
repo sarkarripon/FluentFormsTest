@@ -32,7 +32,7 @@ modules:
                 acceptInsecureCerts: true
                 chromeOptions:
                     args:
-#                        - "--headless"
+                        - "--headless"
                         - "--disable-gpu"
                         - "disable-infobars"
 #                        - "--window-size=1920,1080"
