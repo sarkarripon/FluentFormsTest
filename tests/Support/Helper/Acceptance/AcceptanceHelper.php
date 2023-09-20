@@ -320,14 +320,43 @@ class AcceptanceHelper extends WebDriver
         }
     }
 
-    public function checkValuesInArray($dataArray, $searchStrings) {
+//    public function checkValuesInArray($dataArray, $searchStrings) {
+//        $foundValues = [];
+//        $notFoundValues = [];
+//
+//        foreach ($searchStrings as $searchString) {
+//            $found = false;
+//
+//            array_walk_recursive($dataArray, function ($value) use ($searchString, &$found) {
+//                if (is_string($value) && stripos($value, $searchString) !== false) {
+//                    $found = true;
+//                }
+//            });
+//
+//            if ($found) {
+//                $foundValues[] = $searchString;
+//            } else {
+//                $notFoundValues[] = $searchString;
+//            }
+//        }
+//
+//        return [
+//            'found' => $foundValues,
+//            'notFound' => $notFoundValues,
+//        ];
+//    }
+
+
+
+    public function checkValuesInArray($dataArray, $searchStrings): bool
+    {
         $foundValues = [];
         $notFoundValues = [];
 
         foreach ($searchStrings as $searchString) {
             $found = false;
 
-            array_walk_recursive($dataArray, function ($value) use ($searchString, &$found) {
+            array_walk_recursive($dataArray, function ($value) use ($searchString, & $found) {
                 if (is_string($value) && stripos($value, $searchString) !== false) {
                     $found = true;
                 }
@@ -340,11 +369,28 @@ class AcceptanceHelper extends WebDriver
             }
         }
 
-        return [
-            'found' => $foundValues,
-            'notFound' => $notFoundValues,
-        ];
+        $message = '';
+        if (count($foundValues) > 0) {
+            $message .= "Found Values:" . PHP_EOL;
+            foreach ($foundValues as $foundValue) {
+                $message .= "- " . $foundValue . PHP_EOL;
+            }
+        }
+        if (count($notFoundValues) > 0) {
+            $message .= "Missing Values:" . PHP_EOL;
+            foreach ($notFoundValues as $notFoundValue) {
+                $message .= "- " . $notFoundValue . PHP_EOL;
+            }
+        }
+
+        if (count($notFoundValues) > 0) {
+            $this->fail($message);
+        }else{
+            return true;
+        }
+        return false;
     }
+
 
 
 

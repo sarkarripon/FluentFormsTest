@@ -3,43 +3,43 @@
 
 namespace Tests\Acceptance;
 
-use Tests\Support\Helper\Acceptance\Integrations\Slack;
 use Tests\Support\AcceptanceTester;
 use Tests\Support\Factories\DataProvider\DataGenerator;
-use Tests\Support\Helper\Acceptance\Integrations\FieldCustomizer;
 use Tests\Support\Helper\Acceptance\Integrations\IntegrationHelper;
+use Tests\Support\Helper\Acceptance\Integrations\Telegram;
 use Tests\Support\Selectors\FieldSelectors;
 use Tests\Support\Selectors\FluentFormsSelectors;
 
-class IntegrationSlackCest
+class IntegrationTelegramCest
 {
-    use Slack, IntegrationHelper, FieldCustomizer, DataGenerator;
+    use Telegram, IntegrationHelper, DataGenerator;
     public function _before(AcceptanceTester $I): void
     {
         $I->loadDotEnvFile();
-        $I->loginWordpress();
+//        $I->loginWordpress();
     }
 
     // tests
-    public function test_slack_push_data(AcceptanceTester $I): void
+    public function test_telegram_notification(AcceptanceTester $I)
     {
-//        $kjf = $this->fetchSlackData($I,"Dolorem vitae quis et laborum molestiae eos qui.");
-//        dd($kjf);
+        $jhvf = $this->fetchTelegramData($I,'hello');
+        dd($jhvf);
 
         $pageName = __FUNCTION__.'_'.rand(1,100);
-
         $customName=[
             'email' => 'Email Address',
             'nameFields'=>'Name',
             'simpleText'=>'Message',
         ];
         $this->prepareForm($I, $pageName, [
-            'generalFields' => ['email', 'nameFields','simpleText'],
+            'generalFields' => ['email','nameFields','simpleText'],
         ],'yes',$customName);
-        $this->configureSlack($I, "Slack","Fluentform submission notification","Fluentform submission received");
+        $this->configureTelegram($I, "Telegram");
+
+        $this->mapTelegramFields($I);
         $this->preparePage($I,$pageName);
 
-//        $I->amOnPage("test_slack_push_data_28");
+//        $I->amOnPage("test_airtable_push_data_57/");
         $fillAbleDataArr = [
             'Email Address'=>'email',
             'First Name'=>'firstName',
@@ -47,7 +47,7 @@ class IntegrationSlackCest
             'Message'=> 'sentence',
         ];
         $returnedFakeData = $this->generatedData($fillAbleDataArr);
-//        print_r($returnedFakeData);
+        print_r($returnedFakeData);
 //        exit();
 
         foreach ($returnedFakeData as $selector => $value) {
@@ -55,18 +55,21 @@ class IntegrationSlackCest
         }
         $I->clicked(FieldSelectors::submitButton);
 
-        $remoteData = $this->fetchSlackData($I, $returnedFakeData['Message']);
-//        print_r($remoteData);
+        $remoteData = $this->fetchTelegramData($I, $returnedFakeData['Message']);
+        print_r($remoteData);
 
         if (!empty($remoteData)) {
             $I->checkValuesInArray($remoteData, [
-                    $returnedFakeData['Last Name'],
-                    $returnedFakeData['First Name'],
-                    $returnedFakeData['Email Address'],
-                ]);
+                $returnedFakeData['Last Name'],
+                $returnedFakeData['First Name'],
+                $returnedFakeData['Email Address'],
+            ]);
             echo " Hurray.....! Data found in slack";
         }else{
             $I->fail("Could not fetch data from slack");
         }
+
+
+
     }
 }
