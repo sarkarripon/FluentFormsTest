@@ -22,9 +22,9 @@ trait Sendinblue
         $this->configureApiSettings($I,"Sendinblue");
     }
 
-    public function mapSendinblueFields(AcceptanceTester $I,array $fieldMapping, $extraListOrService): void
+    public function mapSendinblueFields(AcceptanceTester $I,array $fieldMapping, $listOrService): void
     {
-        $this->mapEmailInCommon($I,"Sendinblue Integration",$extraListOrService);
+        $this->mapEmailInCommon($I,"Sendinblue Integration",$listOrService);
         $this->assignShortCode($I,$fieldMapping);
 
         $I->clickWithLeftButton(FluentFormsSelectors::saveButton("Save Feed"));

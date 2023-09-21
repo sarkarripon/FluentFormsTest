@@ -24,7 +24,7 @@ class IntegrationActivecampaignCest
     {
         $pageName = __FUNCTION__.'_'.rand(1,100);
 
-        $extraListOrService =['ActiveCampaign List'=>'Master Contact List'];
+        $listOrService =['ActiveCampaign List'=>'Master Contact List'];
         $customName=[
             'email'=>'Email Address',
             'simpleText'=>['First Name','Last Name','Organization Name'],
@@ -37,7 +37,7 @@ class IntegrationActivecampaignCest
         $this->configureActivecampaign($I, "ActiveCampaign");
         $fieldMapping = $this->buildArrayWithKey($customName);
         print_r($fieldMapping);
-        $this->mapActivecampaignField($I,$fieldMapping,$extraListOrService);
+        $this->mapActivecampaignField($I,$fieldMapping,$listOrService);
         $this->preparePage($I,$pageName);
 
         $fillAbleDataArr = [
@@ -47,25 +47,25 @@ class IntegrationActivecampaignCest
             'Phone Number'=>'phoneNumber',
             'Organization Name'=>'company',
         ];
-        $returnedFakeData = $this->generatedData($fillAbleDataArr);
-//        print_r($returnedFakeData);
-        foreach ($returnedFakeData as $selector => $value) {
+        $fakeData = $this->generatedData($fillAbleDataArr);
+//        print_r($fakeData);
+        foreach ($fakeData as $selector => $value) {
             $I->tryToFilledField(FluentFormsSelectors::fillAbleArea($selector), $value);
         }
         $I->clicked(FieldSelectors::submitButton);
-        $remoteData = $this->fetchActivecampaignData($I,$returnedFakeData['Email Address']);
+        $remoteData = $this->fetchActivecampaignData($I,$fakeData['Email Address']);
 //        print_r($remoteData['contacts']);
 
         // retry to submit form again if data not found
         if (empty($remoteData['contacts'])){
             $I->amOnPage('/' . $pageName);
 
-            $returnedFakeData = $this->generatedData($fillAbleDataArr);
-            foreach ($returnedFakeData as $selector => $value) {
+            $fakeData = $this->generatedData($fillAbleDataArr);
+            foreach ($fakeData as $selector => $value) {
                 $I->tryToFilledField(FluentFormsSelectors::fillAbleArea($selector), $value);
             }
             $I->clicked(FieldSelectors::submitButton);
-            $remoteData = $this->fetchActivecampaignData($I,$returnedFakeData['Email Address']);
+            $remoteData = $this->fetchActivecampaignData($I,$fakeData['Email Address']);
         }
         if (!empty($remoteData['contacts'])) {
             $contact = $remoteData['contacts'][0];
@@ -75,10 +75,10 @@ class IntegrationActivecampaignCest
             $phone = $contact['phone'];
 
             $I->assertString([
-                $returnedFakeData['Email Address'] => $email,
-                $returnedFakeData['First Name'] => $firstName,
-                $returnedFakeData['Last Name'] => $lastName,
-                $returnedFakeData['Phone Number'] => $phone,
+                $fakeData['Email Address'] => $email,
+                $fakeData['First Name'] => $firstName,
+                $fakeData['Last Name'] => $lastName,
+                $fakeData['Phone Number'] => $phone,
             ]);
         }
     }

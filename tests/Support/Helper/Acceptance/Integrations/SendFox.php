@@ -22,9 +22,9 @@ trait SendFox
         $this->configureApiSettings($I,"SendFox");
     }
 
-    public function mapSendFoxFields(AcceptanceTester $I, array $fieldMapping, array $extraListOrService): void
+    public function mapSendFoxFields(AcceptanceTester $I, array $fieldMapping, array $listOrService): void
     {
-        $this->mapEmailInCommon($I,"SendFox Integration",$extraListOrService);
+        $this->mapEmailInCommon($I,"SendFox Integration",$listOrService);
         $this->assignShortCode($I,$fieldMapping);
 
         $I->clickWithLeftButton(FluentFormsSelectors::saveButton("Save Feed"));

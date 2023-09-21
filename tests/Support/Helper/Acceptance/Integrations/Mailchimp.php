@@ -25,9 +25,9 @@ trait Mailchimp
             $this->configureApiSettings($I,"Mailchimp");
     }
 
-    public function mapMailchimpFields(AcceptanceTester $I, array $customName, array $extraListOrService=null): void
+    public function mapMailchimpFields(AcceptanceTester $I, array $customName, array $listOrService=null): void
     {
-        $this->mapEmailInCommon($I,"Mailchimp Integration",$extraListOrService);
+        $this->mapEmailInCommon($I,"Mailchimp Integration",$listOrService);
         $this->assignShortCode($I,$customName);
 
         $I->clicked(FluentFormsSelectors::dropdown("Select Interest Category"));

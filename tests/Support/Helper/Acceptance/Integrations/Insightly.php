@@ -24,9 +24,9 @@ trait Insightly
         $this->configureApiSettings($I,"Insightly");
     }
 
-    public function mapInsightlyFields(AcceptanceTester $I, array $fieldMapping, array $extraListOrService = null)
+    public function mapInsightlyFields(AcceptanceTester $I, array $fieldMapping, array $listOrService = null)
     {
-        $this->mapEmailInCommon($I,"Insightly Integration", $extraListOrService, false);
+        $this->mapEmailInCommon($I,"Insightly Integration", $listOrService, false);
         $this->assignShortCode($I,$fieldMapping,'Insightly Services');
 
         $I->clickWithLeftButton(FluentFormsSelectors::saveButton("Save Feed"));

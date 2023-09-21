@@ -46,23 +46,23 @@ class IntegrationSlackCest
             'Last Name'=>'lastName',
             'Message'=> 'sentence',
         ];
-        $returnedFakeData = $this->generatedData($fillAbleDataArr);
-//        print_r($returnedFakeData);
+        $fakeData = $this->generatedData($fillAbleDataArr);
+//        print_r($fakeData);
 //        exit();
 
-        foreach ($returnedFakeData as $selector => $value) {
+        foreach ($fakeData as $selector => $value) {
             $I->tryToFilledField(FluentFormsSelectors::fillAbleArea($selector), $value);
         }
         $I->clicked(FieldSelectors::submitButton);
 
-        $remoteData = $this->fetchSlackData($I, $returnedFakeData['Message']);
+        $remoteData = $this->fetchSlackData($I, $fakeData['Message']);
 //        print_r($remoteData);
 
         if (!empty($remoteData)) {
             $I->checkValuesInArray($remoteData, [
-                    $returnedFakeData['Last Name'],
-                    $returnedFakeData['First Name'],
-                    $returnedFakeData['Email Address'],
+                    $fakeData['Last Name'],
+                    $fakeData['First Name'],
+                    $fakeData['Email Address'],
                 ]);
             echo " Hurray.....! Data found in slack";
         }else{

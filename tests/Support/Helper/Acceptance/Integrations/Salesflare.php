@@ -22,9 +22,9 @@ trait Salesflare
         $this->configureApiSettings($I,"Salesflare");
     }
 
-    public function mapSalesflareFields(AcceptanceTester $I, array $fieldMapping, array $extraListOrService = null)
+    public function mapSalesflareFields(AcceptanceTester $I, array $fieldMapping, array $listOrService = null)
     {
-        $this->mapEmailInCommon($I,"Salesflare Integration", $extraListOrService);
+        $this->mapEmailInCommon($I,"Salesflare Integration", $listOrService);
         $this->assignShortCode($I,$fieldMapping,'Map Fields');
 
         $I->clickWithLeftButton(FluentFormsSelectors::saveButton("Save Feed"));

@@ -13,7 +13,7 @@ use Tests\Support\Selectors\FluentFormsSelectors;
 class IntegrationDripCest
 {
     use IntegrationHelper,Drip, DataGenerator;
-    public function _before(AcceptanceTester $I)
+    public function _before(AcceptanceTester $I): void
     {
         $I->loadDotEnvFile();
         $I->loginWordpress();
@@ -44,14 +44,14 @@ class IntegrationDripCest
             'First Name'=>'firstName',
             'Last Name'=>'lastName',
         ];
-        $returnedFakeData = $this->generatedData($fillAbleDataArr);
-//        print_r($returnedFakeData);
+        $fakeData = $this->generatedData($fillAbleDataArr);
+//        print_r($fakeData);
 
-        foreach ($returnedFakeData as $selector => $value) {
+        foreach ($fakeData as $selector => $value) {
             $I->tryToFilledField(FluentFormsSelectors::fillAbleArea($selector), $value);
         }
         $I->clicked(FieldSelectors::submitButton);
-        $remoteData = $this->fetchDripData($I, $returnedFakeData['Email Address'],);
+        $remoteData = $this->fetchDripData($I, $fakeData['Email Address'],);
 //        print_r($remoteData);
         if (!isset($remoteData['errors'])) {
             $email = $remoteData['subscribers'][0]['email'];
@@ -59,9 +59,9 @@ class IntegrationDripCest
             $lastName = $remoteData['subscribers'][0]['last_name'];
 
             $I->assertString([
-                $returnedFakeData['Email Address'] => $email,
-                $returnedFakeData['First Name'] => $firstName,
-                $returnedFakeData['Last Name'] => $lastName,
+                $fakeData['Email Address'] => $email,
+                $fakeData['First Name'] => $firstName,
+                $fakeData['Last Name'] => $lastName,
             ]);
         }else{
             $I->fail("Data not found");

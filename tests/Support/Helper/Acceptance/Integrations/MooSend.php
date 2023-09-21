@@ -23,9 +23,9 @@ trait MooSend
         $this->configureApiSettings($I,"MooSend");
 
     }
-    public function mapMooSendFields(AcceptanceTester $I, array $fieldMapping, array $extraListOrService): void
+    public function mapMooSendFields(AcceptanceTester $I, array $fieldMapping, array $listOrService): void
     {
-        $this->mapEmailInCommon($I,"Moosend Integration",$extraListOrService);
+        $this->mapEmailInCommon($I,"Moosend Integration",$listOrService);
         $this->assignShortCode($I,$fieldMapping);
 
         $I->clickWithLeftButton(FluentFormsSelectors::saveButton("Save Feed"));

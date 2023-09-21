@@ -23,7 +23,7 @@ class IntegrationSendinblueCest
     public function test_sendinblue_push_data(AcceptanceTester $I): void
     {
         $pageName = __FUNCTION__.'_'.rand(1,100);
-        $extraListOrService =['Sendinblue Segment'=>getenv('SENDINBLUE_LIST_NAME')];
+        $listOrService =['Sendinblue Segment'=>getenv('SENDINBLUE_LIST_NAME')];
         $customName=[
             'email'=>'Email Address',
             'nameFields'=>'Name',
@@ -37,7 +37,7 @@ class IntegrationSendinblueCest
             'email'=>'Email Address',
             'nameFields'=>['First Name','Last Name'],
         ];
-        $this->mapSendinblueFields($I,$fieldMapping,$extraListOrService);
+        $this->mapSendinblueFields($I,$fieldMapping,$listOrService);
         $this->preparePage($I,$pageName);
 
         $fillAbleDataArr = [
@@ -45,14 +45,14 @@ class IntegrationSendinblueCest
             'First Name'=>'firstName',
             'Last Name'=>'lastName',
         ];
-        $returnedFakeData = $this->generatedData($fillAbleDataArr);
-//        print_r($returnedFakeData);
+        $fakeData = $this->generatedData($fillAbleDataArr);
+//        print_r($fakeData);
 
-        foreach ($returnedFakeData as $selector => $value) {
+        foreach ($fakeData as $selector => $value) {
             $I->tryToFilledField(FluentFormsSelectors::fillAbleArea($selector), $value);
         }
         $I->clicked(FieldSelectors::submitButton);
-        $remoteData = $this->fetchSendinblueData($I, $returnedFakeData['Email Address'],);
+        $remoteData = $this->fetchSendinblueData($I, $fakeData['Email Address'],);
 //        print_r($remoteData);
         if (!isset($remoteData['message'])) {
             $email = $remoteData['email'];
@@ -60,9 +60,9 @@ class IntegrationSendinblueCest
             $lastName = $remoteData['attributes']['LASTNAME'];
 
             $I->assertString([
-                $returnedFakeData['Email Address'] => $email,
-                $returnedFakeData['First Name'] => $firstName,
-                $returnedFakeData['Last Name'] => $lastName,
+                $fakeData['Email Address'] => $email,
+                $fakeData['First Name'] => $firstName,
+                $fakeData['Last Name'] => $lastName,
             ]);
         }else{
             $I->fail("Data not found");

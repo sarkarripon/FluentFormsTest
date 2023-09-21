@@ -51,8 +51,8 @@ class IntegrationInventoryModuleCest
             'First Name'=>'firstName',
             'Last Name'=>'lastName',
         ];
-        $returnedFakeData = $this->generatedData($fillAbleDataArr);
-        foreach ($returnedFakeData as $selector => $value) {
+        $fakeData = $this->generatedData($fillAbleDataArr);
+        foreach ($fakeData as $selector => $value) {
             $I->tryToFilledField(FluentFormsSelectors::fillAbleArea($selector), $value);
         }
 
@@ -64,7 +64,7 @@ class IntegrationInventoryModuleCest
 
         $I->restartSession();
         $I->amOnPage('/' . $pageName);
-        foreach ($returnedFakeData as $selector => $value) {
+        foreach ($fakeData as $selector => $value) {
             $I->tryToFilledField(FluentFormsSelectors::fillAbleArea($selector), $value);
         }
 

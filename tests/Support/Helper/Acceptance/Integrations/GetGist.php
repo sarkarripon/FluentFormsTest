@@ -23,9 +23,9 @@ trait GetGist
         $this->configureApiSettings($I,"GetGist");
     }
 
-    public function mapGetGistFields(AcceptanceTester $I, array $fieldMapping, array $extraListOrService=null)
+    public function mapGetGistFields(AcceptanceTester $I, array $fieldMapping, array $listOrService=null)
     {
-        $this->mapEmailInCommon($I,"GetGist Integration",$extraListOrService);
+        $this->mapEmailInCommon($I,"GetGist Integration",$listOrService);
         $this->assignShortCode($I,$fieldMapping,'Map Fields');
 
         $I->clickWithLeftButton(FluentFormsSelectors::saveButton("Save Feed"));

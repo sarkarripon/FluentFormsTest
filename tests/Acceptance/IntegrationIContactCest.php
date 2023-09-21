@@ -28,7 +28,7 @@ class IntegrationIContactCest
 //        exit();
 
         $pageName = __FUNCTION__.'_'.rand(1,100);
-        $extraListOrService =['iContact List'=>getenv('ICONTACT_CONTACT_LIST')];
+        $listOrService =['iContact List'=>getenv('ICONTACT_CONTACT_LIST')];
         $customName=[
             'email'=>'Email Address',
             'nameFields'=>'Name',
@@ -39,7 +39,7 @@ class IntegrationIContactCest
         $this->configureIContact($I, "iContact");
 
         $fieldMapping= $this->buildArrayWithKey($customName);
-        $this->mapIContactFields($I,$fieldMapping,$extraListOrService);
+        $this->mapIContactFields($I,$fieldMapping,$listOrService);
         $this->preparePage($I,$pageName);
 
         $fillAbleDataArr = [
@@ -47,14 +47,14 @@ class IntegrationIContactCest
             'First Name'=>'firstName',
             'Last Name'=>'lastName',
         ];
-        $returnedFakeData = $this->generatedData($fillAbleDataArr);
-//        print_r($returnedFakeData);
+        $fakeData = $this->generatedData($fillAbleDataArr);
+//        print_r($fakeData);
 
-        foreach ($returnedFakeData as $selector => $value) {
+        foreach ($fakeData as $selector => $value) {
             $I->tryToFilledField(FluentFormsSelectors::fillAbleArea($selector), $value);
         }
         $I->clicked(FieldSelectors::submitButton);
-        $remoteData = $this->fetchIContactData($I, $returnedFakeData['Email Address']);
+        $remoteData = $this->fetchIContactData($I, $fakeData['Email Address']);
 //        print_r($remoteData);
         if (isset($remoteData) and !empty($remoteData)) {
             $email = $remoteData['email'];
@@ -62,9 +62,9 @@ class IntegrationIContactCest
             $lastName = $remoteData['lastName'];
 
             $I->assertString([
-                $returnedFakeData['Email Address'] => $email,
-                $returnedFakeData['First Name'] => $firstName,
-                $returnedFakeData['Last Name'] => $lastName,
+                $fakeData['Email Address'] => $email,
+                $fakeData['First Name'] => $firstName,
+                $fakeData['Last Name'] => $lastName,
             ]);
         }else{
             $I->fail("Data not found");

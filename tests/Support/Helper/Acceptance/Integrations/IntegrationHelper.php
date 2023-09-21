@@ -154,12 +154,12 @@ trait IntegrationHelper
 
     }
 
-    public function mapEmailInCommon(AcceptanceTester $I, string $feedName, array $extraListOrService = null,bool $emailField= true): void
+    public function mapEmailInCommon(AcceptanceTester $I, string $feedName, array $listOrService = null,bool $emailField= true): void
     {
         $I->waitForElementClickable(FluentFormsSelectors::integrationFeed, 20);
         $I->fillByJS(FluentFormsSelectors::feedName, $feedName);
-        if ($extraListOrService) {
-            foreach ($extraListOrService as $key => $value) {
+        if ($listOrService) {
+            foreach ($listOrService as $key => $value) {
                 $I->retryClicked(FluentFormsSelectors::dropdown($key));
                 try {
                     $I->clickOnExactText($value, $key);

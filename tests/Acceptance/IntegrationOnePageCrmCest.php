@@ -30,7 +30,7 @@ class IntegrationOnePageCrmCest
 //        exit();
 
         $pageName = __FUNCTION__.'_'.rand(1,100);
-        $extraListOrService =['OnePageCRM Services'=>'Contact'];
+        $listOrService =['OnePageCRM Services'=>'Contact'];
         $customName=[
             'email'=>'Enter Email',
             'nameFields'=>'Name',
@@ -45,7 +45,7 @@ class IntegrationOnePageCrmCest
 
 //        print_r($fieldMapping);
 
-        $this->mapOnePageCrmFields($I,$fieldMapping,$extraListOrService);
+        $this->mapOnePageCrmFields($I,$fieldMapping,$listOrService);
         $this->preparePage($I,$pageName);
 
         $fillAbleDataArr = [
@@ -54,15 +54,15 @@ class IntegrationOnePageCrmCest
             'Last Name'=>'lastName',
             'Company Name'=>'company',
         ];
-        $returnedFakeData = $this->generatedData($fillAbleDataArr);
-//        print_r($returnedFakeData);
+        $fakeData = $this->generatedData($fillAbleDataArr);
+//        print_r($fakeData);
 
-        foreach ($returnedFakeData as $selector => $value) {
+        foreach ($fakeData as $selector => $value) {
             $I->tryToFilledField(FluentFormsSelectors::fillAbleArea($selector), $value);
         }
         $I->clicked(FieldSelectors::submitButton);
 
-        $remoteData = $this->fetchOnePageCrmData($I, $returnedFakeData['Enter Email'],);
+        $remoteData = $this->fetchOnePageCrmData($I, $fakeData['Enter Email'],);
 //        print_r($remoteData);
         if (isset($remoteData['data']['contacts']) and !empty($remoteData['data']['contacts'])) {
             $email = $remoteData['data']['contacts'][0]['contact']['emails'][0]['value'];
@@ -70,9 +70,9 @@ class IntegrationOnePageCrmCest
             $last_name = $remoteData['data']['contacts'][0]['contact']['last_name'];
 
             $I->assertString([
-                $returnedFakeData['Enter Email'] => $email,
-                $returnedFakeData['First Name'] => $first_name,
-                $returnedFakeData['Last Name'] => $last_name,
+                $fakeData['Enter Email'] => $email,
+                $fakeData['First Name'] => $first_name,
+                $fakeData['Last Name'] => $last_name,
             ]);
         }else{
             $I->fail("Data not found");

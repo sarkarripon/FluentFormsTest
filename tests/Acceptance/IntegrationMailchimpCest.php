@@ -31,7 +31,7 @@ class IntegrationMailchimpCest
     {
         $pageName = __FUNCTION__.'_'.rand(1,100);
 
-        $extraListOrService =['Mailchimp List'=>getenv('MAILCHIMP_LIST_NAME')];
+        $listOrService =['Mailchimp List'=>getenv('MAILCHIMP_LIST_NAME')];
         $customName=[
             'email'=>'Email Address',
             'nameFields'=>'Name',
@@ -44,7 +44,7 @@ class IntegrationMailchimpCest
             'First Name'=>'First Name',
             'Last Name'=>'Last Name',
         ];
-        $this->mapMailchimpFields($I,$fieldMapping,$extraListOrService);
+        $this->mapMailchimpFields($I,$fieldMapping,$listOrService);
 
         // Disabling IP Logging inorder to prevent the test from failing for IP log issue
         $I->amOnPage("wp-admin/admin.php?page=fluent_forms_settings#settings");

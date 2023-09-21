@@ -23,9 +23,9 @@ trait MailJet
         $this->configureApiSettings($I,"Mailjet");
     }
 
-    public function mapMailJetFields(AcceptanceTester $I, array $fieldMapping, array $extraListOrService = null)
+    public function mapMailJetFields(AcceptanceTester $I, array $fieldMapping, array $listOrService = null)
     {
-        $this->mapEmailInCommon($I,"Mailjet Integration", $extraListOrService, false);
+        $this->mapEmailInCommon($I,"Mailjet Integration", $listOrService, false);
         $this->assignShortCode($I,$fieldMapping,'Mailjet Services');
 
         $I->clickWithLeftButton(FluentFormsSelectors::saveButton("Save Feed"));

@@ -48,14 +48,14 @@ class IntegrationGetGistCest
             'First Name'=>'firstName',
             'Last Name'=>'lastName',
         ];
-        $returnedFakeData = $this->generatedData($fillAbleDataArr);
-//        print_r($returnedFakeData);
+        $fakeData = $this->generatedData($fillAbleDataArr);
+//        print_r($fakeData);
 
-        foreach ($returnedFakeData as $selector => $value) {
+        foreach ($fakeData as $selector => $value) {
             $I->tryToFilledField(FluentFormsSelectors::fillAbleArea($selector), $value);
         }
         $I->clicked(FieldSelectors::submitButton);
-        $remoteData = $this->fetchGetGistData($I, $returnedFakeData['Email Address'],);
+        $remoteData = $this->fetchGetGistData($I, $fakeData['Email Address'],);
 //        print_r($remoteData);
 
         if (isset($remoteData['contact'])) {
@@ -63,8 +63,8 @@ class IntegrationGetGistCest
             $fullName = $remoteData['contact']['full_name'];
 
             $I->assertString([
-                $returnedFakeData['Email Address'] => $email,
-                $returnedFakeData['First Name']." ".  $returnedFakeData['Last Name'] => $fullName,
+                $fakeData['Email Address'] => $email,
+                $fakeData['First Name']." ".  $fakeData['Last Name'] => $fullName,
             ]);
         }else{
             $I->fail("Data not found");

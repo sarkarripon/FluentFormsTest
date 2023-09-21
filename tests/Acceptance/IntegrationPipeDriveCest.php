@@ -24,7 +24,7 @@ class IntegrationPipeDriveCest
     public function test_pipedrive_people_creation(AcceptanceTester $I)
     {
         $pageName = __FUNCTION__.'_'.rand(1,100);
-        $extraListOrService =[
+        $listOrService =[
             'Services'=>'Person',
             'Owner'=>getenv('PIPEDRIVE_OWNER'),
             'Visible to'=>'item owner',
@@ -43,7 +43,7 @@ class IntegrationPipeDriveCest
             'Name'=>'Name',
         ];
         print_r($fieldMapping);
-        $this->mapPipeDriveFields($I,$fieldMapping,$extraListOrService);
+        $this->mapPipeDriveFields($I,$fieldMapping,$listOrService);
         $this->preparePage($I,$pageName);
 
         $fillAbleDataArr = [
@@ -51,14 +51,14 @@ class IntegrationPipeDriveCest
             'First Name'=>'firstName',
             'Last Name'=>'lastName',
         ];
-        $returnedFakeData = $this->generatedData($fillAbleDataArr);
-//        print_r($returnedFakeData);
+        $fakeData = $this->generatedData($fillAbleDataArr);
+//        print_r($fakeData);
 
-        foreach ($returnedFakeData as $selector => $value) {
+        foreach ($fakeData as $selector => $value) {
             $I->tryToFilledField(FluentFormsSelectors::fillAbleArea($selector), $value);
         }
         $I->clicked(FieldSelectors::submitButton);
-        $remoteData = $this->fetchPipeDriveData($I, $returnedFakeData['Email Address'],);
+        $remoteData = $this->fetchPipeDriveData($I, $fakeData['Email Address'],);
 //        print_r($remoteData);
 
         if (isset($remoteData)) {
@@ -66,8 +66,8 @@ class IntegrationPipeDriveCest
             $name = $remoteData[0]['item']['name'];
 
             $I->assertString([
-                $returnedFakeData['Email Address'] => $email,
-                $returnedFakeData['First Name']." ".$returnedFakeData['Last Name'] => $name,
+                $fakeData['Email Address'] => $email,
+                $fakeData['First Name']." ".$fakeData['Last Name'] => $name,
             ]);
         }else{
             $I->fail("Data not found");

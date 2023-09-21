@@ -27,7 +27,7 @@ class IntegrationCovertKitCest
 
 
         $pageName = __FUNCTION__.'_'.rand(1,100);
-        $extraListOrService =['ConvertKit Form'=>getenv('CONVERTKIT_LIST')];
+        $listOrService =['ConvertKit Form'=>getenv('CONVERTKIT_LIST')];
         $customName=[
             'email' => 'Email Address',
             'nameFields'=>'Name',
@@ -40,7 +40,7 @@ class IntegrationCovertKitCest
         $fieldMapping = $this->buildArrayWithKey($customName);
         unset($fieldMapping['Last Name']);
 
-        $this->mapConvertKitFields($I,$fieldMapping,$extraListOrService);
+        $this->mapConvertKitFields($I,$fieldMapping,$listOrService);
         $this->preparePage($I,$pageName);
 
 //        $I->amOnPage("test_airtable_push_data_57/");
@@ -48,16 +48,16 @@ class IntegrationCovertKitCest
             'Email Address'=>'email',
             'First Name'=>'firstName',
         ];
-        $returnedFakeData = $this->generatedData($fillAbleDataArr);
-        print_r($returnedFakeData);
+        $fakeData = $this->generatedData($fillAbleDataArr);
+        print_r($fakeData);
 //        exit();
 
-        foreach ($returnedFakeData as $selector => $value) {
+        foreach ($fakeData as $selector => $value) {
             $I->tryToFilledField(FluentFormsSelectors::fillAbleArea($selector), $value);
         }
         $I->clicked(FieldSelectors::submitButton);
 
-        $remoteData = $this->fetchConvertKitData($I, $returnedFakeData['Email Address']);
+        $remoteData = $this->fetchConvertKitData($I, $fakeData['Email Address']);
 //        print_r($remoteData);
 
         if (isset($remoteData)) {
@@ -65,8 +65,8 @@ class IntegrationCovertKitCest
             $email = $remoteData['email_address'];
 
             $I->assertString([
-                $returnedFakeData['Email Address'] => $email,
-                $returnedFakeData['First Name'] => $firstName,
+                $fakeData['Email Address'] => $email,
+                $fakeData['First Name'] => $firstName,
             ]);
         }else{
             $I->fail("Data not found");

@@ -24,7 +24,7 @@ class IntegrationMailerLiteCest
 //        $hgg = $this->fetchData("lucituzic@gmail.co");
 //        dd($hgg);
         $pageName = __FUNCTION__.'_'.rand(1,100);
-        $extraListOrService =['Group List'=>getenv('MAILERLITE_GROUP')];
+        $listOrService =['Group List'=>getenv('MAILERLITE_GROUP')];
         $customName=[
             'email'=>'Email',
             'nameFields'=>'Name',
@@ -39,7 +39,7 @@ class IntegrationMailerLiteCest
             'Name'=>'Name'
         ];
 //        print_r($fieldMapping);
-        $this->mapMailerLiteFields($I,$fieldMapping,$extraListOrService);
+        $this->mapMailerLiteFields($I,$fieldMapping,$listOrService);
         $this->preparePage($I,$pageName);
 
         $fillAbleDataArr = [
@@ -47,14 +47,14 @@ class IntegrationMailerLiteCest
             'First Name'=>'firstName',
             'Last Name'=>'lastName',
         ];
-        $returnedFakeData = $this->generatedData($fillAbleDataArr);
-//        print_r($returnedFakeData);
+        $fakeData = $this->generatedData($fillAbleDataArr);
+//        print_r($fakeData);
 
-        foreach ($returnedFakeData as $selector => $value) {
+        foreach ($fakeData as $selector => $value) {
             $I->tryToFilledField(FluentFormsSelectors::fillAbleArea($selector), $value);
         }
         $I->clicked(FieldSelectors::submitButton);
-        $remoteData = $this->fetchMailerLiteData($I, $returnedFakeData['Email'],);
+        $remoteData = $this->fetchMailerLiteData($I, $fakeData['Email'],);
 //        print_r($remoteData);
 
         if (isset($remoteData['data'])) {
@@ -62,8 +62,8 @@ class IntegrationMailerLiteCest
             $name = $remoteData['data']['fields']['name'];
 
             $I->assertString([
-                $returnedFakeData['Email'] => $email,
-                $returnedFakeData['First Name']." ". $returnedFakeData['Last Name'] => $name,
+                $fakeData['Email'] => $email,
+                $fakeData['First Name']." ". $fakeData['Last Name'] => $name,
 
             ]);
         }else{

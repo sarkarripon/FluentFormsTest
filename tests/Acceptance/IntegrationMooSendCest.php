@@ -23,7 +23,7 @@ class IntegrationMooSendCest
     public function test_mooSend_push_data(AcceptanceTester $I): void
     {
         $pageName = __FUNCTION__.'_'.rand(1,100);
-        $extraListOrService =['MooSend Mailing Lists'=>getenv('MOOSEND_MAILING_LIST')];
+        $listOrService =['MooSend Mailing Lists'=>getenv('MOOSEND_MAILING_LIST')];
         $customName=[
             'email'=>'Email Address',
             'nameFields'=>'Full Name',
@@ -36,7 +36,7 @@ class IntegrationMooSendCest
             'Name'=>'Full Name',
         ];
 
-        $this->mapMooSendFields($I,$fieldMapping,$extraListOrService);
+        $this->mapMooSendFields($I,$fieldMapping,$listOrService);
         $this->preparePage($I,$pageName);
 
         $fillAbleDataArr = [
@@ -44,23 +44,23 @@ class IntegrationMooSendCest
             'First Name'=>'firstName',
             'Last Name'=>'lastName',
         ];
-        $returnedFakeData = $this->generatedData($fillAbleDataArr);
-//        print_r($returnedFakeData);
+        $fakeData = $this->generatedData($fillAbleDataArr);
+//        print_r($fakeData);
 
-        foreach ($returnedFakeData as $selector => $value) {
+        foreach ($fakeData as $selector => $value) {
             $I->tryToFilledField(FluentFormsSelectors::fillAbleArea($selector), $value);
         }
         $I->clicked(FieldSelectors::submitButton);
 
-        $remoteData = $this->fetchMooSendData($I, $returnedFakeData['Email Address'],);
+        $remoteData = $this->fetchMooSendData($I, $fakeData['Email Address'],);
 //        print_r($remoteData);
         if (isset($remoteData['Context'])) {
             $email = $remoteData['Context']['Email'];
             $name = $remoteData['Context']['Name'];
 
             $I->assertString([
-                $returnedFakeData['Email Address'] => $email,
-                $returnedFakeData['First Name']." ".$returnedFakeData['Last Name'] => $name,
+                $fakeData['Email Address'] => $email,
+                $fakeData['First Name']." ".$fakeData['Last Name'] => $name,
             ]);
         }else{
             $I->fail("Data not found");

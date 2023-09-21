@@ -28,7 +28,7 @@ class IntegrationAirtableCest
 //        exit();
 
         $pageName = __FUNCTION__.'_'.rand(1,100);
-        $extraListOrService =['Airtable Configuration'=>getenv('AIRTABLE_BASE_NAME')];
+        $listOrService =['Airtable Configuration'=>getenv('AIRTABLE_BASE_NAME')];
         $customName=[
             'nameFields'=>'Name',
             'simpleText'=>'Status',
@@ -45,7 +45,7 @@ class IntegrationAirtableCest
             'Start date'=>'Start date',
         ];
 
-        $this->mapAirtableFields($I,$fieldMapping,$extraListOrService);
+        $this->mapAirtableFields($I,$fieldMapping,$listOrService);
         $this->preparePage($I,$pageName);
 
 //        $I->amOnPage("test_airtable_push_data_57/");
@@ -55,11 +55,11 @@ class IntegrationAirtableCest
             'Status'=>'status',
             'Start date'=>['date'=>'m-d-Y'],
         ];
-        $returnedFakeData = $this->generatedData($fillAbleDataArr);
-//        print_r($returnedFakeData);
+        $fakeData = $this->generatedData($fillAbleDataArr);
+//        print_r($fakeData);
 //        exit();
 
-        foreach ($returnedFakeData as $selector => $value) {
+        foreach ($fakeData as $selector => $value) {
             if (str_contains(FluentFormsSelectors::fillAbleArea($selector), 'Start date')){
                 $I->fillByJS(FluentFormsSelectors::fillAbleArea($selector), $value);
             }else{
@@ -68,7 +68,7 @@ class IntegrationAirtableCest
         }
         $I->clicked(FieldSelectors::submitButton);
 
-        $remoteData = $this->fetchAirtableData($I, $returnedFakeData['First Name']." ".$returnedFakeData['Last Name']);
+        $remoteData = $this->fetchAirtableData($I, $fakeData['First Name']." ".$fakeData['Last Name']);
 //        print_r($remoteData);
 
         if (isset($remoteData)) {
@@ -76,8 +76,8 @@ class IntegrationAirtableCest
             $status = $remoteData['fields']['Status'];
 
             $I->assertString([
-                $returnedFakeData['Status'] => $status,
-                $returnedFakeData['First Name']." ".$returnedFakeData['Last Name'] => $name,
+                $fakeData['Status'] => $status,
+                $fakeData['First Name']." ".$fakeData['Last Name'] => $name,
             ]);
         }else{
             $I->fail("Data not found");

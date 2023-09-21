@@ -26,9 +26,9 @@ trait IContact
         $this->configureApiSettings($I,"iContact");
     }
 
-    public function mapIContactFields(AcceptanceTester $I, array $fieldMapping, array $extraListOrService)
+    public function mapIContactFields(AcceptanceTester $I, array $fieldMapping, array $listOrService)
     {
-        $this->mapEmailInCommon($I,"Airtable Integration",$extraListOrService);
+        $this->mapEmailInCommon($I,"Airtable Integration",$listOrService);
         $this->assignShortCode($I,$fieldMapping,'Map Fields');
 
         $I->clickWithLeftButton(FluentFormsSelectors::saveButton("Save Feed"));

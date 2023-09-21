@@ -14,7 +14,7 @@ trait Twilio
         // TODO: Implement configure() method.
     }
 
-    public function mapFields(AcceptanceTester $I, array $fieldMapping, array $extraListOrService)
+    public function mapFields(AcceptanceTester $I, array $fieldMapping, array $listOrService)
     {
         // TODO: Implement mapFields() method.
     }

@@ -12,9 +12,9 @@ trait UserRegistration
         $this->configureApiSettings($I,"UserRegistration");
     }
 
-    public function mapUserRegistrationField(AcceptanceTester $I, array $customName, array $extraListOrService=null): void
+    public function mapUserRegistrationField(AcceptanceTester $I, array $customName, array $listOrService=null): void
     {
-        $this->mapEmailInCommon($I,"User Registration",$extraListOrService);
+        $this->mapEmailInCommon($I,"User Registration",$listOrService);
         $this->assignShortCode($I,$customName);
         $I->clicked(FluentFormsSelectors::saveButton("Save Feed"));
 

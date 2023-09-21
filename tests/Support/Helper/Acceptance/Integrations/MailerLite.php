@@ -22,9 +22,9 @@ trait MailerLite
         $this->configureApiSettings($I,"MailerLite");
     }
 
-    public function mapMailerLiteFields(AcceptanceTester $I, array $fieldMapping, array $extraListOrService): void
+    public function mapMailerLiteFields(AcceptanceTester $I, array $fieldMapping, array $listOrService): void
     {
-        $this->mapEmailInCommon($I,"SendFox Integration",$extraListOrService, false);
+        $this->mapEmailInCommon($I,"SendFox Integration",$listOrService, false);
         $this->assignShortCode($I,$fieldMapping,'Map Fields');
 
         $I->clickWithLeftButton(FluentFormsSelectors::saveButton("Save Feed"));

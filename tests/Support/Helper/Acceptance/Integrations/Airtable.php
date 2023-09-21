@@ -24,9 +24,9 @@ trait Airtable
 
     }
 
-    public function mapAirtableFields(AcceptanceTester $I, array $fieldMapping, array $extraListOrService = null)
+    public function mapAirtableFields(AcceptanceTester $I, array $fieldMapping, array $listOrService = null)
     {
-        $this->mapEmailInCommon($I,"Airtable Integration",$extraListOrService, false);
+        $this->mapEmailInCommon($I,"Airtable Integration",$listOrService, false);
 
         $I->retryClicked(FluentFormsSelectors::dropdown('Select Table'));
         $I->retryClickOnText(getenv('AIRTABLE_TABLE_NAME'));

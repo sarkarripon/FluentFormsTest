@@ -26,7 +26,7 @@ class IntegrationClickSendCest
 //        dd($jvhhfdh);
 
         $pageName = __FUNCTION__.'_'.rand(1,100);
-        $extraListOrService =['Services'=>'Create Subscriber Contact', 'Campaign List'=>'Example List'];
+        $listOrService =['Services'=>'Create Subscriber Contact', 'Campaign List'=>'Example List'];
         $customName=[
             'email' => 'Email',
             'phone'=>'Phone Number',
@@ -38,7 +38,7 @@ class IntegrationClickSendCest
 
         $fieldMapping = array_merge($this->buildArrayWithKey($customName),['Email'=>'Email']);
 
-        $this->mapClickSendFields($I,$fieldMapping,$extraListOrService);
+        $this->mapClickSendFields($I,$fieldMapping,$listOrService);
         $this->preparePage($I,$pageName);
 
 //        $I->amOnPage("test_airtable_push_data_57/");
@@ -47,16 +47,16 @@ class IntegrationClickSendCest
             'Phone Number' => 'phoneNumber',
 
         ];
-        $returnedFakeData = $this->generatedData($fillAbleDataArr);
-//        print_r($returnedFakeData);
+        $fakeData = $this->generatedData($fillAbleDataArr);
+//        print_r($fakeData);
 //        exit();
 
-        foreach ($returnedFakeData as $selector => $value) {
+        foreach ($fakeData as $selector => $value) {
             $I->tryToFilledField(FluentFormsSelectors::fillAbleArea($selector), $value);
         }
         $I->clicked(FieldSelectors::submitButton);
 
-        $remoteData = $this->fetchClickSendData($I, $returnedFakeData['Email']);
+        $remoteData = $this->fetchClickSendData($I, $fakeData['Email']);
 //        print_r($remoteData);
 
         if (isset($remoteData)) {
@@ -64,8 +64,8 @@ class IntegrationClickSendCest
             $email = $remoteData['email'];
 
             $I->assertString([
-                $returnedFakeData['Email'] => $email,
-                $returnedFakeData['Phone Number'] => $phone,
+                $fakeData['Email'] => $email,
+                $fakeData['Phone Number'] => $phone,
             ]);
         }else{
             $I->fail("Data not found");

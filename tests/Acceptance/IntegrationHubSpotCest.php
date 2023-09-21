@@ -47,16 +47,16 @@ class IntegrationHubSpotCest
             'First Name'=>'firstName',
             'Last Name'=>'lastName',
         ];
-        $returnedFakeData = $this->generatedData($fillAbleDataArr);
-//        print_r($returnedFakeData);
+        $fakeData = $this->generatedData($fillAbleDataArr);
+//        print_r($fakeData);
 //        exit();
 
-        foreach ($returnedFakeData as $selector => $value) {
+        foreach ($fakeData as $selector => $value) {
             $I->tryToFilledField(FluentFormsSelectors::fillAbleArea($selector), $value);
         }
         $I->clicked(FieldSelectors::submitButton);
 
-        $remoteData = $this->fetchHubSpotData($I, $returnedFakeData['Email Address']);
+        $remoteData = $this->fetchHubSpotData($I, $fakeData['Email Address']);
 //        print_r($remoteData);
 
         if (isset($remoteData)) {
@@ -65,9 +65,9 @@ class IntegrationHubSpotCest
             $email = $remoteData['properties']['email'];
 
             $I->assertString([
-                $returnedFakeData['Email Address'] => $email,
-                $returnedFakeData['First Name'] => $firstName,
-                $returnedFakeData['Last Name'] => $LastName,
+                $fakeData['Email Address'] => $email,
+                $fakeData['First Name'] => $firstName,
+                $fakeData['Last Name'] => $LastName,
             ]);
         }else{
             $I->fail("Data not found");

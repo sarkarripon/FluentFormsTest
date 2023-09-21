@@ -21,7 +21,7 @@ trait Slack
         $I->clicked(FluentFormsSelectors::saveButton("Save Settings"));
     }
 
-    public function mapSlackFields(AcceptanceTester $I, array $fieldMapping, array $extraListOrService = null)
+    public function mapSlackFields(AcceptanceTester $I, array $fieldMapping, array $listOrService = null)
     {
         // TODO: Implement mapFields() method.
     }

@@ -23,9 +23,9 @@ trait ConvertKit
         $this->configureApiSettings($I,"ConvertKit");
     }
 
-    public function mapConvertKitFields(AcceptanceTester $I, array $fieldMapping, array $extraListOrService)
+    public function mapConvertKitFields(AcceptanceTester $I, array $fieldMapping, array $listOrService)
     {
-        $this->mapEmailInCommon($I,"ConvertKit Integration",$extraListOrService);
+        $this->mapEmailInCommon($I,"ConvertKit Integration",$listOrService);
         $this->assignShortCode($I,$fieldMapping,'Map Fields');
 
         $I->clickWithLeftButton(FluentFormsSelectors::saveButton("Save Feed"));

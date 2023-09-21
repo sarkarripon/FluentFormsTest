@@ -12,7 +12,7 @@ trait CleverReach
         // TODO: Implement configure() method.
     }
 
-    public function mapCleverReachFields(AcceptanceTester $I, array $fieldMapping, array $extraListOrService = null)
+    public function mapCleverReachFields(AcceptanceTester $I, array $fieldMapping, array $listOrService = null)
     {
         // TODO: Implement mapFields() method.
     }

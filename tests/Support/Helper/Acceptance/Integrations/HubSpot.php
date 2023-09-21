@@ -23,7 +23,7 @@ trait HubSpot
         $this->configureApiSettings($I,"HubSpot");
     }
 
-    public function mapHubSpotFields(AcceptanceTester $I, array $fieldMapping, array $extraListOrService = null)
+    public function mapHubSpotFields(AcceptanceTester $I, array $fieldMapping, array $listOrService = null)
     {
         $this->mapEmailInCommon($I,"HubSpot Integration");
         $this->assignShortCode($I,$fieldMapping,'Map Fields');

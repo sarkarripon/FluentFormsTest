@@ -28,7 +28,7 @@ class IntegrationUserRegistrationCest
         global $newUser;
         $pageName = __FUNCTION__.'_'.rand(1,100);
 
-        $extraListOrService =['Services'=>'User Registration'];
+        $listOrService =['Services'=>'User Registration'];
         $customName=[
             'email'=>'Email Address',
             'simpleText'=>['Username','First Name','Last Name'],
@@ -41,7 +41,7 @@ class IntegrationUserRegistrationCest
 
 
         $this->configureUserRegistration($I, "User Registration or Update");
-        $this->mapUserRegistrationField($I,$customName,$extraListOrService);
+        $this->mapUserRegistrationField($I,$customName,$listOrService);
         $this->preparePage($I, $pageName);
 
         $I->restartSession();
@@ -53,21 +53,21 @@ class IntegrationUserRegistrationCest
             'Last Name'=>'lastName',
             'Password'=>'password',
         ];
-        $returnedFakeData = $this->generatedData($fillAbleDataArr);
-        foreach ($returnedFakeData as $selector => $value) {
+        $fakeData = $this->generatedData($fillAbleDataArr);
+        foreach ($fakeData as $selector => $value) {
             $I->tryToFilledField(FluentFormsSelectors::fillAbleArea($selector), $value);
         }
         $I->wait(1);
         $I->clicked(FieldSelectors::submitButton);
         $I->wait(1);
 
-        $I->loginWordpress($returnedFakeData['Username'],$returnedFakeData['Password']);
+        $I->loginWordpress($fakeData['Username'],$fakeData['Password']);
         $I->seeText([
-            $returnedFakeData['First Name'],
+            $fakeData['First Name'],
         ]);
         $newUser =[
-            'user' => $returnedFakeData['Username'],
-            'password' => $returnedFakeData['Password'],
+            'user' => $fakeData['Username'],
+            'password' => $fakeData['Password'],
         ];
         return $newUser;
     }
@@ -80,7 +80,7 @@ class IntegrationUserRegistrationCest
             $newUser = $this->test_user_registration($I);
         }
         $I->loginWordpress();
-        $extraListOrService =['Services'=>'User Update'];
+        $listOrService =['Services'=>'User Update'];
         $customName=[
             'simpleText'=>['Username','First Name','Last Name','Nickname'],
             'textArea'=>'Biographical Info',
@@ -94,7 +94,7 @@ class IntegrationUserRegistrationCest
         ],'yes',$customName);
 
         $this->configureUserRegistration($I, "User Registration or Update");
-        $this->mapUserRegistrationField($I,$customName,$extraListOrService);
+        $this->mapUserRegistrationField($I,$customName,$listOrService);
         $this->preparePage($I, $pageName);
         $I->restartSession();
         $I->loginWordpress($newUser['user'],$newUser['password']);
@@ -110,17 +110,17 @@ class IntegrationUserRegistrationCest
             'Password'=>'password',
             'Repeat Password'=>'password',
         ];
-        $returnedFakeData = $this->generatedData($fillAbleDataArr);
-        foreach ($returnedFakeData as $selector => $value) {
+        $fakeData = $this->generatedData($fillAbleDataArr);
+        foreach ($fakeData as $selector => $value) {
             $I->tryToFilledField(FluentFormsSelectors::fillAbleArea($selector), $value);
         }
         $I->wait(1);
         $I->clicked(FieldSelectors::submitButton);
         $I->wait(1);
 
-        $I->loginWordpress($returnedFakeData['Email Address'],$returnedFakeData['Password']);
+        $I->loginWordpress($fakeData['Email Address'],$fakeData['Password']);
         $I->seeText([
-            $returnedFakeData['First Name'],
+            $fakeData['First Name'],
         ]);
     }
 }

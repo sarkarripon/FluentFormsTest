@@ -27,7 +27,7 @@ class IntegrationInsightlyCest
 //        dd($hbvdf);
 
         $pageName = __FUNCTION__.'_'.rand(1,100);
-        $extraListOrService = [
+        $listOrService = [
             'Insightly Services' => 'Contact',
         ];
         $customName=[
@@ -42,7 +42,7 @@ class IntegrationInsightlyCest
         $fieldMapping = array_merge($this->buildArrayWithKey($customName), ['Email' => 'Email']);
 //        unset($fieldMapping['Last Name']);
 //        print_r($fieldMapping);
-        $this->mapInsightlyFields($I,$fieldMapping,$extraListOrService);
+        $this->mapInsightlyFields($I,$fieldMapping,$listOrService);
         $this->preparePage($I,$pageName);
 
 //        $I->amOnPage("test_airtable_push_data_57/");
@@ -51,16 +51,16 @@ class IntegrationInsightlyCest
             'First Name'=>'firstName',
             'Last Name'=>'lastName',
         ];
-        $returnedFakeData = $this->generatedData($fillAbleDataArr);
-//        print_r($returnedFakeData);
+        $fakeData = $this->generatedData($fillAbleDataArr);
+//        print_r($fakeData);
 //        exit();
 
-        foreach ($returnedFakeData as $selector => $value) {
+        foreach ($fakeData as $selector => $value) {
             $I->tryToFilledField(FluentFormsSelectors::fillAbleArea($selector), $value);
         }
         $I->clicked(FieldSelectors::submitButton);
 
-        $remoteData = $this->fetchInsightlyData($I, $returnedFakeData['Email']);
+        $remoteData = $this->fetchInsightlyData($I, $fakeData['Email']);
 //        print_r($remoteData);
 
         if (isset($remoteData)) {
@@ -69,9 +69,9 @@ class IntegrationInsightlyCest
             $email = $remoteData['EMAIL_ADDRESS'];
 
             $I->assertString([
-                $returnedFakeData['Email'] => $email,
-                $returnedFakeData['First Name'] => $firstName,
-                $returnedFakeData['Last Name'] => $lastName,
+                $fakeData['Email'] => $email,
+                $fakeData['First Name'] => $firstName,
+                $fakeData['Last Name'] => $lastName,
             ]);
         }else{
             $I->fail("Data not found");

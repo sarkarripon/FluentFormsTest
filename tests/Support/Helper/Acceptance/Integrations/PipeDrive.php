@@ -23,9 +23,9 @@ trait PipeDrive
         $this->configureApiSettings($I,"Pipedrive");
     }
 
-    public function mapPipeDriveFields(AcceptanceTester $I, array $fieldMapping, array $extraListOrService)
+    public function mapPipeDriveFields(AcceptanceTester $I, array $fieldMapping, array $listOrService)
     {
-        $this->mapEmailInCommon($I,"Pipedrive Integration",$extraListOrService, false);
+        $this->mapEmailInCommon($I,"Pipedrive Integration",$listOrService, false);
         $this->assignShortCode($I,$fieldMapping,"Services");
         $I->clickWithLeftButton(FluentFormsSelectors::saveButton("Save Feed"));
         $I->seeSuccess('Integration successfully saved');

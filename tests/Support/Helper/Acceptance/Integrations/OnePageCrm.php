@@ -24,9 +24,9 @@ trait OnePageCrm
         $this->configureApiSettings($I,"OnePageCrm");
     }
 
-    public function mapOnePageCrmFields(AcceptanceTester $I, array $fieldMapping, array $extraListOrService = null)
+    public function mapOnePageCrmFields(AcceptanceTester $I, array $fieldMapping, array $listOrService = null)
     {
-        $this->mapEmailInCommon($I,"OnePageCrm Integration",$extraListOrService, false);
+        $this->mapEmailInCommon($I,"OnePageCrm Integration",$listOrService, false);
         $this->assignShortCode($I,$fieldMapping,'OnePageCRM Services');
 
         $I->clickWithLeftButton(FluentFormsSelectors::saveButton("Save Feed"));
