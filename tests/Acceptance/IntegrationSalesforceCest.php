@@ -3,29 +3,31 @@
 
 namespace Tests\Acceptance;
 
-use Tests\Support\AcceptanceTester;
 use Tests\Support\Factories\DataProvider\DataGenerator;
 use Tests\Support\Helper\Acceptance\Integrations\FieldCustomizer;
 use Tests\Support\Helper\Acceptance\Integrations\IntegrationHelper;
-use Tests\Support\Helper\Acceptance\Integrations\Zoho;
+use Tests\Support\Helper\Acceptance\Integrations\Salesforce;
+use Tests\Support\AcceptanceTester;
 use Tests\Support\Selectors\FieldSelectors;
 use Tests\Support\Selectors\FluentFormsSelectors;
 
-class IntegrationZohoCest
+class IntegrationSalesforceCest
 {
-    use IntegrationHelper, Zoho, DataGenerator, FieldCustomizer;
-    public function _before(AcceptanceTester $I): void
+    use Salesforce, IntegrationHelper, DataGenerator, FieldCustomizer;
+    public function _before(AcceptanceTester $I)
     {
         $I->loadDotEnvFile();
         $I->loginWordpress();
     }
-    public function test_zoho_push_data(AcceptanceTester $I)
+
+    // tests
+    public function test_salesforce_push_data(AcceptanceTester $I)
     {
-//        $vdf = $this->fetchZohoData($I,"xidulu@mailinator.com");
-//        dd($vdf);
+//       $jhvh =  $this->fetchSalesforceData($I,'kamutiric@mailinator.com');
+//        print_r($jhvh);
 
         $pageName = __FUNCTION__.'_'.rand(1,100);
-        $listOrService =['Services'=>'Contact'];
+        $listOrService =['Salesforce Services'=>'Contact'];
         $customName=[
             'email' => 'Email',
             'nameFields'=>'Name',
@@ -33,12 +35,12 @@ class IntegrationZohoCest
         $this->prepareForm($I, $pageName, [
             'generalFields' => ['email', 'nameFields'],
         ],'yes',$customName);
-        $this->configureZoho($I, "Zoho CRM");
+        $this->configureSalesforce($I, "Salesforce");
 
         $fieldMapping = array_merge($this->buildArrayWithKey($customName),['Email'=>'Email']);
         unset($fieldMapping['First Name']);
 
-        $this->mapZohoFields($I,$fieldMapping,$listOrService);
+        $this->mapSalesforceFields($I,$fieldMapping,$listOrService);
         $this->preparePage($I,$pageName);
 
 //        $I->amOnPage("test_airtable_push_data_57/");
@@ -55,11 +57,11 @@ class IntegrationZohoCest
         }
         $I->clicked(FieldSelectors::submitButton);
 
-        $remoteData = $this->fetchZohoData($I, $fakeData['Email']);
+        $remoteData = $this->fetchSalesforceData($I, $fakeData['Email']);
 //        print_r($remoteData);
 
         if (isset($remoteData)) {
-            $lastName =  $remoteData['Last_Name'];;
+            $lastName =  $remoteData['Name'];;
             $email = $remoteData['Email'];
 
             $I->assertString([
@@ -69,6 +71,7 @@ class IntegrationZohoCest
         }else{
             $I->fail("Data not found");
         }
+
 
     }
 }

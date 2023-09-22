@@ -99,7 +99,7 @@ class AcceptanceHelper extends WebDriver
      */
     public function filledField($selector, $value): void
     {
-        $this->waitForElementClickable($selector);
+        $this->waitForElementVisible($selector);
         $this->clearField($selector);
         $this->clickWithLeftButton($selector);
         parent::type($value,.7);

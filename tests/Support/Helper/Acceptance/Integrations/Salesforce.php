@@ -1,14 +1,15 @@
 <?php
 
 namespace Tests\Support\Helper\Acceptance\Integrations;
-use Support\Helper\Acceptance\Integrations\IntegrationInterface;
+
 use Tests\Support\AcceptanceTester;
 use Tests\Support\Selectors\FluentFormsSelectors;
 use Tests\Support\Selectors\FluentFormsSettingsSelectors;
 
-trait Zoho
+trait Salesforce
 {
-    public function configureZoho(AcceptanceTester $I, string $integrationName)
+    use IntegrationHelper;
+    public function configureSalesforce(AcceptanceTester $I, string $integrationName)
     {
         $this->turnOnIntegration($I,$integrationName);
         $isSaveSettings = $I->checkElement(FluentFormsSettingsSelectors::APIDisconnect);
@@ -16,33 +17,27 @@ trait Zoho
         {
             //since it is required human interaction, we will skip it for now
             $I->fail("Zoho is not connected, Please connect manually");
-//            $I->retryClicked(FluentFormsSelectors::dropdown('Account URL'));
-//            $I->clickOnExactText('US', 'Account URL');
-//
-//            $I->filledField(FluentFormsSettingsSelectors::apiField('Zoho CRM Client ID'), getenv('ZOHO_CLIENT_ID'));
-//            $I->filledField(FluentFormsSettingsSelectors::apiField('Zoho CRM Client Secret'), getenv('ZOHO_SECRET_ID'));
-//            $I->clicked(FluentFormsSettingsSelectors::APISaveButton);
-//            $I->seeSuccess("Success");
+
         }
-        $this->configureApiSettings($I,"Zoho");
+        $this->configureApiSettings($I,"Salesforce");
     }
 
-    public function mapZohoFields(AcceptanceTester $I, array $fieldMapping, array $listOrService = null)
+    public function mapSalesforceFields(AcceptanceTester $I, array $fieldMapping, array $listOrService = null)
     {
-        $this->mapEmailInCommon($I,"Zoho Integration",$listOrService, false);
-        $this->assignShortCode($I,$fieldMapping,'Services');
+        $this->mapEmailInCommon($I,"Salesforce Integration",$listOrService, false);
+        $this->assignShortCode($I,$fieldMapping,'Salesforce Services');
 
         $I->clickWithLeftButton(FluentFormsSelectors::saveButton("Save Feed"));
         $I->seeSuccess('Integration successfully saved');
         $I->wait(1);
     }
 
-    public function fetchZohoData(AcceptanceTester $I, string $searchTerm)
+    public function fetchSalesforceData(AcceptanceTester $I, string $searchTerm)
     {
         for ($i = 0; $i < 8; $i++) {
             $remoteData = $this->fetchData($searchTerm);
             if (empty($remoteData)) {
-                $I->wait(30, 'Zoho is taking too long to respond. Trying again...');
+                $I->wait(30, 'Salesforce is taking too long to respond. Trying again...');
             } else {
                 break;
             }
@@ -50,52 +45,50 @@ trait Zoho
         return $remoteData;
     }
 
-    public function fetchData( string $searchTerm)
+    public function fetchData(string $searchTerm)
     {
+        $accessToken = self::refreshSalesforceAccessToken();
+        $endpoint = getenv("SALSEFORCE_DOMAIN_URL")."/services/data/v52.0/query?q=";
+        $query = "SELECT Id, Name, Email FROM Contact";
+        $encodedQuery = urlencode($query);
+        $fullEndpoint = $endpoint . $encodedQuery;
 
-        $accessToken = self::refreshZohoAccessToken();
-        $url = "https://www.zohoapis.com/crm/v5/Contacts";
+        $ch = curl_init($fullEndpoint);
 
-        $queryParams = [
-            'fields' => 'Last_Name,Email,Converted__s,Converted_Date_Time',
-            'per_page' => 5,
-        ];
-
-        $url .= '?' . http_build_query($queryParams);
-
-        $ch = curl_init($url);
-
+        curl_setopt($ch, CURLOPT_HTTPGET, true);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, [
-            'Authorization: Zoho-oauthtoken ' . $accessToken,
-        ]);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+            "Authorization: Bearer $accessToken",
+            "Content-Type: application/json"
+        ));
 
+        // Execute cURL session and get the response
         $response = curl_exec($ch);
 
+        // Check for cURL errors
         if (curl_errno($ch)) {
-            echo 'cURL Error: ' . curl_error($ch);
-            return null;
+            return false; // Handle the error as needed
         }
 
         curl_close($ch);
 
         $data = json_decode($response, true);
-        foreach ($data['data'] as $subscriber) {
+
+        foreach ($data['records'] as $subscriber) {
             if (isset($subscriber['Email']) && $subscriber['Email'] === $searchTerm) {
                 return $subscriber;
             }
         }
         return null; // Return null if no matching record is found
-
     }
 
-    public static function refreshZohoAccessToken()
+    public function refreshSalesforceAccessToken()
     {
-        $clientId = getenv("ZOHO_CLIENT_ID");
-        $clientSecret = getenv("ZOHO_SECRET_ID");
-        $refreshToken = getenv("ZOHO_REFRESH_TOKEN");
+        $clientId = getenv("SALSEFORCE_CONSUMER_KEY");
+        $clientSecret = getenv("SALSEFORCE_CONSUMER_SECRET");
+        $refreshToken = getenv("SALSEFORCE_REFRESH_TOKEN");
 
-        $tokenUrl = 'https://accounts.zoho.com/oauth/v2/token';
+        $tokenUrl = 'https://login.salesforce.com/services/oauth2/token';
         $postData = array(
             'grant_type' => 'refresh_token',
             'client_id' => $clientId,

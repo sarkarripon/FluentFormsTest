@@ -70,6 +70,7 @@ trait ClickSend
         curl_close($curl);
 
         $data = json_decode($response, true);
+
         foreach ($data['data']['data'] as $subscriber) {
             if (isset($subscriber['email']) && $subscriber['email'] === $searchTerm) {
                 return $subscriber;
