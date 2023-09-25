@@ -130,7 +130,7 @@
 //        $this->I->clicked(FluentFormsSelectors::SegmentDropDown);
 //        $this->I->clicked(FluentFormsSelectors::Segment);
 //
-//        $this->I->clickByJS(FluentFormsSelectors::mapEmailDropdown);
+//        $this->I->clickByJS(FluentFormsSelectors::minstructionsapEmailDropdown);
 //        $this->I->clickByJS(FluentFormsSelectors::mapEmail);
 //    }
 //
