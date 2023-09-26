@@ -22,8 +22,8 @@ class IntegrationTelegramCest
     // tests
     public function test_telegram_notification(AcceptanceTester $I)
     {
-        $jhvf = $this->fetchTelegramData($I,'hello');
-        dd($jhvf);
+//        $jhvf = $this->fetchTelegramData($I,'hello');
+//        dd($jhvf);
 
         $pageName = __FUNCTION__.'_'.rand(1,100);
         $customName=[

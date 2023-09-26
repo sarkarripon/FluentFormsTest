@@ -86,15 +86,33 @@ trait IntegrationHelper
      * paymentSummary
      * coupon
      * ```
+     * * postFields
+     *  ```
+     * postTitle
+     * postContent
+     * postExcerpt
+     * featuredImage
+     * postUpdate
+     * ```
+     * * taxonomyFields
+     * ```
+     * categories
+     * tags
+     * formats
      */
-    public function prepareForm(AcceptanceTester $I, string $formName, array $requiredField, $isCustomName = 'no', array $fieldMappingArray = null)
+    public function prepareForm(AcceptanceTester $I, string $formName, array $requiredField, $isCustomName = 'no', array $fieldMappingArray = null, bool $isCpt=false, bool $isPost=null)
     {
         global $formID;
         $isDelete = getenv("EXISTING_FORM_DELETE");
         if ($isDelete === "yes") {
             $I->deleteExistingForms();
         }
-        $I->initiateNewForm();
+        if ($isCpt) {
+            $I->initiateNewCptForm($isPost);
+        }else{
+            $I->initiateNewForm();
+        }
+//        $I->initiateNewForm();
         if ($isCustomName == 'yes') {
             $I->createCustomFormField($requiredField, $fieldMappingArray);
         } else {

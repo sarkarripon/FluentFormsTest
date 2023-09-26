@@ -1,20 +1,17 @@
 <?php
+
 namespace Tests\Support\Helper\Acceptance;
 
 use Codeception\Module\WebDriver;
-use Exception;
 use Dotenv;
+use Exception;
 
 class AcceptanceHelper extends WebDriver
 {
     public function loadDotEnvFile(): void
     {
         $root = $_SERVER['PWD'];
-        $repository = Dotenv\Repository\RepositoryBuilder::createWithNoAdapters()
-            ->addAdapter(Dotenv\Repository\Adapter\EnvConstAdapter::class)
-            ->addWriter(Dotenv\Repository\Adapter\PutenvAdapter::class)
-            ->immutable()
-            ->make();
+        $repository = Dotenv\Repository\RepositoryBuilder::createWithNoAdapters()->addAdapter(Dotenv\Repository\Adapter\EnvConstAdapter::class)->addWriter(Dotenv\Repository\Adapter\PutenvAdapter::class)->immutable()->make();
         $dotenv = Dotenv\Dotenv::create($repository, $root);
         $dotenv->load();
     }
@@ -25,16 +22,16 @@ class AcceptanceHelper extends WebDriver
      * @throws Exception
      * @author Sarkar Ripon
      */
-    public function loginWordpress(string $username=null, string $password=null): void
+    public function loginWordpress(string $username = null, string $password = null): void
     {
         $username = $username ?? getenv('WORDPRESS_USERNAME');
         $password = $password ?? getenv('WORDPRESS_PASSWORD');
         $this->amOnPage('/wp-login.php');
         $this->wait(1);
-        $this->fillField('Username',$username);
-        $this->fillField('Password',$password);
+        $this->fillField('Username', $username);
+        $this->fillField('Password', $password);
         $this->click('Log In');
-        $this->waitForText('Dashboard',5);
+        $this->waitForText('Dashboard', 5);
         $this->see("Dashboard");
         $this->saveSessionSnapshot("loginWordpress");
 
@@ -62,36 +59,21 @@ class AcceptanceHelper extends WebDriver
     }
 
     /**
-     * @author Sarkar Ripon
      * @return void
      * @throws Exception
      * logout from WordPress
+     * @author Sarkar Ripon
      */
     public function wpLogout(): void
     {
         $this->wait(2);
         $this->amOnPage('/wp-admin/index.php');
         $this->moveMouseOver("(//span[@class='display-name'])[1]");
-        $this->waitForText('Log Out',1);
+        $this->waitForText('Log Out', 1);
         $this->click('Log Out');
-        $this->waitForText('You are now logged out.',5);
+        $this->waitForText('You are now logged out.', 5);
         $this->seeCurrentUrlMatches('/(^|\?)loggedout=true($|&)/');
         $this->see('You are now logged out.');
-    }
-
-    /**
-     * @author Sarkar Ripon
-     * @param string $selector
-     * @return void
-     * @throws Exception
-     * This function will wait for the element to be visible and then click on it.
-     * This is a workaround for the issue of Codeception not waiting for the element to be visible before clicking on it.
-     */
-    public function clicked(string $selector): void
-    {
-        $this->waitForElementClickable( $selector);
-        $this->moveMouseOver($selector);
-        parent::clickWithLeftButton($selector);
     }
 
     /**
@@ -102,23 +84,17 @@ class AcceptanceHelper extends WebDriver
         $this->waitForElementVisible($selector);
         $this->clearField($selector);
         $this->clickWithLeftButton($selector);
-        parent::type($value,.7);
+        parent::type($value, .7);
     }
 
-    public function clickOnText(string $actionText, string $followingText =null, $index=1): void
+    public function clickOnText(string $actionText, string $followingText = null, $index = 1): void
     {
 //        $this->wait(1);
         $following = null;
         if (isset($followingText) and !empty($followingText)) {
             $following .= "*[normalize-space()='$followingText' or contains(text(),'$followingText')]/following::";
         }
-        $xpathVariations = [
-            "(//$following"."*[@x-placement]//*[contains(text(),'{$actionText}')])[$index]",
-            "(//$following"."*[@x-placement]//*[normalize-space()='{$actionText}')])[$index]",
-            "(//$following"."*[normalize-space()='{$actionText}'])[$index]",
-            "(//$following"."*[contains(text(),'{$actionText}')])[$index]",
-            "(//$following"."*[@placeholder='{$actionText}'])[$index]",
-        ];
+        $xpathVariations = ["(//$following" . "*[@x-placement]//*[contains(text(),'{$actionText}')])[$index]", "(//$following" . "*[@x-placement]//*[normalize-space()='{$actionText}')])[$index]", "(//$following" . "*[normalize-space()='{$actionText}'])[$index]", "(//$following" . "*[contains(text(),'{$actionText}')])[$index]", "(//$following" . "*[@placeholder='{$actionText}'])[$index]",];
 //        print_r($xpathVariations);
 
         $exception = [];
@@ -127,17 +103,33 @@ class AcceptanceHelper extends WebDriver
                 $this->seeElementInDOM($xpath);
                 $this->waitForElementClickable($xpath);
                 $this->clicked($xpath);
-                echo "Clicked on ".$xpath.PHP_EOL;
+                echo "Clicked on " . $xpath . PHP_EOL;
                 break; // Exit the loop if the element is found and clicked successfully
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $exception[] = $e->getMessage();
                 // If the element is not found or the click fails, continue to the next XPath variation
             }
         }
-        if(count($exception) === count($xpathVariations)){
-           $this->fail($actionText." not found");
+        if (count($exception) === count($xpathVariations)) {
+            $this->fail($actionText . " not found");
         }
     }
+
+    /**
+     * @param string $selector
+     * @return void
+     * @throws Exception
+     * This function will wait for the element to be visible and then click on it.
+     * This is a workaround for the issue of Codeception not waiting for the element to be visible before clicking on it.
+     * @author Sarkar Ripon
+     */
+    public function clicked(string $selector): void
+    {
+        $this->waitForElementClickable($selector);
+        $this->moveMouseOver($selector);
+        parent::clickWithLeftButton($selector);
+    }
+
     public function clickedOnText(string $actionText, string $followingText = null, $index = null): void
     {
         $following = "";
@@ -150,13 +142,7 @@ class AcceptanceHelper extends WebDriver
             $indexPart = "[$index]";
         }
 
-        $xpathVariations = [
-            "(//$following"."*[@x-placement]//*[contains(text(),'{$actionText}')])$indexPart",
-            "(//$following"."*[@x-placement]//*[normalize-space()='{$actionText}'])$indexPart",
-            "(//$following"."*[normalize-space()='{$actionText}'])$indexPart",
-            "(//$following"."*[contains(text(),'{$actionText}')])$indexPart",
-            "(//$following"."*[@placeholder='{$actionText}'])$indexPart",
-        ];
+        $xpathVariations = ["(//$following" . "*[@x-placement]//*[contains(text(),'{$actionText}')])$indexPart", "(//$following" . "*[@x-placement]//*[normalize-space()='{$actionText}'])$indexPart", "(//$following" . "*[normalize-space()='{$actionText}'])$indexPart", "(//$following" . "*[contains(text(),'{$actionText}')])$indexPart", "(//$following" . "*[@placeholder='{$actionText}'])$indexPart",];
 //        print_r($xpathVariations);
 
         $exception = [];
@@ -165,23 +151,24 @@ class AcceptanceHelper extends WebDriver
                 $this->seeElementInDOM($xpath);
                 $this->waitForElementClickable($xpath);
                 $isMultiple = count($this->grabMultiple($xpath));
-                if ($isMultiple >=2) {
-                    $this->clickWithLeftButton($xpath. "[$isMultiple]",10,10).PHP_EOL;
-                    echo "Multiple found,clicked on ".$xpath. "[$isMultiple]".PHP_EOL;
-                }else{
-                    $this->clickWithLeftButton($xpath,10,10);
-                    echo "Clicked on ".$xpath.PHP_EOL;
+                if ($isMultiple >= 2) {
+                    $this->clickWithLeftButton($xpath . "[$isMultiple]", 10, 10) . PHP_EOL;
+                    echo "Multiple found,clicked on " . $xpath . "[$isMultiple]" . PHP_EOL;
+                } else {
+                    $this->clickWithLeftButton($xpath, 10, 10);
+                    echo "Clicked on " . $xpath . PHP_EOL;
                 }
                 break; // Exit the loop if the element is found and clicked successfully
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $exception[] = $e->getMessage();
                 // If the element is not found or the click fails, continue to the next XPath variation
             }
         }
         if (count($exception) === count($xpathVariations)) {
-            $this->fail($actionText." not found");
+            $this->fail($actionText . " not found");
         }
     }
+
     public function clickOnExactText(string $actionText, string $followingText = null, $index = null): void
     {
         $following = "";
@@ -194,13 +181,7 @@ class AcceptanceHelper extends WebDriver
             $indexPart = "[$index]";
         }
 
-        $xpathVariations = [
-            "(//$following"."*[@x-placement]//*[text()='{$actionText}'])$indexPart",
-            "(//$following"."*[@x-placement]//*[normalize-space()='{$actionText}'])$indexPart",
-            "(//$following"."*[normalize-space()='{$actionText}'])$indexPart",
-            "(//$following"."*[text()='{$actionText}'])$indexPart",
-            "(//$following"."*[@placeholder='{$actionText}'])$indexPart",
-        ];
+        $xpathVariations = ["(//$following" . "*[@x-placement]//*[text()='{$actionText}'])$indexPart", "(//$following" . "*[@x-placement]//*[normalize-space()='{$actionText}'])$indexPart", "(//$following" . "*[normalize-space()='{$actionText}'])$indexPart", "(//$following" . "*[text()='{$actionText}'])$indexPart", "(//$following" . "*[@placeholder='{$actionText}'])$indexPart",];
 //        print_r($xpathVariations);
 
         $exception = [];
@@ -209,21 +190,21 @@ class AcceptanceHelper extends WebDriver
                 $this->seeElementInDOM($xpath);
                 $this->waitForElementClickable($xpath);
                 $isMultiple = count($this->grabMultiple($xpath));
-                if ($isMultiple >=2) {
-                    $this->clickWithLeftButton($xpath. "[$isMultiple]",10,10).PHP_EOL;
-                    echo "Multiple found,clicked on ".$xpath. "[$isMultiple]".PHP_EOL;
-                }else{
-                    $this->clickWithLeftButton($xpath,10,10);
-                    echo "Clicked on ".$xpath.PHP_EOL;
+                if ($isMultiple >= 2) {
+                    $this->clickWithLeftButton($xpath . "[$isMultiple]", 10, 10) . PHP_EOL;
+                    echo "Multiple found,clicked on " . $xpath . "[$isMultiple]" . PHP_EOL;
+                } else {
+                    $this->clickWithLeftButton($xpath, 10, 10);
+                    echo "Clicked on " . $xpath . PHP_EOL;
                 }
                 break; // Exit the loop if the element is found and clicked successfully
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $exception[] = $e->getMessage();
                 // If the element is not found or the click fails, continue to the next XPath variation
             }
         }
         if (count($exception) === count($xpathVariations)) {
-            $this->fail($actionText." not found");
+            $this->fail($actionText . " not found");
         }
     }
 
@@ -274,16 +255,16 @@ class AcceptanceHelper extends WebDriver
      * ```
      * If element is found return true, if not, return false
      * ```
-     * @author Sarkar Ripon
      * @param $element
      * @return bool
+     * @author Sarkar Ripon
      */
     public function checkElement($element): bool
     {
         try {
             $this->seeElementInDOM($element);
-           return true;
-        } catch (\Exception $e) {
+            return true;
+        } catch (Exception $e) {
             return false;
         }
     }
@@ -301,11 +282,10 @@ class AcceptanceHelper extends WebDriver
         $exception = [];
         foreach ($checkAbleArr as $needle => $haystack) {
             try {
-                if (isset($haystack) and !empty($haystack))
-                {
+                if (isset($haystack) and !empty($haystack)) {
                     $this->assertStringContainsString($needle, $haystack);
-                }else{
-                    $this->fail($needle." not found");
+                } else {
+                    $this->fail($needle . " not found");
                 }
 
             } catch (Exception $e) {
@@ -314,8 +294,8 @@ class AcceptanceHelper extends WebDriver
         }
         if (count($exception) > 0) {
             $errorMessage = implode(PHP_EOL, $exception);
-            $this->fail('Some Data missing: ' . $errorMessage. PHP_EOL);
-        }else{
+            $this->fail('Some Data missing: ' . $errorMessage . PHP_EOL);
+        } else {
             echo "Hurray......! All data found.";
         }
     }
@@ -347,11 +327,14 @@ class AcceptanceHelper extends WebDriver
 //    }
 
 
-
-    public function checkValuesInArray($dataArray, $searchStrings): bool
+    public function checkValuesInArray(array $dataArray, $searchStrings): bool
     {
         $foundValues = [];
         $notFoundValues = [];
+
+        if (is_string($searchStrings)) {
+            $searchStrings = [$searchStrings];
+        }
 
         foreach ($searchStrings as $searchString) {
             $found = false;
@@ -385,18 +368,12 @@ class AcceptanceHelper extends WebDriver
 
         if (count($notFoundValues) > 0) {
             $this->fail($message);
-        }else{
+        } else {
             return true;
         }
+
         return false;
     }
-
-
-
-
-
-
-
 
 
 }

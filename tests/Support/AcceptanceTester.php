@@ -292,6 +292,21 @@ class AcceptanceTester extends \Codeception\Actor
         $this->clicked(FluentFormsSelectors::addNewForm);
         $this->clicked(FluentFormsSelectors::blankForm);
     }
+    public function initiateNewCptForm( $isPost = true): void
+    {
+        $this->amOnPage(FluentFormsSelectors::fFormPage);
+        $this->clicked(FluentFormsSelectors::addNewForm);
+        $this->clicked(FluentFormsSelectors::cptForm);
+        $this->clicked("//h4[normalize-space()='Select Post Type']/following::input[@placeholder='Select']");
+
+        if ($isPost) {
+            $this->clickOnExactText("post",'Select Post Type');
+        } else {
+            $this->clickOnExactText("page",'Select Post Type');
+        }
+        $this->clickOnExactText('Continue','Select Post Type');
+
+    }
 
     /**
      * ```
@@ -387,6 +402,8 @@ class AcceptanceTester extends \Codeception\Actor
             $sectionType = match ($fieldType) {
                 default => 'generalSection',
                 'advancedFields' => 'advancedSection',
+                'postFields' => 'postSection',
+                'taxonomyFields' => 'taxonomySection',
             };
             $this->clicked(constant(FluentFormsSelectors::class . '::' . $sectionType));
             foreach ($fields as $inputField) {

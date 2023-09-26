@@ -10,6 +10,7 @@ class FluentFormsSelectors
     const createFirstForm = "(//button[contains(@class,'el-button el-button--primary el-button--large')])[1]";
     const addNewForm = "//button[contains(@class,'el-button el-button--primary')][1]";
     const blankForm = "(//div[contains(@class,'ff_card ff_card_form_action ff_card_shadow_lg hover-zoom')])[1]";
+    const cptForm = "(//h6[normalize-space()='Create A Post Form'])[1]";
     const saveForm = "(//button[normalize-space()='Save Form'])[1]";
     const mouseHoverMenu = "(//td[contains(@class,'el-table__cell')])[2]";
     const deleteBtn = "//a[normalize-space()='Delete']";
@@ -101,6 +102,22 @@ class FluentFormsSelectors
         'paymentMethod' => "//div[contains(@class,'vddl-draggable btn-element')]//span[normalize-space()='Payment Method']",
         'paymentSummary' => "//div[contains(@class,'vddl-draggable btn-element')]//span[normalize-space()='Payment Summary']",
         'coupon' => "//div[contains(@class,'vddl-draggable btn-element')]//span[normalize-space()='Coupon']",
+    ];
+
+    const postSection = "(//h5[normalize-space()='Post Fields'])[1]";
+    const postFields = [
+        'postTitle' => "//div[contains(@class,'vddl-draggable btn-element')]//span[normalize-space()='Post Title']",
+        'postContent' => "//div[contains(@class,'vddl-draggable btn-element')]//span[normalize-space()='Post Content']",
+        'postExcerpt' => "//div[contains(@class,'vddl-draggable btn-element')]//span[normalize-space()='Post Excerpt']",
+        'featuredImage' => "//div[contains(@class,'vddl-draggable btn-element')]//span[normalize-space()='Featured Image']",
+        'postUpdate' => "//div[contains(@class,'vddl-draggable btn-element')]//span[normalize-space()='Post Update']",
+    ];
+
+    const taxonomySection = "(//h5[normalize-space()='Taxonomy Fields'])[1]";
+    const taxonomyFields = [
+        'categories' => "//div[contains(@class,'vddl-draggable btn-element')]//span[normalize-space()='Categories']",
+        'tags' => "//div[contains(@class,'vddl-draggable btn-element')]//span[normalize-space()='Tags']",
+        'formats' => "//div[contains(@class,'vddl-draggable btn-element')]//span[normalize-space()='Formats']",
     ];
 
     //common
