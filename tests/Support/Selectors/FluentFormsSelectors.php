@@ -1,9 +1,6 @@
 <?php
 
 namespace Tests\Support\Selectors;
-
-use Tests\Support\Helper\Pageobjects;
-
 class FluentFormsSelectors
 {
     const fFormPage = '/wp-admin/admin.php?page=fluent_forms';
@@ -145,7 +142,7 @@ class FluentFormsSelectors
     {
         return "((//*[@placeholder='$text' or normalize-space()='$text'])/following::i[contains(@class,'el-select__caret')])[{$index}]";
     }
-    public static function shortcodeDropdown(string $text, string $sectionText = 'Email Address', $index=1): string
+    public static function shortcodeDropdown(string $text, $sectionText = 'Map Fields', $index=1): string
     {
         return "(//label[normalize-space()='{$sectionText}']/following::label[normalize-space()='{$text}']/following::button | //label[normalize-space()='{$sectionText}']/following::label[normalize-space()='{$text}']/following::i)[{$index}]";
     }

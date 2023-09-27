@@ -24,7 +24,7 @@ trait Airtable
 
     }
 
-    public function mapAirtableFields(AcceptanceTester $I, array $fieldMapping, array $listOrService = null)
+    public function mapAirtableFields(AcceptanceTester $I, array $fieldMapping, array $listOrService = null): void
     {
         $this->mapEmailInCommon($I,"Airtable Integration",$listOrService, false);
 

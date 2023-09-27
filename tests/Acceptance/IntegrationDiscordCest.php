@@ -65,9 +65,9 @@ class IntegrationDiscordCest
                 $fakeData['First Name'],
                 $fakeData['Email Address'],
             ]);
-            echo " Hurray.....! Data found in slack";
+            echo " Hurray.....! Data found in Discord";
         }else{
-            $I->fail("Could not fetch data from slack");
+            $I->fail("Could not fetch data from Discord");
         }
 
 

@@ -37,7 +37,7 @@ trait Activecampaign
 
     public function fetchActivecampaignData(AcceptanceTester $I, string $emailToFetch)
     {
-        for ($i = 0; $i < 2; $i++) {
+        for ($i = 0; $i < 8; $i++) {
             $remoteData = $this->fetchData($I,$emailToFetch);
             if (empty($remoteData['contacts'])) {
                 $I->wait(30, 'Activecampaign is taking too long to respond. Trying again...');
@@ -49,7 +49,7 @@ trait Activecampaign
     }
     public function fetchData(AcceptanceTester $I, string $emailToFetch)
     {
-        $I->wait(30,'Activecampaign is taking too long to respond. Trying again...');
+//        $I->wait(30,'Activecampaign is taking too long to respond. Trying again...');
         $apiUrl = getenv("ACTIVECAMPAIGN_API_URL").'/api/3/contacts';
 
         $ch = curl_init();

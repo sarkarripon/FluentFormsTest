@@ -22,7 +22,7 @@ class IntegrationClickSendCest
     // tests
     public function test_clickSend_push_data(AcceptanceTester $I)
     {
-//        $jvhhfdh = $this->fetchClickSendData($I,"jyte@gmail.com");
+//        $jvhhfdh = $this->fetchClickSendData($I,"russel.dax@yahoo.com");
 //        dd($jvhhfdh);
 
         $pageName = __FUNCTION__.'_'.rand(1,100);
@@ -33,7 +33,7 @@ class IntegrationClickSendCest
         ];
         $this->prepareForm($I, $pageName, [
             'generalFields' => ['email', 'phone'],
-        ],'yes',$customName);
+        ],true,$customName);
         $this->configureClickSend($I, "ClickSend");
 
         $fieldMapping = array_merge($this->buildArrayWithKey($customName),['Email'=>'Email']);
@@ -44,7 +44,7 @@ class IntegrationClickSendCest
 //        $I->amOnPage("test_airtable_push_data_57/");
         $fillAbleDataArr = [
             'Email'=>'email',
-            'Phone Number' => 'phoneNumber',
+            'Phone Number' => 'e164PhoneNumber',
 
         ];
         $fakeData = $this->generatedData($fillAbleDataArr);
@@ -58,18 +58,27 @@ class IntegrationClickSendCest
 
         $remoteData = $this->fetchClickSendData($I, $fakeData['Email']);
 //        print_r($remoteData);
-
-        if (isset($remoteData)) {
-            $phone =  $remoteData['phone_number'];;
-            $email = $remoteData['email'];
-
-            $I->assertString([
-                $fakeData['Email'] => $email,
-                $fakeData['Phone Number'] => $phone,
+        if (!empty($remoteData)) {
+            $I->checkValuesInArray($remoteData, [
+                $fakeData['Email'],
+                $fakeData['Phone Number'],
             ]);
+            echo " Hurray.....! Data found";
         }else{
-            $I->fail("Data not found");
+            $I->fail("Could not fetch data");
         }
+
+//        if (isset($remoteData)) {
+//            $phone =  $remoteData['phone_number'];
+//            $email = $remoteData['email'];
+//
+//            $I->assertString([
+//                $fakeData['Email'] => $email,
+//                $fakeData['Phone Number'] => $phone,
+//            ]);
+//        }else{
+//            $I->fail("Data not found");
+//        }
 
     }
 }

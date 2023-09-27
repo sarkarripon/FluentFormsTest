@@ -265,20 +265,17 @@ class AcceptanceTester extends \Codeception\Actor
     {
         $this->amOnPage(FluentFormsSelectors::fFormPage);
         $this->wait(2);
-        $tableRow = count($this->grabMultiple("tr"));
-//        codecept_debug($tableRow);
+        $tableRows = $this->grabMultiple("tr");
+        $tableRows = array_slice($tableRows, 0, -1);
 
-        for ($i = 1; $i < ($tableRow); $i++) {
-            do {
-                $this->wait(1);
-                $this->moveMouseOver(FluentFormsSelectors::mouseHoverMenu);
-                $this->retryClicked(FluentFormsSelectors::deleteBtn);
-                $this->retryClicked(FluentFormsSelectors::confirmBtn);
-                $this->reloadPage();
-            } while ($this->tryToClick(FluentFormsSelectors::deleteBtn) == true);
+        foreach ($tableRows as $row) {
+            $this->retryMoveMouseOver(FluentFormsSelectors::mouseHoverMenu);
+            $this->retryClicked(FluentFormsSelectors::deleteBtn);
+            $this->waitForElementVisible(FluentFormsSelectors::confirmBtn);
+            $this->retryClicked(FluentFormsSelectors::confirmBtn);
+//            $this->reloadPage();
         }
     }
-
     /**
      * ```
      * Create a new form
@@ -393,10 +390,11 @@ class AcceptanceTester extends \Codeception\Actor
      * @return void
      * @author Sarkar Ripon
      */
-    public function createFormField($data): void
+    public function createFormField($data, $isCpt=false): void
     {
         $this->wantTo('Create a form for integrations');
-        $this->clicked(FluentFormsSelectors::generalSection);
+        $isCpt ? $this->clicked(FluentFormsSelectors::generalSection) :
+                 $this->clicked(FluentFormsSelectors::postSection);
 
         foreach ($data as $fieldType => $fields) {
             $sectionType = match ($fieldType) {
@@ -413,16 +411,21 @@ class AcceptanceTester extends \Codeception\Actor
         }
     }
 
-    public function createCustomFormField($data, array $customNameArr = null): void
+    public function createCustomFormField($data, array $customNameArr = null, $isCpt=false): void
     {
         $this->wantTo('Create a form for integrations');
-        $this->clicked(FluentFormsSelectors::generalSection);
+        $isCpt
+            ? $this->clicked(FluentFormsSelectors::postSection)
+            : $this->clicked(FluentFormsSelectors::generalSection);
+
 
         $counter = 1;
         foreach ($data as $fieldType => $fields) {
             $sectionType = match ($fieldType) {
                 default => 'generalSection',
                 'advancedFields' => 'advancedSection',
+                'postFields' => 'postSection',
+                'taxonomyFields' => 'taxonomySection',
             };
             $this->clicked(constant(FluentFormsSelectors::class . '::' . $sectionType));
             foreach ($fields as $inputField) {

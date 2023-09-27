@@ -100,24 +100,22 @@ trait IntegrationHelper
      * tags
      * formats
      */
-    public function prepareForm(AcceptanceTester $I, string $formName, array $requiredField, $isCustomName = 'no', array $fieldMappingArray = null, bool $isCpt=false, bool $isPost=null)
+    public function prepareForm(AcceptanceTester $I, string $formName, array $requiredField, $isCustomName = false, array $fieldMappingArray = null, bool $isCpt=false, bool $isPostType=null)
     {
         global $formID;
-        $isDelete = getenv("EXISTING_FORM_DELETE");
-        if ($isDelete === "yes") {
-            $I->deleteExistingForms();
-        }
-        if ($isCpt) {
-            $I->initiateNewCptForm($isPost);
-        }else{
-            $I->initiateNewForm();
-        }
-//        $I->initiateNewForm();
-        if ($isCustomName == 'yes') {
-            $I->createCustomFormField($requiredField, $fieldMappingArray);
-        } else {
-            $I->createFormField($requiredField);
-        }
+        $isDelete = getenv("DELETE_EXISTING_FORM");
+        $isDelete === "yes"
+            ? $I->deleteExistingForms()
+            : null;
+
+        $isCpt
+            ? $I->initiateNewCptForm($isPostType)
+            : $I->initiateNewForm();
+
+        $isCustomName
+            ? $I->createCustomFormField($requiredField, $fieldMappingArray)
+            : $I->createFormField($requiredField);
+
 
         $formID = $I->grabTextFrom("button[title='Click to Copy']");
         $I->clicked(FluentFormsSelectors::saveForm);
@@ -130,10 +128,12 @@ trait IntegrationHelper
     public function preparePage(AcceptanceTester $I, string $title = null): void
     {
         global $pageUrl;
-        $isDelete = getenv("EXISTING_PAGE_DELETE");
-        if ($isDelete === "yes") {
-            $I->deleteExistingPages();
-        }
+        $isDelete = getenv("DELETE_EXISTING_PAGE");
+
+        $isDelete === 'yes'
+            ? $I->deleteExistingPages()
+            : null;
+
         $I->createNewPage($title);
         $I->amOnUrl($pageUrl);
     }
@@ -198,12 +198,12 @@ trait IntegrationHelper
      * Arr ex; 'Name'=>'{inputs.names}'
      *
      */
-    public function mapCommonFieldsWithLabel(AcceptanceTester $I, $fields, $actionText): void
-    {
-        foreach ($fields as $field => $value) {
-            $I->fillField(FluentFormsSelectors::commonFields($field, $actionText), $value);
-        }
-    }
+//    public function mapCommonFieldsWithLabel(AcceptanceTester $I, $fields, $actionText): void
+//    {
+//        foreach ($fields as $field => $value) {
+//            $I->fillField(FluentFormsSelectors::commonFields($field, $actionText), $value);
+//        }
+//    }
 
 //    public function assignShortCode(AcceptanceTester $I, array $fieldMappingArray): void
 //    {
@@ -229,7 +229,7 @@ trait IntegrationHelper
 //            }
 //        }
 //    }
-    public function assignShortCode(AcceptanceTester $I, array $fieldMappingArray, string $sectionText=null): void
+    public function assignShortCode(AcceptanceTester $I, array $fieldMappingArray, $sectionText = 'Map Fields'): void
     {
         foreach ($fieldMappingArray as $field => $label) {
             echo $field . " => " . $label . "\n";

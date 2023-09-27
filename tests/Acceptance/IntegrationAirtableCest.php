@@ -3,6 +3,7 @@
 
 namespace Tests\Acceptance;
 
+use Codeception\Attribute\Group;
 use Tests\Support\AcceptanceTester;
 use Tests\Support\Factories\DataProvider\DataGenerator;
 use Tests\Support\Helper\Acceptance\Integrations\Airtable;
@@ -21,6 +22,7 @@ class IntegrationAirtableCest
     }
 
     // tests
+    #[Group('Integration')]
     public function test_airtable_push_data(AcceptanceTester $I)
     {
 //        $jvj = $this->fetchAirtableData($I,"Quarterly launch");
@@ -71,17 +73,14 @@ class IntegrationAirtableCest
         $remoteData = $this->fetchAirtableData($I, $fakeData['First Name']." ".$fakeData['Last Name']);
 //        print_r($remoteData);
 
-        if (isset($remoteData)) {
-            $name =  $remoteData['fields']['Name'];;
-            $status = $remoteData['fields']['Status'];
-
-            $I->assertString([
-                $fakeData['Status'] => $status,
-                $fakeData['First Name']." ".$fakeData['Last Name'] => $name,
+        if (!empty($remoteData)) {
+            $I->checkValuesInArray($remoteData, [
+                $fakeData['Status'],
+                $fakeData['First Name']." ".$fakeData['Last Name'],
             ]);
+            echo " Hurray.....! Data found";
         }else{
-            $I->fail("Data not found");
+            $I->fail("Could not fetch data");
         }
-
     }
 }
