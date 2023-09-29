@@ -3,6 +3,7 @@
 
 namespace Tests\Acceptance;
 
+use Codeception\Attribute\Group;
 use Tests\Support\AcceptanceTester;
 use Tests\Support\Factories\DataProvider\DataGenerator;
 use Tests\Support\Helper\Acceptance\Integrations\FieldCustomizer;
@@ -24,6 +25,7 @@ class IntegrationInventoryModuleCest
     }
 
     // tests
+    #[Group('Integration')]
     public function test_inventory_module(AcceptanceTester $I): void
     {
         $pageName = __FUNCTION__.'_'.rand(1,100);
@@ -35,10 +37,10 @@ class IntegrationInventoryModuleCest
             'checkBox' => ['T-shirt']
         ];
         $this->prepareForm($I, $pageName, ['generalFields' => ['nameFields','email','checkBox']],
-            'yes',$customName);
-        $ind = $this->convertToIndexArray($customName);
+            true, $customName);
+        $index = $this->convertToIndexArray($customName);
         $options = ['Small Size','Medium Size', 'Large Size'];
-        $this->customizeCheckBox($I, $ind[2],
+        $this->customizeCheckBox($I, $index[2],
             ['adminFieldLabel' => 'T-shirt Inventory', 'options' => $options,],
             ['inventorySettings' => [1,1,1],]);
 

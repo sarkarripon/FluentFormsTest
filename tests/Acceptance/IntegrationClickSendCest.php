@@ -3,6 +3,7 @@
 
 namespace Tests\Acceptance;
 
+use Codeception\Attribute\Group;
 use Tests\Support\Factories\DataProvider\DataGenerator;
 use Tests\Support\Helper\Acceptance\Integrations\ClickSend;
 use Tests\Support\AcceptanceTester;
@@ -20,6 +21,7 @@ class IntegrationClickSendCest
     }
 
     // tests
+    #[Group('Integration')]
     public function test_clickSend_push_data(AcceptanceTester $I)
     {
 //        $jvhhfdh = $this->fetchClickSendData($I,"russel.dax@yahoo.com");

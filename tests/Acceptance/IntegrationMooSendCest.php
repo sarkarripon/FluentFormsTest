@@ -3,6 +3,7 @@
 
 namespace Tests\Acceptance;
 
+use Codeception\Attribute\Group;
 use Tests\Support\Factories\DataProvider\DataGenerator;
 use Tests\Support\Helper\Acceptance\Integrations\FieldCustomizer;
 use Tests\Support\Helper\Acceptance\Integrations\MooSend;
@@ -20,6 +21,7 @@ class IntegrationMooSendCest
     }
 
     // tests
+    #[Group('Integration')]
     public function test_mooSend_push_data(AcceptanceTester $I): void
     {
         $pageName = __FUNCTION__.'_'.rand(1,100);
@@ -30,7 +32,7 @@ class IntegrationMooSendCest
         ];
         $this->prepareForm($I, $pageName, [
             'generalFields' => ['email', 'nameFields'],
-        ],'yes',$customName);
+        ],true ,$customName);
         $this->configureMooSend($I, "MooSend");
         $fieldMapping=[
             'Name'=>'Full Name',
@@ -55,15 +57,25 @@ class IntegrationMooSendCest
         $remoteData = $this->fetchMooSendData($I, $fakeData['Email Address'],);
 //        print_r($remoteData);
         if (isset($remoteData['Context'])) {
-            $email = $remoteData['Context']['Email'];
-            $name = $remoteData['Context']['Name'];
-
-            $I->assertString([
-                $fakeData['Email Address'] => $email,
-                $fakeData['First Name']." ".$fakeData['Last Name'] => $name,
+            $I->checkValuesInArray($remoteData, [
+                $fakeData['Email Address'],
+                $fakeData['First Name']." ".$fakeData['Last Name'],
             ]);
+            echo " Hurray.....! Data found in MooSend";
         }else{
-            $I->fail("Data not found");
+            $I->fail("Could not fetch data from MooSend");
         }
+
+//        if (isset($remoteData['Context'])) {
+//            $email = $remoteData['Context']['Email'];
+//            $name = $remoteData['Context']['Name'];
+//
+//            $I->assertString([
+//                $fakeData['Email Address'] => $email,
+//                $fakeData['First Name']." ".$fakeData['Last Name'] => $name,
+//            ]);
+//        }else{
+//            $I->fail("Data not found");
+//        }
     }
 }

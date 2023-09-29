@@ -3,6 +3,7 @@
 
 namespace Tests\Acceptance;
 
+use Codeception\Attribute\Group;
 use Tests\Support\AcceptanceTester;
 use Tests\Support\Factories\DataProvider\DataGenerator;
 use Tests\Support\Helper\Acceptance\Integrations\ConvertKit;
@@ -10,7 +11,7 @@ use Tests\Support\Helper\Acceptance\Integrations\FieldCustomizer;
 use Tests\Support\Selectors\FieldSelectors;
 use Tests\Support\Selectors\FluentFormsSelectors;
 
-class IntegrationCovertKitCest
+class IntegrationConvertKitCest
 {
     use ConvertKit, FieldCustomizer, DataGenerator;
     public function _before(AcceptanceTester $I): void
@@ -20,6 +21,7 @@ class IntegrationCovertKitCest
     }
 
     // tests
+    #[Group('Integration')]
     public function test_convertKit_push_data(AcceptanceTester $I)
     {
 //        $kjnfdj = $this->fetchConvertKitData($I,'jasitowe@gmail.com');
@@ -34,7 +36,7 @@ class IntegrationCovertKitCest
         ];
         $this->prepareForm($I, $pageName, [
             'generalFields' => ['email', 'nameFields'],
-        ],'yes',$customName);
+        ],true,$customName);
         $this->configureConvertKit($I, "ConvertKit");
 
         $fieldMapping = $this->buildArrayWithKey($customName);
@@ -59,18 +61,28 @@ class IntegrationCovertKitCest
 
         $remoteData = $this->fetchConvertKitData($I, $fakeData['Email Address']);
 //        print_r($remoteData);
-
-        if (isset($remoteData)) {
-            $firstName =  $remoteData['first_name'];;
-            $email = $remoteData['email_address'];
-
-            $I->assertString([
-                $fakeData['Email Address'] => $email,
-                $fakeData['First Name'] => $firstName,
+        if (!empty($remoteData)) {
+            $I->checkValuesInArray($remoteData, [
+                $fakeData['Email Address'],
+                $fakeData['First Name'],
             ]);
+            echo " Hurray.....! Data found";
         }else{
-            $I->fail("Data not found");
+            $I->fail("Could not fetch data");
         }
+
+
+//        if (isset($remoteData)) {
+//            $firstName =  $remoteData['first_name'];;
+//            $email = $remoteData['email_address'];
+//
+//            $I->assertString([
+//                $fakeData['Email Address'] => $email,
+//                $fakeData['First Name'] => $firstName,
+//            ]);
+//        }else{
+//            $I->fail("Data not found");
+//        }
 
 
     }

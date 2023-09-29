@@ -3,6 +3,7 @@
 
 namespace Tests\Acceptance;
 
+use Codeception\Attribute\Group;
 use Tests\Support\AcceptanceTester;
 use Tests\Support\Factories\DataProvider\DataGenerator;
 use Tests\Support\Helper\Acceptance\Integrations\FieldCustomizer;
@@ -21,6 +22,7 @@ class IntegrationHubSpotCest
     }
 
     // tests
+    #[Group('Integration')]
     public function test_hubspot_push_data(AcceptanceTester $I)
     {
 //        $jvbh = $this->fetchHubSpotData($I,'bh@hubspot.com');
@@ -33,11 +35,11 @@ class IntegrationHubSpotCest
         ];
         $this->prepareForm($I, $pageName, [
             'generalFields' => ['email', 'nameFields'],
-        ],'yes',$customName);
+        ],true ,$customName);
         $this->configureHubSpot($I, "HubSpot");
 
         $fieldMapping = $this->buildArrayWithKey($customName);
-//        unset($fieldMapping['Last Name']);
+
         $this->mapHubSpotFields($I,$fieldMapping);
         $this->preparePage($I,$pageName);
 
@@ -58,20 +60,30 @@ class IntegrationHubSpotCest
 
         $remoteData = $this->fetchHubSpotData($I, $fakeData['Email Address']);
 //        print_r($remoteData);
-
-        if (isset($remoteData)) {
-            $firstName =  $remoteData['properties']['firstname'];;
-            $LastName =  $remoteData['properties']['lastname'];;
-            $email = $remoteData['properties']['email'];
-
-            $I->assertString([
-                $fakeData['Email Address'] => $email,
-                $fakeData['First Name'] => $firstName,
-                $fakeData['Last Name'] => $LastName,
+        if (!empty($remoteData)) {
+            $I->checkValuesInArray($remoteData, [
+                $fakeData['Email Address'],
+                $fakeData['First Name'],
+                $fakeData['Last Name'],
             ]);
+            echo " Hurray.....! Data found in HubSpot";
         }else{
-            $I->fail("Data not found");
+            $I->fail("Could not fetch data from HubSpot");
         }
+
+//        if (isset($remoteData)) {
+//            $firstName =  $remoteData['properties']['firstname'];;
+//            $LastName =  $remoteData['properties']['lastname'];;
+//            $email = $remoteData['properties']['email'];
+//
+//            $I->assertString([
+//                $fakeData['Email Address'] => $email,
+//                $fakeData['First Name'] => $firstName,
+//                $fakeData['Last Name'] => $LastName,
+//            ]);
+//        }else{
+//            $I->fail("Data not found");
+//        }
 
 
     }

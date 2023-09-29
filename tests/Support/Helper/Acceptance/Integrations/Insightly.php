@@ -9,7 +9,7 @@ use Tests\Support\Selectors\FluentFormsSettingsSelectors;
 trait Insightly
 {
 
-    public function configureInsightly(AcceptanceTester $I, string $integrationName)
+    public function configureInsightly(AcceptanceTester $I, string $integrationName): void
     {
         $this->turnOnIntegration($I,$integrationName);
         $isSaveSettings = $I->checkElement(FluentFormsSettingsSelectors::APIDisconnect);
@@ -24,7 +24,7 @@ trait Insightly
         $this->configureApiSettings($I,"Insightly");
     }
 
-    public function mapInsightlyFields(AcceptanceTester $I, array $fieldMapping, array $listOrService = null)
+    public function mapInsightlyFields(AcceptanceTester $I, array $fieldMapping, array $listOrService = null): void
     {
         $this->mapEmailInCommon($I,"Insightly Integration", $listOrService, false);
         $this->assignShortCode($I,$fieldMapping,'Insightly Services');

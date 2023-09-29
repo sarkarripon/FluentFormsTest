@@ -3,6 +3,7 @@
 
 namespace Tests\Acceptance;
 
+use Codeception\Attribute\Group;
 use Tests\Support\Factories\DataProvider\DataGenerator;
 use Tests\Support\Helper\Acceptance\Integrations\Discord;
 use Tests\Support\AcceptanceTester;
@@ -20,6 +21,7 @@ class IntegrationDiscordCest
     }
 
     // tests
+    #[Group('Integration')]
     public function test_discord_notification(AcceptanceTester $I)
     {
 //        $jhcg = $this->fetchDiscordData($I,["hepywuziwa@mailinat.com"]);
@@ -34,7 +36,7 @@ class IntegrationDiscordCest
         ];
         $this->prepareForm($I, $pageName, [
             'generalFields' => ['email','nameFields','simpleText'],
-        ],'yes',$customName);
+        ],true ,$customName);
         $this->configureDiscord($I, "Discord");
 
         $this->mapDiscordFields($I);

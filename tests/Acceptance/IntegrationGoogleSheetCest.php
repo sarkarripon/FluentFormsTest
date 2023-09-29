@@ -21,7 +21,10 @@ class IntegrationGoogleSheetCest
     {
         $pageName = __FUNCTION__.'_'.rand(1,100);
         
-        $this->prepareForm($I, $pageName, ['generalFields' => ['email', 'nameFields']]);
+        $this->prepareForm($I,
+            $pageName,
+            ['generalFields' => ['email', 'nameFields']]
+        );
         $this->configureGoogleSheet($I, "Google");
 
         $otherFieldArray = $this->getShortCodeArray(['Email', 'First Name', 'Last Name']);
@@ -52,6 +55,7 @@ class IntegrationGoogleSheetCest
             $I->clicked(FieldSelectors::submitButton);
             $remoteData = $this->fetchGoogleSheetData($I, $fillAbleDataArr["//input[contains(@id,'email')]"]);
         }
+
         if (!empty($remoteData)) {
             $email = $remoteData[0];
             $firstName = $remoteData[1];

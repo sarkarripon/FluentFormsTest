@@ -48,11 +48,7 @@ trait Googlesheet
     }
     public function fetchGoogleSheetData(AcceptanceTester $I, string $emailToFetch): array
     {
-        //        if (empty($expectedRow)) {
-//            $I->fail('The row with the email address ' . $emailToFetch . ' was not found in the spreadsheet.');
-//        }
-        return $this->retryFetchingData($I,[$this, 'fetchData'], $emailToFetch);
-
+        return $this->retryFetchingData($I,[$this, 'fetchData'], $emailToFetch,8);
     }
     /**
      * @throws Exception

@@ -393,8 +393,9 @@ class AcceptanceTester extends \Codeception\Actor
     public function createFormField($data, $isCpt=false): void
     {
         $this->wantTo('Create a form for integrations');
-        $isCpt ? $this->clicked(FluentFormsSelectors::generalSection) :
-                 $this->clicked(FluentFormsSelectors::postSection);
+        $isCpt
+            ? $this->clicked(FluentFormsSelectors::postSection)
+            : $this->clicked(FluentFormsSelectors::generalSection);
 
         foreach ($data as $fieldType => $fields) {
             $sectionType = match ($fieldType) {

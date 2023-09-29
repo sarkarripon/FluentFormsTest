@@ -35,7 +35,7 @@ trait GetGist
 
     public function fetchGetGistData(AcceptanceTester $I, string $emailToFetch)
     {
-        for ($i = 0; $i < 4; $i++) {
+        for ($i = 0; $i < 8; $i++) {
             $remoteData = $this->fetchData($I,$emailToFetch);
             if (isset($remoteData['errors']) && $remoteData['errors'][0]['code'] === 'not_found') {
                 $I->wait(30, 'GetGist is taking too long to respond. Trying again...');
@@ -48,7 +48,7 @@ trait GetGist
 
     public function fetchData(AcceptanceTester $I, string $emailToFetch)
     {
-        $I->wait(10,'GetGist is taking too long to respond. Trying again...');
+//        $I->wait(10,'GetGist is taking too long to respond. Trying again...');
 
         $apiKey = getenv('GETGIST_API');
         $url = 'https://api.getgist.com/contacts?email=' . urlencode($emailToFetch);

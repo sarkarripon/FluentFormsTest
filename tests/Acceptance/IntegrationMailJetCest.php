@@ -3,6 +3,7 @@
 
 namespace Tests\Acceptance;
 
+use Codeception\Attribute\Group;
 use Tests\Support\AcceptanceTester;
 use Tests\Support\Factories\DataProvider\DataGenerator;
 use Tests\Support\Helper\Acceptance\Integrations\FieldCustomizer;
@@ -21,6 +22,7 @@ class IntegrationMailJetCest
     }
 
     // tests
+    #[Group('Integration')]
     public function test_mailJet_push_data(AcceptanceTester $I)
     {
 //        $dhfv = $this->fetchMailJetData($I, 'nogowem@gmail.com');
@@ -36,7 +38,7 @@ class IntegrationMailJetCest
         ];
         $this->prepareForm($I, $pageName, [
             'generalFields' => ['email', 'nameFields'],
-        ],'yes',$customName);
+        ],true ,$customName);
         $this->configureMailJet($I, "Mailjet");
 
         $fieldMapping = ['Contact Email' => 'Contact Email', 'Contact Name' => 'Contact Name'];
@@ -62,18 +64,27 @@ class IntegrationMailJetCest
 
         $remoteData = $this->fetchMailJetData($I, $fakeData['Contact Email']);
 //        print_r($remoteData);
-
-        if (isset($remoteData)) {
-            $name =  $remoteData['Name'];;
-            $email = $remoteData['Email'];
-
-            $I->assertString([
-                $fakeData['Contact Email'] => $email,
-                $fakeData['First Name']." ".$fakeData['Last Name'] => $name,
+        if (!empty($remoteData)) {
+            $I->checkValuesInArray($remoteData, [
+                $fakeData['Contact Email'],
+                $fakeData['First Name']." ".$fakeData['Last Name'],
             ]);
+            echo " Hurray.....! Data found in MailJet";
         }else{
-            $I->fail("Data not found");
+            $I->fail("Could not fetch data from MailJet");
         }
+
+//        if (isset($remoteData)) {
+//            $name =  $remoteData['Name'];;
+//            $email = $remoteData['Email'];
+//
+//            $I->assertString([
+//                $fakeData['Contact Email'] => $email,
+//                $fakeData['First Name']." ".$fakeData['Last Name'] => $name,
+//            ]);
+//        }else{
+//            $I->fail("Data not found");
+//        }
 
     }
 }

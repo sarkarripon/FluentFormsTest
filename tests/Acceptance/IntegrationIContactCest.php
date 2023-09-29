@@ -3,6 +3,7 @@
 
 namespace Tests\Acceptance;
 
+use Codeception\Attribute\Group;
 use Tests\Support\Factories\DataProvider\DataGenerator;
 use Tests\Support\Helper\Acceptance\Integrations\FieldCustomizer;
 use Tests\Support\Helper\Acceptance\Integrations\IContact;
@@ -21,6 +22,7 @@ class IntegrationIContactCest
     }
 
     // tests
+    #[Group('Integration')]
     public function test_iContact_push_data(AcceptanceTester $I): void
     {
 //        $cjnj= $this->fetchIContactData($I,'qa@wpmanageninja.com');
@@ -35,7 +37,7 @@ class IntegrationIContactCest
         ];
         $this->prepareForm($I, $pageName, [
             'generalFields' => ['email', 'nameFields'],
-        ],'yes',$customName);
+        ],true ,$customName);
         $this->configureIContact($I, "iContact");
 
         $fieldMapping= $this->buildArrayWithKey($customName);
@@ -56,18 +58,31 @@ class IntegrationIContactCest
         $I->clicked(FieldSelectors::submitButton);
         $remoteData = $this->fetchIContactData($I, $fakeData['Email Address']);
 //        print_r($remoteData);
-        if (isset($remoteData) and !empty($remoteData)) {
-            $email = $remoteData['email'];
-            $firstName = $remoteData['firstName'];
-            $lastName = $remoteData['lastName'];
 
-            $I->assertString([
-                $fakeData['Email Address'] => $email,
-                $fakeData['First Name'] => $firstName,
-                $fakeData['Last Name'] => $lastName,
+        if (!empty($remoteData)) {
+            $I->checkValuesInArray($remoteData, [
+                $fakeData['Email Address'],
+                $fakeData['First Name'],
+                $fakeData['Last Name'],
             ]);
+            echo " Hurray.....! Data found in iContact";
         }else{
-            $I->fail("Data not found");
+            $I->fail("Could not fetch data from iContact");
         }
+
+
+//        if (isset($remoteData) and !empty($remoteData)) {
+//            $email = $remoteData['email'];
+//            $firstName = $remoteData['firstName'];
+//            $lastName = $remoteData['lastName'];
+//
+//            $I->assertString([
+//                $fakeData['Email Address'] => $email,
+//                $fakeData['First Name'] => $firstName,
+//                $fakeData['Last Name'] => $lastName,
+//            ]);
+//        }else{
+//            $I->fail("Data not found");
+//        }
     }
 }

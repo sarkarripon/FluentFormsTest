@@ -38,7 +38,7 @@ class IntegrationMailchimpCest
         ];
         $this->prepareForm($I, $pageName, [
             'generalFields' => ['email', 'nameFields'],
-        ],'yes',$customName);
+        ],true ,$customName);
         $this->configureMailchimp($I, "Mailchimp");
         $fieldMapping=[
             'First Name'=>'First Name',

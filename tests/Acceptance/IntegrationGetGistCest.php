@@ -3,6 +3,7 @@
 
 namespace Tests\Acceptance;
 
+use Codeception\Attribute\Group;
 use Tests\Support\AcceptanceTester;
 use Tests\Support\Factories\DataProvider\DataGenerator;
 use Tests\Support\Helper\Acceptance\Integrations\GetGist;
@@ -19,6 +20,7 @@ class IntegrationGetGistCest
     }
 
     // tests
+    #[Group('Integration')]
     public function test_getGist_push_data(AcceptanceTester $I)
     {
 //        $kjnvj = $this->fetchGetGistData($I,"raul.metz@hotmail.co");
@@ -32,7 +34,7 @@ class IntegrationGetGistCest
         ];
         $this->prepareForm($I, $pageName, [
             'generalFields' => ['email', 'nameFields'],
-        ],'yes',$customName);
+        ],true ,$customName);
         $this->configureGetGist($I, "GetGist");
 
         $fieldMapping= [
@@ -57,17 +59,26 @@ class IntegrationGetGistCest
         $I->clicked(FieldSelectors::submitButton);
         $remoteData = $this->fetchGetGistData($I, $fakeData['Email Address'],);
 //        print_r($remoteData);
-
         if (isset($remoteData['contact'])) {
-            $email = $remoteData['contact']['email'];
-            $fullName = $remoteData['contact']['full_name'];
-
-            $I->assertString([
-                $fakeData['Email Address'] => $email,
-                $fakeData['First Name']." ".  $fakeData['Last Name'] => $fullName,
+            $I->checkValuesInArray($remoteData, [
+                $fakeData['Email Address'],
+                $fakeData['First Name'] ." ".  $fakeData['Last Name'],
             ]);
+            echo " Hurray.....! Data found in GetGist";
         }else{
-            $I->fail("Data not found");
+            $I->fail("Could not fetch data from GetGist");
         }
+
+//        if (isset($remoteData['contact'])) {
+//            $email = $remoteData['contact']['email'];
+//            $fullName = $remoteData['contact']['full_name'];
+//
+//            $I->assertString([
+//                $fakeData['Email Address'] => $email,
+//                $fakeData['First Name']." ".  $fakeData['Last Name'] => $fullName,
+//            ]);
+//        }else{
+//            $I->fail("Data not found");
+//        }
     }
 }

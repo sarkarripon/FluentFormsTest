@@ -100,8 +100,7 @@ class AcceptanceHelper extends WebDriver
         $exception = [];
         foreach ($xpathVariations as $xpath) {
             try {
-                $this->seeElementInDOM($xpath);
-                $this->waitForElementClickable($xpath);
+                $this->waitForElementVisible($xpath);
                 $this->clicked($xpath);
                 echo "Clicked on " . $xpath . PHP_EOL;
                 break; // Exit the loop if the element is found and clicked successfully
@@ -148,8 +147,7 @@ class AcceptanceHelper extends WebDriver
         $exception = [];
         foreach ($xpathVariations as $xpath) {
             try {
-                $this->seeElementInDOM($xpath);
-                $this->waitForElementClickable($xpath);
+                $this->waitForElementVisible($xpath,3);
                 $isMultiple = count($this->grabMultiple($xpath));
                 if ($isMultiple >= 2) {
                     $this->clickWithLeftButton($xpath . "[$isMultiple]", 10, 10) . PHP_EOL;
@@ -187,14 +185,13 @@ class AcceptanceHelper extends WebDriver
         $exception = [];
         foreach ($xpathVariations as $xpath) {
             try {
-                $this->seeElementInDOM($xpath);
-                $this->waitForElementClickable($xpath);
+                $this->waitForElementVisible($xpath,3);
                 $isMultiple = count($this->grabMultiple($xpath));
                 if ($isMultiple >= 2) {
-                    $this->clickWithLeftButton($xpath . "[$isMultiple]", 10, 10) . PHP_EOL;
+                    $this->clickWithLeftButton($xpath . "[$isMultiple]") . PHP_EOL;
                     echo "Multiple found,clicked on " . $xpath . "[$isMultiple]" . PHP_EOL;
                 } else {
-                    $this->clickWithLeftButton($xpath, 10, 10);
+                    $this->clickWithLeftButton($xpath);
                     echo "Clicked on " . $xpath . PHP_EOL;
                 }
                 break; // Exit the loop if the element is found and clicked successfully
@@ -262,7 +259,7 @@ class AcceptanceHelper extends WebDriver
     public function checkElement($element): bool
     {
         try {
-            $this->waitForElementVisible($element);
+            $this->waitForElementVisible($element,5);
             $this->seeElementInDOM($element);
             return true;
         } catch (Exception $e) {

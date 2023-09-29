@@ -3,6 +3,7 @@
 
 namespace Tests\Acceptance;
 
+use Codeception\Attribute\Group;
 use Tests\Support\Factories\DataProvider\DataGenerator;
 use Tests\Support\Helper\Acceptance\Integrations\FieldCustomizer;
 use Tests\Support\Helper\Acceptance\Integrations\OnePageCrm;
@@ -20,6 +21,7 @@ class IntegrationOnePageCrmCest
     }
 
     // tests
+    #[Group('Integration')]
     public function test_push_onePageCrm_data(AcceptanceTester $I)
     {
 //        $remoteData = $this->fetchData('annetta.wisoky@aol.co');
@@ -38,7 +40,7 @@ class IntegrationOnePageCrmCest
         ];
         $this->prepareForm($I, $pageName, [
             'generalFields' => ['email', 'nameFields','simpleText'],
-        ],'yes',$customName);
+        ],true ,$customName);
         $this->configureOnePageCrm($I, "OnePageCrm");
 
         $fieldMapping= array_merge($this->buildArrayWithKey($customName), ['Enter Email'=>'Enter Email']);
@@ -65,18 +67,30 @@ class IntegrationOnePageCrmCest
         $remoteData = $this->fetchOnePageCrmData($I, $fakeData['Enter Email'],);
 //        print_r($remoteData);
         if (isset($remoteData['data']['contacts']) and !empty($remoteData['data']['contacts'])) {
-            $email = $remoteData['data']['contacts'][0]['contact']['emails'][0]['value'];
-            $first_name = $remoteData['data']['contacts'][0]['contact']['first_name'];
-            $last_name = $remoteData['data']['contacts'][0]['contact']['last_name'];
-
-            $I->assertString([
-                $fakeData['Enter Email'] => $email,
-                $fakeData['First Name'] => $first_name,
-                $fakeData['Last Name'] => $last_name,
+            $I->checkValuesInArray($remoteData, [
+                $fakeData['Enter Email'],
+                $fakeData['First Name'],
+                $fakeData['Last Name'],
             ]);
+            echo " Hurray.....! Data found in OnePageCrm";
         }else{
-            $I->fail("Data not found");
+            $I->fail("Could not fetch data from OnePageCrm");
         }
+
+
+//        if (isset($remoteData['data']['contacts']) and !empty($remoteData['data']['contacts'])) {
+//            $email = $remoteData['data']['contacts'][0]['contact']['emails'][0]['value'];
+//            $first_name = $remoteData['data']['contacts'][0]['contact']['first_name'];
+//            $last_name = $remoteData['data']['contacts'][0]['contact']['last_name'];
+//
+//            $I->assertString([
+//                $fakeData['Enter Email'] => $email,
+//                $fakeData['First Name'] => $first_name,
+//                $fakeData['Last Name'] => $last_name,
+//            ]);
+//        }else{
+//            $I->fail("Data not found");
+//        }
 
 
     }

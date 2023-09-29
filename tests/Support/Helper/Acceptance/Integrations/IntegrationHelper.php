@@ -144,11 +144,11 @@ trait IntegrationHelper
         $I->amOnPage(FluentFormsAddonsSelectors::integrationsPage);
         $I->filledField("//input[@placeholder='Search Modules']", $integrationName);
 
-        $isEnabled = $I->retryCheckElement("//div[@role='switch' and contains(@class, 'is-checked')]");
+        $isEnabled = $I->checkElement("//div[@role='switch' and contains(@class, 'is-checked')]");
         if (!$isEnabled) {
             $I->retryClickWithLeftButton("//div[@role='switch']");
         }
-        $gearIcon = $I->retryCheckElement("//div[contains(@class,'ff_card_footer')]//i[contains(@class,'el-icon-setting')]");
+        $gearIcon = $I->checkElement("//div[contains(@class,'ff_card_footer')]//i[contains(@class,'el-icon-setting')]");
         if ($gearIcon) {
             $I->retryClickWithLeftButton("//div[contains(@class,'ff_card_footer')]//i[contains(@class,'el-icon-setting')]");
         }

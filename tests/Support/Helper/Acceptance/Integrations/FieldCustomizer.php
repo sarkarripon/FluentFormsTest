@@ -122,7 +122,7 @@ trait FieldCustomizer
      */
     public function customizeCheckBox(AcceptanceTester $I, $fieldName, array $basicOptions = null, array $advancedOptions = null): void
     {
-        $I->clickOnText($fieldName);
+        $I->clickOnExactText($fieldName);
 
         $basicOperand = null;
         $advancedOperand = null;

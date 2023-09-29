@@ -8,10 +8,10 @@ use Tests\Support\Selectors\FluentFormsSelectors;
 trait LandingPage
 {
     use IntegrationHelper;
-    public function configureLandingPage(AcceptanceTester $I,$integrationPositionNumber)
+    public function configureLandingPage(AcceptanceTester $I, $integrationName)
     {
         global $landingPageUrl;
-        $this->turnOnIntegration($I,$integrationPositionNumber);
+        $this->turnOnIntegration($I,$integrationName);
         $this->takeMeToConfigurationPage($I);
         $I->clickOnText("Landing Page","Conditional Confirmations");
         $I->clicked(FluentFormsSelectors::radioButton("Enable Form Landing Page Mode"));

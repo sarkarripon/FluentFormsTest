@@ -3,6 +3,7 @@
 
 namespace Tests\Acceptance;
 
+use Codeception\Attribute\Group;
 use Tests\Support\AcceptanceTester;
 use Tests\Support\Factories\DataProvider\DataGenerator;
 use Tests\Support\Helper\Acceptance\Integrations\FieldCustomizer;
@@ -21,6 +22,7 @@ class IntegrationInsightlyCest
     }
 
     // tests
+    #[Group('Integration')]
     public function test_insightly_push_data(AcceptanceTester $I)
     {
 //        $hbvdf = $this->fetchInsightlyData($I, 'qa@wpmanageninja.com');
@@ -36,7 +38,7 @@ class IntegrationInsightlyCest
         ];
         $this->prepareForm($I, $pageName, [
             'generalFields' => ['email', 'nameFields'],
-        ],'yes',$customName);
+        ],true ,$customName);
         $this->configureInsightly($I, "Insightly");
 
         $fieldMapping = array_merge($this->buildArrayWithKey($customName), ['Email' => 'Email']);
@@ -62,19 +64,29 @@ class IntegrationInsightlyCest
 
         $remoteData = $this->fetchInsightlyData($I, $fakeData['Email']);
 //        print_r($remoteData);
-
-        if (isset($remoteData)) {
-            $firstName =  $remoteData['FIRST_NAME'];;
-            $lastName = $remoteData['LAST_NAME'];
-            $email = $remoteData['EMAIL_ADDRESS'];
-
-            $I->assertString([
-                $fakeData['Email'] => $email,
-                $fakeData['First Name'] => $firstName,
-                $fakeData['Last Name'] => $lastName,
+        if (!empty($remoteData)) {
+            $I->checkValuesInArray($remoteData, [
+                $fakeData['Email'],
+                $fakeData['First Name'],
+                $fakeData['Last Name'],
             ]);
+            echo " Hurray.....! Data found in Insightly";
         }else{
-            $I->fail("Data not found");
+            $I->fail("Could not fetch data from Insightly");
         }
+
+//        if (isset($remoteData)) {
+//            $firstName =  $remoteData['FIRST_NAME'];;
+//            $lastName = $remoteData['LAST_NAME'];
+//            $email = $remoteData['EMAIL_ADDRESS'];
+//
+//            $I->assertString([
+//                $fakeData['Email'] => $email,
+//                $fakeData['First Name'] => $firstName,
+//                $fakeData['Last Name'] => $lastName,
+//            ]);
+//        }else{
+//            $I->fail("Data not found");
+//        }
     }
 }

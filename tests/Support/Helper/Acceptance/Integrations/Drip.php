@@ -35,7 +35,7 @@ trait Drip
 
     public function fetchDripData(AcceptanceTester $I, string $emailToFetch): array
     {
-        return $this->retryFetchingData($I,[$this, 'fetchData'], $emailToFetch,5);
+        return $this->retryFetchingData($I,[$this, 'fetchData'], $emailToFetch,8);
     }
     public function fetchData(string $emailToFetch)
     {

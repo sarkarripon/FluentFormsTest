@@ -99,9 +99,9 @@ class IntegrationActivecampaignCest
                 $fakeData['Last Name'],
                 $fakeData['Phone Number'],
             ]);
-            echo " Hurray.....! Data found";
+            echo " Hurray.....! Data found in ActiveCampaign";
         }else{
-            $I->fail("Could not fetch data");
+            $I->fail("Could not fetch data from ActiveCampaign");
         }
     }
 }

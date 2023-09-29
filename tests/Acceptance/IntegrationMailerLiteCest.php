@@ -3,6 +3,7 @@
 
 namespace Tests\Acceptance;
 
+use Codeception\Attribute\Group;
 use Tests\Support\Factories\DataProvider\DataGenerator;
 use Tests\Support\Helper\Acceptance\Integrations\MailerLite;
 use Tests\Support\AcceptanceTester;
@@ -19,9 +20,10 @@ class IntegrationMailerLiteCest
     }
 
     // tests
+    #[Group('Integration')]
     public function test_mailerLite_push_data(AcceptanceTester $I): void
     {
-//        $hgg = $this->fetchData("lucituzic@gmail.co");
+//        $hgg = $this->fetchData("sabina.abbott@yahoo.co");
 //        dd($hgg);
         $pageName = __FUNCTION__.'_'.rand(1,100);
         $listOrService =['Group List'=>getenv('MAILERLITE_GROUP')];
@@ -31,7 +33,7 @@ class IntegrationMailerLiteCest
         ];
         $this->prepareForm($I, $pageName, [
             'generalFields' => ['email', 'nameFields'],
-        ],'yes',$customName);
+        ],true ,$customName);
         $this->configureMailerLite($I, "MailerLite");
 
         $fieldMapping= [
@@ -56,19 +58,28 @@ class IntegrationMailerLiteCest
         $I->clicked(FieldSelectors::submitButton);
         $remoteData = $this->fetchMailerLiteData($I, $fakeData['Email'],);
 //        print_r($remoteData);
-
         if (isset($remoteData['data'])) {
-            $email = $remoteData['data']['email'];
-            $name = $remoteData['data']['fields']['name'];
-
-            $I->assertString([
-                $fakeData['Email'] => $email,
-                $fakeData['First Name']." ". $fakeData['Last Name'] => $name,
-
+            $I->checkValuesInArray($remoteData, [
+                $fakeData['Email'],
+                $fakeData['First Name']." ". $fakeData['Last Name'],
             ]);
+            echo " Hurray.....! Data found in MailerLite";
         }else{
-            $I->fail("Data not found");
+            $I->fail("Could not fetch data from MailerLite");
         }
+
+//        if (isset($remoteData['data'])) {
+//            $email = $remoteData['data']['email'];
+//            $name = $remoteData['data']['fields']['name'];
+//
+//            $I->assertString([
+//                $fakeData['Email'] => $email,
+//                $fakeData['First Name']." ". $fakeData['Last Name'] => $name,
+//
+//            ]);
+//        }else{
+//            $I->fail("Data not found");
+//        }
 
 
     }
