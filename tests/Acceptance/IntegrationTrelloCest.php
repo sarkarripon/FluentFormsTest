@@ -24,7 +24,7 @@ class IntegrationTrelloCest
         
         $faker = \Faker\Factory::create();
         $this->prepareForm($I,$pageName, ['generalFields' => ['textArea', 'textArea']]);
-        $this->configureTrello($I,13);
+        $this->configureTrello($I,"Trello");
         $this->mapTrelloField($I);
         $this->preparePage($I,$pageName);
 //        $I->amOnPage('/' . $pageName);
@@ -32,7 +32,7 @@ class IntegrationTrelloCest
         $cardContent = $faker->text($maxNbChars = 60);
 
         $I->fillByJS("(//textarea[contains(@id,'description')])[1]", $cardTitle );
-        $I->fillByJS("(//textarea[contains(@id,'description')])[2]", $cardContent);
+        $I->fillByJS("(//textarea[contains(@id,'description')])[2]", $cardContent );
         $I->clicked(FieldSelectors::submitButton);
 
         $remoteData = $this->fetchTrelloData($I,$cardTitle);

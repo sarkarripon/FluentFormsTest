@@ -4,6 +4,7 @@
 namespace Tests\Acceptance;
 
 use Tests\Support\Factories\DataProvider\DataGenerator;
+use Tests\Support\Helper\Acceptance\Integrations\FieldCustomizer;
 use Tests\Support\Helper\Acceptance\Integrations\Sendinblue;
 use Tests\Support\AcceptanceTester;
 use Tests\Support\Helper\Acceptance\Integrations\IntegrationHelper;
@@ -12,7 +13,7 @@ use Tests\Support\Selectors\FluentFormsSelectors;
 
 class IntegrationSendinblueCest
 {
-    use IntegrationHelper, SendinBlue, DataGenerator;
+    use IntegrationHelper, SendinBlue, DataGenerator, FieldCustomizer;
     public function _before(AcceptanceTester $I): void
     {
         $I->loadDotEnvFile();
@@ -30,13 +31,14 @@ class IntegrationSendinblueCest
         ];
         $this->prepareForm($I, $pageName, [
             'generalFields' => ['email', 'nameFields'],
-        ],'yes',$customName);
+        ],true ,$customName);
         $this->configureSendinblue($I, "Sendinblue");
 
-        $fieldMapping=[
-            'email'=>'Email Address',
-            'nameFields'=>['First Name','Last Name'],
-        ];
+        $fieldMapping = $this->buildArrayWithKey($customName);
+//            [
+//            'email'=>'Email Address',
+//            'nameFields'=>['First Name','Last Name'],
+//        ];
         $this->mapSendinblueFields($I,$fieldMapping,$listOrService);
         $this->preparePage($I,$pageName);
 
@@ -54,18 +56,30 @@ class IntegrationSendinblueCest
         $I->clicked(FieldSelectors::submitButton);
         $remoteData = $this->fetchSendinblueData($I, $fakeData['Email Address'],);
 //        print_r($remoteData);
-        if (!isset($remoteData['message'])) {
-            $email = $remoteData['email'];
-            $firstName = $remoteData['attributes']['FIRSTNAME'];
-            $lastName = $remoteData['attributes']['LASTNAME'];
 
-            $I->assertString([
-                $fakeData['Email Address'] => $email,
-                $fakeData['First Name'] => $firstName,
-                $fakeData['Last Name'] => $lastName,
+        if (!isset($remoteData['message'])) {
+            $I->checkValuesInArray($remoteData, [
+                $fakeData['Email Address'],
+                $fakeData['First Name'],
+                $fakeData['Last Name'],
             ]);
+            echo " Hurray.....! Data found in Sendinblue";
         }else{
-            $I->fail("Data not found");
+            $I->fail("Could not fetch data from Sendinblue");
         }
+
+//        if (!isset($remoteData['message'])) {
+//            $email = $remoteData['email'];
+//            $firstName = $remoteData['attributes']['FIRSTNAME'];
+//            $lastName = $remoteData['attributes']['LASTNAME'];
+//
+//            $I->assertString([
+//                $fakeData['Email Address'] => $email,
+//                $fakeData['First Name'] => $firstName,
+//                $fakeData['Last Name'] => $lastName,
+//            ]);
+//        }else{
+//            $I->fail("Data not found");
+//        }
     }
 }

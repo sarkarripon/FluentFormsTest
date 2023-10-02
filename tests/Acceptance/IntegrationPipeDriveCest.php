@@ -35,7 +35,7 @@ class IntegrationPipeDriveCest
         ];
         $this->prepareForm($I, $pageName, [
             'generalFields' => ['email', 'nameFields'],
-        ],'yes',$customName);
+        ],true ,$customName);
         $this->configurePipeDrive($I, "Pipedrive");
 
         $fieldMapping= [
@@ -61,17 +61,27 @@ class IntegrationPipeDriveCest
         $remoteData = $this->fetchPipeDriveData($I, $fakeData['Email Address'],);
 //        print_r($remoteData);
 
-        if (isset($remoteData)) {
-            $email = $remoteData[0]['item']['primary_email'];
-            $name = $remoteData[0]['item']['name'];
-
-            $I->assertString([
-                $fakeData['Email Address'] => $email,
-                $fakeData['First Name']." ".$fakeData['Last Name'] => $name,
+        if (!empty($remoteData)) {
+            $I->checkValuesInArray($remoteData, [
+                $fakeData['Email Address'],
+                $fakeData['First Name']." ".$fakeData['Last Name'],
             ]);
+            echo " Hurray.....! Data found in PipeDrive";
         }else{
-            $I->fail("Data not found");
+            $I->fail("Could not fetch data from PipeDrive");
         }
+
+//        if (isset($remoteData)) {
+//            $email = $remoteData[0]['item']['primary_email'];
+//            $name = $remoteData[0]['item']['name'];
+//
+//            $I->assertString([
+//                $fakeData['Email Address'] => $email,
+//                $fakeData['First Name']." ".$fakeData['Last Name'] => $name,
+//            ]);
+//        }else{
+//            $I->fail("Data not found");
+//        }
 
 
     }

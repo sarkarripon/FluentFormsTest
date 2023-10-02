@@ -31,7 +31,7 @@ class IntegrationSendFoxCest
         ];
         $this->prepareForm($I, $pageName, [
             'generalFields' => ['email', 'nameFields'],
-        ],'yes',$customName);
+        ],true ,$customName);
         $this->configureSendFox($I, "SendFox");
 
         $fieldMapping= $this->buildArrayWithKey($customName);
@@ -54,18 +54,29 @@ class IntegrationSendFoxCest
         $remoteData = $this->fetchSendFoxData($I, $fakeData['Email Address'],);
 //        print_r($remoteData);
 
-        if (isset($remoteData['data'])) {
-            $email = $remoteData['data'][0]['email'];
-            $firstName = $remoteData['data'][0]['first_name'];
-            $lastName = $remoteData['data'][0]['last_name'];
-
-            $I->assertString([
-                $fakeData['Email Address'] => $email,
-                $fakeData['First Name'] => $firstName,
-                $fakeData['Last Name'] => $lastName,
+        if (!empty($remoteData['data'])) {
+            $I->checkValuesInArray($remoteData, [
+                $fakeData['Email Address'],
+                $fakeData['First Name'],
+                $fakeData['Last Name'],
             ]);
+            echo " Hurray.....! Data found in SendFox";
         }else{
-            $I->fail("Data not found");
+            $I->fail("Could not fetch data from SendFox");
         }
+
+//        if (isset($remoteData['data'])) {
+//            $email = $remoteData['data'][0]['email'];
+//            $firstName = $remoteData['data'][0]['first_name'];
+//            $lastName = $remoteData['data'][0]['last_name'];
+//
+//            $I->assertString([
+//                $fakeData['Email Address'] => $email,
+//                $fakeData['First Name'] => $firstName,
+//                $fakeData['Last Name'] => $lastName,
+//            ]);
+//        }else{
+//            $I->fail("Data not found");
+//        }
     }
 }

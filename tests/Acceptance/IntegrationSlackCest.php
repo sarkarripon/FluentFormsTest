@@ -35,7 +35,7 @@ class IntegrationSlackCest
         ];
         $this->prepareForm($I, $pageName, [
             'generalFields' => ['email', 'nameFields','simpleText'],
-        ],'yes',$customName);
+        ],true ,$customName);
         $this->configureSlack($I, "Slack","Fluentform submission notification","Fluentform submission received");
         $this->preparePage($I,$pageName);
 

@@ -271,20 +271,20 @@ trait IntegrationHelper
 
     }
 
-    public function missingFieldCheck(AcceptanceTester $I, array $referenceData, array $remoteData): void
-    {
-        $absentData = array_diff_assoc($referenceData, $remoteData);
-
-        $message = '';
-        if (!empty($absentData)) {
-            foreach ($absentData as $missingField => $value) {
-                $message .= $missingField . ', ';
-            }
-            $I->fail($message . " is not present to the remote.");
-        } else {
-            echo ' Hurray!! Additional data has been sent to remote' . "\n";
-        }
-    }
+//    public function missingFieldCheck(AcceptanceTester $I, array $referenceData, array $remoteData): void
+//    {
+//        $absentData = array_diff_assoc($referenceData, $remoteData);
+//
+//        $message = '';
+//        if (!empty($absentData)) {
+//            foreach ($absentData as $missingField => $value) {
+//                $message .= $missingField . ', ';
+//            }
+//            $I->fail($message . " is not present to the remote.");
+//        } else {
+//            echo ' Hurray!! Additional data has been sent to remote' . "\n";
+//        }
+//    }
 
     public function retryFetchingData(AcceptanceTester $I, $fetchFunction, string $searchTerm, int $retries = 3)
     {

@@ -23,8 +23,9 @@ class IntegrationSalesforceCest
     // tests
     public function test_salesforce_push_data(AcceptanceTester $I)
     {
-//       $jhvh =  $this->fetchSalesforceData($I,'kamutiric@mailinator.com');
+//       $jhvh =  $this->fetchSalesforceData($I,'gherzog@icloud.com');
 //        print_r($jhvh);
+//        exit();
 
         $pageName = __FUNCTION__.'_'.rand(1,100);
         $listOrService =['Salesforce Services'=>'Contact'];
@@ -60,17 +61,27 @@ class IntegrationSalesforceCest
         $remoteData = $this->fetchSalesforceData($I, $fakeData['Email']);
 //        print_r($remoteData);
 
-        if (isset($remoteData)) {
-            $lastName =  $remoteData['Name'];;
-            $email = $remoteData['Email'];
-
-            $I->assertString([
-                $fakeData['Email'] => $email,
-                $fakeData['Last Name'] => $lastName,
+        if (!empty($remoteData)) {
+            $I->checkValuesInArray($remoteData, [
+                $fakeData['Email'],
+                $fakeData['Last Name'],
             ]);
+            echo " Hurray.....! Data found in Salesforce";
         }else{
-            $I->fail("Data not found");
+            $I->fail("Could not fetch data from Salesforce");
         }
+
+//        if (isset($remoteData)) {
+//            $lastName =  $remoteData['Name'];;
+//            $email = $remoteData['Email'];
+//
+//            $I->assertString([
+//                $fakeData['Email'] => $email,
+//                $fakeData['Last Name'] => $lastName,
+//            ]);
+//        }else{
+//            $I->fail("Data not found");
+//        }
 
 
     }

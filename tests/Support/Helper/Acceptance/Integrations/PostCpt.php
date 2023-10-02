@@ -12,12 +12,12 @@ trait PostCpt
     public function configurePostCpt(AcceptanceTester $I)
     {
         $this->takeMeToConfigurationPage($I);
-        $I->clickOnText("Post Feeds","Settings");
-        $I->clicked("//span[normalize-space()='Add Post Feed']");
+        $I->clickOnExactText("Post Feeds","Settings");
+        $I->clickOnExactText("Add Post Feed","Post Feeds");
 
     }
 
-    public function mapPostCptFields(AcceptanceTester $I, array $fieldMapping, array $listOrService = null)
+    public function mapPostCptFields(AcceptanceTester $I, array $fieldMapping)
     {
 //        $this->mapEmailInCommon($I,"Post Cpt Integration",$listOrService, false);
         $I->fillByJS(FluentFormsSelectors::fillAbleArea("Feed Name"), "Post Cpt Integration");

@@ -147,7 +147,7 @@ class AcceptanceHelper extends WebDriver
         $exception = [];
         foreach ($xpathVariations as $xpath) {
             try {
-                $this->waitForElementVisible($xpath,3);
+                $this->waitForElementVisible($xpath,1);
                 $isMultiple = count($this->grabMultiple($xpath));
                 if ($isMultiple >= 2) {
                     $this->clickWithLeftButton($xpath . "[$isMultiple]", 10, 10) . PHP_EOL;
@@ -185,7 +185,7 @@ class AcceptanceHelper extends WebDriver
         $exception = [];
         foreach ($xpathVariations as $xpath) {
             try {
-                $this->waitForElementVisible($xpath,3);
+                $this->waitForElementVisible($xpath,1);
                 $isMultiple = count($this->grabMultiple($xpath));
                 if ($isMultiple >= 2) {
                     $this->clickWithLeftButton($xpath . "[$isMultiple]") . PHP_EOL;

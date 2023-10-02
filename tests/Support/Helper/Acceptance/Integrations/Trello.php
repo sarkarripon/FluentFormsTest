@@ -11,6 +11,22 @@ trait Trello
 {
     use IntegrationHelper, UserRegistration;
 
+    public function configureTrello(AcceptanceTester $I, $integrationName): void
+    {
+        $this->turnOnIntegration($I,$integrationName);
+        $isTrelloConfigured = $I->checkElement(FluentFormsSettingsSelectors::APIDisconnect);
+
+        if (!$isTrelloConfigured) {
+            $I->fillField(
+                FluentFormsSelectors::commonFields("Trello access Key", "access token Key"),
+                getenv("TRELLO_ACCESS_KEY")
+            );
+            $I->clicked(FluentFormsSettingsSelectors::APISaveButton);
+        }
+        $this->configureApiSettings($I,"Trello");
+    }
+
+
     public function mapTrelloField(AcceptanceTester $I): void
     {
         $I->waitForElement(FluentFormsSelectors::feedName, 30);
@@ -34,26 +50,6 @@ trait Trello
 
         $I->clicked(FluentFormsSelectors::saveButton("Save Feed"));
         $I->seeSuccess("Integration successfully saved");
-    }
-    public function configureTrello(AcceptanceTester $I, $integrationPositionNumber): void
-    {
-        $this->turnOnIntegration($I,$integrationPositionNumber);
-
-        $trelloIntegrationPosition = 13;
-
-        if ($integrationPositionNumber === $trelloIntegrationPosition) {
-            $isTrelloConfigured = $I->checkElement(FluentFormsSettingsSelectors::APIDisconnect);
-
-            if (!$isTrelloConfigured) {
-                $I->fillField(
-                    FluentFormsSelectors::commonFields("Trello access Key", "access token Key"),
-                    getenv("TRELLO_ACCESS_KEY")
-                );
-                $I->clicked(FluentFormsSettingsSelectors::APISaveButton);
-            }
-            $this->configureApiSettings($I,"Trello");
-        }
-
     }
     public function fetchTrelloData(AcceptanceTester $I, $titleToSearch): array
     {

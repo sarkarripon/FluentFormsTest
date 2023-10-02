@@ -34,12 +34,12 @@ class IntegrationSalesflareCest
         ];
         $this->prepareForm($I, $pageName, [
             'generalFields' => ['email', 'nameFields'],
-        ],'yes',$customName);
+        ],true ,$customName);
         $this->configureSalesflare($I, "Salesflare");
 
         $fieldMapping = $this->buildArrayWithKey($customName);
-//        unset($fieldMapping['Last Name']);
 //        print_r($fieldMapping);
+
         $this->mapSalesflareFields($I,$fieldMapping);
         $this->preparePage($I,$pageName);
 
@@ -61,19 +61,31 @@ class IntegrationSalesflareCest
         $remoteData = $this->fetchSalesflareData($I, $fakeData['Email Address']);
 //        print_r($remoteData);
 
-        if (isset($remoteData)) {
-            $firstName =  $remoteData[0]['firstname'];;
-            $LastName =  $remoteData[0]['lastname'];;
-            $email = $remoteData[0]['email'];
-
-            $I->assertString([
-                $fakeData['Email Address'] => $email,
-                $fakeData['First Name'] => $firstName,
-                $fakeData['Last Name'] => $LastName,
+        if (isset($remoteData['subscribers'])) {
+            $I->checkValuesInArray($remoteData, [
+                $fakeData['Email Address'],
+                $fakeData['First Name'],
+                $fakeData['Last Name'],
             ]);
+            echo " Hurray.....! Data found in Salesflare";
         }else{
-            $I->fail("Data not found");
+            $I->fail("Could not fetch data from Salesflare");
         }
+
+
+//        if (isset($remoteData)) {
+//            $firstName =  $remoteData[0]['firstname'];;
+//            $LastName =  $remoteData[0]['lastname'];;
+//            $email = $remoteData[0]['email'];
+//
+//            $I->assertString([
+//                $fakeData['Email Address'] => $email,
+//                $fakeData['First Name'] => $firstName,
+//                $fakeData['Last Name'] => $LastName,
+//            ]);
+//        }else{
+//            $I->fail("Data not found");
+//        }
 
     }
 }

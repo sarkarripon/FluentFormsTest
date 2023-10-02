@@ -35,7 +35,7 @@ trait Salesflare
     public function fetchSalesflareData(AcceptanceTester $I, string $searchTerm)
     {
         for ($i = 0; $i < 8; $i++) {
-            $remoteData = $this->fetchData($searchTerm);
+            $remoteData = $this->fetchData($I, $searchTerm);
             if (empty($remoteData)) {
                 $I->wait(30, 'Salesflare is taking too long to respond. Trying again...');
             } else {
@@ -45,7 +45,7 @@ trait Salesflare
         return $remoteData;
     }
 
-    public function fetchData($searchTerm)
+    public function fetchData(AcceptanceTester $I, $searchTerm)
     {
         $apiUrl = 'https://api.salesflare.com/contacts';
         $bearerToken = getenv('SALSEFLARE_API_KEY');
@@ -76,8 +76,7 @@ trait Salesflare
         $data = json_decode($response, true);
 
         if (isset($data['error'])) {
-            echo 'API Error: ' . $data['error']['message'];
-            return null;
+            $I->fail($data['message']);
         }
 
         return $data;

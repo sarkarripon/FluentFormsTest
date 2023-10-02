@@ -8,6 +8,7 @@ use Codeception\Attribute\Depends;
 use Tests\Support\AcceptanceTester;
 use Tests\Support\Factories\DataProvider\DataGenerator;
 use Tests\Support\Factories\DataProvider\ShortCodes;
+use Tests\Support\Helper\Acceptance\Integrations\FieldCustomizer;
 use Tests\Support\Helper\Acceptance\Integrations\IntegrationHelper;
 use Tests\Support\Helper\Acceptance\Integrations\UserRegistration;
 use Tests\Support\Selectors\FieldSelectors;
@@ -15,45 +16,49 @@ use Tests\Support\Selectors\FluentFormsSelectors;
 
 class IntegrationUserRegistrationCest
 {
-    use IntegrationHelper, UserRegistration, DataGenerator;
+    use IntegrationHelper, UserRegistration, DataGenerator, FieldCustomizer;
     public function _before(AcceptanceTester $I): void
     {
        $I->loadDotEnvFile();
-       $I->loginWordpress();
+//       $I->loginWordpress();
     }
 
 
     public function test_user_registration(AcceptanceTester $I): array
     {
-        global $newUser;
-        $pageName = __FUNCTION__.'_'.rand(1,100);
-
-        $listOrService =['Services'=>'User Registration'];
-        $customName=[
-            'email'=>'Email Address',
-            'simpleText'=>['Username','First Name','Last Name'],
-            'passwordField'=>'Password'
-        ];
-        $this->prepareForm($I, $pageName, [
-            'generalFields' => ['email','simpleText'],
-            'advancedFields' => ['passwordField']
-        ],'yes',$customName);
-
-
-        $this->configureUserRegistration($I, "User Registration or Update");
-        $this->mapUserRegistrationField($I,$customName,$listOrService);
-        $this->preparePage($I, $pageName);
-
-        $I->restartSession();
-        $I->amOnPage('/' . $pageName);
+//        global $newUser;
+//        $pageName = __FUNCTION__.'_'.rand(1,100);
+//
+//        $listOrService =['Services'=>'User Registration', "Email Address" => "Email Address"];
+//        $customName=[
+//            'email'=>'Email Address',
+//            'simpleText'=>['Username','First Name','Last Name'],
+//            'passwordField'=>'Password'
+//        ];
+//        $this->prepareForm($I, $pageName, [
+//            'generalFields' => ['email','simpleText'],
+//            'advancedFields' => ['passwordField']
+//        ],true ,$customName);
+//
+//
+//        $this->configureUserRegistration($I, "User Registration or Update");
+//        $fieldMapping = $this->buildArrayWithKey($customName);
+//
+//        $this->mapUserRegistrationField($I,$fieldMapping,$listOrService);
+//        $this->preparePage($I, $pageName);
+//
+//        $I->restartSession();
+//        $I->amOnPage('/' . $pageName);
         $fillAbleDataArr = [
             'Email Address'=>'email',
             'Username'=>'userName',
             'First Name'=>'firstName',
             'Last Name'=>'lastName',
-            'Password'=>'password',
+            'Password'=>['password'=>[10, true, true, true, false]],
         ];
         $fakeData = $this->generatedData($fillAbleDataArr);
+        print_r($fakeData);
+        exit();
         foreach ($fakeData as $selector => $value) {
             $I->tryToFilledField(FluentFormsSelectors::fillAbleArea($selector), $value);
         }
@@ -66,6 +71,7 @@ class IntegrationUserRegistrationCest
             $fakeData['First Name'],
         ]);
         $newUser =[
+            'Email Address' => $fakeData['Email Address'],
             'user' => $fakeData['Username'],
             'password' => $fakeData['Password'],
         ];
@@ -91,10 +97,12 @@ class IntegrationUserRegistrationCest
         $this->prepareForm($I, $pageName, [
             'generalFields' => ['simpleText','email','websiteUrl','textArea'],
             'advancedFields' => ['passwordField']
-        ],'yes',$customName);
+        ],true ,$customName);
 
         $this->configureUserRegistration($I, "User Registration or Update");
-        $this->mapUserRegistrationField($I,$customName,$listOrService);
+
+        $fieldMapping = $this->buildArrayWithKey($customName);
+        $this->mapUserRegistrationField($I,$fieldMapping,$listOrService);
         $this->preparePage($I, $pageName);
         $I->restartSession();
         $I->loginWordpress($newUser['user'],$newUser['password']);
