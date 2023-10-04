@@ -35,10 +35,10 @@ trait Activecampaign
             $this->configureApiSettings($I, "ActiveCampaign");
         }
 
-    public function fetchActivecampaignData(AcceptanceTester $I, string $emailToFetch)
+    public function fetchActivecampaignData(AcceptanceTester $I, string $searchTerm)
     {
         for ($i = 0; $i < 3; $i++) {
-            $remoteData = $this->fetchData($I,$emailToFetch);
+            $remoteData = $this->fetchData($I,$searchTerm);
             if (empty($remoteData['contacts'])) {
                 $I->wait(30, 'Activecampaign is taking too long to respond. Trying again...');
             } else {
@@ -47,13 +47,13 @@ trait Activecampaign
         }
         return $remoteData;
     }
-    public function fetchData(AcceptanceTester $I, string $emailToFetch)
+    public function fetchData(AcceptanceTester $I, string $searchTerm)
     {
 //        $I->wait(30,'Activecampaign is taking too long to respond. Trying again...');
         $apiUrl = getenv("ACTIVECAMPAIGN_API_URL").'/api/3/contacts';
 
         $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $apiUrl . '?email=' . urlencode($emailToFetch));
+        curl_setopt($ch, CURLOPT_URL, $apiUrl . '?email=' . urlencode($searchTerm));
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_HTTPHEADER, [
             'Api-Token: ' . getenv("ACTIVECAMPAIGN_API_KEY"),

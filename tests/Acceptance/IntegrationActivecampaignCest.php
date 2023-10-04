@@ -73,6 +73,8 @@ class IntegrationActivecampaignCest
 
         // Fetch ActiveCampaign data
         $remoteData = $this->fetchActivecampaignData($I, $fakeData['Email Address']);
+        print_r($remoteData);
+
 
         // Retry to submit the form again if data not found
 //        if (empty($remoteData['contacts'])) {
@@ -92,7 +94,7 @@ class IntegrationActivecampaignCest
 //            $remoteData = $this->fetchActivecampaignData($I, $fakeData['Email Address']);
 //        }
 
-        if (!empty($remoteData)) {
+        if (!empty($remoteData['contacts'])) {
             $I->checkValuesInArray($remoteData, [
                 $fakeData['Email Address'],
                 $fakeData['First Name'],

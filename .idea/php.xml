@@ -112,6 +112,11 @@
       <path value="$PROJECT_DIR$/vendor/codeception/module-cli" />
       <path value="$PROJECT_DIR$/vendor/hackzilla/password-generator" />
       <path value="$PROJECT_DIR$/vendor/twilio/sdk" />
+      <path value="$PROJECT_DIR$/vendor/nategood/httpful" />
+      <path value="$PROJECT_DIR$/vendor/spatie/emoji" />
+      <path value="$PROJECT_DIR$/vendor/roave/better-reflection" />
+      <path value="$PROJECT_DIR$/vendor/roave/signature" />
+      <path value="$PROJECT_DIR$/vendor/testomatio/list-tests" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="8.0">

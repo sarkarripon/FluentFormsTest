@@ -527,19 +527,19 @@ class AcceptanceTester extends \Codeception\Actor
         return $this->grabTextFrom($selector);
     }
 
-    public function loginGoogle(): void
-    {
-        $cookiesFilePath = "tests/Support/Data/googlecookie.json";
-        $cookiesJson = file_get_contents($cookiesFilePath);
-        $cookiesData = json_decode($cookiesJson, true);
-        if (isset($cookiesData) && is_array($cookiesData)) {
-            foreach ($cookiesData as $cookie) {
-                if (isset($cookie['domain']) && isset($cookie['expirationDate']) && isset($cookie['hostOnly']) && isset($cookie['httpOnly']) && isset($cookie['name']) && isset($cookie['path']) && isset($cookie['sameSite']) && isset($cookie['secure']) && isset($cookie['session']) && isset($cookie['storeId']) && isset($cookie['value'])) {
-                    $this->setCookie($cookie['name'], $cookie['value'], $cookie['expirationDate'], $cookie['path'], $cookie['domain'], $cookie['secure'], $cookie['httpOnly'], $cookie['sameSite']);
-                }
-            }
-        }
-    }
+//    public function loginGoogle(): void
+//    {
+//        $cookiesFilePath = "tests/Support/Data/googlecookie.json";
+//        $cookiesJson = file_get_contents($cookiesFilePath);
+//        $cookiesData = json_decode($cookiesJson, true);
+//        if (isset($cookiesData) && is_array($cookiesData)) {
+//            foreach ($cookiesData as $cookie) {
+//                if (isset($cookie['domain']) && isset($cookie['expirationDate']) && isset($cookie['hostOnly']) && isset($cookie['httpOnly']) && isset($cookie['name']) && isset($cookie['path']) && isset($cookie['sameSite']) && isset($cookie['secure']) && isset($cookie['session']) && isset($cookie['storeId']) && isset($cookie['value'])) {
+//                    $this->setCookie($cookie['name'], $cookie['value'], $cookie['expirationDate'], $cookie['path'], $cookie['domain'], $cookie['secure'], $cookie['httpOnly'], $cookie['sameSite']);
+//                }
+//            }
+//        }
+//    }
 
 
 }
