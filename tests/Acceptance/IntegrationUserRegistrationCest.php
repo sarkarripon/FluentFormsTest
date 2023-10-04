@@ -20,45 +20,43 @@ class IntegrationUserRegistrationCest
     public function _before(AcceptanceTester $I): void
     {
        $I->loadDotEnvFile();
-//       $I->loginWordpress();
+       $I->loginWordpress();
     }
 
 
     public function test_user_registration(AcceptanceTester $I): array
     {
-//        global $newUser;
-//        $pageName = __FUNCTION__.'_'.rand(1,100);
-//
-//        $listOrService =['Services'=>'User Registration', "Email Address" => "Email Address"];
-//        $customName=[
-//            'email'=>'Email Address',
-//            'simpleText'=>['Username','First Name','Last Name'],
-//            'passwordField'=>'Password'
-//        ];
-//        $this->prepareForm($I, $pageName, [
-//            'generalFields' => ['email','simpleText'],
-//            'advancedFields' => ['passwordField']
-//        ],true ,$customName);
-//
-//
-//        $this->configureUserRegistration($I, "User Registration or Update");
-//        $fieldMapping = $this->buildArrayWithKey($customName);
-//
-//        $this->mapUserRegistrationField($I,$fieldMapping,$listOrService);
-//        $this->preparePage($I, $pageName);
-//
-//        $I->restartSession();
-//        $I->amOnPage('/' . $pageName);
+        global $newUser;
+        $pageName = __FUNCTION__.'_'.rand(1,100);
+
+        $listOrService =['Services'=>'User Registration', "Email Address" => "Email Address"];
+        $customName=[
+            'email'=>'Email Address',
+            'simpleText'=>['Username','First Name','Last Name'],
+            'passwordField'=>'Password'
+        ];
+        $this->prepareForm($I, $pageName, [
+            'generalFields' => ['email','simpleText'],
+            'advancedFields' => ['passwordField']
+        ],true ,$customName);
+
+
+        $this->configureUserRegistration($I, "User Registration or Update");
+        $fieldMapping = $this->buildArrayWithKey($customName);
+
+        $this->mapUserRegistrationField($I,$fieldMapping,$listOrService);
+        $this->preparePage($I, $pageName);
+
+        $I->restartSession();
+        $I->amOnPage('/' . $pageName);
         $fillAbleDataArr = [
             'Email Address'=>'email',
             'Username'=>'userName',
             'First Name'=>'firstName',
             'Last Name'=>'lastName',
-            'Password'=>['password'=>[10, true, true, true, false]],
+            'Password'=>['password'=>[20, true, true, true, false]],
         ];
         $fakeData = $this->generatedData($fillAbleDataArr);
-        print_r($fakeData);
-        exit();
         foreach ($fakeData as $selector => $value) {
             $I->tryToFilledField(FluentFormsSelectors::fillAbleArea($selector), $value);
         }
@@ -101,11 +99,13 @@ class IntegrationUserRegistrationCest
 
         $this->configureUserRegistration($I, "User Registration or Update");
 
-        $fieldMapping = $this->buildArrayWithKey($customName);
+        $fieldMapping = array_merge($this->buildArrayWithKey($customName),['Email Address'=>'Email Address']);
         $this->mapUserRegistrationField($I,$fieldMapping,$listOrService);
+        $I->seeSuccess("Integration successfully saved");
+
         $this->preparePage($I, $pageName);
         $I->restartSession();
-        $I->loginWordpress($newUser['user'],$newUser['password']);
+        $I->loginWordpress($newUser['user'], $newUser['password']);
         $I->amOnPage('/' . $pageName);
         $fillAbleDataArr = [
             'Username'=>'userName',
@@ -115,8 +115,8 @@ class IntegrationUserRegistrationCest
             'Biographical Info'=>'text',
             'Website Url'=>'url',
             'Email Address'=>'email',
-            'Password'=>'password',
-            'Repeat Password'=>'password',
+            'Password'=>['password'=>[20, true, true, true, false]],
+            'Repeat Password'=>['password'=>[20, true, true, true, false]]
         ];
         $fakeData = $this->generatedData($fillAbleDataArr);
         foreach ($fakeData as $selector => $value) {

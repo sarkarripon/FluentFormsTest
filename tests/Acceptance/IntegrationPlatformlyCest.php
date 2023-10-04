@@ -28,7 +28,7 @@ class IntegrationPlatformlyCest
     {
         $this->prepareForm($I,__FUNCTION__, ['generalFields' => ['email', 'nameFields', 'phone']]);
 
-        $this->configurePlatformly($I,12);
+        $this->configurePlatformly($I,"Platformly");
         $this->mapPlatformlyFields($I,'Select a Field or Type Custom value','yes', [], [], [], [], '');
 
         $this->preparePage($I,__FUNCTION__);

@@ -3,6 +3,7 @@
 
 namespace Tests\Acceptance;
 
+use Codeception\Attribute\Group;
 use Tests\Support\AcceptanceTester;
 use Tests\Support\Factories\DataProvider\DataGenerator;
 use Tests\Support\Helper\Acceptance\Integrations\FieldCustomizer;
@@ -19,6 +20,7 @@ class IntegrationZohoCest
         $I->loadDotEnvFile();
         $I->loginWordpress();
     }
+    #[Group('Integration')]
     public function test_zoho_push_data(AcceptanceTester $I)
     {
 //        $vdf = $this->fetchZohoData($I,"xidulu@mailinator.com");
@@ -32,7 +34,7 @@ class IntegrationZohoCest
         ];
         $this->prepareForm($I, $pageName, [
             'generalFields' => ['email', 'nameFields'],
-        ],'yes',$customName);
+        ],true, $customName);
         $this->configureZoho($I, "Zoho CRM");
 
         $fieldMapping = array_merge($this->buildArrayWithKey($customName),['Email'=>'Email']);
@@ -57,18 +59,27 @@ class IntegrationZohoCest
 
         $remoteData = $this->fetchZohoData($I, $fakeData['Email']);
 //        print_r($remoteData);
-
-        if (isset($remoteData)) {
-            $lastName =  $remoteData['Last_Name'];;
-            $email = $remoteData['Email'];
-
-            $I->assertString([
-                $fakeData['Email'] => $email,
-                $fakeData['Last Name'] => $lastName,
+        if (!empty($remoteData)) {
+            $I->checkValuesInArray($remoteData, [
+                $fakeData['Email'],
+                $fakeData['Last Name'],
             ]);
+            echo " Hurray.....! Data found in Zoho CRM";
         }else{
-            $I->fail("Data not found");
+            $I->fail("Could not fetch data from Zoho CRM");
         }
+
+//        if (isset($remoteData)) {
+//            $lastName =  $remoteData['Last_Name'];
+//            $email = $remoteData['Email'];
+//
+//            $I->assertString([
+//                $fakeData['Email'] => $email,
+//                $fakeData['Last Name'] => $lastName,
+//            ]);
+//        }else{
+//            $I->fail("Data not found");
+//        }
 
     }
 }

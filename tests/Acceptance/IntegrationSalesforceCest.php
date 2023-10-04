@@ -3,6 +3,7 @@
 
 namespace Tests\Acceptance;
 
+use Codeception\Attribute\Group;
 use Tests\Support\Factories\DataProvider\DataGenerator;
 use Tests\Support\Helper\Acceptance\Integrations\FieldCustomizer;
 use Tests\Support\Helper\Acceptance\Integrations\IntegrationHelper;
@@ -21,6 +22,7 @@ class IntegrationSalesforceCest
     }
 
     // tests
+    #[Group('Integration')]
     public function test_salesforce_push_data(AcceptanceTester $I)
     {
 //       $jhvh =  $this->fetchSalesforceData($I,'gherzog@icloud.com');

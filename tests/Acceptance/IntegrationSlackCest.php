@@ -3,6 +3,7 @@
 
 namespace Tests\Acceptance;
 
+use Codeception\Attribute\Group;
 use Tests\Support\Helper\Acceptance\Integrations\Slack;
 use Tests\Support\AcceptanceTester;
 use Tests\Support\Factories\DataProvider\DataGenerator;
@@ -21,6 +22,7 @@ class IntegrationSlackCest
     }
 
     // tests
+    #[Group('Integration')]
     public function test_slack_push_data(AcceptanceTester $I): void
     {
 //        $kjf = $this->fetchSlackData($I,"Dolorem vitae quis et laborum molestiae eos qui.");

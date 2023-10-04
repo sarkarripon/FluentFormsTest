@@ -3,6 +3,7 @@
 
 namespace Tests\Acceptance;
 
+use Codeception\Attribute\Group;
 use Tests\Support\AcceptanceTester;
 use Tests\Support\Factories\DataProvider\DataGenerator;
 use Tests\Support\Helper\Acceptance\Integrations\FieldCustomizer;
@@ -19,6 +20,7 @@ class IntegrationPostCptCest
     }
 
     // tests
+    #[Group('Integration')]
     public function test_post_creation_using_cpt(AcceptanceTester $I)
     {
         // Generate a unique page name

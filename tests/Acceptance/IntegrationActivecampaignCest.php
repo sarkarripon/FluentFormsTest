@@ -22,7 +22,7 @@ class IntegrationActivecampaignCest
         $I->loginWordpress();
     }
 
-    #[Group('Integration')]
+    #[Group('Integration','test')]
     public function test_activecampaign_push_data(AcceptanceTester $I): void
     {
         $pageName = __FUNCTION__ . '_' . rand(1, 100);
@@ -75,22 +75,22 @@ class IntegrationActivecampaignCest
         $remoteData = $this->fetchActivecampaignData($I, $fakeData['Email Address']);
 
         // Retry to submit the form again if data not found
-        if (empty($remoteData['contacts'])) {
-            $I->amOnPage('/' . $pageName);
-
-            $fakeData = $this->generatedData($fillableDataArr);
-
-            // Fill the form with fake data
-            foreach ($fakeData as $selector => $value) {
-                $I->tryToFilledField(FluentFormsSelectors::fillAbleArea($selector), $value);
-            }
-
-            // Submit the form
-            $I->clicked(FieldSelectors::submitButton);
-
-            // Fetch ActiveCampaign data again
-            $remoteData = $this->fetchActivecampaignData($I, $fakeData['Email Address']);
-        }
+//        if (empty($remoteData['contacts'])) {
+//            $I->amOnPage('/' . $pageName);
+//
+//            $fakeData = $this->generatedData($fillableDataArr);
+//
+//            // Fill the form with fake data
+//            foreach ($fakeData as $selector => $value) {
+//                $I->tryToFilledField(FluentFormsSelectors::fillAbleArea($selector), $value);
+//            }
+//
+//            // Submit the form
+//            $I->clicked(FieldSelectors::submitButton);
+//
+//            // Fetch ActiveCampaign data again
+//            $remoteData = $this->fetchActivecampaignData($I, $fakeData['Email Address']);
+//        }
 
         if (!empty($remoteData)) {
             $I->checkValuesInArray($remoteData, [

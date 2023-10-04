@@ -1,6 +1,9 @@
 <?php
 
 namespace Tests\Support\Factories\DataProvider;
+use Hackzilla\PasswordGenerator\Exception\CharactersNotFoundException;
+use Hackzilla\PasswordGenerator\Exception\ImpossibleMinMaxLimitsException;
+use Hackzilla\PasswordGenerator\Generator\ComputerPasswordGenerator;
 use Hackzilla\PasswordGenerator\Generator\RequirementPasswordGenerator;
 
 trait DataGenerator
@@ -10,39 +13,25 @@ trait DataGenerator
     {
         $this->faker = \Faker\Factory::create();
     }
+
+    /**
+     * @throws CharactersNotFoundException
+     * @throws ImpossibleMinMaxLimitsException
+     */
     public function generatedData(array $keys): array
     {
         $generatedData = [];
-         // This is conditional password generator.
-//        $generator = new RequirementPasswordGenerator();
-//        $generator
-//            ->setLength(16)
-//            ->setOptionValue(RequirementPasswordGenerator::OPTION_UPPER_CASE, true)
-//            ->setOptionValue(RequirementPasswordGenerator::OPTION_LOWER_CASE, true)
-//            ->setOptionValue(RequirementPasswordGenerator::OPTION_NUMBERS, true)
-//            ->setOptionValue(RequirementPasswordGenerator::OPTION_SYMBOLS, true)
-//            ->setMinimumCount(RequirementPasswordGenerator::OPTION_UPPER_CASE, 2)
-//            ->setMinimumCount(RequirementPasswordGenerator::OPTION_LOWER_CASE, 2)
-//            ->setMinimumCount(RequirementPasswordGenerator::OPTION_NUMBERS, 2)
-//            ->setMinimumCount(RequirementPasswordGenerator::OPTION_SYMBOLS, 2)
-//            ->setMaximumCount(RequirementPasswordGenerator::OPTION_UPPER_CASE, 8)
-//            ->setMaximumCount(RequirementPasswordGenerator::OPTION_LOWER_CASE, 8)
-//            ->setMaximumCount(RequirementPasswordGenerator::OPTION_NUMBERS, 8)
-//            ->setMaximumCount(RequirementPasswordGenerator::OPTION_SYMBOLS, 8)
-//        ;
-//        $password = $generator->generatePasswords()[0];
-
-//        $password = $this->faker->password(10, 18);
+        $password = '';
 
         foreach ($keys as $key => $value) {
-            if ($value == 'password') {
+            if ($key == 'Password') {
                 if (is_array($value)) {
                     foreach ($value as $method => $argument) {
                         $password = self::generatePassword(...$argument);
                         $generatedData[$key] = $password;
                     }
                 }else{
-                    $password = self::generatePassword(10, true, true, true, true);
+                    $password = self::generatePassword(10);
                     $generatedData[$key] = $password;
                 }
 
@@ -71,13 +60,18 @@ trait DataGenerator
         return $generatedData;
     }
 
+    /**
+     * @throws CharactersNotFoundException
+     * @throws ImpossibleMinMaxLimitsException
+     */
     public static function generatePassword(
         int $length,
         bool $useUpperCase = true,
         bool $useLowerCase = true,
         bool $useNumbers = true,
-        bool $useSymbols = false
+        bool $useSymbols = true
     ): string {
+
         $generator = new RequirementPasswordGenerator();
         $generator
             ->setLength($length)
@@ -92,9 +86,10 @@ trait DataGenerator
             ->setMaximumCount(RequirementPasswordGenerator::OPTION_UPPER_CASE, 8)
             ->setMaximumCount(RequirementPasswordGenerator::OPTION_LOWER_CASE, 8)
             ->setMaximumCount(RequirementPasswordGenerator::OPTION_NUMBERS, 8)
-            ->setMaximumCount(RequirementPasswordGenerator::OPTION_SYMBOLS, 0);
+            ->setMaximumCount(RequirementPasswordGenerator::OPTION_SYMBOLS, 8)
+        ;
 
-        return $generator->generatePasswords()[0];
+        return $generator->generatePassword();
     }
     public static function randEmailTld(): string
     {

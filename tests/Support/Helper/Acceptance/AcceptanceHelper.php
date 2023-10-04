@@ -26,7 +26,7 @@ class AcceptanceHelper extends WebDriver
     {
         $username = $username ?? getenv('WORDPRESS_USERNAME');
         $password = $password ?? getenv('WORDPRESS_PASSWORD');
-        $this->amOnPage('/wp-login.php');
+        $this->amOnUrl(getenv("PROJECT_URL").'/wp-login.php');
         $this->wait(1);
         $this->fillField('Username', $username);
         $this->fillField('Password', $password);

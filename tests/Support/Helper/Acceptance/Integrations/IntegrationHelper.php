@@ -107,7 +107,6 @@ trait IntegrationHelper
         $isDelete === "yes"
             ? $I->deleteExistingForms()
             : null;
-
         $isCpt
             ? $I->initiateNewCptForm($isPostType)
             : $I->initiateNewForm();
@@ -119,9 +118,9 @@ trait IntegrationHelper
 
         $formID = $I->grabTextFrom("button[title='Click to Copy']");
         $I->clicked(FluentFormsSelectors::saveForm);
-        $I->seeSuccess('Form created successfully.');
+        $I->seeSuccess('The form is successfully updated.');
         $I->renameForm($formName);
-        $I->seeSuccess('Form renamed successfully.');
+        $I->seeSuccess('The form is successfully updated.');
         return $formID;
     }
 
@@ -169,7 +168,6 @@ trait IntegrationHelper
         $I->waitForElement(FluentFormsSelectors::mouseHoverMenu, 10);
         $I->moveMouseOver(FluentFormsSelectors::mouseHoverMenu);
         $I->clicked(FluentFormsSelectors::formSettings);
-
     }
 
     public function mapEmailInCommon(AcceptanceTester $I, string $feedName, array $listOrService = null,bool $emailField= true): void

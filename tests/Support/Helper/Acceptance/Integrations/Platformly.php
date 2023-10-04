@@ -136,16 +136,14 @@ trait Platformly
      *
      *
      * @param AcceptanceTester $I
-     * @param $integrationPositionNumber
+     * @param $integrationName
      * @return void
      */
 
-    public function configurePlatformly(AcceptanceTester $I, $integrationPositionNumber): void
+    public function configurePlatformly(AcceptanceTester $I, $integrationName): void
     {
-        $this->turnOnIntegration($I,$integrationPositionNumber);
+        $this->turnOnIntegration($I,$integrationName);
 
-        if($integrationPositionNumber == 12)
-        {
             $saveSettings = $I->checkElement(FluentFormsSettingsSelectors::APIDisconnect);
 
             if (!$saveSettings) // Check if the platformly integration is already configured.
@@ -157,8 +155,8 @@ trait Platformly
                 $I->clicked(FluentFormsSettingsSelectors::APISaveButton);
             }
             $this->configureApiSettings($I,"Platformly");
-        }
     }
+
     public function fetchPlatformlyData(AcceptanceTester $I, $email): string
     {
         $curl = curl_init();

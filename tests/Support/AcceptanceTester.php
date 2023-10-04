@@ -70,13 +70,7 @@ class AcceptanceTester extends \Codeception\Actor
         }
     }
 
-    /**(//span[normalize-space()='{$followingText}']/preceding::*[contains(@class, 'el-checkbox') or contains(@class, 'el-switch') or contains(@class, 'el-radio')])[1]";
-        }
-        try {
-            $I->waitForElementVisible($selector);
-            $classAttribute = $I->grabAttributeFrom($selector, 'class');
-            if (!str_contains($classAttribute, 'is-checked')) {
-                $I->clicked($selector);
+    /**
      * @param array $texts
      * @return void
      * @author Sarkar Ripon
@@ -165,9 +159,11 @@ class AcceptanceTester extends \Codeception\Actor
      */
     public function seeSuccess($message): void
     {
-        $this->waitForElementVisible("//div[@role='alert']//h2[normalize-space()='Success'][1]");
-        $this->assertStringContainsString('Success',
-            $this->grabTextFrom("//div[@role='alert']//h2[normalize-space()='Success'][1]"), $message);
+        $this->waitForElementVisible("(//div[@role='alert'])[1]");
+        $text =  $this->grabTextFrom("(//div[@role='alert'])[1]");
+        echo $text .PHP_EOL;
+        $this->assertStringContainsString($message, $text);
+
     }
 
     /**

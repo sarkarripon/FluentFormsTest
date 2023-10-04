@@ -15,7 +15,8 @@
         "zohocrm/php-sdk-2.0": "4.0.0",
         "mashape/unirest-php": "^3.0",
         "codeception/module-cli": "^2.0",
-        "twilio/sdk": "^7.9"
+        "twilio/sdk": "^7.9",
+        "testomatio/list-tests": "^0.2.3"
     },
   "require": {
         "ext-curl": "*",

@@ -3,6 +3,7 @@
 
 namespace Tests\Acceptance;
 
+use Codeception\Attribute\Group;
 use Tests\Support\Helper\Acceptance\Integrations\Salesflare;
 use Tests\Support\AcceptanceTester;
 use Tests\Support\Factories\DataProvider\DataGenerator;
@@ -21,6 +22,7 @@ class IntegrationSalesflareCest
     }
 
     // tests
+    #[Group('Integration', 'test')]
     public function test_Salesflare_push_data(AcceptanceTester $I)
     {
 //        $jhvhf = $this->fetchSalesflareData($I,"bysywagu@gmail.co");

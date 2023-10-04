@@ -3,6 +3,7 @@
 
 namespace Tests\Acceptance;
 
+use Codeception\Attribute\Group;
 use Tests\Support\Factories\DataProvider\DataGenerator;
 use Tests\Support\Helper\Acceptance\Integrations\FieldCustomizer;
 use Tests\Support\Helper\Acceptance\Integrations\Sendinblue;
@@ -21,6 +22,7 @@ class IntegrationSendinblueCest
     }
 
     // tests
+    #[Group('Integration')]
     public function test_sendinblue_push_data(AcceptanceTester $I): void
     {
         $pageName = __FUNCTION__.'_'.rand(1,100);

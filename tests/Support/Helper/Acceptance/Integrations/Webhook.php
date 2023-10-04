@@ -8,11 +8,19 @@ use Tests\Support\Selectors\FluentFormsSelectors;
 trait Webhook
 {
     use IntegrationHelper;
-
-    public function configureWebhook(AcceptanceTester $I, $integrationPositionNumber): void
+    private static function getWebhook(AcceptanceTester $I): string
     {
-        $webhookUrl ="https://webhook.site/".getenv("WEBHOOK");
-        $this->turnOnIntegration($I,$integrationPositionNumber);
+        $I->amOnUrl("https://webhook.site/");
+        $I->waitForElementVisible("(//code)[1]");
+        $url = $I->grabTextFrom("(//code)[1]");
+
+        return $url;
+
+    }
+
+    public function configureWebhook(AcceptanceTester $I, $integrationName, $webhookUrl): void
+    {
+        $this->turnOnIntegration($I,$integrationName);
         $this->takeMeToConfigurationPage($I);
         $I->clickOnText("WebHook","Conditional Confirmations");
         $I->clickOnText("Add New","WebHooks Integration");
@@ -21,12 +29,12 @@ trait Webhook
         $I->clicked(FluentFormsSelectors::saveButton("Save Feed"));
 
     }
-    public function fetchWebhookData(AcceptanceTester $I, array $texts): void
+    public function fetchWebhookData(AcceptanceTester $I, array $texts, $webhookUrl): void
     {
-        $maxRetries = 5;
-        $retryDelay = 10;
+        $maxRetries = 8;
+        $retryDelay = 30;
         for ($i = 0; $i < $maxRetries; $i++) {
-            if ($this->fetchData($I, $texts)) {
+            if ($this->fetchData($I, $texts,$webhookUrl)) {
                 echo "Webhook data fetched successfully!";
                 return;
             } else {
@@ -35,9 +43,11 @@ trait Webhook
         }
         $I->fail("Failed to fetch webhook data after {$maxRetries} attempts.");
     }
-    public function fetchData(AcceptanceTester $I, array $texts): bool
+    public function fetchData(AcceptanceTester $I, array $texts, $webhookUrl): bool
     {
-        $I->amOnUrl("https://webhook.site/#!/".getenv('WEBHOOK'));
+        $webhookUrl = preg_replace('/https:\/\/webhook\.site\//', 'https://webhook.site/#!/', $webhookUrl);
+
+        $I->amOnUrl($webhookUrl);
         try {
             $I->seeText($texts);
             return true;
