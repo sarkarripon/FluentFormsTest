@@ -58,8 +58,12 @@ class IntegrationPipeDriveCest
             $I->tryToFilledField(FluentFormsSelectors::fillAbleArea($selector), $value);
         }
         $I->clicked(FieldSelectors::submitButton);
-        $remoteData = $this->fetchPipeDriveData($I, $fakeData['Email Address'],);
-//        print_r($remoteData);
+
+        $remoteData = "";
+        if ($I->checkSubmissionLog(['success', $pageName])) {
+            $remoteData = $this->fetchPipeDriveData($I, $fakeData['Email Address'],);
+            print_r($remoteData);
+        }
 
         if (!empty($remoteData)) {
             $I->checkValuesInArray($remoteData, [
@@ -68,7 +72,7 @@ class IntegrationPipeDriveCest
             ]);
             echo " Hurray.....! Data found in PipeDrive";
         }else{
-            $I->fail("Could not fetch data from PipeDrive");
+            $I->fail("Could not fetch data from PipeDrive". PHP_EOL. $remoteData);
         }
 
 //        if (isset($remoteData)) {

@@ -56,8 +56,12 @@ class IntegrationDripCest
             $I->tryToFilledField(FluentFormsSelectors::fillAbleArea($selector), $value);
         }
         $I->clicked(FieldSelectors::submitButton);
-        $remoteData = $this->fetchDripData($I, $fakeData['Email Address'],);
-//        print_r($remoteData);
+
+        $remoteData = "";
+        if ($I->checkSubmissionLog(['success', $pageName])) {
+            $remoteData = $this->fetchDripData($I, $fakeData['Email Address'],);
+            print_r($remoteData);
+        }
 
         if (isset($remoteData['subscribers'])) {
             $I->checkValuesInArray($remoteData, [
@@ -67,7 +71,7 @@ class IntegrationDripCest
             ]);
             echo " Hurray.....! Data found in Drip";
         }else{
-            $I->fail("Could not fetch data from Drip");
+            $I->fail("Could not fetch data from Drip. " . PHP_EOL. $remoteData);
         }
 
 //        print_r($remoteData);

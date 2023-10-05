@@ -57,8 +57,12 @@ class IntegrationZohoCest
         }
         $I->clicked(FieldSelectors::submitButton);
 
-        $remoteData = $this->fetchZohoData($I, $fakeData['Email']);
-//        print_r($remoteData);
+        $remoteData = "";
+        if ($I->checkSubmissionLog(['success', $pageName])) {
+            $remoteData = $this->fetchZohoData($I, $fakeData['Email']);
+            print_r($remoteData);
+        }
+
         if (!empty($remoteData)) {
             $I->checkValuesInArray($remoteData, [
                 $fakeData['Email'],
@@ -66,7 +70,7 @@ class IntegrationZohoCest
             ]);
             echo " Hurray.....! Data found in Zoho CRM";
         }else{
-            $I->fail("Could not fetch data from Zoho CRM");
+            $I->fail("Could not fetch data from Zoho CRM". PHP_EOL. $remoteData);
         }
 
 //        if (isset($remoteData)) {

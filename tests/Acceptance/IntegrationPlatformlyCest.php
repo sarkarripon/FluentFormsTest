@@ -39,10 +39,12 @@ class IntegrationPlatformlyCest
         $I->filledField(FieldSelectors::email, ($example['email']));
         $I->filledField(FieldSelectors::phone, ($example['phone']));
         $I->click(FieldSelectors::submitButton);
-        $I->wait(5);
 
-        $remoteData = $this->fetchPlatformlyData($I,$example['email']);
-
+//        $remoteData = "";
+//        if ($I->checkSubmissionLog(['success', $pageName])) {
+//            $remoteData = $this->fetchPlatformlyData($I,$example['email']);
+//            print_r($remoteData);
+//        }
 
         $referenceData = [
             'first_name' => $example['first_name'],

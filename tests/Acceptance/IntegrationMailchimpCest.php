@@ -82,7 +82,14 @@ class IntegrationMailchimpCest
                 }
             }
             $I->clicked(FieldSelectors::submitButton);
-            $remoteData = $this->fetchMailchimpData($I,$fillAbleDataArr["//input[contains(@id,'email')]"]);
+
+            $remoteData = "";
+            if ($I->checkSubmissionLog(['success', $pageName])) {
+                $remoteData = $this->fetchMailchimpData($I,$fillAbleDataArr["//input[contains(@id,'email')]"]);
+                print_r($remoteData);
+            }
+
+
         }
         if(!empty($remoteData)){
             $I->assertString([
@@ -91,7 +98,7 @@ class IntegrationMailchimpCest
                 $fillAbleDataArr["//input[contains(@id,'_last_name_')]"] => $remoteData->merge_fields->LNAME,
             ]);
         }else{
-            $I->fail("No data found in Mailchimp");
+            $I->fail("No data found in Mailchimp". PHP_EOL. $remoteData);
         }
     }
 }

@@ -58,8 +58,11 @@ class IntegrationDiscordCest
         }
         $I->clicked(FieldSelectors::submitButton);
 
-        $remoteData = $this->fetchDiscordData($I, $fakeData['Email Address']);
-//        print_r($remoteData);
+        $remoteData = "";
+        if ($I->checkSubmissionLog(['success', $pageName])) {
+            $remoteData = $this->fetchDiscordData($I, $fakeData['Email Address']);
+            print_r($remoteData);
+        }
 
         if (!empty($remoteData)) {
             $I->checkValuesInArray($remoteData, [
@@ -69,7 +72,7 @@ class IntegrationDiscordCest
             ]);
             echo " Hurray.....! Data found in Discord";
         }else{
-            $I->fail("Could not fetch data from Discord");
+            $I->fail("Could not fetch data from Discord " . PHP_EOL. $remoteData);
         }
 
 

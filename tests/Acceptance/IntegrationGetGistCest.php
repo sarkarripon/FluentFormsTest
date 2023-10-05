@@ -57,8 +57,13 @@ class IntegrationGetGistCest
             $I->tryToFilledField(FluentFormsSelectors::fillAbleArea($selector), $value);
         }
         $I->clicked(FieldSelectors::submitButton);
-        $remoteData = $this->fetchGetGistData($I, $fakeData['Email Address'],);
-//        print_r($remoteData);
+
+        $remoteData = "";
+        if ($I->checkSubmissionLog(['success', $pageName])) {
+            $remoteData = $this->fetchGetGistData($I, $fakeData['Email Address'],);
+            print_r($remoteData);
+        }
+
         if (isset($remoteData['contact'])) {
             $I->checkValuesInArray($remoteData, [
                 $fakeData['Email Address'],
@@ -66,7 +71,7 @@ class IntegrationGetGistCest
             ]);
             echo " Hurray.....! Data found in GetGist";
         }else{
-            $I->fail("Could not fetch data from GetGist");
+            $I->fail("Could not fetch data from GetGist. " . PHP_EOL. $remoteData);
         }
 
 //        if (isset($remoteData['contact'])) {

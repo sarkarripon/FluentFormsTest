@@ -61,9 +61,12 @@ class IntegrationMailJetCest
             $I->tryToFilledField(FluentFormsSelectors::fillAbleArea($selector), $value);
         }
         $I->clicked(FieldSelectors::submitButton);
+        $remoteData = "";
+        if ($I->checkSubmissionLog(['success', $pageName])) {
+            $remoteData = $this->fetchMailJetData($I, $fakeData['Contact Email']);
+            print_r($remoteData);
+        }
 
-        $remoteData = $this->fetchMailJetData($I, $fakeData['Contact Email']);
-//        print_r($remoteData);
         if (!empty($remoteData)) {
             $I->checkValuesInArray($remoteData, [
                 $fakeData['Contact Email'],
@@ -71,7 +74,7 @@ class IntegrationMailJetCest
             ]);
             echo " Hurray.....! Data found in MailJet";
         }else{
-            $I->fail("Could not fetch data from MailJet");
+            $I->fail("Could not fetch data from MailJet". PHP_EOL. $remoteData);
         }
 
 //        if (isset($remoteData)) {

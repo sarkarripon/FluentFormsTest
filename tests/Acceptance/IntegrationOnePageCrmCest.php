@@ -64,8 +64,12 @@ class IntegrationOnePageCrmCest
         }
         $I->clicked(FieldSelectors::submitButton);
 
-        $remoteData = $this->fetchOnePageCrmData($I, $fakeData['Enter Email'],);
-//        print_r($remoteData);
+        $remoteData = "";
+        if ($I->checkSubmissionLog(['success', $pageName])) {
+            $remoteData = $this->fetchOnePageCrmData($I, $fakeData['Enter Email'],);
+            print_r($remoteData);
+        }
+
         if (isset($remoteData['data']['contacts']) and !empty($remoteData['data']['contacts'])) {
             $I->checkValuesInArray($remoteData, [
                 $fakeData['Enter Email'],
@@ -74,7 +78,7 @@ class IntegrationOnePageCrmCest
             ]);
             echo " Hurray.....! Data found in OnePageCrm";
         }else{
-            $I->fail("Could not fetch data from OnePageCrm");
+            $I->fail("Could not fetch data from OnePageCrm". PHP_EOL. $remoteData);
         }
 
 

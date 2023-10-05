@@ -59,9 +59,11 @@ class IntegrationSalesforceCest
             $I->tryToFilledField(FluentFormsSelectors::fillAbleArea($selector), $value);
         }
         $I->clicked(FieldSelectors::submitButton);
-
-        $remoteData = $this->fetchSalesforceData($I, $fakeData['Email']);
-//        print_r($remoteData);
+        $remoteData = "";
+        if ($I->checkSubmissionLog(['success', $pageName])) {
+            $remoteData = $this->fetchSalesforceData($I, $fakeData['Email']);
+            print_r($remoteData);
+        }
 
         if (!empty($remoteData)) {
             $I->checkValuesInArray($remoteData, [
@@ -70,7 +72,7 @@ class IntegrationSalesforceCest
             ]);
             echo " Hurray.....! Data found in Salesforce";
         }else{
-            $I->fail("Could not fetch data from Salesforce");
+            $I->fail("Could not fetch data from Salesforce". PHP_EOL. $remoteData);
         }
 
 //        if (isset($remoteData)) {

@@ -41,20 +41,21 @@ class IntegrationGoogleSheetCest
             }
         }
         $I->clicked(FieldSelectors::submitButton);
-
-        $remoteData = $this->fetchGoogleSheetData($I, $fillAbleDataArr["//input[contains(@id,'email')]"]);
-//        print_r($remoteData);
-
-        // retry to submit form again if data not found
-        if (empty($remoteData)) {
-            $I->amOnPage('/' . $pageName);
-            $fillAbleDataArr = FieldSelectors::getFieldDataArray(['email', 'first_name', 'last_name',]);
-            foreach ($fillAbleDataArr as $selector => $value) {
-                $I->fillByJS($selector, $value);
-            }
-            $I->clicked(FieldSelectors::submitButton);
+        $remoteData = "";
+        if ($I->checkSubmissionLog(['success', $pageName])) {
             $remoteData = $this->fetchGoogleSheetData($I, $fillAbleDataArr["//input[contains(@id,'email')]"]);
+            print_r($remoteData);
         }
+
+//        if (empty($remoteData)) {
+//            $I->amOnPage('/' . $pageName);
+//            $fillAbleDataArr = FieldSelectors::getFieldDataArray(['email', 'first_name', 'last_name',]);
+//            foreach ($fillAbleDataArr as $selector => $value) {
+//                $I->fillByJS($selector, $value);
+//            }
+//            $I->clicked(FieldSelectors::submitButton);
+//            $remoteData = $this->fetchGoogleSheetData($I, $fillAbleDataArr["//input[contains(@id,'email')]"]);
+//        }
 
         if (!empty($remoteData)) {
             $email = $remoteData[0];
@@ -67,7 +68,7 @@ class IntegrationGoogleSheetCest
                 $fillAbleDataArr["//input[contains(@id,'_last_name_')]"] => $lastName,
             ]);
         }else{
-            $I->fail("Data not found in Google Sheet");
+            $I->fail("Data not found in Google Sheet.");
         }
     }
 }

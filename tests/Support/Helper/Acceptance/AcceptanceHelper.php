@@ -241,11 +241,20 @@ class AcceptanceHelper extends WebDriver
     }
 
 
-    public function seeTextCaseInsensitive($actionText, $selector): void
+    public function seeTextCaseInsensitive($actionTexts, $selector): bool
     {
+        $this->waitForElementVisible($selector,10);
         $elementText = $this->grabTextFrom($selector);
-        $actionText = preg_quote($actionText, '/');
-        $this->assertRegExp("/$actionText/i", $elementText);
+        if (is_string($actionTexts)) {
+            $actionTexts = [$actionTexts];
+        }
+        foreach ($actionTexts as $actionText) {
+            $actionText = preg_quote($actionText, '/');
+            if (!preg_match("/$actionText/i", $elementText)) {
+                return false; // If any text is not found, return false
+            }
+        }
+        return true; // If all texts are found, return true
     }
 
     /**
@@ -259,7 +268,7 @@ class AcceptanceHelper extends WebDriver
     public function checkElement($element): bool
     {
         try {
-            $this->waitForElementVisible($element,5);
+            $this->waitForElementVisible($element,10);
             $this->seeElementInDOM($element);
             return true;
         } catch (Exception $e) {

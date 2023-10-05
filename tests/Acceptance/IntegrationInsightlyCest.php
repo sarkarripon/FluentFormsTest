@@ -62,7 +62,13 @@ class IntegrationInsightlyCest
         }
         $I->clicked(FieldSelectors::submitButton);
 
-        $remoteData = $this->fetchInsightlyData($I, $fakeData['Email']);
+        $remoteData = "";
+        if ($I->checkSubmissionLog(['success', $pageName])) {
+            $remoteData = $this->fetchInsightlyData($I, $fakeData['Email']);
+            print_r($remoteData);
+        }
+
+
 //        print_r($remoteData);
         if (!empty($remoteData)) {
             $I->checkValuesInArray($remoteData, [
@@ -72,7 +78,7 @@ class IntegrationInsightlyCest
             ]);
             echo " Hurray.....! Data found in Insightly";
         }else{
-            $I->fail("Could not fetch data from Insightly");
+            $I->fail("Could not fetch data from Insightly". PHP_EOL. $remoteData);
         }
 
 //        if (isset($remoteData)) {

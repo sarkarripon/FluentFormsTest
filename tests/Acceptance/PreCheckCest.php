@@ -22,6 +22,11 @@ class PreCheckCest
 
     public function check_test(AcceptanceTester $I, $isApi=true, $isNative=false)
     {
+        $I->amOnPage("wp-admin/admin.php?page=fluent_forms_transfer#apilogs");
+        $I->seeTextCaseInsensitive(["success","test_zapier_push_data_37"],"//tbody/tr[1]");
+
+
+
 //        $I->amOnPage("wp-admin/admin.php?page=fluent_forms_all_entries");
 //        $I->clicked("(//span[contains(text(),'View')])[1]");
 //        if ($isApi)
@@ -36,8 +41,8 @@ class PreCheckCest
 //            $I->waitForElementVisible("(//div[@class='wpf_entry_details'])[3]");
 //            return $I->grabTextFrom("(//div[@class='wpf_entry_details'])[3]");
 //        }
-        $gg = $I->checkAPICallStatus("Success","(//span[contains(@class,'log_status')])");
-        dd($gg);
+//        $gg = $I->checkAPICallStatus("Success","(//span[contains(@class,'log_status')])");
+//        dd($gg);
 
 
 

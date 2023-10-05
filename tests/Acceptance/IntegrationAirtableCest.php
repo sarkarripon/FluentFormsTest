@@ -70,8 +70,11 @@ class IntegrationAirtableCest
         }
         $I->clicked(FieldSelectors::submitButton);
 
-        $remoteData = $this->fetchAirtableData($I, $fakeData['First Name']." ".$fakeData['Last Name']);
-//        print_r($remoteData);
+        $remoteData = "";
+        if ($I->checkSubmissionLog(['success', $pageName])) {
+            $remoteData = $this->fetchAirtableData($I, $fakeData['First Name']." ".$fakeData['Last Name']);
+            print_r($remoteData);
+        }
 
         if (!empty($remoteData)) {
             $I->checkValuesInArray($remoteData, [
@@ -80,7 +83,7 @@ class IntegrationAirtableCest
             ]);
             echo " Hurray.....! Data found";
         }else{
-            $I->fail("Could not fetch data");
+            $I->fail("Could not fetch data" . PHP_EOL. $remoteData);
         }
     }
 }

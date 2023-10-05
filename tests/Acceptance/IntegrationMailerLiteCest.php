@@ -56,8 +56,12 @@ class IntegrationMailerLiteCest
             $I->tryToFilledField(FluentFormsSelectors::fillAbleArea($selector), $value);
         }
         $I->clicked(FieldSelectors::submitButton);
-        $remoteData = $this->fetchMailerLiteData($I, $fakeData['Email'],);
-//        print_r($remoteData);
+
+        $remoteData = "";
+        if ($I->checkSubmissionLog(['success', $pageName])) {
+            $remoteData = $this->fetchMailerLiteData($I, $fakeData['Email'],);
+            print_r($remoteData);
+        }
         if (isset($remoteData['data'])) {
             $I->checkValuesInArray($remoteData, [
                 $fakeData['Email'],

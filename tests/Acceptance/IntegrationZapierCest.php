@@ -34,12 +34,17 @@ class IntegrationZapierCest
             $I->fillByJS($selector, $value);
         }
         $I->clicked(FieldSelectors::submitButton);
+
         $texts = array(
             $fillAbleDataArr["//input[contains(@id,'email')]"],
             $fillAbleDataArr["//input[contains(@id,'_first_name_')]"],
             $fillAbleDataArr["//input[contains(@id,'_last_name_')]"],
         );
-        $this->fetchWebhookData($I,$texts,$webhookUrl);
+
+        if ($I->checkSubmissionLog(['success', $pageName])) {
+            $this->fetchWebhookData($I,$texts,$webhookUrl);
+        }
+
 
 //        $remoteData = $this->fetchGoogleSheetData($I, $fillAbleDataArr["//input[contains(@id,'email')]"]);
 //

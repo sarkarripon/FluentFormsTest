@@ -56,8 +56,12 @@ class IntegrationIContactCest
             $I->tryToFilledField(FluentFormsSelectors::fillAbleArea($selector), $value);
         }
         $I->clicked(FieldSelectors::submitButton);
-        $remoteData = $this->fetchIContactData($I, $fakeData['Email Address']);
-//        print_r($remoteData);
+
+        $remoteData = "";
+        if ($I->checkSubmissionLog(['success', $pageName])) {
+            $remoteData = $this->fetchIContactData($I, $fakeData['Email Address']);
+            print_r($remoteData);
+        }
 
         if (!empty($remoteData)) {
             $I->checkValuesInArray($remoteData, [
@@ -67,7 +71,7 @@ class IntegrationIContactCest
             ]);
             echo " Hurray.....! Data found in iContact";
         }else{
-            $I->fail("Could not fetch data from iContact");
+            $I->fail("Could not fetch data from iContact". PHP_EOL. $remoteData);
         }
 
 

@@ -59,8 +59,12 @@ class IntegrationConvertKitCest
         }
         $I->clicked(FieldSelectors::submitButton);
 
-        $remoteData = $this->fetchConvertKitData($I, $fakeData['Email Address']);
-//        print_r($remoteData);
+        $remoteData = "";
+        if ($I->checkSubmissionLog(['success', $pageName])) {
+            $remoteData = $this->fetchConvertKitData($I, $fakeData['Email Address']);
+            print_r($remoteData);
+        }
+
         if (!empty($remoteData)) {
             $I->checkValuesInArray($remoteData, [
                 $fakeData['Email Address'],
@@ -68,7 +72,7 @@ class IntegrationConvertKitCest
             ]);
             echo " Hurray.....! Data found";
         }else{
-            $I->fail("Could not fetch data");
+            $I->fail("Could not fetch data from ConvertKit" . PHP_EOL. $remoteData);
         }
 
 

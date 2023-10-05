@@ -53,7 +53,14 @@ class IntegrationSendFoxCest
             $I->tryToFilledField(FluentFormsSelectors::fillAbleArea($selector), $value);
         }
         $I->clicked(FieldSelectors::submitButton);
-        $remoteData = $this->fetchSendFoxData($I, $fakeData['Email Address'],);
+
+        $remoteData = "";
+        if ($I->checkSubmissionLog(['success', $pageName])) {
+            $remoteData = $this->fetchSendFoxData($I, $fakeData['Email Address'],);
+            print_r($remoteData);
+        }
+
+
 //        print_r($remoteData);
 
         if (!empty($remoteData['data'])) {
@@ -64,7 +71,7 @@ class IntegrationSendFoxCest
             ]);
             echo " Hurray.....! Data found in SendFox";
         }else{
-            $I->fail("Could not fetch data from SendFox");
+            $I->fail("Could not fetch data from SendFox". PHP_EOL. $remoteData);
         }
 
 //        if (isset($remoteData['data'])) {

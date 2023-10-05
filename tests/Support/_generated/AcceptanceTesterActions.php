@@ -469,8 +469,8 @@ trait AcceptanceTesterActions
      *
      * @see \Tests\Support\Helper\Acceptance\AcceptanceHelper::seeTextCaseInsensitive()
      */
-    public function seeTextCaseInsensitive($actionText, $selector): void {
-        $this->getScenario()->runStep(new \Codeception\Step\Assertion('seeTextCaseInsensitive', func_get_args()));
+    public function seeTextCaseInsensitive($actionText, $selector): bool {
+        return $this->getScenario()->runStep(new \Codeception\Step\Assertion('seeTextCaseInsensitive', func_get_args()));
     }
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
@@ -479,8 +479,8 @@ trait AcceptanceTesterActions
      *
      * @see \Tests\Support\Helper\Acceptance\AcceptanceHelper::seeTextCaseInsensitive()
      */
-    public function canSeeTextCaseInsensitive($actionText, $selector): void {
-        $this->getScenario()->runStep(new \Codeception\Step\ConditionalAssertion('seeTextCaseInsensitive', func_get_args()));
+    public function canSeeTextCaseInsensitive($actionText, $selector): bool {
+        return $this->getScenario()->runStep(new \Codeception\Step\ConditionalAssertion('seeTextCaseInsensitive', func_get_args()));
     }
     /**
      * [!] Method is generated. Documentation taken from corresponding module.

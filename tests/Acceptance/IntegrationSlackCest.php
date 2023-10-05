@@ -57,8 +57,11 @@ class IntegrationSlackCest
         }
         $I->clicked(FieldSelectors::submitButton);
 
-        $remoteData = $this->fetchSlackData($I, $fakeData['Message']);
-//        print_r($remoteData);
+        $remoteData = "";
+        if ($I->checkSubmissionLog(['success', $pageName])) {
+            $remoteData = $this->fetchSlackData($I, $fakeData['Message']);
+            print_r($remoteData);
+        }
 
         if (!empty($remoteData)) {
             $I->checkValuesInArray($remoteData, [

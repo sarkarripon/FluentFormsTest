@@ -25,6 +25,9 @@ class IntegrationActivecampaignCest
     #[Group('Integration','test')]
     public function test_activecampaign_push_data(AcceptanceTester $I): void
     {
+//        $remoteData = $this->fetchActivecampaignData($I, "dare.emely@icloud.c");
+//        dd($remoteData);
+
         $pageName = __FUNCTION__ . '_' . rand(1, 100);
 
         $listOrService = ['ActiveCampaign List' => 'Master Contact List'];
@@ -33,23 +36,12 @@ class IntegrationActivecampaignCest
             'simpleText' => ['First Name', 'Last Name', 'Organization Name'],
             'phone' => 'Phone Number',
         ];
-
-        // Prepare the form
         $this->prepareForm($I, $pageName, [
             'generalFields' => ['email', 'simpleText', 'phone'],
         ], true, $customName);
-
-        // Configure ActiveCampaign
         $this->configureActivecampaign($I, "ActiveCampaign");
-
-        // Build field mapping
         $fieldMapping = $this->buildArrayWithKey($customName);
-//        print_r($fieldMapping);
-
-        // Map ActiveCampaign field
         $this->mapActivecampaignField($I, $fieldMapping, $listOrService);
-
-        // Prepare the page
         $this->preparePage($I, $pageName);
 
         $fillableDataArr = [
@@ -59,22 +51,19 @@ class IntegrationActivecampaignCest
             'Phone Number' => 'phoneNumber',
             'Organization Name' => 'company',
         ];
-
-        // Generate fake data
         $fakeData = $this->generatedData($fillableDataArr);
 
-        // Fill the form with fake data
         foreach ($fakeData as $selector => $value) {
             $I->tryToFilledField(FluentFormsSelectors::fillAbleArea($selector), $value);
         }
 
-        // Submit the form
         $I->clicked(FieldSelectors::submitButton);
 
-        // Fetch ActiveCampaign data
-        $remoteData = $this->fetchActivecampaignData($I, $fakeData['Email Address']);
-        print_r($remoteData);
-
+        $remoteData = "";
+        if ($I->checkSubmissionLog(['success', $pageName])) {
+            $remoteData = $this->fetchActivecampaignData($I, $fakeData['Email Address']);
+            print_r($remoteData);
+        }
 
         // Retry to submit the form again if data not found
 //        if (empty($remoteData['contacts'])) {
@@ -103,7 +92,7 @@ class IntegrationActivecampaignCest
             ]);
             echo " Hurray.....! Data found in ActiveCampaign";
         }else{
-            $I->fail("Could not fetch data from ActiveCampaign");
+            $I->fail("Could not fetch data from ActiveCampaign" . PHP_EOL. $remoteData);
         }
     }
 }

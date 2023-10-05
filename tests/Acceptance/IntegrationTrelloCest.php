@@ -35,7 +35,12 @@ class IntegrationTrelloCest
         $I->fillByJS("(//textarea[contains(@id,'description')])[2]", $cardContent );
         $I->clicked(FieldSelectors::submitButton);
 
-        $remoteData = $this->fetchTrelloData($I,$cardTitle);
+        $remoteData = "";
+        if ($I->checkSubmissionLog(['success', $pageName])) {
+            $remoteData = $this->fetchTrelloData($I,$cardTitle);
+            print_r($remoteData);
+        }
+
         if (empty($remoteData['title'])){
             $I->amOnPage('/' . $pageName);
             $I->fillByJS("(//textarea[contains(@id,'description')])[1]", $cardTitle );

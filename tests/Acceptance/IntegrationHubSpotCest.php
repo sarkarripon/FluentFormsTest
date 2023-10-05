@@ -58,8 +58,12 @@ class IntegrationHubSpotCest
         }
         $I->clicked(FieldSelectors::submitButton);
 
-        $remoteData = $this->fetchHubSpotData($I, $fakeData['Email Address']);
-//        print_r($remoteData);
+        $remoteData = "";
+        if ($I->checkSubmissionLog(['success', $pageName])) {
+            $remoteData = $this->fetchHubSpotData($I, $fakeData['Email Address']);
+            print_r($remoteData);
+        }
+
         if (!empty($remoteData)) {
             $I->checkValuesInArray($remoteData, [
                 $fakeData['Email Address'],
@@ -68,7 +72,7 @@ class IntegrationHubSpotCest
             ]);
             echo " Hurray.....! Data found in HubSpot";
         }else{
-            $I->fail("Could not fetch data from HubSpot");
+            $I->fail("Could not fetch data from HubSpot". PHP_EOL. $remoteData);
         }
 
 //        if (isset($remoteData)) {

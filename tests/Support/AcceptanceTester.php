@@ -457,6 +457,24 @@ class AcceptanceTester extends \Codeception\Actor
             }
         }
     }
+    public function checkSubmissionLog($text, $selector="//tbody/tr[1]")
+    {
+        $this->wait(20, 'Before checking submission log');
+        $this->amOnPage(FluentFormsAllEntries::entriesPage);
+
+        $found = false;
+        for ($i = 0; $i < 6; $i++) {
+            if ($this->seeTextCaseInsensitive($text, $selector)) {
+                $found = true;
+                break;
+            } else {
+                $this->wait(10);
+                $this->reloadPage();
+            }
+        }
+        return $found;
+    }
+
 
 
 //    public function createCustomFormField($data, array $customNameArr = null): void
@@ -505,27 +523,53 @@ class AcceptanceTester extends \Codeception\Actor
      * @return string
      * @author Sarkar Ripon
      */
-    public function checkAPICallStatus($text, $selector): string
-    {
-        $this->wait(5);
-        $this->amOnPage(FluentFormsAllEntries::entriesPage);
-        $this->clicked(FluentFormsAllEntries::viewEntry);
-        $this->clicked(FluentFormsAllEntries::apiCalls);
-        $this->waitForElement($selector, 10);
-
-        for ($i = 0; $i < 6; $i++) {
-            try {
-                $this->clicked(FluentFormsAllEntries::apiCalls);
-                $this->waitForElement($selector, 10);
-                $this->seeTextCaseInsensitive($text, $selector);
-                break;
-            } catch (Exception $e) {
-                $this->wait(15);
-                $this->reloadPage();
-            }
-        }
-        return $this->grabTextFrom($selector);
-    }
+//    public function checkAPICallStatus($text, $selector, $isApi=true, $isNative=false): string
+//    {
+//        //        $I->amOnPage("wp-admin/admin.php?page=fluent_forms_all_entries");
+////        $I->clicked("(//span[contains(text(),'View')])[1]");
+////        if ($isApi)
+////        {
+////            $I->clicked("(//span[normalize-space()='API Calls'])[1]");
+////            $I->waitForElementVisible("(//span[contains(@class,'log_status')])",10);
+////            return $I->grabTextFrom("(//div[@class='wpf_entry_details'])[3]");
+////        }
+////        if ($isNative)
+////        {
+////            $I->waitForElementVisible("(//div[@class='wpf_entry_details'])[3]");
+////            return $I->grabTextFrom("(//div[@class='wpf_entry_details'])[3]");
+////        }
+//        $this->wait(30);
+//        $this->amOnPage(FluentFormsAllEntries::entriesPage);
+//        $this->clicked(FluentFormsAllEntries::viewEntry);
+////        $this->clicked(FluentFormsAllEntries::apiCalls);
+////        $this->waitForElementVisible($selector, 10);
+//
+//        for ($i = 0; $i < 6; $i++) {
+//            if ($isApi){
+//                try {
+//                    $this->clicked(FluentFormsAllEntries::apiCalls);
+//                    $this->waitForElementVisible($selector, 10);
+//                    $this->seeTextCaseInsensitive($text, $selector);
+//                    break;
+//                } catch (Exception $e) {
+//                    $this->wait(15);
+//                    $this->reloadPage();
+//                }
+//            }
+//            if ($isNative){
+//                try {
+//                    $this->waitForElementVisible($selector, 10);
+//                    $this->seeTextCaseInsensitive($text, $selector);
+//                    break;
+//                } catch (Exception $e) {
+//                    $this->wait(15);
+//                    $this->reloadPage();
+//                }
+//            }
+//
+//        }
+//        return $this->grabTextFrom($selector);
+//    }
 
 //    public function loginGoogle(): void
 //    {

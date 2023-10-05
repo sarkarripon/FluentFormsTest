@@ -54,8 +54,12 @@ class IntegrationMooSendCest
         }
         $I->clicked(FieldSelectors::submitButton);
 
-        $remoteData = $this->fetchMooSendData($I, $fakeData['Email Address'],);
-//        print_r($remoteData);
+        $remoteData = "";
+        if ($I->checkSubmissionLog(['success', $pageName])) {
+            $remoteData = $this->fetchMooSendData($I, $fakeData['Email Address'],);
+            print_r($remoteData);
+        }
+
         if (isset($remoteData['Context'])) {
             $I->checkValuesInArray($remoteData, [
                 $fakeData['Email Address'],
@@ -63,7 +67,7 @@ class IntegrationMooSendCest
             ]);
             echo " Hurray.....! Data found in MooSend";
         }else{
-            $I->fail("Could not fetch data from MooSend");
+            $I->fail("Could not fetch data from MooSend" . PHP_EOL. $remoteData);
         }
 
 //        if (isset($remoteData['Context'])) {

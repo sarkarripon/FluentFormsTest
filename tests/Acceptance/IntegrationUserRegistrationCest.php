@@ -5,6 +5,7 @@ namespace Tests\Acceptance;
 use Codeception\Attribute\After;
 use Codeception\Attribute\Before;
 use Codeception\Attribute\Depends;
+use Codeception\Attribute\Group;
 use Tests\Support\AcceptanceTester;
 use Tests\Support\Factories\DataProvider\DataGenerator;
 use Tests\Support\Factories\DataProvider\ShortCodes;
@@ -23,7 +24,7 @@ class IntegrationUserRegistrationCest
        $I->loginWordpress();
     }
 
-
+    #[Group('Integration','native')]
     public function test_user_registration(AcceptanceTester $I): array
     {
         global $newUser;
@@ -76,6 +77,7 @@ class IntegrationUserRegistrationCest
         return $newUser;
     }
 
+    #[Group('Integration','native')]
     public function test_user_update(AcceptanceTester $I ): void
     {
         global $newUser;

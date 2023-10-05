@@ -16,7 +16,7 @@ class IntegrationLandingPageCest
         $I->loadDotEnvFile(); $I->loginWordpress();
     }
     //tests
-    #[Group('Integration')]
+    #[Group('Integration', 'native')]
     public function test_landing_page(AcceptanceTester $I): void
     {
         $pageName = __FUNCTION__.'_'.rand(1,100);

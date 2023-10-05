@@ -55,8 +55,11 @@ class IntegrationTelegramCest
         }
         $I->clicked(FieldSelectors::submitButton);
 
-        $remoteData = $this->fetchTelegramData($I, $fakeData['Message']);
-        print_r($remoteData);
+        $remoteData = "";
+        if ($I->checkSubmissionLog(['success', $pageName])) {
+            $remoteData = $this->fetchTelegramData($I, $fakeData['Message']);
+            print_r($remoteData);
+        }
 
         if (!empty($remoteData)) {
             $I->checkValuesInArray($remoteData, [
@@ -66,7 +69,7 @@ class IntegrationTelegramCest
             ]);
             echo " Hurray.....! Data found in slack";
         }else{
-            $I->fail("Could not fetch data from slack");
+            $I->fail("Could not fetch data from slack". PHP_EOL. $remoteData);
         }
 
 

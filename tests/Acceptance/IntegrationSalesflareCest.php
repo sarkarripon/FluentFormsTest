@@ -60,8 +60,11 @@ class IntegrationSalesflareCest
         }
         $I->clicked(FieldSelectors::submitButton);
 
-        $remoteData = $this->fetchSalesflareData($I, $fakeData['Email Address']);
-//        print_r($remoteData);
+        $remoteData = "";
+        if ($I->checkSubmissionLog(['success', $pageName])) {
+            $remoteData = $this->fetchSalesflareData($I, $fakeData['Email Address']);
+            print_r($remoteData);
+        }
 
         if (isset($remoteData['subscribers'])) {
             $I->checkValuesInArray($remoteData, [
@@ -71,7 +74,7 @@ class IntegrationSalesflareCest
             ]);
             echo " Hurray.....! Data found in Salesflare";
         }else{
-            $I->fail("Could not fetch data from Salesflare");
+            $I->fail("Could not fetch data from Salesflare" . PHP_EOL. $remoteData);
         }
 
 

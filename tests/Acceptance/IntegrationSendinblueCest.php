@@ -56,8 +56,11 @@ class IntegrationSendinblueCest
             $I->tryToFilledField(FluentFormsSelectors::fillAbleArea($selector), $value);
         }
         $I->clicked(FieldSelectors::submitButton);
-        $remoteData = $this->fetchSendinblueData($I, $fakeData['Email Address'],);
-//        print_r($remoteData);
+        $remoteData = "";
+        if ($I->checkSubmissionLog(['success', $pageName])) {
+            $remoteData = $this->fetchSendinblueData($I, $fakeData['Email Address'],);
+            print_r($remoteData);
+        }
 
         if (!isset($remoteData['message'])) {
             $I->checkValuesInArray($remoteData, [
@@ -67,7 +70,7 @@ class IntegrationSendinblueCest
             ]);
             echo " Hurray.....! Data found in Sendinblue";
         }else{
-            $I->fail("Could not fetch data from Sendinblue");
+            $I->fail("Could not fetch data from Sendinblue". PHP_EOL. $remoteData);
         }
 
 //        if (!isset($remoteData['message'])) {
