@@ -1,4 +1,4 @@
-<?php  //[STAMP] 79bd3faf693540e3697f048ea1a6777a
+<?php  //[STAMP] 27a9f8a931d8a94f929644ef2be245a4
 // phpcs:ignoreFile
 namespace Tests\Support\_generated;
 
@@ -469,7 +469,7 @@ trait AcceptanceTesterActions
      *
      * @see \Tests\Support\Helper\Acceptance\AcceptanceHelper::seeTextCaseInsensitive()
      */
-    public function seeTextCaseInsensitive($actionText, $selector): bool {
+    public function seeTextCaseInsensitive($actionTexts, $selector): bool {
         return $this->getScenario()->runStep(new \Codeception\Step\Assertion('seeTextCaseInsensitive', func_get_args()));
     }
     /**
@@ -479,7 +479,7 @@ trait AcceptanceTesterActions
      *
      * @see \Tests\Support\Helper\Acceptance\AcceptanceHelper::seeTextCaseInsensitive()
      */
-    public function canSeeTextCaseInsensitive($actionText, $selector): bool {
+    public function canSeeTextCaseInsensitive($actionTexts, $selector): bool {
         return $this->getScenario()->runStep(new \Codeception\Step\ConditionalAssertion('seeTextCaseInsensitive', func_get_args()));
     }
     /**
@@ -489,7 +489,7 @@ trait AcceptanceTesterActions
      *
      * @see \Tests\Support\Helper\Acceptance\AcceptanceHelper::seeTextCaseInsensitive()
      */
-    public function tryToSeeTextCaseInsensitive($actionText, $selector): bool {
+    public function tryToSeeTextCaseInsensitive($actionTexts, $selector): bool {
         return $this->getScenario()->runStep(new \Codeception\Step\TryTo('seeTextCaseInsensitive', func_get_args()));
     }
     /**
@@ -501,7 +501,7 @@ trait AcceptanceTesterActions
      *
      * @see \Tests\Support\Helper\Acceptance\AcceptanceHelper::seeTextCaseInsensitive()
      */
-    public function retrySeeTextCaseInsensitive($actionText, $selector) {
+    public function retrySeeTextCaseInsensitive($actionTexts, $selector) {
         $retryNum = isset($this->retryNum) ? $this->retryNum : 1;
         $retryInterval = isset($this->retryInterval) ? $this->retryInterval : 200;
         return $this->getScenario()->runStep(new \Codeception\Step\Retry('seeTextCaseInsensitive', func_get_args(), $retryNum, $retryInterval));

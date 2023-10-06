@@ -59,6 +59,7 @@ class IntegrationSalesforceCest
             $I->tryToFilledField(FluentFormsSelectors::fillAbleArea($selector), $value);
         }
         $I->clicked(FieldSelectors::submitButton);
+
         $remoteData = "";
         if ($I->checkSubmissionLog(['success', $pageName])) {
             $remoteData = $this->fetchSalesforceData($I, $fakeData['Email']);

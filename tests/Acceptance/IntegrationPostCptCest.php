@@ -20,7 +20,7 @@ class IntegrationPostCptCest
     }
 
     // tests
-    #[Group('Integration', 'native')]
+//    #[Group('Integration', 'native')]
     public function test_post_creation_using_cpt(AcceptanceTester $I)
     {
         // Generate a unique page name

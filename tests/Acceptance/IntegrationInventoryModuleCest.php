@@ -38,7 +38,9 @@ class IntegrationInventoryModuleCest
         ];
         $this->prepareForm($I, $pageName, ['generalFields' => ['nameFields','email','checkBox']],
             true, $customName);
+
         $index = $this->convertToIndexArray($customName);
+
         $options = ['Small Size','Medium Size', 'Large Size'];
         $this->customizeCheckBox($I, $index[2],
             ['adminFieldLabel' => 'T-shirt Inventory', 'options' => $options,],
@@ -59,7 +61,7 @@ class IntegrationInventoryModuleCest
         }
 
         foreach ($options as $value) {
-            $I->clickedOnText($value);
+            $I->clickOnExactText($value);
         }
         $I->clicked(FieldSelectors::submitButton);
         $I->dontSee("This Item is Stock Out");
@@ -71,7 +73,7 @@ class IntegrationInventoryModuleCest
         }
 
         foreach ($options as $value) {
-            $I->clickedOnText($value);
+            $I->clickOnExactText($value);
         }
         $I->clicked(FieldSelectors::submitButton);
         $I->seeText(['This Item is Stock Out']);
