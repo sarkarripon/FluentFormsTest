@@ -46,7 +46,7 @@ class IntegrationZohoCest
 //        $I->amOnPage("test_airtable_push_data_57/");
         $fillAbleDataArr = [
             'Email'=>'email',
-            'Last Name'=>'firstName',
+            'Last Name'=>'lastName',
         ];
         $fakeData = $this->generatedData($fillAbleDataArr);
 //        print_r($fakeData);

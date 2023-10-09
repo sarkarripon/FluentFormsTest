@@ -25,7 +25,7 @@ class IntegrationHubSpotCest
     #[Group('Integration')]
     public function test_hubspot_push_data(AcceptanceTester $I)
     {
-//        $jvbh = $this->fetchHubSpotData($I,'bh@hubspot.com');
+//        $jvbh = $this->fetchHubSpotData($I,'alysha.wehner@yahoo.co');
 //        dd($jvbh);
 
         $pageName = __FUNCTION__.'_'.rand(1,100);
@@ -64,7 +64,7 @@ class IntegrationHubSpotCest
             print_r($remoteData);
         }
 
-        if (!empty($remoteData)) {
+        if (!empty($remoteData["results"])) {
             $I->checkValuesInArray($remoteData, [
                 $fakeData['Email Address'],
                 $fakeData['First Name'],

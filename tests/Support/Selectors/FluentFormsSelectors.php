@@ -126,7 +126,7 @@ class FluentFormsSelectors
     const mapEmail = "(//span[contains(text(),'Email')])[1]";
 //    const saveButton("Save Feed") = "//span[normalize-space()='Save Feed' and //button[contains(@class,'el-button--primary')]]";
     const integrationFeed = "(//div[contains(@class, 'ff_card_head_group')] | //button[@title='Show Video'])[1]";
-    const feedName = "//input[@placeholder='Your Feed Name']";
+    const feedName = "//input[@placeholder='Your Feed Name' or @placeholder='Your Feed Title']";
     const SegmentDropDown = "(//i[contains(@class,'el-select__caret el-input__icon el-icon-arrow-up')])[1]";
     const Segment = "(//div[@x-placement='bottom-start']//ul[contains(@class,'el-scrollbar__view el-select-dropdown__list')])[1]";
 

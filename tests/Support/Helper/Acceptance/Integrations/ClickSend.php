@@ -27,7 +27,7 @@ trait ClickSend
 
     public function mapClickSendFields(AcceptanceTester $I, array $fieldMapping, array $listOrService = null)
     {
-        $this->mapEmailInCommon($I,"ConvertKit Integration",$listOrService, false);
+        $this->mapEmailInCommon($I,"ClickSend Integration",$listOrService, false);
         $this->assignShortCode($I,$fieldMapping,'Campaign List');
 
         $I->clickWithLeftButton(FluentFormsSelectors::saveButton("Save Feed"));

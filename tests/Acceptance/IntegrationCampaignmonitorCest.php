@@ -3,6 +3,7 @@
 
 namespace Tests\Acceptance;
 
+use Codeception\Attribute\Group;
 use Tests\Support\Helper\Acceptance\Integrations\Campaignmonitor;
 use Tests\Support\AcceptanceTester;
 use Tests\Support\Factories\DataProvider\DataGenerator;
@@ -22,6 +23,7 @@ class IntegrationCampaignmonitorCest
     }
 
     // tests
+    #[Group('Integration')]
     public function test_campaignmonitor_push_data(AcceptanceTester $I)
     {
 //        $jhcb = $this->fetchCampaignmonitorData($I,"balowykosi@mailinator.com");

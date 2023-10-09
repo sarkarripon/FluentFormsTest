@@ -41,6 +41,7 @@ class IntegrationClickSendCest
         $fieldMapping = array_merge($this->buildArrayWithKey($customName),['Email'=>'Email']);
 
         $this->mapClickSendFields($I,$fieldMapping,$listOrService);
+
         $this->preparePage($I,$pageName);
 
 //        $I->amOnPage("test_airtable_push_data_57/");

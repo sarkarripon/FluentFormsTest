@@ -35,9 +35,9 @@ trait HubSpot
 
     public function fetchHubSpotData(AcceptanceTester $I, string $searchTerm)
     {
-        for ($i = 0; $i < 8; $i++) {
+        for ($i = 0; $i < 3; $i++) {
             $remoteData = $this->fetchData($searchTerm);
-            if (empty($remoteData)) {
+            if (empty($remoteData["results"])) {
                 $I->wait(30, 'Hubspot is taking too long to respond. Trying again...');
             } else {
                 break;
@@ -49,14 +49,44 @@ trait HubSpot
     public function fetchData(string $searchTerm)
     {
         $accessToken = getenv('HUBSPOT_ACCESS_TOKEN');
-        $url = "https://api.hubapi.com/crm/v3/objects/contacts";
+        $url = "https://api.hubapi.com/crm/v3/objects/contacts/search";
+
+        $properties = [
+            "email",
+            "firstname",
+            "lastname",
+            "company",
+            "phone",
+            "address",
+            "jobtitle",
+            "lifecyclestage",
+        ];
+
+        $requestData = [
+            'filterGroups' => [
+                [
+                    'filters' => [
+                        [
+                            'propertyName' => 'email',
+                            'operator' => 'EQ',
+                            'value' => $searchTerm,
+                        ],
+                    ],
+                ],
+            ],
+            'properties' => $properties,
+        ];
+
+        $requestDataJson = json_encode($requestData);
 
         $curl = curl_init($url);
-
         curl_setopt($curl, CURLOPT_HTTPHEADER, [
-            'authorization: Bearer ' . $accessToken,
+            'Authorization: Bearer ' . $accessToken,
+            'Content-Type: application/json',
         ]);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($curl, CURLOPT_POST, true);
+        curl_setopt($curl, CURLOPT_POSTFIELDS, $requestDataJson);
 
         $response = curl_exec($curl);
 
@@ -67,17 +97,17 @@ trait HubSpot
 
         curl_close($curl);
 
-        $data = json_decode($response, true);
+        return json_decode($response, true);
 
-        if (isset($data['status']) && $data['status'] === 'error') {
-            echo 'API Error: ' . $data['message'];
-            return null;
-        }
-        foreach ($data['results'] as $subscriber) {
-            if (isset($subscriber['properties']['email']) && $subscriber['properties']['email'] === $searchTerm) {
-                return $subscriber;
-            }
-        }
-        return null;
+//        if (isset($data['status']) && $data['status'] === 'error') {
+//            echo 'API Error: ' . $data['message'];
+//            return null;
+//        }
+//        foreach ($data['results'] as $subscriber) {
+//            if (isset($subscriber['properties']['email']) && $subscriber['properties']['email'] === $searchTerm) {
+//                return $subscriber;
+//            }
+//        }
+//        return null;
     }
 }
