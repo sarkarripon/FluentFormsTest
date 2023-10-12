@@ -99,7 +99,6 @@
       <path value="$PROJECT_DIR$/vendor/vlucas/phpdotenv" />
       <path value="$PROJECT_DIR$/vendor/graham-campbell/result-type" />
       <path value="$PROJECT_DIR$/vendor/phpoption/phpoption" />
-      <path value="$PROJECT_DIR$/vendor/zohocrm/php-sdk-2.0" />
       <path value="$PROJECT_DIR$/vendor/firebase/php-jwt" />
       <path value="$PROJECT_DIR$/vendor/monolog/monolog" />
       <path value="$PROJECT_DIR$/vendor/google/auth" />
@@ -111,7 +110,6 @@
       <path value="$PROJECT_DIR$/vendor/mashape/unirest-php" />
       <path value="$PROJECT_DIR$/vendor/codeception/module-cli" />
       <path value="$PROJECT_DIR$/vendor/hackzilla/password-generator" />
-      <path value="$PROJECT_DIR$/vendor/twilio/sdk" />
       <path value="$PROJECT_DIR$/vendor/nategood/httpful" />
       <path value="$PROJECT_DIR$/vendor/spatie/emoji" />
       <path value="$PROJECT_DIR$/vendor/roave/better-reflection" />
