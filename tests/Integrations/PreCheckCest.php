@@ -1,12 +1,7 @@
 <?php
 namespace Tests\Integrations;
 use Tests\Support\AcceptanceTester;
-use Tests\Support\Helper\Acceptance\Integrations\Activecampaign;
-use Tests\Support\Helper\Acceptance\Integrations\IntegrationHelper;
-use Tests\Support\Helper\Acceptance\Integrations\Googlesheet;
-use Tests\Support\Helper\Acceptance\Integrations\Mailchimp;
-use Tests\Support\Helper\Acceptance\Integrations\Platformly;
-use Tests\Support\Helper\Acceptance\Integrations\Trello;
+use Tests\Support\Helper\Integrations\IntegrationHelper;
 
 
 class PreCheckCest

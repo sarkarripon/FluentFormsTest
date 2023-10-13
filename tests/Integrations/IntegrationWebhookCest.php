@@ -5,8 +5,8 @@ namespace Tests\Integrations;
 
 use Codeception\Attribute\Group;
 use Tests\Support\AcceptanceTester;
-use Tests\Support\Helper\Acceptance\Integrations\IntegrationHelper;
-use Tests\Support\Helper\Acceptance\Integrations\Webhook;
+use Tests\Support\Helper\Integrations\IntegrationHelper;
+use Tests\Support\Helper\Integrations\Webhook;
 use Tests\Support\Selectors\FieldSelectors;
 
 class IntegrationWebhookCest

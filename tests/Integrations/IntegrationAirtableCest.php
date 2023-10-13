@@ -6,8 +6,8 @@ namespace Tests\Integrations;
 use Codeception\Attribute\Group;
 use Tests\Support\AcceptanceTester;
 use Tests\Support\Factories\DataProvider\DataGenerator;
-use Tests\Support\Helper\Acceptance\Integrations\Airtable;
-use Tests\Support\Helper\Acceptance\Integrations\FieldCustomizer;
+use Tests\Support\Helper\FieldCustomizer;
+use Tests\Support\Helper\Integrations\Airtable;
 use Tests\Support\Selectors\FieldSelectors;
 use Tests\Support\Selectors\FluentFormsSelectors;
 

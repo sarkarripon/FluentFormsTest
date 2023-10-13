@@ -1,4 +1,4 @@
-<?php  //[STAMP] 27a9f8a931d8a94f929644ef2be245a4
+<?php  //[STAMP] 6ea0c0e79740bcff957d58c6ecdb3aaa
 // phpcs:ignoreFile
 namespace Tests\Support\_generated;
 
@@ -17,7 +17,7 @@ trait AcceptanceTesterActions
      * [!] Method is generated. Documentation taken from corresponding module.
      *
      *
-     * @see \Tests\Support\Helper\Acceptance\AcceptanceHelper::loadDotEnvFile()
+     * @see \Tests\Support\Helper\AcceptanceHelper::loadDotEnvFile()
      */
     public function loadDotEnvFile(): void {
         $this->getScenario()->runStep(new \Codeception\Step\Action('loadDotEnvFile', func_get_args()));
@@ -27,7 +27,7 @@ trait AcceptanceTesterActions
      *
      * [!] Test won't be stopped on fail. Error won't be logged 
      *
-     * @see \Tests\Support\Helper\Acceptance\AcceptanceHelper::loadDotEnvFile()
+     * @see \Tests\Support\Helper\AcceptanceHelper::loadDotEnvFile()
      */
     public function tryToLoadDotEnvFile(): bool {
         return $this->getScenario()->runStep(new \Codeception\Step\TryTo('loadDotEnvFile', func_get_args()));
@@ -39,7 +39,7 @@ trait AcceptanceTesterActions
      * 
      * Retry number and interval set by $I->retry();
      *
-     * @see \Tests\Support\Helper\Acceptance\AcceptanceHelper::loadDotEnvFile()
+     * @see \Tests\Support\Helper\AcceptanceHelper::loadDotEnvFile()
      */
     public function retryLoadDotEnvFile() {
         $retryNum = isset($this->retryNum) ? $this->retryNum : 1;
@@ -55,7 +55,7 @@ trait AcceptanceTesterActions
      * Login to WordPress
      * @throws Exception
      * @author Sarkar Ripon
-     * @see \Tests\Support\Helper\Acceptance\AcceptanceHelper::loginWordpress()
+     * @see \Tests\Support\Helper\AcceptanceHelper::loginWordpress()
      */
     public function loginWordpress(?string $username = NULL, ?string $password = NULL): void {
         $this->getScenario()->runStep(new \Codeception\Step\Action('loginWordpress', func_get_args()));
@@ -68,7 +68,7 @@ trait AcceptanceTesterActions
      * Login to WordPress
      * @throws Exception
      * @author Sarkar Ripon
-     * @see \Tests\Support\Helper\Acceptance\AcceptanceHelper::loginWordpress()
+     * @see \Tests\Support\Helper\AcceptanceHelper::loginWordpress()
      */
     public function tryToLoginWordpress(?string $username = NULL, ?string $password = NULL): bool {
         return $this->getScenario()->runStep(new \Codeception\Step\TryTo('loginWordpress', func_get_args()));
@@ -80,7 +80,7 @@ trait AcceptanceTesterActions
      * 
      * Retry number and interval set by $I->retry();
      *
-     * @see \Tests\Support\Helper\Acceptance\AcceptanceHelper::loginWordpress()
+     * @see \Tests\Support\Helper\AcceptanceHelper::loginWordpress()
      */
     public function retryLoginWordpress(?string $username = NULL, ?string $password = NULL) {
         $retryNum = isset($this->retryNum) ? $this->retryNum : 1;
@@ -93,7 +93,7 @@ trait AcceptanceTesterActions
      * [!] Method is generated. Documentation taken from corresponding module.
      *
      * @throws Exception
-     * @see \Tests\Support\Helper\Acceptance\AcceptanceHelper::restartSession()
+     * @see \Tests\Support\Helper\AcceptanceHelper::restartSession()
      */
     public function restartSession(): void {
         $this->getScenario()->runStep(new \Codeception\Step\Action('restartSession', func_get_args()));
@@ -103,7 +103,7 @@ trait AcceptanceTesterActions
      *
      * [!] Test won't be stopped on fail. Error won't be logged 
      * @throws Exception
-     * @see \Tests\Support\Helper\Acceptance\AcceptanceHelper::restartSession()
+     * @see \Tests\Support\Helper\AcceptanceHelper::restartSession()
      */
     public function tryToRestartSession(): bool {
         return $this->getScenario()->runStep(new \Codeception\Step\TryTo('restartSession', func_get_args()));
@@ -115,7 +115,7 @@ trait AcceptanceTesterActions
      * 
      * Retry number and interval set by $I->retry();
      *
-     * @see \Tests\Support\Helper\Acceptance\AcceptanceHelper::restartSession()
+     * @see \Tests\Support\Helper\AcceptanceHelper::restartSession()
      */
     public function retryRestartSession() {
         $retryNum = isset($this->retryNum) ? $this->retryNum : 1;
@@ -128,7 +128,7 @@ trait AcceptanceTesterActions
      * [!] Method is generated. Documentation taken from corresponding module.
      *
      *
-     * @see \Tests\Support\Helper\Acceptance\AcceptanceHelper::cleanCookies()
+     * @see \Tests\Support\Helper\AcceptanceHelper::cleanCookies()
      */
     public function cleanCookies(): void {
         $this->getScenario()->runStep(new \Codeception\Step\Action('cleanCookies', func_get_args()));
@@ -138,7 +138,7 @@ trait AcceptanceTesterActions
      *
      * [!] Test won't be stopped on fail. Error won't be logged 
      *
-     * @see \Tests\Support\Helper\Acceptance\AcceptanceHelper::cleanCookies()
+     * @see \Tests\Support\Helper\AcceptanceHelper::cleanCookies()
      */
     public function tryToCleanCookies(): bool {
         return $this->getScenario()->runStep(new \Codeception\Step\TryTo('cleanCookies', func_get_args()));
@@ -150,7 +150,7 @@ trait AcceptanceTesterActions
      * 
      * Retry number and interval set by $I->retry();
      *
-     * @see \Tests\Support\Helper\Acceptance\AcceptanceHelper::cleanCookies()
+     * @see \Tests\Support\Helper\AcceptanceHelper::cleanCookies()
      */
     public function retryCleanCookies() {
         $retryNum = isset($this->retryNum) ? $this->retryNum : 1;
@@ -166,7 +166,7 @@ trait AcceptanceTesterActions
      * @throws Exception
      * logout from WordPress
      * @author Sarkar Ripon
-     * @see \Tests\Support\Helper\Acceptance\AcceptanceHelper::wpLogout()
+     * @see \Tests\Support\Helper\AcceptanceHelper::wpLogout()
      */
     public function wpLogout(): void {
         $this->getScenario()->runStep(new \Codeception\Step\Action('wpLogout', func_get_args()));
@@ -179,7 +179,7 @@ trait AcceptanceTesterActions
      * @throws Exception
      * logout from WordPress
      * @author Sarkar Ripon
-     * @see \Tests\Support\Helper\Acceptance\AcceptanceHelper::wpLogout()
+     * @see \Tests\Support\Helper\AcceptanceHelper::wpLogout()
      */
     public function tryToWpLogout(): bool {
         return $this->getScenario()->runStep(new \Codeception\Step\TryTo('wpLogout', func_get_args()));
@@ -191,7 +191,7 @@ trait AcceptanceTesterActions
      * 
      * Retry number and interval set by $I->retry();
      *
-     * @see \Tests\Support\Helper\Acceptance\AcceptanceHelper::wpLogout()
+     * @see \Tests\Support\Helper\AcceptanceHelper::wpLogout()
      */
     public function retryWpLogout() {
         $retryNum = isset($this->retryNum) ? $this->retryNum : 1;
@@ -204,7 +204,7 @@ trait AcceptanceTesterActions
      * [!] Method is generated. Documentation taken from corresponding module.
      *
      * @throws Exception
-     * @see \Tests\Support\Helper\Acceptance\AcceptanceHelper::filledField()
+     * @see \Tests\Support\Helper\AcceptanceHelper::filledField()
      */
     public function filledField($selector, $value): void {
         $this->getScenario()->runStep(new \Codeception\Step\Action('filledField', func_get_args()));
@@ -214,7 +214,7 @@ trait AcceptanceTesterActions
      *
      * [!] Test won't be stopped on fail. Error won't be logged 
      * @throws Exception
-     * @see \Tests\Support\Helper\Acceptance\AcceptanceHelper::filledField()
+     * @see \Tests\Support\Helper\AcceptanceHelper::filledField()
      */
     public function tryToFilledField($selector, $value): bool {
         return $this->getScenario()->runStep(new \Codeception\Step\TryTo('filledField', func_get_args()));
@@ -226,7 +226,7 @@ trait AcceptanceTesterActions
      * 
      * Retry number and interval set by $I->retry();
      *
-     * @see \Tests\Support\Helper\Acceptance\AcceptanceHelper::filledField()
+     * @see \Tests\Support\Helper\AcceptanceHelper::filledField()
      */
     public function retryFilledField($selector, $value) {
         $retryNum = isset($this->retryNum) ? $this->retryNum : 1;
@@ -239,7 +239,7 @@ trait AcceptanceTesterActions
      * [!] Method is generated. Documentation taken from corresponding module.
      *
      *
-     * @see \Tests\Support\Helper\Acceptance\AcceptanceHelper::clickOnText()
+     * @see \Tests\Support\Helper\AcceptanceHelper::clickOnText()
      */
     public function clickOnText(string $actionText, ?string $followingText = NULL, $index = 1): void {
         $this->getScenario()->runStep(new \Codeception\Step\Action('clickOnText', func_get_args()));
@@ -249,7 +249,7 @@ trait AcceptanceTesterActions
      *
      * [!] Test won't be stopped on fail. Error won't be logged 
      *
-     * @see \Tests\Support\Helper\Acceptance\AcceptanceHelper::clickOnText()
+     * @see \Tests\Support\Helper\AcceptanceHelper::clickOnText()
      */
     public function tryToClickOnText(string $actionText, ?string $followingText = NULL, $index = 1): bool {
         return $this->getScenario()->runStep(new \Codeception\Step\TryTo('clickOnText', func_get_args()));
@@ -261,7 +261,7 @@ trait AcceptanceTesterActions
      * 
      * Retry number and interval set by $I->retry();
      *
-     * @see \Tests\Support\Helper\Acceptance\AcceptanceHelper::clickOnText()
+     * @see \Tests\Support\Helper\AcceptanceHelper::clickOnText()
      */
     public function retryClickOnText(string $actionText, ?string $followingText = NULL, $index = 1) {
         $retryNum = isset($this->retryNum) ? $this->retryNum : 1;
@@ -279,7 +279,7 @@ trait AcceptanceTesterActions
      * This function will wait for the element to be visible and then click on it.
      * This is a workaround for the issue of Codeception not waiting for the element to be visible before clicking on it.
      * @author Sarkar Ripon
-     * @see \Tests\Support\Helper\Acceptance\AcceptanceHelper::clicked()
+     * @see \Tests\Support\Helper\AcceptanceHelper::clicked()
      */
     public function clicked(string $selector): void {
         $this->getScenario()->runStep(new \Codeception\Step\Action('clicked', func_get_args()));
@@ -294,7 +294,7 @@ trait AcceptanceTesterActions
      * This function will wait for the element to be visible and then click on it.
      * This is a workaround for the issue of Codeception not waiting for the element to be visible before clicking on it.
      * @author Sarkar Ripon
-     * @see \Tests\Support\Helper\Acceptance\AcceptanceHelper::clicked()
+     * @see \Tests\Support\Helper\AcceptanceHelper::clicked()
      */
     public function tryToClicked(string $selector): bool {
         return $this->getScenario()->runStep(new \Codeception\Step\TryTo('clicked', func_get_args()));
@@ -306,7 +306,7 @@ trait AcceptanceTesterActions
      * 
      * Retry number and interval set by $I->retry();
      *
-     * @see \Tests\Support\Helper\Acceptance\AcceptanceHelper::clicked()
+     * @see \Tests\Support\Helper\AcceptanceHelper::clicked()
      */
     public function retryClicked(string $selector) {
         $retryNum = isset($this->retryNum) ? $this->retryNum : 1;
@@ -319,7 +319,7 @@ trait AcceptanceTesterActions
      * [!] Method is generated. Documentation taken from corresponding module.
      *
      *
-     * @see \Tests\Support\Helper\Acceptance\AcceptanceHelper::clickedOnText()
+     * @see \Tests\Support\Helper\AcceptanceHelper::clickedOnText()
      */
     public function clickedOnText(string $actionText, ?string $followingText = NULL, $index = NULL): void {
         $this->getScenario()->runStep(new \Codeception\Step\Action('clickedOnText', func_get_args()));
@@ -329,7 +329,7 @@ trait AcceptanceTesterActions
      *
      * [!] Test won't be stopped on fail. Error won't be logged 
      *
-     * @see \Tests\Support\Helper\Acceptance\AcceptanceHelper::clickedOnText()
+     * @see \Tests\Support\Helper\AcceptanceHelper::clickedOnText()
      */
     public function tryToClickedOnText(string $actionText, ?string $followingText = NULL, $index = NULL): bool {
         return $this->getScenario()->runStep(new \Codeception\Step\TryTo('clickedOnText', func_get_args()));
@@ -341,7 +341,7 @@ trait AcceptanceTesterActions
      * 
      * Retry number and interval set by $I->retry();
      *
-     * @see \Tests\Support\Helper\Acceptance\AcceptanceHelper::clickedOnText()
+     * @see \Tests\Support\Helper\AcceptanceHelper::clickedOnText()
      */
     public function retryClickedOnText(string $actionText, ?string $followingText = NULL, $index = NULL) {
         $retryNum = isset($this->retryNum) ? $this->retryNum : 1;
@@ -354,7 +354,7 @@ trait AcceptanceTesterActions
      * [!] Method is generated. Documentation taken from corresponding module.
      *
      *
-     * @see \Tests\Support\Helper\Acceptance\AcceptanceHelper::clickOnExactText()
+     * @see \Tests\Support\Helper\AcceptanceHelper::clickOnExactText()
      */
     public function clickOnExactText(string $actionText, ?string $followingText = NULL, $index = NULL): void {
         $this->getScenario()->runStep(new \Codeception\Step\Action('clickOnExactText', func_get_args()));
@@ -364,7 +364,7 @@ trait AcceptanceTesterActions
      *
      * [!] Test won't be stopped on fail. Error won't be logged 
      *
-     * @see \Tests\Support\Helper\Acceptance\AcceptanceHelper::clickOnExactText()
+     * @see \Tests\Support\Helper\AcceptanceHelper::clickOnExactText()
      */
     public function tryToClickOnExactText(string $actionText, ?string $followingText = NULL, $index = NULL): bool {
         return $this->getScenario()->runStep(new \Codeception\Step\TryTo('clickOnExactText', func_get_args()));
@@ -376,7 +376,7 @@ trait AcceptanceTesterActions
      * 
      * Retry number and interval set by $I->retry();
      *
-     * @see \Tests\Support\Helper\Acceptance\AcceptanceHelper::clickOnExactText()
+     * @see \Tests\Support\Helper\AcceptanceHelper::clickOnExactText()
      */
     public function retryClickOnExactText(string $actionText, ?string $followingText = NULL, $index = NULL) {
         $retryNum = isset($this->retryNum) ? $this->retryNum : 1;
@@ -389,7 +389,7 @@ trait AcceptanceTesterActions
      * [!] Method is generated. Documentation taken from corresponding module.
      *
      * @throws Exception
-     * @see \Tests\Support\Helper\Acceptance\AcceptanceHelper::clickByJS()
+     * @see \Tests\Support\Helper\AcceptanceHelper::clickByJS()
      */
     public function clickByJS(string $selector): void {
         $this->getScenario()->runStep(new \Codeception\Step\Action('clickByJS', func_get_args()));
@@ -399,7 +399,7 @@ trait AcceptanceTesterActions
      *
      * [!] Test won't be stopped on fail. Error won't be logged 
      * @throws Exception
-     * @see \Tests\Support\Helper\Acceptance\AcceptanceHelper::clickByJS()
+     * @see \Tests\Support\Helper\AcceptanceHelper::clickByJS()
      */
     public function tryToClickByJS(string $selector): bool {
         return $this->getScenario()->runStep(new \Codeception\Step\TryTo('clickByJS', func_get_args()));
@@ -411,7 +411,7 @@ trait AcceptanceTesterActions
      * 
      * Retry number and interval set by $I->retry();
      *
-     * @see \Tests\Support\Helper\Acceptance\AcceptanceHelper::clickByJS()
+     * @see \Tests\Support\Helper\AcceptanceHelper::clickByJS()
      */
     public function retryClickByJS(string $selector) {
         $retryNum = isset($this->retryNum) ? $this->retryNum : 1;
@@ -428,7 +428,7 @@ trait AcceptanceTesterActions
      * @param string $value
      * @return void The converted XPath expression.
      * @throws Exception
-     * @see \Tests\Support\Helper\Acceptance\AcceptanceHelper::fillByJS()
+     * @see \Tests\Support\Helper\AcceptanceHelper::fillByJS()
      */
     public function fillByJS(string $selector, string $value): void {
         $this->getScenario()->runStep(new \Codeception\Step\Action('fillByJS', func_get_args()));
@@ -442,7 +442,7 @@ trait AcceptanceTesterActions
      * @param string $value
      * @return void The converted XPath expression.
      * @throws Exception
-     * @see \Tests\Support\Helper\Acceptance\AcceptanceHelper::fillByJS()
+     * @see \Tests\Support\Helper\AcceptanceHelper::fillByJS()
      */
     public function tryToFillByJS(string $selector, string $value): bool {
         return $this->getScenario()->runStep(new \Codeception\Step\TryTo('fillByJS', func_get_args()));
@@ -454,7 +454,7 @@ trait AcceptanceTesterActions
      * 
      * Retry number and interval set by $I->retry();
      *
-     * @see \Tests\Support\Helper\Acceptance\AcceptanceHelper::fillByJS()
+     * @see \Tests\Support\Helper\AcceptanceHelper::fillByJS()
      */
     public function retryFillByJS(string $selector, string $value) {
         $retryNum = isset($this->retryNum) ? $this->retryNum : 1;
@@ -467,7 +467,7 @@ trait AcceptanceTesterActions
      * [!] Method is generated. Documentation taken from corresponding module.
      *
      *
-     * @see \Tests\Support\Helper\Acceptance\AcceptanceHelper::seeTextCaseInsensitive()
+     * @see \Tests\Support\Helper\AcceptanceHelper::seeTextCaseInsensitive()
      */
     public function seeTextCaseInsensitive($actionTexts, $selector): bool {
         return $this->getScenario()->runStep(new \Codeception\Step\Assertion('seeTextCaseInsensitive', func_get_args()));
@@ -477,7 +477,7 @@ trait AcceptanceTesterActions
      *
      * [!] Conditional Assertion: Test won't be stopped on fail
      *
-     * @see \Tests\Support\Helper\Acceptance\AcceptanceHelper::seeTextCaseInsensitive()
+     * @see \Tests\Support\Helper\AcceptanceHelper::seeTextCaseInsensitive()
      */
     public function canSeeTextCaseInsensitive($actionTexts, $selector): bool {
         return $this->getScenario()->runStep(new \Codeception\Step\ConditionalAssertion('seeTextCaseInsensitive', func_get_args()));
@@ -487,7 +487,7 @@ trait AcceptanceTesterActions
      *
      * [!] Test won't be stopped on fail. Error won't be logged 
      *
-     * @see \Tests\Support\Helper\Acceptance\AcceptanceHelper::seeTextCaseInsensitive()
+     * @see \Tests\Support\Helper\AcceptanceHelper::seeTextCaseInsensitive()
      */
     public function tryToSeeTextCaseInsensitive($actionTexts, $selector): bool {
         return $this->getScenario()->runStep(new \Codeception\Step\TryTo('seeTextCaseInsensitive', func_get_args()));
@@ -499,7 +499,7 @@ trait AcceptanceTesterActions
      * 
      * Retry number and interval set by $I->retry();
      *
-     * @see \Tests\Support\Helper\Acceptance\AcceptanceHelper::seeTextCaseInsensitive()
+     * @see \Tests\Support\Helper\AcceptanceHelper::seeTextCaseInsensitive()
      */
     public function retrySeeTextCaseInsensitive($actionTexts, $selector) {
         $retryNum = isset($this->retryNum) ? $this->retryNum : 1;
@@ -517,7 +517,7 @@ trait AcceptanceTesterActions
      * @param $element
      * @return bool
      * @author Sarkar Ripon
-     * @see \Tests\Support\Helper\Acceptance\AcceptanceHelper::checkElement()
+     * @see \Tests\Support\Helper\AcceptanceHelper::checkElement()
      */
     public function checkElement($element): bool {
         return $this->getScenario()->runStep(new \Codeception\Step\Action('checkElement', func_get_args()));
@@ -532,7 +532,7 @@ trait AcceptanceTesterActions
      * @param $element
      * @return bool
      * @author Sarkar Ripon
-     * @see \Tests\Support\Helper\Acceptance\AcceptanceHelper::checkElement()
+     * @see \Tests\Support\Helper\AcceptanceHelper::checkElement()
      */
     public function tryToCheckElement($element): bool {
         return $this->getScenario()->runStep(new \Codeception\Step\TryTo('checkElement', func_get_args()));
@@ -544,7 +544,7 @@ trait AcceptanceTesterActions
      * 
      * Retry number and interval set by $I->retry();
      *
-     * @see \Tests\Support\Helper\Acceptance\AcceptanceHelper::checkElement()
+     * @see \Tests\Support\Helper\AcceptanceHelper::checkElement()
      */
     public function retryCheckElement($element) {
         $retryNum = isset($this->retryNum) ? $this->retryNum : 1;
@@ -562,7 +562,7 @@ trait AcceptanceTesterActions
      * ```
      * @param array $checkAbleArr
      * @return void
-     * @see \Tests\Support\Helper\Acceptance\AcceptanceHelper::assertString()
+     * @see \Tests\Support\Helper\AcceptanceHelper::assertString()
      */
     public function assertString(array $checkAbleArr): void {
         $this->getScenario()->runStep(new \Codeception\Step\Action('assertString', func_get_args()));
@@ -577,7 +577,7 @@ trait AcceptanceTesterActions
      * ```
      * @param array $checkAbleArr
      * @return void
-     * @see \Tests\Support\Helper\Acceptance\AcceptanceHelper::assertString()
+     * @see \Tests\Support\Helper\AcceptanceHelper::assertString()
      */
     public function tryToAssertString(array $checkAbleArr): bool {
         return $this->getScenario()->runStep(new \Codeception\Step\TryTo('assertString', func_get_args()));
@@ -589,7 +589,7 @@ trait AcceptanceTesterActions
      * 
      * Retry number and interval set by $I->retry();
      *
-     * @see \Tests\Support\Helper\Acceptance\AcceptanceHelper::assertString()
+     * @see \Tests\Support\Helper\AcceptanceHelper::assertString()
      */
     public function retryAssertString(array $checkAbleArr) {
         $retryNum = isset($this->retryNum) ? $this->retryNum : 1;
@@ -602,7 +602,7 @@ trait AcceptanceTesterActions
      * [!] Method is generated. Documentation taken from corresponding module.
      *
      *
-     * @see \Tests\Support\Helper\Acceptance\AcceptanceHelper::checkValuesInArray()
+     * @see \Tests\Support\Helper\AcceptanceHelper::checkValuesInArray()
      */
     public function checkValuesInArray(array $dataArray, $searchStrings): bool {
         return $this->getScenario()->runStep(new \Codeception\Step\Action('checkValuesInArray', func_get_args()));
@@ -612,7 +612,7 @@ trait AcceptanceTesterActions
      *
      * [!] Test won't be stopped on fail. Error won't be logged 
      *
-     * @see \Tests\Support\Helper\Acceptance\AcceptanceHelper::checkValuesInArray()
+     * @see \Tests\Support\Helper\AcceptanceHelper::checkValuesInArray()
      */
     public function tryToCheckValuesInArray(array $dataArray, $searchStrings): bool {
         return $this->getScenario()->runStep(new \Codeception\Step\TryTo('checkValuesInArray', func_get_args()));
@@ -624,7 +624,7 @@ trait AcceptanceTesterActions
      * 
      * Retry number and interval set by $I->retry();
      *
-     * @see \Tests\Support\Helper\Acceptance\AcceptanceHelper::checkValuesInArray()
+     * @see \Tests\Support\Helper\AcceptanceHelper::checkValuesInArray()
      */
     public function retryCheckValuesInArray(array $dataArray, $searchStrings) {
         $retryNum = isset($this->retryNum) ? $this->retryNum : 1;

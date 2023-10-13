@@ -4,10 +4,10 @@
 namespace Tests\Integrations;
 
 use Codeception\Attribute\Group;
-use Tests\Support\Factories\DataProvider\DataGenerator;
-use Tests\Support\Helper\Acceptance\Integrations\Drip;
 use Tests\Support\AcceptanceTester;
-use Tests\Support\Helper\Acceptance\Integrations\IntegrationHelper;
+use Tests\Support\Factories\DataProvider\DataGenerator;
+use Tests\Support\Helper\Integrations\Drip;
+use Tests\Support\Helper\Integrations\IntegrationHelper;
 use Tests\Support\Selectors\FieldSelectors;
 use Tests\Support\Selectors\FluentFormsSelectors;
 

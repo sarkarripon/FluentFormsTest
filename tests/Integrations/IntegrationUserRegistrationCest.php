@@ -2,16 +2,12 @@
 
 namespace Tests\Integrations;
 
-use Codeception\Attribute\After;
-use Codeception\Attribute\Before;
-use Codeception\Attribute\Depends;
 use Codeception\Attribute\Group;
 use Tests\Support\AcceptanceTester;
 use Tests\Support\Factories\DataProvider\DataGenerator;
-use Tests\Support\Factories\DataProvider\ShortCodes;
-use Tests\Support\Helper\Acceptance\Integrations\FieldCustomizer;
-use Tests\Support\Helper\Acceptance\Integrations\IntegrationHelper;
-use Tests\Support\Helper\Acceptance\Integrations\UserRegistration;
+use Tests\Support\Helper\FieldCustomizer;
+use Tests\Support\Helper\Integrations\IntegrationHelper;
+use Tests\Support\Helper\Integrations\UserRegistration;
 use Tests\Support\Selectors\FieldSelectors;
 use Tests\Support\Selectors\FluentFormsSelectors;
 

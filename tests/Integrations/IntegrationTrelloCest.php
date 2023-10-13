@@ -4,8 +4,8 @@ namespace Tests\Integrations;
 
 use Codeception\Attribute\Group;
 use Tests\Support\AcceptanceTester;
-use Tests\Support\Helper\Acceptance\Integrations\IntegrationHelper;
-use Tests\Support\Helper\Acceptance\Integrations\Trello;
+use Tests\Support\Helper\Integrations\IntegrationHelper;
+use Tests\Support\Helper\Integrations\Trello;
 use Tests\Support\Selectors\FieldSelectors;
 
 class IntegrationTrelloCest

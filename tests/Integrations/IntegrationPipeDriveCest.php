@@ -6,9 +6,9 @@ namespace Tests\Integrations;
 use Codeception\Attribute\Group;
 use Tests\Support\AcceptanceTester;
 use Tests\Support\Factories\DataProvider\DataGenerator;
-use Tests\Support\Helper\Acceptance\Integrations\FieldCustomizer;
-use Tests\Support\Helper\Acceptance\Integrations\IntegrationHelper;
-use Tests\Support\Helper\Acceptance\Integrations\PipeDrive;
+use Tests\Support\Helper\FieldCustomizer;
+use Tests\Support\Helper\Integrations\IntegrationHelper;
+use Tests\Support\Helper\Integrations\PipeDrive;
 use Tests\Support\Selectors\FieldSelectors;
 use Tests\Support\Selectors\FluentFormsSelectors;
 
