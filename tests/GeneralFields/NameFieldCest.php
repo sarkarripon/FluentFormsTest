@@ -53,7 +53,7 @@ class NameFieldCest
               'firstName' => [
                   'label' => $flabel,
                   'default' => $fdefault,
-                  'placeholder' => $fplaceholder,
+//                  'placeholder' => $fplaceholder,
                   'helpMessage' => $fhelpMessage,
                   'required' => $ferrorMessage,
                     ],

@@ -57,7 +57,11 @@ trait FieldCustomizer
         return $new;
     }
 
-    public function customizeNameFields(AcceptanceTester $I, $fieldName, ?array $basicOptions = null, ?array $advancedOptions = null)
+    public function customizeNameFields(AcceptanceTester $I,
+                                        $fieldName,
+                                        ?array $basicOptions = null,
+                                        ?array $advancedOptions = null,
+                                        ?bool $isDefault = false): void
     {
         $I->clickOnExactText($fieldName);
 
@@ -91,27 +95,61 @@ trait FieldCustomizer
             $I->filledField(GeneralFields::adminFieldLabel,
                 !empty($basicOperand['adminFieldLabel']) ? $basicOperand['adminFieldLabel'] : $fieldName, 'As Admin Field Label');
         }
-        // Name Fields
-        if (isset($basicOperand) && $basicOperand['firstName']) {
-            $firstName = $basicOperand['firstName'];
-            $firstNameFields = "";
-            $flabelSelector = $firstNameFields . "[1]";
-            $fdefaultSelector = "//div[@class='address-field-option__settings is-open']//form[@class='el-form el-form-nested el-form--label-top']//div[@class='el-form-item']//div[@class='el-form-item__content']//div//div[@class='el-input el-input-group el-input-group--append']//input[@type='text']";
-            $fplaceholderSelector = $firstNameFields . "[3]";
-            $fhelpSelector = $firstNameFields . "[4]";
-            $ferrorMessageSelector = $firstNameFields . "[5]";
 
-            $I->clicked("(//i[contains(@class,'el-icon-caret-bottom')])[1]",'To expand First Name field');
+        $nameFieldLocalFunction = function (AcceptanceTester $I, $whichName, $nameArea, $whatRequire){
+            // Name Fields
+            if (isset($whichName)) {
+                $firstName = $whichName;
+                $I->clicked("(//i[contains(@class,'el-icon-caret-bottom')])[1]", 'To expand First Name field');
+                $fieldData = [
+                    'Label' => $firstName['label'] ?? null,
+                    'Default' => $firstName['default'] ?? null,
+                    'Placeholder' => $firstName['placeholder'] ?? null,
+                    'Help Message' => $firstName['helpMessage'] ?? null,
+                    'Error Message' => $firstName['required'] ?? null,
+                ];
 
-            $I->filledField($flabelSelector, $firstName['label']);
-            $I->filledField($fdefaultSelector, $firstName['default'] ? $firstName['default'] : "");
+                foreach ($fieldData as $key => $value) {
+                    // Check if "Default" has a value and "Placeholder" is empty, or vice versa.
+                    if (($key == 'Default' && isset($fieldData['Placeholder']) && empty($fieldData['Placeholder'])) ||
+                        ($key == 'Placeholder' && isset($fieldData['Default']) && empty($fieldData['Default']))) {
+                        continue; // Skip this iteration of the loop.
+                    }
 
-            exit();
+                    if ($key == "Error Message") {
+                        $I->clicked(GeneralFields::isRequire($whatRequire));
+                    }
+                    $I->fillField(GeneralFields::nameFieldSelectors($nameArea, $key), $value ?? "");
+                }
+            }
 
-            $I->clickByJS("//div[normalize-space()='Name Fields']/following::span[normalize-space()='Enable']");
-            $I->clickByJS("//div[normalize-space()='Name Fields']/following::span[normalize-space()='First Name']");
-            $I->clickByJS("//div[normalize-space()='Name Fields']/following::span[normalize-space()='Last Name']");
-        }
+        };
+        $this->$nameFieldLocalFunction($I, $basicOperand['firstName'], 1);
+        $this->$nameFieldLocalFunction($I, $basicOperand['middleName'], 3);
+        $this->$nameFieldLocalFunction($I, $basicOperand['lastName'], 5);
+
+
+
+//        // Name Fields
+//        if (isset($basicOperand) && $basicOperand['firstName']) {
+//            $firstName = $basicOperand['firstName'];
+//            $I->clicked("(//i[contains(@class,'el-icon-caret-bottom')])[1]",'To expand First Name field');
+//            $fieldData = [
+//                'Label' => $firstName['label'],
+//                'Default' => $firstName['default'],
+//                'Placeholder' => $firstName['placeholder'],
+//                'Help Message' => $firstName['helpMessage'],
+//                'Error Message' => $firstName['required'],
+//            ];
+//
+//            foreach ($fieldData as $key => $value) {
+//                if ($key=="Error Message"){
+//                    $I->clicked(GeneralFields::isRequire(1));
+//                }
+//
+//                $I->fillField(GeneralFields::nameFieldSelectors(1, $key), $value ? $value : "");
+//            }
+//        }
 
 
     }
