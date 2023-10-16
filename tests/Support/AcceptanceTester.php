@@ -35,7 +35,6 @@ class AcceptanceTester extends \Codeception\Actor
     use _generated\AcceptanceTesterActions;
     use \Codeception\Lib\Actor\Shared\Retry;
 
-
     public function toggleOn(AcceptanceTester $I, string $followingText, bool $isToggleRight= true ): void
     {
         if ($isToggleRight) {
@@ -51,6 +50,21 @@ class AcceptanceTester extends \Codeception\Actor
             }
         }catch (Exception $e){
         }
+    }
+
+    public function makeComment($text, $color): ?string
+    {
+        if ($color === 'red') {
+            return sprintf("\033[31m{$text}\033[0m");
+        }
+        if ($color === 'green') {
+            return sprintf("\033[32m{$text}\033[0m");
+        }
+        if ($color === 'yellow') {
+            return sprintf("\033[33m{$text}\033[0m");
+        }
+
+        return null;
     }
 
     public function runShellCommand(AcceptanceTester $I, $commands): void

@@ -124,9 +124,15 @@ class AcceptanceHelper extends WebDriver
      */
     public function clicked(string $selector): void
     {
-        $this->waitForElementVisible($selector,10);
-        $this->moveMouseOver($selector);
-        parent::clickWithLeftButton($selector);
+        try {
+            parent::clickWithLeftButton($selector);
+        }catch (Exception $e){
+            $this->waitForElementVisible($selector);
+            parent::clickWithLeftButton($selector);
+        }
+//        $this->waitForElementVisible($selector,10);
+//        $this->moveMouseOver($selector);
+
     }
 
     public function clickedOnText(string $actionText, string $followingText = null, $index = null): void
@@ -185,14 +191,25 @@ class AcceptanceHelper extends WebDriver
         $exception = [];
         foreach ($xpathVariations as $xpath) {
             try {
-                $this->waitForElementVisible($xpath,1);
-                $isMultiple = count($this->grabMultiple($xpath));
-                if ($isMultiple >= 2) {
-                    $this->clickWithLeftButton($xpath . "[$isMultiple]") . PHP_EOL;
-                    echo "Multiple found,clicked on " . $xpath . "[$isMultiple]" . PHP_EOL;
-                } else {
-                    $this->clickWithLeftButton($xpath);
-                    echo "Clicked on " . $xpath . PHP_EOL;
+                try {
+                    $isMultiple = count($this->grabMultiple($xpath));
+                    if ($isMultiple >= 2) {
+                        $this->clickWithLeftButton($xpath . "[$isMultiple]") . PHP_EOL;
+                        echo "Multiple found,clicked on " . $xpath . "[$isMultiple]" . PHP_EOL;
+                    } else {
+                        $this->clickWithLeftButton($xpath);
+                        echo "Clicked on " . $xpath . PHP_EOL;
+                    }
+                }catch (Exception $e){
+                    $this->waitForElementVisible($xpath,2);
+                    $isMultiple = count($this->grabMultiple($xpath));
+                    if ($isMultiple >= 2) {
+                        $this->clickWithLeftButton($xpath . "[$isMultiple]") . PHP_EOL;
+                        echo "Multiple found,clicked on " . $xpath . "[$isMultiple]" . PHP_EOL;
+                    } else {
+                        $this->clickWithLeftButton($xpath);
+                        echo "Clicked on " . $xpath . PHP_EOL;
+                    }
                 }
                 break; // Exit the loop if the element is found and clicked successfully
             } catch (Exception $e) {
@@ -244,8 +261,12 @@ class AcceptanceHelper extends WebDriver
 
     public function seeTextCaseInsensitive($actionTexts, $selector): bool
     {
-        $this->waitForElementVisible($selector,10);
-        $elementText = $this->grabTextFrom($selector);
+        try {
+            $elementText = $this->grabTextFrom($selector);
+        }catch (Exception $e) {
+            $this->waitForElementVisible($selector, 10);
+            $elementText = $this->grabTextFrom($selector);
+        }
         if (is_string($actionTexts)) {
             $actionTexts = [$actionTexts];
         }

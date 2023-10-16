@@ -7,6 +7,7 @@ class GeneralFields{
     const adminFieldLabel = "//div[@prop='admin_field_label']//input[@type='text']";
     public static function nameFieldSelectors(int $nameArea,string $label )
     {
+        // namearea = 1,3,5, label = Label, Default, Placeholder, Help Message, Error Message
         return "((//div[contains(@class,'address-field-option')])[$nameArea]//span[contains(text(),'$label')]/following::input[@type='text'])[1]";
     }
     public static function isRequire(int $whatRequire)

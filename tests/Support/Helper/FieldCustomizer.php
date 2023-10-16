@@ -61,7 +61,7 @@ trait FieldCustomizer
                                         $fieldName,
                                         ?array $basicOptions = null,
                                         ?array $advancedOptions = null,
-                                        ?bool $isDefault = false): void
+                                        ?bool $isHiddenLabel = false): void
     {
         $I->clickOnExactText($fieldName);
 
@@ -76,7 +76,8 @@ trait FieldCustomizer
         ];
 
         $advancedOptionsDefault = [
-            'inventorySettings' => false,
+            'containerClass' => false,
+            'nameAttribute' => false,
         ];
 
         if (!is_null($basicOptions)) {
@@ -86,8 +87,6 @@ trait FieldCustomizer
         if (!is_null($advancedOptions)) {
             $advancedOperand = array_merge($advancedOptionsDefault, $advancedOptions);
         }
-
-//        dd($basicOperand['firstName']);
 
         //                                           Basic options                                              //
         // adminFieldLabel
@@ -99,14 +98,23 @@ trait FieldCustomizer
         $nameFieldLocalFunction = function (AcceptanceTester $I, $whichName, $nameArea, $whatRequire){
             // Name Fields
             if (isset($whichName)) {
-                $firstName = $whichName;
-                $I->clicked("(//i[contains(@class,'el-icon-caret-bottom')])[1]", 'To expand First Name field');
+
+                $name = $whichName;
+
+                if ($nameArea == 1){
+                    $I->clicked("(//i[contains(@class,'el-icon-caret-bottom')])[1]", 'To expand First Name field');
+                }elseif ($nameArea == 3){
+                    $I->clicked("(//span[@class='el-checkbox__inner'])[2]", 'To enable Middle Name field');
+                    $I->clickByJS("(//i[contains(@class,'el-icon-caret-bottom')])[2]", 'To expand Middle Name field');
+                }elseif ($nameArea == 5){
+                    $I->clicked("(//i[contains(@class,'el-icon-caret-bottom')])[3]", 'To expand Last Name field');
+                }
                 $fieldData = [
-                    'Label' => $firstName['label'] ?? null,
-                    'Default' => $firstName['default'] ?? null,
-                    'Placeholder' => $firstName['placeholder'] ?? null,
-                    'Help Message' => $firstName['helpMessage'] ?? null,
-                    'Error Message' => $firstName['required'] ?? null,
+                    'Label' => $name['label'] ?? null,
+                    'Default' => $name['default'] ?? null,
+                    'Placeholder' => $name['placeholder'] ?? null,
+                    'Help Message' => $name['helpMessage'] ?? null,
+                    'Error Message' => $name['required'] ?? null,
                 ];
 
                 foreach ($fieldData as $key => $value) {
@@ -119,43 +127,42 @@ trait FieldCustomizer
                     if ($key == "Error Message") {
                         $I->clicked(GeneralFields::isRequire($whatRequire));
                     }
-                    $I->fillField(GeneralFields::nameFieldSelectors($nameArea, $key), $value ?? "");
+                    $I->filledField(GeneralFields::nameFieldSelectors($nameArea, $key), $value ?? "");
                 }
             }
 
         };
-        $this->$nameFieldLocalFunction($I, $basicOperand['firstName'], 1);
-        $this->$nameFieldLocalFunction($I, $basicOperand['middleName'], 3);
-        $this->$nameFieldLocalFunction($I, $basicOperand['lastName'], 5);
+        // calling local function, reverse order for scrolling issue
+        $nameFieldLocalFunction($I, $basicOperand['lastName'], 5,5);
+        $nameFieldLocalFunction($I, $basicOperand['middleName'], 3,3);
+        $nameFieldLocalFunction($I, $basicOperand['firstName'], 1, 1);
+
+        // Label Placement (Hidden Label)
+        if ($isHiddenLabel) {
+            $I->clicked("(//span[normalize-space()='Hide Label'])[1]");
+        }
+
+        //                                           Advanced options                                              //
+
+        if (isset($advancedOperand)) {
+            $I->clicked("//h5[normalize-space()='Advanced Options']");
+
+            $I->fillField("(//span[normalize-space()='Container Class']/following::input[@type='text'])[1]",
+                $advancedOperand['containerClass'] ?? $fieldName);
+
+            $I->filledField("(//span[normalize-space()='Name Attribute']/following::input[@type='text'])[1]",
+                $advancedOperand['nameAttribute'] ?? $fieldName);
+            }
 
 
-
-//        // Name Fields
-//        if (isset($basicOperand) && $basicOperand['firstName']) {
-//            $firstName = $basicOperand['firstName'];
-//            $I->clicked("(//i[contains(@class,'el-icon-caret-bottom')])[1]",'To expand First Name field');
-//            $fieldData = [
-//                'Label' => $firstName['label'],
-//                'Default' => $firstName['default'],
-//                'Placeholder' => $firstName['placeholder'],
-//                'Help Message' => $firstName['helpMessage'],
-//                'Error Message' => $firstName['required'],
-//            ];
-//
-//            foreach ($fieldData as $key => $value) {
-//                if ($key=="Error Message"){
-//                    $I->clicked(GeneralFields::isRequire(1));
-//                }
-//
-//                $I->fillField(GeneralFields::nameFieldSelectors(1, $key), $value ? $value : "");
-//            }
-//        }
+        $I->clicked(FluentFormsSelectors::saveForm);
 
 
     }
 
-    public function customizeEmail()
+    public function customizeEmail(AcceptanceTester $I)
     {
+        $I->clicked(FluentFormsSelectors::saveForm);
 
     }
 
