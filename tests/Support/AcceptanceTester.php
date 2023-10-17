@@ -13,6 +13,7 @@ use Tests\Support\Selectors\FluentFormsSettingsSelectors;
 use Tests\Support\Selectors\GlobalPageSelec;
 use Tests\Support\Selectors\NewPageSelectors;
 use Tests\Support\Selectors\RenameFormSelec;
+use Symfony\Component\Console\Color;
 
 
 /**
@@ -52,20 +53,12 @@ class AcceptanceTester extends \Codeception\Actor
         }
     }
 
-    public function makeComment($text, $color): ?string
-    {
-        if ($color === 'red') {
-            return sprintf("\033[31m{$text}\033[0m");
-        }
-        if ($color === 'green') {
-            return sprintf("\033[32m{$text}\033[0m");
-        }
-        if ($color === 'yellow') {
-            return sprintf("\033[33m{$text}\033[0m");
-        }
 
-        return null;
+    public function cmnt($text, string $textColor ='bright-green', string $backColor='', array $options=[]): ?string
+    {
+        return sprintf((new Color($textColor,$backColor,$options))->apply($text));
     }
+
 
     public function runShellCommand(AcceptanceTester $I, $commands): void
     {

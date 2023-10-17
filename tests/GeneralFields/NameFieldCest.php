@@ -20,6 +20,7 @@ class NameFieldCest
     // tests
     public function test_name_fields_without_default_value(AcceptanceTester $I)
     {
+
         $pageName = __FUNCTION__ . '_' . rand(1, 100);
         $faker = \Faker\Factory::create();
 
@@ -41,8 +42,8 @@ class NameFieldCest
         $lhelpMessage = $faker->words(4, true);
         $lerrorMessage = $faker->words(4, true);
 
-        $containerClass = $faker->word();
-        $nameAttribute = $faker->word();
+        $containerClass = $faker->firstNameMale();
+        $nameAttribute = $faker->lastName();
 
         $customName = [
             'nameFields' => 'Full Name',
@@ -90,20 +91,20 @@ class NameFieldCest
             $merrorMessage,
             $llabel,
             $lerrorMessage,
-        ], 'Check label and error message');
+        ], $I->cmnt('Check label and error message for each name field'));
 
-        $I->seeElement("(//input[@name='{$nameAttribute}[first_name]'])[1]", ['placeholder' => $fplaceholder], $I->makeComment('Check first name placeholder', 'yellow'));
-        $I->seeElement("(//input[@name='{$nameAttribute}[middle_name]'])[1]", ['placeholder' => $mplaceholder], 'Check middle name placeholder');
-        $I->seeElement("(//input[@name='{$nameAttribute}[last_name]'])[1]", ['placeholder' => $lplaceholder], 'Check last name placeholder');
+        $I->seeElement("(//input[@name='{$nameAttribute}[first_name]'])[1]", ['placeholder' => $fplaceholder], $I->cmnt('Check first name placeholder'));
+        $I->seeElement("(//input[@name='{$nameAttribute}[middle_name]'])[1]", ['placeholder' => $mplaceholder], $I->cmnt('Check middle name placeholder'));
+        $I->seeElement("(//input[@name='{$nameAttribute}[last_name]'])[1]", ['placeholder' => $lplaceholder], $I->cmnt('Check last name placeholder'));
 
-        $I->seeElement("//div", ['data-content' => $fhelpMessage], 'Check first name help message');
-        $I->seeElement("//div", ['data-content' => $mhelpMessage], 'Check middle name help message');
-        $I->seeElement("//div", ['data-content' => $lhelpMessage], 'Check last name help message');
+        $I->seeElement("//div", ['data-content' => $fhelpMessage], $I->cmnt('Check first name help message'));
+        $I->seeElement("//div", ['data-content' => $mhelpMessage], $I->cmnt('Check middle name help message'));
+        $I->seeElement("//div", ['data-content' => $lhelpMessage], $I->cmnt('Check last name help message'));
 
-        $I->seeElement("//div[contains(@class,'$containerClass')]", [], 'Check container class');
-        $I->seeElement("//div", ['data-name' => $nameAttribute], 'Check name attribute');
+        $I->seeElement("//div[contains(@class,'$containerClass')]", [], $I->cmnt('Check container class'));
+        $I->seeElement("//div", ['data-name' => $nameAttribute], $I->cmnt('Check name attribute'));
 
-        echo "Tested Name Fields without default value and everything looks good. ";
+        echo $I->cmnt("Tested Name Fields without default value and everything looks good.",'yellow','',array('blink') );
     }
     public function test_name_fields_with_default_value(AcceptanceTester $I)
     {
@@ -139,9 +140,9 @@ class NameFieldCest
         $I->seeElement("//input", ['value' => $mdefault]);
         $I->seeElement("//input", ['value' => $ldefault]);
 
-        echo "Tested Name Fields with default value and everything looks good. ";
+        echo $I->cmnt("Tested Name Fields with default value and everything looks good. ", 'yellow','',array('blink'));
     }
-    public function test_name_fields_hide_label(AcceptanceTester $I)
+    public function test_name_fields_hide_label(AcceptanceTester $I): void
     {
         $pageName = __FUNCTION__ . '_' . rand(1, 100);
         $faker = \Faker\Factory::create();
@@ -178,7 +179,7 @@ class NameFieldCest
         $I->dontSeeElement("//label", ['aria-label'=> $mlabel]);
         $I->dontSeeElement("//label", ['aria-label'=> $llabel]);
 
-        echo "Tested Name Fields whether it can hide label, everything looks good. ";
+        echo $I->cmnt("Tested Name Fields whether it can hide label, everything looks good. ", 'yellow','',array('blink'));
     }
 
 
