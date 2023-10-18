@@ -57,11 +57,13 @@ trait FieldCustomizer
         return $new;
     }
 
-    public function customizeNameFields(AcceptanceTester $I,
-                                        $fieldName,
-                                        ?array $basicOptions = null,
-                                        ?array $advancedOptions = null,
-                                        ?bool $isHiddenLabel = false): void
+    public function customizeNameFields
+    (AcceptanceTester $I,
+    $fieldName,
+    ?array $basicOptions = null,
+    ?array $advancedOptions = null,
+    ?bool $isHiddenLabel = false
+    ): void
     {
         $I->clickOnExactText($fieldName);
 
@@ -95,7 +97,7 @@ trait FieldCustomizer
                 !empty($basicOperand['adminFieldLabel']) ? $basicOperand['adminFieldLabel'] : $fieldName, 'As Admin Field Label');
         }
 
-        $nameFieldLocalFunction = function (AcceptanceTester $I, $whichName, $nameArea, $whatRequire){
+        $nameFieldLocalFunction = function (AcceptanceTester $I, $whichName, $nameArea){
             // Name Fields
             if (isset($whichName)) {
 
@@ -125,7 +127,7 @@ trait FieldCustomizer
                     }
 
                     if ($key == "Error Message") {
-                        $I->clicked(GeneralFields::isRequire($whatRequire));
+                        $I->clicked(GeneralFields::isRequire($nameArea));
                     }
                     $I->filledField(GeneralFields::nameFieldSelectors($nameArea, $key), $value ?? "");
                 }
@@ -133,9 +135,9 @@ trait FieldCustomizer
 
         };
         // calling local function, reverse order for scrolling issue
-        $nameFieldLocalFunction($I, $basicOperand['lastName'], 5,5);
-        $nameFieldLocalFunction($I, $basicOperand['middleName'], 3,3);
-        $nameFieldLocalFunction($I, $basicOperand['firstName'], 1, 1);
+        $nameFieldLocalFunction($I, $basicOperand['lastName'], 5,);
+        $nameFieldLocalFunction($I, $basicOperand['middleName'], 3,);
+        $nameFieldLocalFunction($I, $basicOperand['firstName'], 1,);
 
         // Label Placement (Hidden Label)
         if ($isHiddenLabel) {

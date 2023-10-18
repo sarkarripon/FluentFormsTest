@@ -87,32 +87,6 @@ class AcceptanceHelper extends WebDriver
         parent::type($value, .7);
     }
 
-    public function clickOnText(string $actionText, string $followingText = null, $index = 1): void
-    {
-//        $this->wait(1);
-        $following = null;
-        if (isset($followingText) and !empty($followingText)) {
-            $following .= "*[normalize-space()='$followingText' or contains(text(),'$followingText')]/following::";
-        }
-        $xpathVariations = ["(//$following" . "*[@x-placement]//*[contains(text(),'{$actionText}')])[$index]", "(//$following" . "*[@x-placement]//*[normalize-space()='{$actionText}')])[$index]", "(//$following" . "*[normalize-space()='{$actionText}'])[$index]", "(//$following" . "*[contains(text(),'{$actionText}')])[$index]", "(//$following" . "*[@placeholder='{$actionText}'])[$index]",];
-//        print_r($xpathVariations);
-
-        $exception = [];
-        foreach ($xpathVariations as $xpath) {
-            try {
-                $this->waitForElementVisible($xpath);
-                $this->clicked($xpath);
-                echo "Clicked on " . $xpath . PHP_EOL;
-                break; // Exit the loop if the element is found and clicked successfully
-            } catch (Exception $e) {
-                $exception[] = $e->getMessage();
-                // If the element is not found or the click fails, continue to the next XPath variation
-            }
-        }
-        if (count($exception) === count($xpathVariations)) {
-            $this->fail($actionText . " not found");
-        }
-    }
 
     /**
      * @param string $selector
@@ -134,34 +108,32 @@ class AcceptanceHelper extends WebDriver
 //        $this->moveMouseOver($selector);
 
     }
-
-    public function clickedOnText(string $actionText, string $followingText = null, $index = null): void
+    public function clickedOnText(string $actionText, string $followingText = null, $index = 1, $wait=1): void
     {
-        $following = "";
-        if (!empty($followingText)) {
-            $following = "*[normalize-space()='$followingText' or contains(text(),'$followingText')]/following::";
+        $following = null;
+        if (isset($followingText) and !empty($followingText)) {
+            $following .= "*[normalize-space()='$followingText' or contains(text(),'$followingText')]/following::";
         }
-
-        $indexPart = "";
-        if ($index !== null) {
-            $indexPart = "[$index]";
-        }
-
-        $xpathVariations = ["(//$following" . "*[@x-placement]//*[contains(text(),'{$actionText}')])$indexPart", "(//$following" . "*[@x-placement]//*[normalize-space()='{$actionText}'])$indexPart", "(//$following" . "*[normalize-space()='{$actionText}'])$indexPart", "(//$following" . "*[contains(text(),'{$actionText}')])$indexPart", "(//$following" . "*[@placeholder='{$actionText}'])$indexPart",];
+        $xpathVariations = [
+            "(//$following" . "*[@x-placement]//*[contains(text(),'{$actionText}')])[$index]",
+            "(//$following" . "*[@x-placement]//*[normalize-space()='{$actionText}')])[$index]",
+            "(//$following" . "*[normalize-space()='{$actionText}'])[$index]",
+            "(//$following" . "*[contains(text(),'{$actionText}')])[$index]",
+            "(//$following" . "*[@placeholder='{$actionText}'])[$index]",
+        ];
 //        print_r($xpathVariations);
 
+        $waitPerformed = false;
         $exception = [];
         foreach ($xpathVariations as $xpath) {
             try {
-                $this->waitForElementVisible($xpath,1);
-                $isMultiple = count($this->grabMultiple($xpath));
-                if ($isMultiple >= 2) {
-                    $this->clickWithLeftButton($xpath . "[$isMultiple]", 10, 10) . PHP_EOL;
-                    echo "Multiple found,clicked on " . $xpath . "[$isMultiple]" . PHP_EOL;
-                } else {
-                    $this->clickWithLeftButton($xpath, 10, 10);
-                    echo "Clicked on " . $xpath . PHP_EOL;
+                if (!$waitPerformed) {
+                    $this->waitForElementVisible($xpath, $wait);
+                    $waitPerformed = true;
                 }
+                $this->waitForElementVisible($xpath);
+                $this->clicked($xpath);
+                echo "Clicked on " . $xpath . PHP_EOL;
                 break; // Exit the loop if the element is found and clicked successfully
             } catch (Exception $e) {
                 $exception[] = $e->getMessage();
@@ -173,7 +145,49 @@ class AcceptanceHelper extends WebDriver
         }
     }
 
-    public function clickOnExactText(string $actionText, string $followingText = null, $index = null): void
+
+    public function clickOnText(string $actionText, string $followingText = null, $index = null, $wait=1): void
+    {
+        $following = "";
+        if (!empty($followingText)) {
+            $following = "*[normalize-space()='$followingText' or contains(text(),'$followingText')]/following::";
+        }
+
+        $indexPart = "";
+        if ($index !== null) {
+            $indexPart = "[$index]";
+        }
+
+        $xpathVariations = [
+            "(//$following" . "*[contains(text(),'{$actionText}')])$indexPart",
+            "(//$following" . "*[@x-placement]//*[contains(text(),'{$actionText}')])$indexPart",
+            "(//$following" . "*[@x-placement]//*[normalize-space()='{$actionText}'])$indexPart",
+            "(//$following" . "*[normalize-space()='{$actionText}'])$indexPart",
+            "(//$following" . "*[@placeholder='{$actionText}'])$indexPart",
+            ];
+//        print_r($xpathVariations);
+
+        $waitPerformed = false;
+        $exception = [];
+        foreach ($xpathVariations as $xpath) {
+            try {
+                if (!$waitPerformed) {
+                    $this->waitForElementVisible($xpath, $wait);
+                    $waitPerformed = true;
+                }
+                $this->clickWithLeftButton($xpath);
+                break; // Exit the loop if the element is found and clicked successfully
+            } catch (Exception $e) {
+                $exception[] = $e->getMessage();
+                // If the element is not found or the click fails, continue to the next XPath variation
+            }
+        }
+        if (count($exception) === count($xpathVariations)) {
+            $this->fail($actionText . " not found");
+        }
+    }
+
+    public function clickOnExactText(string $actionText, string $followingText = null, $index = null, $wait=1): void
     {
         $following = "";
         if (!empty($followingText)) {
@@ -185,38 +199,39 @@ class AcceptanceHelper extends WebDriver
             $indexPart = "[$index]";
         }
 
-        $xpathVariations = ["(//$following" . "*[@x-placement]//*[text()='{$actionText}'])$indexPart", "(//$following" . "*[@x-placement]//*[normalize-space()='{$actionText}'])$indexPart", "(//$following" . "*[normalize-space()='{$actionText}'])$indexPart", "(//$following" . "*[text()='{$actionText}'])$indexPart", "(//$following" . "*[@placeholder='{$actionText}'])$indexPart",];
-//        print_r($xpathVariations);
+        $xpathVariations = [
+            "(//$following" . "*[@x-placement]//*[text()='{$actionText}'])$indexPart",
+            "(//$following" . "*[@x-placement]//*[normalize-space()='{$actionText}'])$indexPart",
+            "(//$following" . "*[normalize-space()='{$actionText}'])$indexPart",
+            "(//$following" . "*[text()='{$actionText}'])$indexPart",
+            "(//$following" . "*[@placeholder='{$actionText}'])$indexPart",
+        ];
 
         $exception = [];
+        $waitPerformed = false;
         foreach ($xpathVariations as $xpath) {
             try {
-                try {
-                    $isMultiple = count($this->grabMultiple($xpath));
-                    if ($isMultiple >= 2) {
-                        $this->clickWithLeftButton($xpath . "[$isMultiple]") . PHP_EOL;
-                        echo "Multiple found,clicked on " . $xpath . "[$isMultiple]" . PHP_EOL;
-                    } else {
-                        $this->clickWithLeftButton($xpath);
-                        echo "Clicked on " . $xpath . PHP_EOL;
-                    }
-                }catch (Exception $e){
-                    $this->waitForElementVisible($xpath,2);
-                    $isMultiple = count($this->grabMultiple($xpath));
-                    if ($isMultiple >= 2) {
-                        $this->clickWithLeftButton($xpath . "[$isMultiple]") . PHP_EOL;
-                        echo "Multiple found,clicked on " . $xpath . "[$isMultiple]" . PHP_EOL;
-                    } else {
-                        $this->clickWithLeftButton($xpath);
-                        echo "Clicked on " . $xpath . PHP_EOL;
-                    }
+                if (!$waitPerformed) {
+                    $this->waitForElementVisible($xpath, $wait);
+                    $waitPerformed = true;
                 }
+
+                $isMultiple = count($this->grabMultiple($xpath));
+                if ($isMultiple >= 2) {
+                    $this->clickWithLeftButton($xpath . "[$isMultiple]") . PHP_EOL;
+                    echo "Multiple found, clicked on " . $xpath . "[$isMultiple]" . PHP_EOL;
+                } else {
+                    $this->clickWithLeftButton($xpath);
+                    echo "Clicked on " . $xpath . PHP_EOL;
+                }
+
                 break; // Exit the loop if the element is found and clicked successfully
             } catch (Exception $e) {
                 $exception[] = $e->getMessage();
                 // If the element is not found or the click fails, continue to the next XPath variation
             }
         }
+
         if (count($exception) === count($xpathVariations)) {
             $this->fail($actionText . " not found");
         }

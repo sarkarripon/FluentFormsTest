@@ -1,4 +1,4 @@
-<?php  //[STAMP] e7b215e247413e61f63a701360c10997
+<?php  //[STAMP] b1c4f0c7349d16c98f534d7250928a50
 // phpcs:ignoreFile
 namespace Tests\Support\_generated;
 
@@ -238,41 +238,6 @@ trait AcceptanceTesterActions
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
-     *
-     * @see \Tests\Support\Helper\AcceptanceHelper::clickOnText()
-     */
-    public function clickOnText(string $actionText, ?string $followingText = NULL, $index = 1): void {
-        $this->getScenario()->runStep(new \Codeception\Step\Action('clickOnText', func_get_args()));
-    }
-    /**
-     * [!] Method is generated. Documentation taken from corresponding module.
-     *
-     * [!] Test won't be stopped on fail. Error won't be logged 
-     *
-     * @see \Tests\Support\Helper\AcceptanceHelper::clickOnText()
-     */
-    public function tryToClickOnText(string $actionText, ?string $followingText = NULL, $index = 1): bool {
-        return $this->getScenario()->runStep(new \Codeception\Step\TryTo('clickOnText', func_get_args()));
-    }
-    /**
-     * [!] Method is generated.
-     * 
-     * * Executes clickOnText and retries on failure.
-     * 
-     * Retry number and interval set by $I->retry();
-     *
-     * @see \Tests\Support\Helper\AcceptanceHelper::clickOnText()
-     */
-    public function retryClickOnText(string $actionText, ?string $followingText = NULL, $index = 1) {
-        $retryNum = isset($this->retryNum) ? $this->retryNum : 1;
-        $retryInterval = isset($this->retryInterval) ? $this->retryInterval : 200;
-        return $this->getScenario()->runStep(new \Codeception\Step\Retry('clickOnText', func_get_args(), $retryNum, $retryInterval));
-    }
-
- 
-    /**
-     * [!] Method is generated. Documentation taken from corresponding module.
-     *
      * @param string $selector
      * @return void
      * @throws Exception
@@ -321,7 +286,7 @@ trait AcceptanceTesterActions
      *
      * @see \Tests\Support\Helper\AcceptanceHelper::clickedOnText()
      */
-    public function clickedOnText(string $actionText, ?string $followingText = NULL, $index = NULL): void {
+    public function clickedOnText(string $actionText, ?string $followingText = NULL, $index = 1, $wait = 1): void {
         $this->getScenario()->runStep(new \Codeception\Step\Action('clickedOnText', func_get_args()));
     }
     /**
@@ -331,7 +296,7 @@ trait AcceptanceTesterActions
      *
      * @see \Tests\Support\Helper\AcceptanceHelper::clickedOnText()
      */
-    public function tryToClickedOnText(string $actionText, ?string $followingText = NULL, $index = NULL): bool {
+    public function tryToClickedOnText(string $actionText, ?string $followingText = NULL, $index = 1, $wait = 1): bool {
         return $this->getScenario()->runStep(new \Codeception\Step\TryTo('clickedOnText', func_get_args()));
     }
     /**
@@ -343,7 +308,7 @@ trait AcceptanceTesterActions
      *
      * @see \Tests\Support\Helper\AcceptanceHelper::clickedOnText()
      */
-    public function retryClickedOnText(string $actionText, ?string $followingText = NULL, $index = NULL) {
+    public function retryClickedOnText(string $actionText, ?string $followingText = NULL, $index = 1, $wait = 1) {
         $retryNum = isset($this->retryNum) ? $this->retryNum : 1;
         $retryInterval = isset($this->retryInterval) ? $this->retryInterval : 200;
         return $this->getScenario()->runStep(new \Codeception\Step\Retry('clickedOnText', func_get_args(), $retryNum, $retryInterval));
@@ -354,9 +319,44 @@ trait AcceptanceTesterActions
      * [!] Method is generated. Documentation taken from corresponding module.
      *
      *
+     * @see \Tests\Support\Helper\AcceptanceHelper::clickOnText()
+     */
+    public function clickOnText(string $actionText, ?string $followingText = NULL, $index = NULL, $wait = 1): void {
+        $this->getScenario()->runStep(new \Codeception\Step\Action('clickOnText', func_get_args()));
+    }
+    /**
+     * [!] Method is generated. Documentation taken from corresponding module.
+     *
+     * [!] Test won't be stopped on fail. Error won't be logged 
+     *
+     * @see \Tests\Support\Helper\AcceptanceHelper::clickOnText()
+     */
+    public function tryToClickOnText(string $actionText, ?string $followingText = NULL, $index = NULL, $wait = 1): bool {
+        return $this->getScenario()->runStep(new \Codeception\Step\TryTo('clickOnText', func_get_args()));
+    }
+    /**
+     * [!] Method is generated.
+     * 
+     * * Executes clickOnText and retries on failure.
+     * 
+     * Retry number and interval set by $I->retry();
+     *
+     * @see \Tests\Support\Helper\AcceptanceHelper::clickOnText()
+     */
+    public function retryClickOnText(string $actionText, ?string $followingText = NULL, $index = NULL, $wait = 1) {
+        $retryNum = isset($this->retryNum) ? $this->retryNum : 1;
+        $retryInterval = isset($this->retryInterval) ? $this->retryInterval : 200;
+        return $this->getScenario()->runStep(new \Codeception\Step\Retry('clickOnText', func_get_args(), $retryNum, $retryInterval));
+    }
+
+ 
+    /**
+     * [!] Method is generated. Documentation taken from corresponding module.
+     *
+     *
      * @see \Tests\Support\Helper\AcceptanceHelper::clickOnExactText()
      */
-    public function clickOnExactText(string $actionText, ?string $followingText = NULL, $index = NULL): void {
+    public function clickOnExactText(string $actionText, ?string $followingText = NULL, $index = NULL, $wait = 1): void {
         $this->getScenario()->runStep(new \Codeception\Step\Action('clickOnExactText', func_get_args()));
     }
     /**
@@ -366,7 +366,7 @@ trait AcceptanceTesterActions
      *
      * @see \Tests\Support\Helper\AcceptanceHelper::clickOnExactText()
      */
-    public function tryToClickOnExactText(string $actionText, ?string $followingText = NULL, $index = NULL): bool {
+    public function tryToClickOnExactText(string $actionText, ?string $followingText = NULL, $index = NULL, $wait = 1): bool {
         return $this->getScenario()->runStep(new \Codeception\Step\TryTo('clickOnExactText', func_get_args()));
     }
     /**
@@ -378,7 +378,7 @@ trait AcceptanceTesterActions
      *
      * @see \Tests\Support\Helper\AcceptanceHelper::clickOnExactText()
      */
-    public function retryClickOnExactText(string $actionText, ?string $followingText = NULL, $index = NULL) {
+    public function retryClickOnExactText(string $actionText, ?string $followingText = NULL, $index = NULL, $wait = 1) {
         $retryNum = isset($this->retryNum) ? $this->retryNum : 1;
         $retryInterval = isset($this->retryInterval) ? $this->retryInterval : 200;
         return $this->getScenario()->runStep(new \Codeception\Step\Retry('clickOnExactText', func_get_args(), $retryNum, $retryInterval));

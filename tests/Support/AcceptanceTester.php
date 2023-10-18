@@ -467,7 +467,7 @@ class AcceptanceTester extends \Codeception\Actor
     public function checkSubmissionLog($text, $selector="//tbody/tr[1]")
     {
         $this->wait(20, 'Before checking submission log');
-        $this->amOnPage(FluentFormsAllEntries::entriesPage);
+        $this->amOnPage(FluentFormsAllEntries::apiLogPage);
 
         $found = false;
         for ($i = 0; $i < 6; $i++) {
@@ -480,6 +480,14 @@ class AcceptanceTester extends \Codeception\Actor
             }
         }
         return $found;
+    }
+
+    public function checkAdminArea($text)
+    {
+        $this->amOnPage(FluentFormsAllEntries::allEntriesPage);
+        $this->clicked(FluentFormsAllEntries::viewEntry);
+        $this->seeText($text);
+
     }
 
 

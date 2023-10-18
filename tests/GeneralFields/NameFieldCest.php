@@ -4,13 +4,15 @@
 namespace Tests\GeneralFields;
 
 use Tests\Support\AcceptanceTester;
+use Tests\Support\Factories\DataProvider\DataGenerator;
 use Tests\Support\Helper\FieldCustomizer;
 use Tests\Support\Helper\Integrations\IntegrationHelper;
 use Tests\Support\Selectors\FieldSelectors;
+use Tests\Support\Selectors\FluentFormsSelectors;
 
 class NameFieldCest
 {
-    use IntegrationHelper, FieldCustomizer;
+    use IntegrationHelper, FieldCustomizer, DataGenerator;
     public function _before(AcceptanceTester $I)
     {
         $I->loadDotEnvFile();
@@ -111,36 +113,58 @@ class NameFieldCest
         $pageName = __FUNCTION__ . '_' . rand(1, 100);
         $faker = \Faker\Factory::create();
 
+        $adminLabel = $faker->words(2, true);
+        $flabel = $faker->words(2, true);
         $fdefault = $faker->words(3, true);
+        $mlabel = $faker->words(2, true);
         $mdefault = $faker->words(3, true);
+        $llabel = $faker->words(2, true);
         $ldefault = $faker->words(3, true);
 
         $customName = [
-            'nameFields' => 'Full Name',
+            'nameFields' => $adminLabel,
         ];
         $this->prepareForm($I, $pageName, [
             'generalFields' => ['nameFields'],
         ], true, $customName);
         $this->customizeNameFields($I,
           'First Name',
-            ['adminFieldLabel' => 'Full Name',
+            ['adminFieldLabel' => $adminLabel,
               'firstName' => [
+                  'label' => $flabel,
                   'default' => $fdefault,
                     ],
                 'middleName' => [
-                  'default' => $mdefault,
+                    'label' => $mlabel,
+                    'default' => $mdefault,
                     ],
                 'lastName' => [
-                  'default' => $ldefault,
+                    'label' => $llabel,
+                    'default' => $ldefault,
                     ],
             ]
         );
         $this->preparePage($I, $pageName);
+
         $I->seeElement("//input", ['value' => $fdefault]);
         $I->seeElement("//input", ['value' => $mdefault]);
         $I->seeElement("//input", ['value' => $ldefault]);
 
-        echo $I->cmnt("Tested Name Fields with default value and everything looks good. ", 'yellow','',array('blink'));
+        $fillableDataArr = [
+            $flabel => 'firstName',
+            $mlabel => 'word',
+            $llabel => 'lastName',
+        ];
+        $fakeData = $this->generatedData($fillableDataArr);
+
+        foreach ($fakeData as $selector => $value) {
+            $I->tryToFilledField(FluentFormsSelectors::fillAbleArea($selector), $value);
+        }
+        $I->clicked(FieldSelectors::submitButton);
+
+        $I->checkAdminArea([$adminLabel, $fakeData[$flabel], $fakeData[$mlabel], $fakeData[$llabel]]);
+
+        echo $I->cmnt("Checked Admin field label, default value and form post data ", 'yellow','',array('blink'));
     }
     public function test_name_fields_hide_label(AcceptanceTester $I): void
     {
