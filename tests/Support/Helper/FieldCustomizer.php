@@ -93,8 +93,7 @@ trait FieldCustomizer
         //                                           Basic options                                              //
         // adminFieldLabel
         if (isset($basicOperand) && $basicOperand['adminFieldLabel']) {
-            $I->filledField(GeneralFields::adminFieldLabel,
-                !empty($basicOperand['adminFieldLabel']) ? $basicOperand['adminFieldLabel'] : $fieldName, 'As Admin Field Label');
+            $I->filledField(GeneralFields::adminFieldLabel, $basicOperand['adminFieldLabel'], 'Fill As Admin Field Label');
         }
 
         $nameFieldLocalFunction = function (AcceptanceTester $I, $whichName, $nameArea){
@@ -162,8 +161,64 @@ trait FieldCustomizer
 
     }
 
-    public function customizeEmail(AcceptanceTester $I)
+    public function customizeEmail(
+        AcceptanceTester $I,
+        $fieldName,
+        ?array $basicOptions = null,
+        ?array $advancedOptions = null,
+        ?bool $isHiddenLabel = false
+    ): void
     {
+        $I->clickOnExactText($fieldName);
+
+        $basicOperand = null;
+        $advancedOperand = null;
+
+        $basicOptionsDefault = [
+            'adminFieldLabel' => false,
+            'placeholder' => false,
+            'requiredMessage' => false,
+            'validationMessage' => false,
+        ];
+
+        $advancedOptionsDefault = [
+            'defaultValue' => false,
+            'containerClass' => false,
+            'elementClass' => false,
+            'helpMessage' => false,
+            'duplicateValidationMessage' => false,
+            'prefixLabel' => false,
+            'suffixLabel' => false,
+            'nameAttribute' => false,
+
+        ];
+
+        if (!is_null($basicOptions)) {
+            $basicOperand = array_merge($basicOptionsDefault, $basicOptions);
+        }
+
+        if (!is_null($advancedOptions)) {
+            $advancedOperand = array_merge($advancedOptionsDefault, $advancedOptions);
+        }
+
+        //                                           Basic options                                              //
+        // adminFieldLabel
+        if (isset($basicOperand) && $basicOperand['adminFieldLabel']) {
+            $I->filledField(GeneralFields::adminFieldLabel, $basicOperand['adminFieldLabel'], 'Fill As Admin Field Label');
+        }
+//         Placeholder
+        if (isset($basicOperand) && $basicOperand['placeholder']) {
+            $I->filledField(GeneralFields::placeholder, $basicOperand['placeholder'], 'Fill As Placeholder');
+        }
+//         Required Message
+        if (isset($basicOperand) && $basicOperand['requiredMessage']) {
+            $I->clicked(GeneralFields::radioSelect('Required'));
+            $I->filledField(GeneralFields::customizationFields('Required'), $basicOperand['requiredMessage'], 'Fill As Required Message');
+        }
+
+
+
+
         $I->clicked(FluentFormsSelectors::saveForm);
 
     }
