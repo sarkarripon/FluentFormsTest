@@ -146,8 +146,7 @@ trait FieldCustomizer
         //                                           Advanced options                                              //
 
         if (isset($advancedOperand)) {
-            $I->clicked("//h5[normalize-space()='Advanced Options']");
-
+            $I->clicked(GeneralFields::advancedOptions);
             $I->fillField("(//span[normalize-space()='Container Class']/following::input[@type='text'])[1]",
                 $advancedOperand['containerClass'] ?? $fieldName);
 
@@ -203,22 +202,53 @@ trait FieldCustomizer
 
         //                                           Basic options                                              //
         // adminFieldLabel
-        if (isset($basicOperand) && $basicOperand['adminFieldLabel']) {
-            $I->filledField(GeneralFields::adminFieldLabel, $basicOperand['adminFieldLabel'], 'Fill As Admin Field Label');
-        }
+        if (isset($basicOperand)) {
+            $I->filledField(GeneralFields::adminFieldLabel, $basicOperand['adminFieldLabel'] ?? null, 'Fill As Admin Field Label');
 //         Placeholder
-        if (isset($basicOperand) && $basicOperand['placeholder']) {
             $I->filledField(GeneralFields::placeholder, $basicOperand['placeholder'], 'Fill As Placeholder');
-        }
 //         Required Message
-        if (isset($basicOperand) && $basicOperand['requiredMessage']) {
-            $I->clicked(GeneralFields::radioSelect('Required'));
+        if ($basicOperand['requiredMessage']) {
+            $I->clicked(GeneralFields::radioSelect('Required'),'Select Required');
             $I->filledField(GeneralFields::customizationFields('Required'), $basicOperand['requiredMessage'], 'Fill As Required Message');
         }
+//         Validation Message
+            $I->filledField(GeneralFields::customizationFields('Validate Email'), $basicOperand['validationMessage'], 'Fill As Email Validation Message');
+        }
 
+        //                                           Advanced options                                              //
 
-
-
+        if (isset($advancedOperand)) {
+            $I->scrollTo(GeneralFields::advancedOptions);
+            $I->clicked(GeneralFields::advancedOptions,'Expand advanced options');
+            // Default Value
+            $I->wait(2);
+            $I->filledField(GeneralFields::defaultField,
+                $advancedOperand['defaultValue'] ?? null, 'Fill As Default Value');
+            // Container Class
+            $I->filledField(GeneralFields::customizationFields('Container Class'),
+                $advancedOperand['containerClass'] ?? null, 'Fill As Container Class');
+            // Element Class
+            $I->filledField(GeneralFields::customizationFields('Element Class'),
+                $advancedOperand['elementClass'] ?? null, 'Fill As Element Class');
+            // Help Message
+            $I->filledField("//textarea[@class='el-textarea__inner']",
+                $advancedOperand['helpMessage'] ?? null, 'Fill As Help Message');
+            // Duplicate Validation Message
+            if ($advancedOperand['duplicateValidationMessage']) {
+                $I->clicked(GeneralFields::checkboxSelect(),'Select Duplicate Validation Message');
+                $I->filledField(GeneralFields::customizationFields('Validation Message for Duplicate'),
+                    $advancedOperand['duplicateValidationMessage'], 'Fill As Duplicate Validation Message');
+            }
+            // Prefix Label
+            $I->filledField(GeneralFields::customizationFields('Prefix Label'),
+                $advancedOperand['prefixLabel'] ?? null, 'Fill As Prefix Label');
+            // Suffix Label
+            $I->filledField(GeneralFields::customizationFields('Suffix Label'),
+                $advancedOperand['suffixLabel'] ?? null, 'Fill As Suffix Label');
+            // Name Attribute
+            $I->filledField(GeneralFields::customizationFields('Name Attribute'),
+                $advancedOperand['nameAttribute'] ?? null, 'Fill As Name Attribute');
+        }
         $I->clicked(FluentFormsSelectors::saveForm);
 
     }
