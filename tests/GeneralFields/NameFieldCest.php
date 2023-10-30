@@ -203,7 +203,7 @@ class NameFieldCest
         $I->dontSeeElement("//label", ['aria-label'=> $mlabel]);
         $I->dontSeeElement("//label", ['aria-label'=> $llabel]);
 
-        echo $I->cmnt("Tested Name Fields whether it can hide label, everything looks good. ", 'yellow','',array('blink'));
+        echo $I->cmnt("All tests went through. ", 'yellow','',array('blink'));
     }
 
 

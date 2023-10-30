@@ -253,8 +253,97 @@ trait FieldCustomizer
 
     }
 
-    public function customizeSimpleText()
+    public function customizeSimpleText(
+        AcceptanceTester $I,
+        $fieldName,
+        ?array $basicOptions = null,
+        ?array $advancedOptions = null,
+        ?bool $isHiddenLabel = false
+    )
     {
+        $I->clickOnExactText($fieldName);
+
+        $basicOperand = null;
+        $advancedOperand = null;
+
+        $basicOptionsDefault = [
+            'adminFieldLabel' => false,
+            'placeholder' => false,
+            'requiredMessage' => false,
+        ];
+
+        $advancedOptionsDefault = [
+            'defaultValue' => false,
+            'containerClass' => false,
+            'elementClass' => false,
+            'helpMessage' => false,
+            'prefixLabel' => false,
+            'suffixLabel' => false,
+            'nameAttribute' => false,
+            'maxLength' => false,
+            'uniqueValidationMessage' => false,
+        ];
+
+        if (!is_null($basicOptions)) {
+            $basicOperand = array_merge($basicOptionsDefault, $basicOptions);
+        }
+
+        if (!is_null($advancedOptions)) {
+            $advancedOperand = array_merge($advancedOptionsDefault, $advancedOptions);
+        }
+
+        //                                           Basic options                                              //
+        // adminFieldLabel
+        if (isset($basicOperand)) {
+            $I->filledField(GeneralFields::adminFieldLabel, $basicOperand['adminFieldLabel'] ?? null, 'Fill As Admin Field Label');
+//         Placeholder
+            $I->filledField(GeneralFields::placeholder, $basicOperand['placeholder'], 'Fill As Placeholder');
+//         Required Message
+            if ($basicOperand['requiredMessage']) {
+                $I->clicked(GeneralFields::radioSelect('Required'),'Select Required');
+                $I->filledField(GeneralFields::customizationFields('Error Message'), $basicOperand['requiredMessage'], 'Fill As Required Message');
+            }
+        }
+
+        //                                           Advanced options                                              //
+
+        if (isset($advancedOperand)) {
+            $I->scrollTo(GeneralFields::advancedOptions);
+            $I->clicked(GeneralFields::advancedOptions,'Expand advanced options');
+            // Default Value
+            $I->wait(2);
+            $I->filledField(GeneralFields::defaultField,
+                $advancedOperand['defaultValue'] ?? null, 'Fill As Default Value');
+            // Container Class
+            $I->filledField(GeneralFields::customizationFields('Container Class'),
+                $advancedOperand['containerClass'] ?? null, 'Fill As Container Class');
+            // Element Class
+            $I->filledField(GeneralFields::customizationFields('Element Class'),
+                $advancedOperand['elementClass'] ?? null, 'Fill As Element Class');
+            // Help Message
+            $I->filledField("//textarea[@class='el-textarea__inner']",
+                $advancedOperand['helpMessage'] ?? null, 'Fill As Help Message');
+
+            // Prefix Label
+            $I->filledField(GeneralFields::customizationFields('Prefix Label'),
+                $advancedOperand['prefixLabel'] ?? null, 'Fill As Prefix Label');
+            // Suffix Label
+            $I->filledField(GeneralFields::customizationFields('Suffix Label'),
+                $advancedOperand['suffixLabel'] ?? null, 'Fill As Suffix Label');
+            // Name Attribute
+            $I->filledField(GeneralFields::customizationFields('Name Attribute'),
+                $advancedOperand['nameAttribute'] ?? null, 'Fill As Name Attribute');
+            // Max Length
+            $I->filledField("//input[@type='number']",
+                $advancedOperand['maxLength'] ?? null, 'Fill As Max text Length');
+            // Unique Validation Message
+            if ($advancedOperand['uniqueValidationMessage']) {
+                $I->clicked(GeneralFields::checkboxSelect(),'Validate as Unique');
+                $I->filledField(GeneralFields::customizationFields('Validation Message for Duplicate'),
+                    $advancedOperand['uniqueValidationMessage'], 'Fill As Unique Validation Message');
+            }
+        }
+        $I->clicked(FluentFormsSelectors::saveForm);
 
     }
 
