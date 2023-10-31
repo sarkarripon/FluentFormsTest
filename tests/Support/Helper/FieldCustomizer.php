@@ -336,6 +336,7 @@ trait FieldCustomizer
             // Max Length
             $I->filledField("//input[@type='number']",
                 $advancedOperand['maxLength'] ?? null, 'Fill As Max text Length');
+
             // Unique Validation Message
             if ($advancedOperand['uniqueValidationMessage']) {
                 $I->clicked(GeneralFields::checkboxSelect(),'Validate as Unique');

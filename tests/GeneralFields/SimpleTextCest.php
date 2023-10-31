@@ -83,51 +83,67 @@ class SimpleTextCest
         $I->seeElement("//div[contains(@class,'$containerClass')]", [], $I->cmnt('Check simpletext container class'));
         $I->seeElement("//input[contains(@class,'$elementClass')]", [], $I->cmnt('Check simpletext element class'));
         $I->seeElement("//div", ['data-content' => $helpMessage], $I->cmnt('Check simpletext help message'));
+        $I->seeElement("//input", ['maxlength' => $maxLength], $I->cmnt('Check simpletext input max length'));
+
 
         $fillableDataArr = [
             $elementLabel => ['regexify'=> "^[A-Za-z0-9]{".$maxLength."}"],
         ];
         $fakeData = $this->generatedData($fillableDataArr);
 
+        $sameText = '';
+        $textField = '';
         foreach ($fakeData as $selector => $value) {
+            $sameText = $value;
+            $textField = $selector;
             $I->tryToFilledField(FluentFormsSelectors::fillAbleArea($selector), $value);
         }
-
         $I->clicked(FieldSelectors::submitButton);
-        exit();
-        $I->seeText([
-            $validationMessage,
-        ], $I->cmnt('Check email validation message'));
-
-        $I->amOnPage('/' . $pageName);
-
-        $fillableDataArr = [
-            $elementLabel => 'email',
-        ];
-        $fakeData = $this->generatedData($fillableDataArr);
-
-        $sameEmail = null;
-        $emailField = null;
-        foreach ($fakeData as $selector => $value) {
-            $sameEmail = $value;
-            $emailField = $selector;
-            $I->tryToFilledField(FluentFormsSelectors::fillAbleArea($selector), $value);
-        }
-
         $I->clicked(FieldSelectors::submitButton);
         $I->wait(1);
         $I->amOnPage('/' . $pageName);
 
-        $I->filledField(FluentFormsSelectors::fillAbleArea($emailField), $sameEmail);
+        $I->filledField(FluentFormsSelectors::fillAbleArea($textField), $sameText);
 
         $I->clicked(FieldSelectors::submitButton);
 
         $I->seeText([
-            $duplicateValidationMessage,
-        ], $I->cmnt('Check email duplicate validation message'));
+            $uniqueValidationMessage,
+        ], $I->cmnt('Check unique validation message'));
 
-        echo $I->cmnt("All tests went through. ",'yellow','',array('blink') );
-
-
+        echo $I->cmnt("All test cases went through. ",'yellow','',array('blink') );
     }
+    public function test_simple_text_field_with_default_value(AcceptanceTester $I)
+    {
+        $pageName = __FUNCTION__ . '_' . rand(1, 100);
+        $faker = \Faker\Factory::create();
+
+        $elementLabel = $faker->words(2, true);
+        $adminFieldLabel = $faker->words(2, true);
+        $defaultValue = $faker->words(2, true);
+
+        $customName = [
+            'simpleText' => $elementLabel,
+        ];
+
+        $this->prepareForm($I, $pageName, [
+            'generalFields' => ['simpleText'],
+        ], true, $customName);
+
+        $this->customizeSimpleText($I, $elementLabel,
+            [
+            'adminFieldLabel' => $adminFieldLabel,
+            ],
+            [
+            'defaultValue' => $defaultValue,
+            ]);
+
+        $this->preparePage($I, $pageName);
+        $I->seeElement("//input", ['value' => $defaultValue], $I->cmnt('Check simpletext default value'));
+        $I->clicked(FieldSelectors::submitButton);
+        $I->checkAdminArea([$adminFieldLabel], $I->cmnt('Check simpletext adminfield label'));
+        echo $I->cmnt("All test cases went through. ", 'yellow','',array('blink'));
+    }
+
+
 }

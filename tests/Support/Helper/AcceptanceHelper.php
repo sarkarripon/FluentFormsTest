@@ -104,9 +104,6 @@ class AcceptanceHelper extends WebDriver
             $this->waitForElementVisible($selector);
             parent::clickWithLeftButton($selector);
         }
-//        $this->waitForElementVisible($selector,10);
-//        $this->moveMouseOver($selector);
-
     }
     public function clickedOnText(string $actionText, string $followingText = null, $index = 1, $wait=1): void
     {
