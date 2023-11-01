@@ -40,14 +40,14 @@ class MaskInputCest
 
 
         $customName = [
-            'simpleText' => $elementLabel,
+            'maskInput' => $elementLabel,
         ];
 
         $this->prepareForm($I, $pageName, [
-            'generalFields' => ['simpleText'],
+            'generalFields' => ['maskInput'],
         ], true, $customName);
 
-        $this->customizeSimpleText($I, $elementLabel,
+        $this->customizeMaskInput($I, $elementLabel,
             [
 //            'adminFieldLabel' => $adminFieldLabel,
                 'placeholder' => $placeholder,
@@ -62,7 +62,6 @@ class MaskInputCest
                 'suffixLabel' => $suffixLabel,
                 'nameAttribute' => $nameAttribute,
             ]);
-
         $this->preparePage($I, $pageName);
         $I->clicked(FieldSelectors::submitButton);
         $I->seeText([
@@ -80,36 +79,38 @@ class MaskInputCest
         $I->seeElement("//input[contains(@class,'$elementClass')]", [], $I->cmnt('Check maskinput element class'));
         $I->seeElement("//div", ['data-content' => $helpMessage], $I->cmnt('Check maskinput help message'));
 
-
-        exit();
-
-        $fillableDataArr = [
-            $elementLabel => ['regexify'=> "^[A-Za-z0-9]{".$maxLength."}"],
-        ];
-        $fakeData = $this->generatedData($fillableDataArr);
-
-        $sameText = '';
-        $textField = '';
-        foreach ($fakeData as $selector => $value) {
-            $sameText = $value;
-            $textField = $selector;
-            $I->tryToFilledField(FluentFormsSelectors::fillAbleArea($selector), $value);
-        }
-        $I->clicked(FieldSelectors::submitButton);
-        $I->clicked(FieldSelectors::submitButton);
-        $I->wait(1);
-        $I->amOnPage('/' . $pageName);
-
-        $I->filledField(FluentFormsSelectors::fillAbleArea($textField), $sameText);
-
-        $I->clicked(FieldSelectors::submitButton);
-
-        $I->seeText([
-            $uniqueValidationMessage,
-        ], $I->cmnt('Check unique validation message'));
-
         echo $I->cmnt("All test cases went through. ",'yellow','',array('blink') );
+    }
 
+    public function test_maskinput_field_with_default_value(AcceptanceTester $I)
+    {
+        $pageName = __FUNCTION__ . '_' . rand(1, 100);
+        $faker = \Faker\Factory::create();
 
+        $elementLabel = $faker->words(2, true);
+        $adminFieldLabel = $faker->words(2, true);
+        $defaultValue = $faker->words(2, true);
+
+        $customName = [
+            'maskInput' => $elementLabel,
+        ];
+
+        $this->prepareForm($I, $pageName, [
+            'generalFields' => ['maskInput'],
+        ], true, $customName);
+
+        $this->customizeMaskInput($I, $elementLabel,
+            [
+                'adminFieldLabel' => $adminFieldLabel,
+            ],
+            [
+                'defaultValue' => $defaultValue,
+            ]);
+
+        $this->preparePage($I, $pageName);
+        $I->seeElement("//input", ['value' => $defaultValue], $I->cmnt('Check maskInput default value'));
+        $I->clicked(FieldSelectors::submitButton);
+        $I->checkAdminArea([$adminFieldLabel], $I->cmnt('Check maskInput adminfield label'));
+        echo $I->cmnt("All test cases went through. ", 'yellow','',array('blink'));
     }
 }

@@ -113,7 +113,7 @@ class SimpleTextCest
 
         echo $I->cmnt("All test cases went through. ",'yellow','',array('blink') );
     }
-    public function test_simple_text_field_with_default_value(AcceptanceTester $I)
+    public function test_simpletext_field_with_default_value(AcceptanceTester $I)
     {
         $pageName = __FUNCTION__ . '_' . rand(1, 100);
         $faker = \Faker\Factory::create();
