@@ -8,7 +8,7 @@ class FluentFormsSelectors
     const addNewForm = "//button[contains(@class,'el-button el-button--primary')][1]";
     const blankForm = "(//div[contains(@class,'ff_card ff_card_form_action ff_card_shadow_lg hover-zoom')])[1]";
     const cptForm = "(//h6[normalize-space()='Create A Post Form'])[1]";
-    const saveForm = "(//button[normalize-space()='Save Form'])[1]";
+    const saveForm = "//button[@id='saveFormData']";
     const mouseHoverMenu = "(//td[contains(@class,'el-table__cell')])[2]";
     const deleteBtn = "//a[normalize-space()='Delete']";
     const confirmBtn = "[class='el-popover el-popper']:last-child button:last-child";

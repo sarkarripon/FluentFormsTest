@@ -62,6 +62,7 @@ class MaskInputCest
                 'suffixLabel' => $suffixLabel,
                 'nameAttribute' => $nameAttribute,
             ]);
+
         $this->preparePage($I, $pageName);
         $I->clicked(FieldSelectors::submitButton);
         $I->seeText([

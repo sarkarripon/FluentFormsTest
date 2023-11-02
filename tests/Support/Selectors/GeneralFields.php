@@ -21,9 +21,13 @@ class GeneralFields{
         // 1,3,5
         return "(//div[@role='radiogroup']//span[contains(@class,'el-radio__inner')])[$whatRequire]";
     }
-    public static function radioSelect($label)
+    public static function radioSelect($label, $index = 1)
     {
-        return "(//*[normalize-space()='$label']/following::div[@role='radiogroup']//span[contains(@class,'el-radio__inner')])[1]";
+        $indexPart = "";
+        if ($index !== null) {
+            $indexPart = "[$index]";
+        }
+        return "(//*[normalize-space()='$label']/following::div[@role='radiogroup']//span[contains(@class,'el-radio__inner')])$indexPart";
     }
     public static function checkboxSelect($checkboxClassName="checkbox-label")
     {
