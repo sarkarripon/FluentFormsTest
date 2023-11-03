@@ -34,7 +34,7 @@ class FluentFormsSelectors
         'textArea' => "//div[contains(@class,'vddl-draggable btn-element')]//span[normalize-space()='Text Area']",
         'addressFields' => "//div[contains(@class,'vddl-draggable btn-element')]//span[normalize-space()='Address Fields']",
         'countryList' => "//div[contains(@class,'vddl-draggable btn-element')]//span[normalize-space()='Country List']",
-        'numaricField' => "//div[contains(@class,'vddl-draggable btn-element')]//span[normalize-space()='Numeric Field']",
+        'numericField' => "//div[contains(@class,'vddl-draggable btn-element')]//span[normalize-space()='Numeric Field']",
         'dropdown' => "//div[contains(@class,'vddl-draggable btn-element')]//span[normalize-space()='Dropdown']",
         'radioField' => "//div[contains(@class,'vddl-draggable btn-element')]//span[normalize-space()='Radio Field']",
         'checkBox' => "//div[contains(@class,'vddl-draggable btn-element')]//span[normalize-space()='Check Box']",

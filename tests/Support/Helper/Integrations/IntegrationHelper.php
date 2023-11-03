@@ -27,7 +27,7 @@ trait IntegrationHelper
      * textArea
      * addressFields
      * countryList
-     * numaricField
+     * numericField
      * dropdown
      * radioField
      * checkBox

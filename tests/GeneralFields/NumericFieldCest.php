@@ -4,10 +4,14 @@
 namespace Tests\GeneralFields;
 
 use Tests\Support\AcceptanceTester;
+use Tests\Support\Factories\DataProvider\DataGenerator;
+use Tests\Support\Helper\FieldCustomizer;
+use Tests\Support\Helper\Integrations\IntegrationHelper;
 use Tests\Support\Selectors\FieldSelectors;
 
 class NumericFieldCest
 {
+    use IntegrationHelper, FieldCustomizer, DataGenerator;
     public function _before(AcceptanceTester $I)
     {
         $I->loadDotEnvFile();
@@ -32,52 +36,54 @@ class NumericFieldCest
         $prefixLabel = $faker->words(2, true);
         $suffixLabel = $faker->words(3, true);
         $nameAttribute = $faker->firstName();
-        $rows = $faker->numberBetween(1, 6);
-        $columns = $faker->numberBetween(1, 6);
-        $maxLength = $faker->numberBetween(10, 100);
-
-
+        $minValue = $faker->numberBetween(10, 50);
+        $maxValue = $faker->numberBetween(60, 99);
+        $digits = $faker->numberBetween(2, 2);
 
         $customName = [
-            'textArea' => $elementLabel,
+            'numericField' => $elementLabel,
         ];
 
         $this->prepareForm($I, $pageName, [
-            'generalFields' => ['textArea'],
+            'generalFields' => ['numericField'],
         ], true, $customName);
 
-        $this->customizeTextArea($I, $elementLabel,
+        $this->customizeNumericField($I, $elementLabel,
             [
 //            'adminFieldLabel' => $adminFieldLabel,
                 'placeholder' => $placeholder,
-                'rows' => $rows,
-                'columns' => $columns,
                 'requiredMessage' => $requiredMessage,
+                'minValue' => $minValue,
+                'maxValue' => $maxValue,
+                'digits' => $digits,
+//                'numberFormat' => 'US Style with Decimal (EX: 123,456.00)',
             ],
             [
-//            'defaultValue' => $defaultValue,
+//                'defaultValue' => $defaultValue,
                 'containerClass' => $containerClass,
                 'elementClass' => $elementClass,
                 'helpMessage' => $helpMessage,
-                'maxLength' => $maxLength,
+                'step' => 'any',
+                'prefixLabel' => $prefixLabel,
+                'suffixLabel' => $suffixLabel,
                 'nameAttribute' => $nameAttribute,
+//                'calculation' => 'Sum',
             ]);
 
         $this->preparePage($I, $pageName);
         $I->clicked(FieldSelectors::submitButton);
         $I->seeText([
             $elementLabel,
-            $requiredMessage,
+//            $requiredMessage,
+            $prefixLabel,
+            $suffixLabel,
+        ], $I->cmnt('Check element label, required message, prefix label, suffix label'));
 
-        ], $I->cmnt('Check element label and required message'));
-
-        $I->seeElement("//textarea", ['placeholder' => $placeholder], $I->cmnt('Check textarea placeholder'));
-        $I->seeElement("//textarea", ['rows' => $rows, 'cols' => $columns], $I->cmnt('Check textarea rows and columns'));
-        $I->seeElement("//textarea", ['maxlength' => $maxLength], $I->cmnt('Check textarea maxlength'));
-        $I->seeElement("//textarea", ['name' => $nameAttribute], $I->cmnt('Check textarea name attribute'));
-        $I->seeElement("//textarea", ['data-name' => $nameAttribute], $I->cmnt('Check textarea name attribute'));
-        $I->seeElement("//div[contains(@class,'$containerClass')]", [], $I->cmnt('Check textarea container class'));
-        $I->seeElement("//textarea[contains(@class,'$elementClass')]", [], $I->cmnt('Check textarea element class'));
+        $I->seeElement("//input", ['placeholder' => $placeholder], $I->cmnt('Check numericField placeholder'));
+        $I->seeElement("//input", ['name' => $nameAttribute], $I->cmnt('Check numericField name attribute'));
+        $I->seeElement("//input", ['data-name' => $nameAttribute], $I->cmnt('Check numericField name attribute'));
+        $I->seeElement("//div[contains(@class,'$containerClass')]", [], $I->cmnt('Check numericField container class'));
+        $I->seeElement("//input[contains(@class,'$elementClass')]", [], $I->cmnt('Check numericField element class'));
         echo $I->cmnt("All test cases went through. ", 'yellow','',array('blink'));
 
     }

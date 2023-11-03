@@ -84,7 +84,7 @@ class AcceptanceHelper extends WebDriver
         try {
             $this->fillField($selector, $value);
         } catch (Exception $e) {
-            $this->waitForElementVisible($selector);
+            $this->waitForElementClickable($selector);
             $this->clearField($selector);
             $this->clickWithLeftButton($selector);
             parent::type($value, .7);
@@ -106,9 +106,11 @@ class AcceptanceHelper extends WebDriver
         try {
             parent::clickWithLeftButton($selector);
         }catch (Exception $e){
-            $this->waitForElementVisible($selector);
-            parent::clickWithLeftButton($selector);
+            $this->waitForElementClickable($selector);
+            $this->scrollTo($selector);
+            $this->clickByJS($selector);
         }
+
     }
     public function clickedOnText(string $actionText, string $followingText = null, $index = 1, $wait=1): void
     {

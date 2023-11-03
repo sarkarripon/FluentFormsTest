@@ -2,6 +2,7 @@
 
 namespace Tests\Support\Helper;
 
+use PhpParser\Node\Expr\Exit_;
 use Tests\Support\AcceptanceTester;
 use Tests\Support\Selectors\FluentFormsSelectors;
 use Tests\Support\Selectors\GeneralFields;
@@ -224,8 +225,8 @@ trait FieldCustomizer
         if (isset($advancedOperand)) {
             $I->scrollTo(GeneralFields::advancedOptions);
             $I->clicked(GeneralFields::advancedOptions,'Expand advanced options');
-            // Default Value
             $I->wait(2);
+
             $advancedOperand['defaultValue'] // Default Value
             ? $I->filledField(GeneralFields::defaultField, $advancedOperand['defaultValue'], 'Fill As Default Value')
             : null;
@@ -252,6 +253,7 @@ trait FieldCustomizer
             $advancedOperand['prefixLabel'] // Prefix Label
             ? $I->filledField(GeneralFields::customizationFields('Prefix Label'), $advancedOperand['prefixLabel'], 'Fill As Prefix Label')
             : null;
+
             $advancedOperand['suffixLabel'] // Suffix Label
             ? $I->filledField(GeneralFields::customizationFields('Suffix Label'), $advancedOperand['suffixLabel'], 'Fill As Suffix Label')
             : null;
@@ -262,7 +264,6 @@ trait FieldCustomizer
 
         }
         $I->clicked(FluentFormsSelectors::saveForm);
-
     }
 
     public function customizeSimpleText(
@@ -305,13 +306,18 @@ trait FieldCustomizer
         }
 
         //                                           Basic options                                              //
-        // adminFieldLabel
+
         if (isset($basicOperand)) {
-            $I->filledField(GeneralFields::adminFieldLabel, $basicOperand['adminFieldLabel'] ?? null, 'Fill As Admin Field Label');
-//         Placeholder
-            $I->filledField(GeneralFields::placeholder, $basicOperand['placeholder'], 'Fill As Placeholder');
-//         Required Message
-            if ($basicOperand['requiredMessage']) {
+
+            $basicOperand['adminFieldLabel'] // adminFieldLabel
+                ? $I->filledField(GeneralFields::adminFieldLabel, $basicOperand['adminFieldLabel'], 'Fill As Admin Field Label')
+                : null;
+
+            $basicOperand['placeholder']
+                ? $I->filledField(GeneralFields::placeholder, $basicOperand['placeholder'], 'Fill As Placeholder')
+                : null;
+
+            if ($basicOperand['requiredMessage']) { // Required Message
                 $I->clicked(GeneralFields::radioSelect('Required'),'Select Required');
                 $I->filledField(GeneralFields::customizationFields('Error Message'), $basicOperand['requiredMessage'], 'Fill As Required Message');
             }
@@ -322,32 +328,39 @@ trait FieldCustomizer
         if (isset($advancedOperand)) {
             $I->scrollTo(GeneralFields::advancedOptions);
             $I->clicked(GeneralFields::advancedOptions,'Expand advanced options');
-            // Default Value
             $I->wait(2);
-            $I->filledField(GeneralFields::defaultField,
-                $advancedOperand['defaultValue'] ?? null, 'Fill As Default Value');
-            // Container Class
-            $I->filledField(GeneralFields::customizationFields('Container Class'),
-                $advancedOperand['containerClass'] ?? null, 'Fill As Container Class');
-            // Element Class
-            $I->filledField(GeneralFields::customizationFields('Element Class'),
-                $advancedOperand['elementClass'] ?? null, 'Fill As Element Class');
-            // Help Message
-            $I->filledField("//textarea[@class='el-textarea__inner']",
-                $advancedOperand['helpMessage'] ?? null, 'Fill As Help Message');
 
-            // Prefix Label
-            $I->filledField(GeneralFields::customizationFields('Prefix Label'),
-                $advancedOperand['prefixLabel'] ?? null, 'Fill As Prefix Label');
-            // Suffix Label
-            $I->filledField(GeneralFields::customizationFields('Suffix Label'),
-                $advancedOperand['suffixLabel'] ?? null, 'Fill As Suffix Label');
-            // Name Attribute
-            $I->filledField(GeneralFields::customizationFields('Name Attribute'),
-                $advancedOperand['nameAttribute'] ?? null, 'Fill As Name Attribute');
-            // Max Length
-            $I->filledField("//input[@type='number']",
-                $advancedOperand['maxLength'] ?? null, 'Fill As Max text Length');
+            $advancedOperand['defaultValue']    // Default Value
+                ? $I->filledField(GeneralFields::defaultField, $advancedOperand['defaultValue'], 'Fill As Default Value')
+                : null;
+
+            $advancedOperand['containerClass'] // Container Class
+                ? $I->filledField(GeneralFields::customizationFields('Container Class'), $advancedOperand['containerClass'], 'Fill As Container Class')
+                : null;
+
+            $advancedOperand['elementClass'] // Element Class
+                ? $I->filledField(GeneralFields::customizationFields('Element Class'), $advancedOperand['elementClass'], 'Fill As Element Class')
+                : null;
+
+            $advancedOperand['helpMessage'] // Help Message
+                ? $I->filledField("//textarea[@class='el-textarea__inner']", $advancedOperand['helpMessage'], 'Fill As Help Message')
+                : null;
+
+            $advancedOperand['prefixLabel'] // Prefix Label
+                ? $I->filledField(GeneralFields::customizationFields('Prefix Label'), $advancedOperand['prefixLabel'], 'Fill As Prefix Label')
+                : null;
+
+            $advancedOperand['suffixLabel'] // Suffix Label
+                ? $I->filledField(GeneralFields::customizationFields('Suffix Label'), $advancedOperand['suffixLabel'], 'Fill As Suffix Label')
+                : null;
+
+            $advancedOperand['nameAttribute'] // Name Attribute
+                ? $I->filledField(GeneralFields::customizationFields('Name Attribute'), $advancedOperand['nameAttribute'], 'Fill As Name Attribute')
+                : null;
+
+            $advancedOperand['maxLength'] // Max Length
+                ? $I->filledField("//input[@type='number']", $advancedOperand['maxLength'], 'Fill As Max text Length')
+                : null;
 
             // Unique Validation Message
             if ($advancedOperand['uniqueValidationMessage']) {
@@ -357,7 +370,6 @@ trait FieldCustomizer
             }
         }
         $I->clicked(FluentFormsSelectors::saveForm);
-
     }
 
     public function customizeMaskInput(
@@ -401,11 +413,16 @@ trait FieldCustomizer
         //                                           Basic options                                              //
         // adminFieldLabel
         if (isset($basicOperand)) {
-            $I->filledField(GeneralFields::adminFieldLabel, $basicOperand['adminFieldLabel'] ?? null, 'Fill As Admin Field Label');
-//         Placeholder
-            $I->filledField(GeneralFields::placeholder, $basicOperand['placeholder'], 'Fill As Placeholder');
-//         Required Message
-            if ($basicOperand['requiredMessage']) {
+
+            $basicOperand['adminFieldLabel']   // adminFieldLabel
+                ? $I->filledField(GeneralFields::adminFieldLabel, $basicOperand['adminFieldLabel'], 'Fill As Admin Field Label')
+                : null;
+
+            $basicOperand['placeholder'] // Placeholder
+                ? $I->filledField(GeneralFields::placeholder, $basicOperand['placeholder'], 'Fill As Placeholder')
+                : null;
+
+            if ($basicOperand['requiredMessage']) { // Required Message
                 $I->clicked(GeneralFields::radioSelect('Required'),'Select Required');
                 $I->clicked(GeneralFields::radioSelect('Error Message', 2),'Select custom');
                 $I->filledField(GeneralFields::customizationFields('Error Message'), $basicOperand['requiredMessage'], 'Fill As Required Message');
@@ -417,50 +434,42 @@ trait FieldCustomizer
         if (isset($advancedOperand)) {
             $I->scrollTo(GeneralFields::advancedOptions);
             $I->clicked(GeneralFields::advancedOptions, 'Expand advanced options');
+            $I->wait(2);
 
-            // Default Value
-            if (isset($advancedOperand['defaultValue'])) {
-                $I->wait(2);
-                $I->filledField(GeneralFields::defaultField, $advancedOperand['defaultValue'], 'Fill As Default Value');
-            }
+            $advancedOperand['defaultValue'] // Default Value
+                ? $I->filledField(GeneralFields::defaultField, $advancedOperand['defaultValue'], 'Fill As Default Value')
+                : null;
 
-            // Container Class
-            if (isset($advancedOperand['containerClass'])) {
-                $I->filledField(GeneralFields::customizationFields('Container Class'), $advancedOperand['containerClass'], 'Fill As Container Class');
-            }
+            $advancedOperand['containerClass'] // Container Class
+                ? $I->filledField(GeneralFields::customizationFields('Container Class'), $advancedOperand['containerClass'], 'Fill As Container Class')
+                : null;
 
-            // Element Class
-            if (isset($advancedOperand['elementClass'])) {
-                $I->filledField(GeneralFields::customizationFields('Element Class'), $advancedOperand['elementClass'], 'Fill As Element Class');
-            }
+            $advancedOperand['elementClass'] // Element Class
+                ? $I->filledField(GeneralFields::customizationFields('Element Class'), $advancedOperand['elementClass'], 'Fill As Element Class')
+                : null;
 
-            // Help Message
-            if (isset($advancedOperand['helpMessage'])) {
-                $I->filledField("//textarea[@class='el-textarea__inner']", $advancedOperand['helpMessage'], 'Fill As Help Message');
-            }
 
-            // Prefix Label
-            if (isset($advancedOperand['prefixLabel'])) {
-                $I->filledField(GeneralFields::customizationFields('Prefix Label'), $advancedOperand['prefixLabel'], 'Fill As Prefix Label');
-            }
+            $advancedOperand['helpMessage'] // Help Message
+                ? $I->filledField("//textarea[@class='el-textarea__inner']", $advancedOperand['helpMessage'], 'Fill As Help Message')
+                : null;
 
-            // Suffix Label
-            if (isset($advancedOperand['suffixLabel'])) {
-                $I->filledField(GeneralFields::customizationFields('Suffix Label'), $advancedOperand['suffixLabel'], 'Fill As Suffix Label');
-            }
+            $advancedOperand['prefixLabel'] // Prefix Label
+                ? $I->filledField(GeneralFields::customizationFields('Prefix Label'), $advancedOperand['prefixLabel'], 'Fill As Prefix Label')
+                : null;
 
-            // Name Attribute
-            if (isset($advancedOperand['nameAttribute'])) {
-                $I->filledField(GeneralFields::customizationFields('Name Attribute'), $advancedOperand['nameAttribute'], 'Fill As Name Attribute');
-            }
+            $advancedOperand['suffixLabel'] // Suffix Label
+                ? $I->filledField(GeneralFields::customizationFields('Suffix Label'), $advancedOperand['suffixLabel'], 'Fill As Suffix Label')
+                : null;
 
-            // Max Length
-            if (isset($advancedOperand['maxLength'])) {
-                $I->filledField("//input[@type='number']", $advancedOperand['maxLength'], 'Fill As Max text Length');
-            }
+            $advancedOperand['nameAttribute'] // Name Attribute
+                ? $I->filledField(GeneralFields::customizationFields('Name Attribute'), $advancedOperand['nameAttribute'], 'Fill As Name Attribute')
+                : null;
 
-            // Unique Validation Message
-            if (isset($advancedOperand['uniqueValidationMessage'])) {
+            $advancedOperand['maxLength'] // Max Length
+                ? $I->filledField("//input[@type='number']", $advancedOperand['maxLength'], 'Fill As Max text Length')
+                : null;
+
+            if (isset($advancedOperand['uniqueValidationMessage'])) { // Unique Validation Message
                 $I->clicked(GeneralFields::checkboxSelect(), 'Validate as Unique');
                 $I->clicked(GeneralFields::radioSelect('Error Message', 2),'Select Required');
                 $I->filledField(GeneralFields::customizationFields('Validation Message for Duplicate'), $advancedOperand['uniqueValidationMessage'], 'Fill As Unique Validation Message');
@@ -576,9 +585,119 @@ trait FieldCustomizer
 
     }
 
-    public function customizeNumericField()
+    public function customizeNumericField(
+        AcceptanceTester $I,
+        $fieldName,
+        ?array $basicOptions = null,
+        ?array $advancedOptions = null,
+        ?bool $isHiddenLabel = false
+    ): void
     {
+        $I->clickOnExactText($fieldName);
 
+        $basicOperand = null;
+        $advancedOperand = null;
+
+        $basicOptionsDefault = [
+            'adminFieldLabel' => false,
+            'placeholder' => false,
+            'requiredMessage' => false,
+            'minValue' => false,
+            'maxValue' => false,
+            'digits' => false,
+            'numberFormat' => false,
+
+        ];
+
+        $advancedOptionsDefault = [
+            'defaultValue' => false,
+            'containerClass' => false,
+            'elementClass' => false,
+            'helpMessage' => false,
+            'step' => false,
+            'prefixLabel' => false,
+            'suffixLabel' => false,
+            'nameAttribute' => false,
+            'calculation' => false,
+        ];
+
+        if (!is_null($basicOptions)) {
+            $basicOperand = array_merge($basicOptionsDefault, $basicOptions);
+        }
+
+        if (!is_null($advancedOptions)) {
+            $advancedOperand = array_merge($advancedOptionsDefault, $advancedOptions);
+        }
+
+        //                                           Basic options                                              //
+        // adminFieldLabel
+        if (isset($basicOperand)) {
+            $basicOperand['adminFieldLabel']
+                ? $I->filledField(GeneralFields::adminFieldLabel, $basicOperand['adminFieldLabel'], 'Fill As Admin Field Label')
+                : null;
+
+            $basicOperand['placeholder'] //Placeholder
+                ? $I->filledField(GeneralFields::placeholder, $basicOperand['placeholder'], 'Fill As Placeholder')
+                : null;
+
+            if ($basicOperand['requiredMessage']) { //Required Message
+                $I->clicked(GeneralFields::radioSelect('Required'),'Select Required');
+                $I->clickByJS(GeneralFields::radioSelect('Error Message', 2),'Select error message type');
+                $I->filledField(GeneralFields::customizationFields('Required'), $basicOperand['requiredMessage'], 'Fill As Required Message');
+            }
+            $basicOperand['minValue']   // Min Value
+                ? $I->filledField("(//input[@type='number'])[2]", $basicOperand['minValue'], 'Fill As Min Value')
+                : null;
+
+            $basicOperand['maxValue']   // Max Value
+                ? $I->filledField("(//input[@type='number'])[3]", $basicOperand['maxValue'], 'Fill As Max Value')
+                : null;
+
+            $basicOperand['digits']   // Digits
+                ? $I->filledField("(//input[@type='number'])[4]", $basicOperand['digits'], 'Fill As Digits')
+                : null;
+        }
+        //                                           Advanced options                                              //
+
+        if (isset($advancedOperand)) {
+            $I->scrollTo(GeneralFields::advancedOptions);
+            $I->clickByJS(GeneralFields::advancedOptions, 'Expand advanced options');
+            $I->wait(2);
+
+            $advancedOperand['defaultValue'] // Default Value
+                ? $I->filledField(GeneralFields::defaultField, $advancedOperand['defaultValue'], 'Fill As Default Value')
+                : null;
+
+            $advancedOperand['containerClass'] // Container Class
+                ? $I->filledField(GeneralFields::customizationFields('Container Class'), $advancedOperand['containerClass'], 'Fill As Container Class')
+                : null;
+
+            $advancedOperand['elementClass'] // Element Class
+                ? $I->filledField(GeneralFields::customizationFields('Element Class'), $advancedOperand['elementClass'], 'Fill As Element Class')
+                : null;
+
+            $advancedOperand['helpMessage'] // Help Message
+                ? $I->filledField("(//textarea[@class='el-textarea__inner'])", $advancedOperand['helpMessage'], 'Fill As Help Message')
+                : null;
+
+            $advancedOperand['step']      // Step
+                ? $I->filledField(GeneralFields::customizationFields('Step'), $advancedOperand['step'], 'Fill As Step')
+                : null;
+
+            $advancedOperand['prefixLabel'] // Prefix Label
+                ? $I->filledField(GeneralFields::customizationFields('Prefix Label'), $advancedOperand['prefixLabel'], 'Fill As Prefix Label')
+                : null;
+
+            $advancedOperand['suffixLabel'] // Suffix Label
+                ? $I->filledField(GeneralFields::customizationFields('Suffix Label'), $advancedOperand['suffixLabel'], 'Fill As Suffix Label')
+                : null;
+
+            $advancedOperand['nameAttribute'] // Name Attribute
+                ? $I->filledField(GeneralFields::customizationFields('Name Attribute'), $advancedOperand['nameAttribute'], 'Fill As Name Attribute')
+                : null;
+
+        }
+        $I->clicked(FluentFormsSelectors::saveForm);
     }
 
     public function customizeDropdown()
