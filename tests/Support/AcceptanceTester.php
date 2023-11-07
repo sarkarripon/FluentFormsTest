@@ -59,7 +59,6 @@ class AcceptanceTester extends \Codeception\Actor
         return sprintf((new Color($textColor,$backColor,$options))->apply($text));
     }
 
-
     public function runShellCommand(AcceptanceTester $I, $commands): void
     {
         if (!is_array($commands)) {
@@ -166,11 +165,12 @@ class AcceptanceTester extends \Codeception\Actor
      */
     public function seeSuccess($message): void
     {
-        $this->waitForElementVisible("(//div[@role='alert'])[1]");
-        $text =  $this->grabTextFrom("(//div[@role='alert'])[1]");
+        $selector ="(//div[@role='alert'])[1]";
+        $this->waitForElementVisible($selector);
+        $text =  $this->grabTextFrom($selector);
         echo $text .PHP_EOL;
         $this->assertStringContainsString($message, $text);
-
+        $this->tryToClicked("//div[contains(@class,'el-notification__closeBtn')]"); // Close the notification
     }
 
     /**

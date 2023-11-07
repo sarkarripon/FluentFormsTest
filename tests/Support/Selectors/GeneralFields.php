@@ -29,9 +29,10 @@ class GeneralFields{
         }
         return "(//*[normalize-space()='$label']/following::div[@role='radiogroup']//span[contains(@class,'el-radio__inner')])$indexPart";
     }
-    public static function checkboxSelect($checkboxClassName="checkbox-label")
+    public static function checkboxSelect($precedingElement=null)
     {
-        return "(//*[contains(@class,'$checkboxClassName')]/preceding::span[@class='el-checkbox__inner'])[1]";
+        $preceding = $precedingElement ?? "//*[contains(@class,'checkbox-label')]";
+        return "($preceding/preceding::span[@class='el-checkbox__inner'])[1]";
     }
     const defaultField = "//div[contains(@class,'el-input-group--append')]//input[@type='text']";
 
