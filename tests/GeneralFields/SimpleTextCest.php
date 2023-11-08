@@ -77,13 +77,13 @@ class SimpleTextCest
 
         ], $I->cmnt('Check element label, prefix label, suffix label and required message'));
 
-        $I->seeElement("//input", ['placeholder' => $placeholder], $I->cmnt('Check simpletext placeholder'));
-        $I->seeElement("//input", ['name' => $nameAttribute], $I->cmnt('Check simpletext name attribute'));
-        $I->seeElement("//input", ['data-name' => $nameAttribute], $I->cmnt('Check simpletext name attribute'));
-        $I->seeElement("//div[contains(@class,'$containerClass')]", [], $I->cmnt('Check simpletext container class'));
-        $I->seeElement("//input[contains(@class,'$elementClass')]", [], $I->cmnt('Check simpletext element class'));
-        $I->seeElement("//div", ['data-content' => $helpMessage], $I->cmnt('Check simpletext help message'));
-        $I->seeElement("//input", ['maxlength' => $maxLength], $I->cmnt('Check simpletext input max length'));
+        $I->canSeeElement("//input", ['placeholder' => $placeholder], $I->cmnt('Check simpletext placeholder'));
+        $I->canSeeElement("//input", ['name' => $nameAttribute], $I->cmnt('Check simpletext name attribute'));
+        $I->canSeeElement("//input", ['data-name' => $nameAttribute], $I->cmnt('Check simpletext name attribute'));
+        $I->canSeeElement("//div[contains(@class,'$containerClass')]", [], $I->cmnt('Check simpletext container class'));
+        $I->canSeeElement("//input[contains(@class,'$elementClass')]", [], $I->cmnt('Check simpletext element class'));
+        $I->canSeeElement("//div", ['data-content' => $helpMessage], $I->cmnt('Check simpletext help message'));
+        $I->canSeeElement("//input", ['maxlength' => $maxLength], $I->cmnt('Check simpletext input max length'));
 
 
         $fillableDataArr = [
@@ -139,7 +139,7 @@ class SimpleTextCest
             ]);
 
         $this->preparePage($I, $pageName);
-        $I->seeElement("//input", ['value' => $defaultValue], $I->cmnt('Check simpletext default value'));
+        $I->canSeeElement("//input", ['value' => $defaultValue], $I->cmnt('Check simpletext default value'));
         $I->clicked(FieldSelectors::submitButton);
         $I->checkAdminArea([$adminFieldLabel], $I->cmnt('Check simpletext adminfield label'));
         echo $I->cmnt("All test cases went through. ", 'yellow','',array('blink'));

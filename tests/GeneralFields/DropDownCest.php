@@ -57,28 +57,26 @@ class DropDownCest
         $this->customizeDropdown($I, $elementLabel,
             [
 //                'adminFieldLabel' => $adminFieldLabel,
-//                'placeholder' => $placeholder,
+                'placeholder' => $placeholder,
                 'options' => [
                                 [
                                 'label'=> $optionLabel1,
                                 'value' => $optionValue1,
-                                'calcValue' => $optionCalcValue1
+//                                'calcValue' => $optionCalcValue1
                                 ],
                                 [
                                 'label'=> $optionLabel2,
                                 'value' => $optionValue2,
-                                'calcValue' => $optionCalcValue2
+//                                'calcValue' => $optionCalcValue2
                                 ],
                                 [
                                 'label'=> $optionLabel3,
                                 'value' => $optionValue3,
-                                'calcValue' => $optionCalcValue3
+//                                'calcValue' => $optionCalcValue3
                                 ],
                 ],
-                'showValues' => false,
-                'calcValues' => false,
-                'shuffleOption' => false,
-                'searchableOption' => false,
+                'shuffleOption' => true,
+                'searchableOption' => true,
                 'requiredMessage' => $requiredMessage,
             ],
             [
@@ -88,24 +86,20 @@ class DropDownCest
                 'helpMessage' => $helpMessage,
                 'nameAttribute' => $nameAttribute,
             ]);
-        exit();
 
         $this->preparePage($I, $pageName);
         $I->clicked(FieldSelectors::submitButton);
         $I->seeText([
             $elementLabel,
-            $prefixLabel,
-            $suffixLabel,
             $requiredMessage,
+        ], $I->cmnt('Check element label, required message'));
 
-        ], $I->cmnt('Check element label, prefix label, suffix label and required message'));
-
-        $I->seeElement("//input", ['placeholder' => $placeholder], $I->cmnt('Check maskinput placeholder'));
-        $I->seeElement("//input", ['name' => $nameAttribute], $I->cmnt('Check maskinput name attribute'));
-        $I->seeElement("//input", ['data-name' => $nameAttribute], $I->cmnt('Check maskinput name attribute'));
-        $I->seeElement("//div[contains(@class,'$containerClass')]", [], $I->cmnt('Check maskinput container class'));
-        $I->seeElement("//input[contains(@class,'$elementClass')]", [], $I->cmnt('Check maskinput element class'));
-        $I->seeElement("//div", ['data-content' => $helpMessage], $I->cmnt('Check maskinput help message'));
+        $I->canSee($placeholder, null, $I->cmnt('Check DropDown placeholder'));
+        $I->canSeeElement("//select[@name='$nameAttribute']", [], $I->cmnt('Check DropDown name attribute'));
+        $I->canSeeElement("//select[@data-name='$nameAttribute']",[], $I->cmnt('Check DropDown data-name attribute'));
+        $I->canSeeElement("//select[contains(@class,'$containerClass')]", [], $I->cmnt('Check DropDown container class'));
+        $I->canSeeElement("//select[contains(@class,'$elementClass')]", [], $I->cmnt('Check DropDown element class'));
+        $I->canSeeElement("//div", ['data-content' => $helpMessage], $I->cmnt('Check DropDown help message'));
 
         echo $I->cmnt("All test cases went through. ",'yellow','',array('blink') );
 

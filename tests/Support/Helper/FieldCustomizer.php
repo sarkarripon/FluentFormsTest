@@ -717,8 +717,6 @@ trait FieldCustomizer
             'adminFieldLabel' => false,
             'placeholder' => false,
             'options' => false,
-            'showValues' => false,
-            'calcValues' => false,
             'shuffleOption' => false,
             'searchableOption' => false,
             'requiredMessage' => false,
@@ -759,37 +757,50 @@ trait FieldCustomizer
 
                 foreach ($basicOperand['options'] as $fieldContents) {
 
-                        $value = $fieldContents['value'] ?? null;
-                        $label = $fieldContents['label'] ?? null;
-                        $calcValue = $fieldContents['calcValue'] ?? null;
+                    $value = $fieldContents['value'] ?? null;
+                    $label = $fieldContents['label'] ?? null;
+                    $calcValue = $fieldContents['calcValue'] ?? null;
 
-                        $label
-                            ? $I->filledField("(//input[@placeholder='label'])[$fieldCounter]", $label, 'Fill As Label')
-                            : null;
+                    $label
+                        ? $I->filledField("(//input[@placeholder='label'])[$fieldCounter]", $label, 'Fill As Label')
+                        : null;
 
-                        if(isset($value)){
-                            if ($fieldCounter = 1) {
-                                $I->clicked(GeneralFields::checkboxSelect("//span[normalize-space()='Show Values']"), 'Select Show Values');
-                            }
-                            $I->filledField("(//input[@placeholder='value'])[$fieldCounter]", $value, 'Fill As Value');
+                    if (isset($value)) {
+                        if ($fieldCounter === 1) {
+                            $I->clicked("(//span[@class='el-checkbox__inner'])[1]", 'Select Show Values');
                         }
-                        if(isset($calcValue)){
-                            if ($fieldCounter = 1) {
-                                $I->clicked(GeneralFields::checkboxSelect("//span[normalize-space()='Calc Values']"), 'Select Calc Values');
-                            }
-                            $I->filledField("(//input[@placeholder='calc value'])[$fieldCounter]", $calcValue, 'Fill As calc Value');
-                        }
-
-                        if ($fieldCounter >= 3) {
-                            $I->clickByJS(FluentFormsSelectors::addField($fieldCounter), 'Add Field');
-                        }
-                        $fieldCounter++;
-                        $removeField += 1;
+                        $I->filledField("(//input[@placeholder='value'])[$fieldCounter]", $value, 'Fill As Value');
                     }
+                    if (isset($calcValue)) {
+                        if ($fieldCounter === 1) {
+                            $I->clicked("(//span[@class='el-checkbox__inner'])[2]", 'Select Calc Values');
+                        }
+                        $I->filledField("(//input[@placeholder='calc value'])[$fieldCounter]", $calcValue, 'Fill As calc Value');
+                    }
+
+                    if ($fieldCounter >= 2) {
+                        $I->clickByJS(FluentFormsSelectors::addField($fieldCounter), 'Add Field');
+                    }
+                    $fieldCounter++;
+                    $removeField += 1;
                 }
-                $I->clicked(FluentFormsSelectors::removeField($removeField));
             }
-        exit();
+            $I->clicked(FluentFormsSelectors::removeField($removeField));
+
+            if ($basicOperand['shuffleOption']) { // Shuffle Option
+                $I->clicked("(//span[@class='el-checkbox__inner'])[3]", 'Select Shuffle Option');
+            }
+            if ($basicOperand['searchableOption']) { // Searchable Option
+                $I->clicked("(//span[@class='el-checkbox__inner'])[4]", 'Select Searchable Option');
+            }
+
+            if ($basicOperand['requiredMessage']) { //Required Message
+                $I->clicked(GeneralFields::radioSelect('Required'),'Select Required');
+                $I->clickByJS(GeneralFields::radioSelect('Error Message', 2),'Select error message type');
+                $I->filledField(GeneralFields::customizationFields('Required'), $basicOperand['requiredMessage'], 'Fill As Required Message');
+            }
+
+        }
         //                                           Advanced options                                              //
 
         if (isset($advancedOperand)) {
@@ -813,24 +824,13 @@ trait FieldCustomizer
                 ? $I->filledField("(//textarea[@class='el-textarea__inner'])", $advancedOperand['helpMessage'], 'Fill As Help Message')
                 : null;
 
-            $advancedOperand['step']      // Step
-                ? $I->filledField(GeneralFields::customizationFields('Step'), $advancedOperand['step'], 'Fill As Step')
-                : null;
-
-            $advancedOperand['prefixLabel'] // Prefix Label
-                ? $I->filledField(GeneralFields::customizationFields('Prefix Label'), $advancedOperand['prefixLabel'], 'Fill As Prefix Label')
-                : null;
-
-            $advancedOperand['suffixLabel'] // Suffix Label
-                ? $I->filledField(GeneralFields::customizationFields('Suffix Label'), $advancedOperand['suffixLabel'], 'Fill As Suffix Label')
-                : null;
-
             $advancedOperand['nameAttribute'] // Name Attribute
                 ? $I->filledField(GeneralFields::customizationFields('Name Attribute'), $advancedOperand['nameAttribute'], 'Fill As Name Attribute')
                 : null;
-
         }
+
         $I->clicked(FluentFormsSelectors::saveForm);
+        $I->seeSuccess('The form is successfully updated.');
 
     }
 
