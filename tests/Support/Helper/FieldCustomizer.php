@@ -834,8 +834,136 @@ trait FieldCustomizer
 
     }
 
-    public function customizeRadioField()
+    public function customizeRadioField(
+        AcceptanceTester $I,
+        $fieldName,
+        ?array $basicOptions = null,
+        ?array $advancedOptions = null,
+        ?bool $isHiddenLabel = false
+    ): void
     {
+        $I->clickOnExactText($fieldName);
+
+        $basicOperand = null;
+        $advancedOperand = null;
+
+        $basicOptionsDefault = [
+            'adminFieldLabel' => false,
+            'options' => false,
+            'shuffleOption' => false,
+            'requiredMessage' => false,
+        ];
+
+        $advancedOptionsDefault = [
+            'defaultValue' => false,
+            'containerClass' => false,
+            'helpMessage' => false,
+            'nameAttribute' => false,
+            'layout' => false,
+        ];
+
+        if (!is_null($basicOptions)) {
+            $basicOperand = array_merge($basicOptionsDefault, $basicOptions);
+        }
+
+        if (!is_null($advancedOptions)) {
+            $advancedOperand = array_merge($advancedOptionsDefault, $advancedOptions);
+        }
+
+        //                                           Basic options                                              //
+        // adminFieldLabel
+        if (isset($basicOperand)) {
+            $basicOperand['adminFieldLabel']
+                ? $I->filledField(GeneralFields::adminFieldLabel, $basicOperand['adminFieldLabel'], 'Fill As Admin Field Label')
+                : null;
+
+            $basicOperand['placeholder'] //Placeholder
+                ? $I->filledField(GeneralFields::placeholder, $basicOperand['placeholder'], 'Fill As Placeholder')
+                : null;
+
+            if ($basicOperand['options']) { // configure options
+
+                global $removeField;
+                $removeField = 1;
+                $fieldCounter = 1;
+
+                foreach ($basicOperand['options'] as $fieldContents) {
+
+                    $value = $fieldContents['value'] ?? null;
+                    $label = $fieldContents['label'] ?? null;
+                    $calcValue = $fieldContents['calcValue'] ?? null;
+
+                    $label
+                        ? $I->filledField("(//input[@placeholder='label'])[$fieldCounter]", $label, 'Fill As Label')
+                        : null;
+
+                    if (isset($value)) {
+                        if ($fieldCounter === 1) {
+                            $I->clicked("(//span[@class='el-checkbox__inner'])[1]", 'Select Show Values');
+                        }
+                        $I->filledField("(//input[@placeholder='value'])[$fieldCounter]", $value, 'Fill As Value');
+                    }
+                    if (isset($calcValue)) {
+                        if ($fieldCounter === 1) {
+                            $I->clicked("(//span[@class='el-checkbox__inner'])[2]", 'Select Calc Values');
+                        }
+                        $I->filledField("(//input[@placeholder='calc value'])[$fieldCounter]", $calcValue, 'Fill As calc Value');
+                    }
+
+                    if ($fieldCounter >= 2) {
+                        $I->clickByJS(FluentFormsSelectors::addField($fieldCounter), 'Add Field');
+                    }
+                    $fieldCounter++;
+                    $removeField += 1;
+                }
+            }
+            $I->clicked(FluentFormsSelectors::removeField($removeField));
+
+            if ($basicOperand['shuffleOption']) { // Shuffle Option
+                $I->clicked("(//span[@class='el-checkbox__inner'])[3]", 'Select Shuffle Option');
+            }
+            if ($basicOperand['searchableOption']) { // Searchable Option
+                $I->clicked("(//span[@class='el-checkbox__inner'])[4]", 'Select Searchable Option');
+            }
+
+            if ($basicOperand['requiredMessage']) { //Required Message
+                $I->clicked(GeneralFields::radioSelect('Required'),'Select Required');
+                $I->clickByJS(GeneralFields::radioSelect('Error Message', 2),'Select error message type');
+                $I->filledField(GeneralFields::customizationFields('Required'), $basicOperand['requiredMessage'], 'Fill As Required Message');
+            }
+
+        }
+        //                                           Advanced options                                              //
+
+        if (isset($advancedOperand)) {
+            $I->scrollTo(GeneralFields::advancedOptions);
+            $I->clickByJS(GeneralFields::advancedOptions, 'Expand advanced options');
+            $I->wait(2);
+
+            $advancedOperand['defaultValue'] // Default Value
+                ? $I->filledField(GeneralFields::defaultField, $advancedOperand['defaultValue'], 'Fill As Default Value')
+                : null;
+
+            $advancedOperand['containerClass'] // Container Class
+                ? $I->filledField(GeneralFields::customizationFields('Container Class'), $advancedOperand['containerClass'], 'Fill As Container Class')
+                : null;
+
+            $advancedOperand['elementClass'] // Element Class
+                ? $I->filledField(GeneralFields::customizationFields('Element Class'), $advancedOperand['elementClass'], 'Fill As Element Class')
+                : null;
+
+            $advancedOperand['helpMessage'] // Help Message
+                ? $I->filledField("(//textarea[@class='el-textarea__inner'])", $advancedOperand['helpMessage'], 'Fill As Help Message')
+                : null;
+
+            $advancedOperand['nameAttribute'] // Name Attribute
+                ? $I->filledField(GeneralFields::customizationFields('Name Attribute'), $advancedOperand['nameAttribute'], 'Fill As Name Attribute')
+                : null;
+        }
+
+        $I->clicked(FluentFormsSelectors::saveForm);
+        $I->seeSuccess('The form is successfully updated.');
+
 
     }
 
@@ -853,7 +981,11 @@ trait FieldCustomizer
      * @param array|null $advancedOptions
      * @return void
      */
-    public function customizeCheckBox(AcceptanceTester $I, $fieldName, array $basicOptions = null, array $advancedOptions = null): void
+    public function customizeCheckBox(
+        AcceptanceTester $I,
+        $fieldName,
+        array $basicOptions = null,
+        array $advancedOptions = null): void
     {
         $I->clickOnExactText($fieldName);
 

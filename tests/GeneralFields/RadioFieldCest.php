@@ -9,10 +9,9 @@ use Tests\Support\Helper\FieldCustomizer;
 use Tests\Support\Helper\Integrations\IntegrationHelper;
 use Tests\Support\Selectors\FieldSelectors;
 
-class DropDownCest
+class RadioFieldCest
 {
     use IntegrationHelper, FieldCustomizer, DataGenerator;
-
     public function _before(AcceptanceTester $I)
     {
         $I->loadDotEnvFile();
@@ -20,7 +19,7 @@ class DropDownCest
     }
 
     // tests
-    public function test_dropdown_field(AcceptanceTester $I)
+    public function test_radio_field(AcceptanceTester $I)
     {
         $pageName = __FUNCTION__ . '_' . rand(1, 100);
         $faker = \Faker\Factory::create();
@@ -35,7 +34,7 @@ class DropDownCest
         $elementClass = $faker->userName();
         $helpMessage = $faker->words(4, true);
         $optionLabel1 = $faker->words(2, true);
-        $optionLabel2 = $faker->words(2, true);
+        $optionLabel2 = $faker->words(2, true);/
         $optionLabel3 = $faker->words(2, true);
         $optionValue1 = $faker->words(3, true);
         $optionValue2 = $faker->words(3, true);
@@ -59,21 +58,21 @@ class DropDownCest
 //                'adminFieldLabel' => $adminFieldLabel,
                 'placeholder' => $placeholder,
                 'options' => [
-                                [
-                                'label'=> $optionLabel1,
-                                'value' => $optionValue1,
+                    [
+                        'label'=> $optionLabel1,
+                        'value' => $optionValue1,
 //                                'calcValue' => $optionCalcValue1
-                                ],
-                                [
-                                'label'=> $optionLabel2,
-                                'value' => $optionValue2,
+                    ],
+                    [
+                        'label'=> $optionLabel2,
+                        'value' => $optionValue2,
 //                                'calcValue' => $optionCalcValue2
-                                ],
-                                [
-                                'label'=> $optionLabel3,
-                                'value' => $optionValue3,
+                    ],
+                    [
+                        'label'=> $optionLabel3,
+                        'value' => $optionValue3,
 //                                'calcValue' => $optionCalcValue3
-                                ],
+                    ],
                 ],
                 'shuffleOption' => true,
                 'searchableOption' => true,
@@ -102,5 +101,6 @@ class DropDownCest
         $I->canSeeElementInDOM("//div/select[contains(@class,$elementClass)]", [], $I->cmnt('Check DropDown element class'));
         $I->canSeeElementInDOM("//div", ['data-content' => $helpMessage], $I->cmnt('Check DropDown help message'));
         echo $I->cmnt("All test cases went through. ",'yellow','',array('blink'));
+
     }
 }
