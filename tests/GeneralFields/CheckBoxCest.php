@@ -9,7 +9,7 @@ use Tests\Support\Helper\FieldCustomizer;
 use Tests\Support\Helper\Integrations\IntegrationHelper;
 use Tests\Support\Selectors\FieldSelectors;
 
-class RadioFieldCest
+class CheckBoxCest
 {
     use IntegrationHelper, FieldCustomizer, DataGenerator;
     public function _before(AcceptanceTester $I)
@@ -19,7 +19,7 @@ class RadioFieldCest
     }
 
     // tests
-    public function test_radio_field(AcceptanceTester $I)
+    public function test_check_box(AcceptanceTester $I)
     {
         $pageName = __FUNCTION__ . '_' . rand(1, 100);
         $faker = \Faker\Factory::create();
@@ -48,11 +48,11 @@ class RadioFieldCest
         $nameAttribute = $faker->firstName();
 
         $customName = [
-            'radioField' => $elementLabel,
+            'checkBox' => $elementLabel,
         ];
 
         $this->prepareForm($I, $pageName, [
-            'generalFields' => ['radioField'],
+            'generalFields' => ['checkBox'],
         ], true, $customName);
 
         $this->customizeRadioField($I, $elementLabel,
@@ -63,20 +63,20 @@ class RadioFieldCest
                         'label'=> $optionLabel1,
                         'value' => $optionValue1,
                         'calcValue' => $optionCalcValue1,
-//                        'photo' => $faker->imageUrl(),
+                        'photo' => $optionPhoto1,
                     ],
                     [
                         'label'=> $optionLabel2,
                         'value' => $optionValue2,
                         'calcValue' => $optionCalcValue2,
-//                        'photo' => $faker->imageUrl(),
+                        'photo' => $optionPhoto2,
 
                     ],
                     [
                         'label'=> $optionLabel3,
                         'value' => $optionValue3,
                         'calcValue' => $optionCalcValue3,
-//                        'photo' => $faker->imageUrl(),
+                        'photo' => $optionPhoto3,
 
                     ],
                 ],
@@ -102,5 +102,6 @@ class RadioFieldCest
         $I->canSeeElement("//input[contains(@class,$containerClass)]", [], $I->cmnt('Check RadioField container class'));
         $I->canSeeElement("//div", ['data-content' => $helpMessage], $I->cmnt('Check RadioField help message'));
         echo $I->cmnt("All test cases went through. ",'yellow','',array('blink'));
+
     }
 }

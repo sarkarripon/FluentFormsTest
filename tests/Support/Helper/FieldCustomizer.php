@@ -877,10 +877,6 @@ trait FieldCustomizer
                 ? $I->filledField(GeneralFields::adminFieldLabel, $basicOperand['adminFieldLabel'], 'Fill As Admin Field Label')
                 : null;
 
-            $basicOperand['placeholder'] //Placeholder
-                ? $I->filledField(GeneralFields::placeholder, $basicOperand['placeholder'], 'Fill As Placeholder')
-                : null;
-
             if ($basicOperand['options']) { // configure options
 
                 global $removeField;
@@ -892,6 +888,7 @@ trait FieldCustomizer
                     $value = $fieldContents['value'] ?? null;
                     $label = $fieldContents['label'] ?? null;
                     $calcValue = $fieldContents['calcValue'] ?? null;
+                    $photo = $fieldContents['photo'] ?? null;
 
                     $label
                         ? $I->filledField("(//input[@placeholder='label'])[$fieldCounter]", $label, 'Fill As Label')
@@ -909,6 +906,12 @@ trait FieldCustomizer
                         }
                         $I->filledField("(//input[@placeholder='calc value'])[$fieldCounter]", $calcValue, 'Fill As calc Value');
                     }
+//                    if (isset($photo)) {
+//                        if ($fieldCounter === 1) {
+//                            $I->clicked("(//span[@class='el-checkbox__inner'])[3]", 'Select photo Values');
+//                        }
+//                        $I->attachFile("", $photo, 'Fill As calc Value');
+//                    }
 
                     if ($fieldCounter >= 2) {
                         $I->clickByJS(FluentFormsSelectors::addField($fieldCounter), 'Add Field');
@@ -920,10 +923,7 @@ trait FieldCustomizer
             $I->clicked(FluentFormsSelectors::removeField($removeField));
 
             if ($basicOperand['shuffleOption']) { // Shuffle Option
-                $I->clicked("(//span[@class='el-checkbox__inner'])[3]", 'Select Shuffle Option');
-            }
-            if ($basicOperand['searchableOption']) { // Searchable Option
-                $I->clicked("(//span[@class='el-checkbox__inner'])[4]", 'Select Searchable Option');
+                $I->clicked("(//span[@class='el-checkbox__inner'])[4]", 'Select Shuffle Option');
             }
 
             if ($basicOperand['requiredMessage']) { //Required Message
@@ -946,10 +946,6 @@ trait FieldCustomizer
 
             $advancedOperand['containerClass'] // Container Class
                 ? $I->filledField(GeneralFields::customizationFields('Container Class'), $advancedOperand['containerClass'], 'Fill As Container Class')
-                : null;
-
-            $advancedOperand['elementClass'] // Element Class
-                ? $I->filledField(GeneralFields::customizationFields('Element Class'), $advancedOperand['elementClass'], 'Fill As Element Class')
                 : null;
 
             $advancedOperand['helpMessage'] // Help Message
