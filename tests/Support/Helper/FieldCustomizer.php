@@ -979,7 +979,7 @@ trait FieldCustomizer
      */
     public function customizeCheckBox(
         AcceptanceTester $I,
-                         $fieldName,
+        $fieldName,
         ?array $basicOptions = null,
         ?array $advancedOptions = null,
         ?bool $isHiddenLabel = false
@@ -1108,13 +1108,153 @@ trait FieldCustomizer
                 }
             }
         }
-
         $I->clicked(FluentFormsSelectors::saveForm);
         $I->seeSuccess('The form is successfully updated.');
     }
 
-    public function customizeMultipleChoice()
+    public function customizeMultipleChoice(
+        AcceptanceTester $I,
+        $fieldName,
+        ?array $basicOptions = null,
+        ?array $advancedOptions = null,
+        ?bool $isHiddenLabel = false
+    ): void
     {
+        $I->clickOnExactText($fieldName);
+
+        $basicOperand = null;
+        $advancedOperand = null;
+
+        $basicOptionsDefault = [
+            'adminFieldLabel' => false,
+            'options' => false,
+            'shuffleOption' => false,
+            'maxSelection' => false,
+            'requiredMessage' => false,
+        ];
+
+        $advancedOptionsDefault = [
+            'defaultValue' => false,
+            'containerClass' => false,
+            'elementClass' => false,
+            'helpMessage' => false,
+            'nameAttribute' => false,
+            'layout' => false,
+            'inventorySettings' => false,
+        ];
+
+        if (!is_null($basicOptions)) {
+            $basicOperand = array_merge($basicOptionsDefault, $basicOptions);
+        }
+
+        if (!is_null($advancedOptions)) {
+            $advancedOperand = array_merge($advancedOptionsDefault, $advancedOptions);
+        }
+
+        //                                           Basic options                                              //
+
+        if (isset($basicOperand)) {
+            $basicOperand['adminFieldLabel']  // adminFieldLabel
+                ? $I->filledField(GeneralFields::adminFieldLabel, $basicOperand['adminFieldLabel'], 'Fill As Admin Field Label')
+                : null;
+
+            if ($basicOperand['options']) { // configure options
+                global $removeField;
+                $removeField = 1;
+                $fieldCounter = 1;
+
+                foreach ($basicOperand['options'] as $fieldContents) {
+
+                    $value = $fieldContents['value'] ?? null;
+                    $label = $fieldContents['label'] ?? null;
+                    $calcValue = $fieldContents['calcValue'] ?? null;
+//                    $photo = $fieldContents['photo'] ?? null;
+
+                    $label
+                        ? $I->filledField("(//input[@placeholder='label'])[$fieldCounter]", $label, 'Fill As Label')
+                        : null;
+
+                    if (isset($value)) {
+                        if ($fieldCounter === 1) {
+                            $I->clicked("(//span[@class='el-checkbox__inner'])[1]", 'Select Show Values');
+                        }
+                        $I->filledField("(//input[@placeholder='value'])[$fieldCounter]", $value, 'Fill As Value');
+                    }
+                    if (isset($calcValue)) {
+                        if ($fieldCounter === 1) {
+                            $I->clicked("(//span[@class='el-checkbox__inner'])[2]", 'Select Calc Values');
+                        }
+                        $I->filledField("(//input[@placeholder='calc value'])[$fieldCounter]", $calcValue, 'Fill As calc Value');
+                    }
+//                    if (isset($photo)) {
+//                        if ($fieldCounter === 1) {
+//                            $I->clicked("(//span[@class='el-checkbox__inner'])[3]", 'Select photo Values');
+//                        }
+//                        $I->attachFile("", $photo, 'Fill As calc Value');
+//                    }
+
+
+                    if ($fieldCounter >= 2) {
+                        $I->clickByJS(FluentFormsSelectors::addField($fieldCounter), 'Add Field');
+                    }
+                    $fieldCounter++;
+                    $removeField += 1;
+                }
+            }
+            $I->clicked(FluentFormsSelectors::removeField($removeField));
+
+            if ($basicOperand['shuffleOption']) { // Shuffle Option
+                $I->clicked("(//span[@class='el-checkbox__inner'])[3]", 'Select Shuffle Option');
+            }
+            if ($basicOperand['maxSelection']) { // Max Selection
+                $I->filledField("//div[@prop='max_selection']//input[@type='number']", $basicOperand['maxSelection'], 'Fill As Max Selection');
+            }
+
+            if ($basicOperand['requiredMessage']) { //Required Message
+                $I->clicked(GeneralFields::radioSelect('Required'),'Select Required');
+                $I->clickByJS(GeneralFields::radioSelect('Error Message', 2),'Select error message type');
+                $I->filledField(GeneralFields::customizationFields('Required'), $basicOperand['requiredMessage'], 'Fill As Required Message');
+            }
+
+        }
+        //                                           Advanced options                                              //
+
+        if (isset($advancedOperand)) {
+            $I->scrollTo(GeneralFields::advancedOptions);
+            $I->clickByJS(GeneralFields::advancedOptions, 'Expand advanced options');
+            $I->wait(2);
+
+            $advancedOperand['defaultValue'] // Default Value
+                ? $I->filledField(GeneralFields::defaultField, $advancedOperand['defaultValue'], 'Fill As Default Value')
+                : null;
+
+            $advancedOperand['containerClass'] // Container Class
+                ? $I->filledField(GeneralFields::customizationFields('Container Class'), $advancedOperand['containerClass'], 'Fill As Container Class')
+                : null;
+
+            $advancedOperand['elementClass'] // Element Class
+                ? $I->filledField(GeneralFields::customizationFields('Element Class'), $advancedOperand['elementClass'], 'Fill As Element Class')
+                : null;
+
+            $advancedOperand['helpMessage'] // Help Message
+                ? $I->filledField("(//textarea[@class='el-textarea__inner'])", $advancedOperand['helpMessage'], 'Fill As Help Message')
+                : null;
+
+            $advancedOperand['nameAttribute'] // Name Attribute
+                ? $I->filledField(GeneralFields::customizationFields('Name Attribute'), $advancedOperand['nameAttribute'], 'Fill As Name Attribute')
+                : null;
+
+            if ($advancedOperand["inventorySettings"]) { // Inventory Settings
+                $I->clickByJS("//div[normalize-space()='Inventory Settings']/following::span[normalize-space()='Enable']");
+                $stockCounter = 1;
+                foreach ($advancedOperand['inventorySettings'] as $value) {
+                    $I->filledField("(//input[@type='number'])[$stockCounter]", $value);
+                    $stockCounter++;
+                }
+            }
+        }
+        $I->clicked(FluentFormsSelectors::saveForm);
+        $I->seeSuccess('The form is successfully updated.');
 
     }
 
