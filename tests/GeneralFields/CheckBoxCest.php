@@ -42,9 +42,9 @@ class CheckBoxCest
         $optionCalcValue1 = $faker->numberBetween(1, 100);
         $optionCalcValue2 = $faker->numberBetween(1, 100);
         $optionCalcValue3 = $faker->numberBetween(1, 100);
-        $optionPhoto1 = $faker->imageUrl();
-        $optionPhoto2 = $faker->imageUrl();
-        $optionPhoto3 = $faker->imageUrl();
+//        $optionPhoto1 = $faker->imageUrl();
+//        $optionPhoto2 = $faker->imageUrl();
+//        $optionPhoto3 = $faker->imageUrl();
         $nameAttribute = $faker->firstName();
 
         $customName = [
@@ -55,29 +55,27 @@ class CheckBoxCest
             'generalFields' => ['checkBox'],
         ], true, $customName);
 
-        $this->customizeRadioField($I, $elementLabel,
+        $this->customizeCheckBox($I, $elementLabel,
             [
 //                'adminFieldLabel' => $adminFieldLabel,
                 'options' => [
                     [
-                        'label'=> $optionLabel1,
+                        'label' => $optionLabel1,
                         'value' => $optionValue1,
                         'calcValue' => $optionCalcValue1,
-                        'photo' => $optionPhoto1,
+//                        'photo' => $optionPhoto1,
                     ],
                     [
                         'label'=> $optionLabel2,
                         'value' => $optionValue2,
                         'calcValue' => $optionCalcValue2,
-                        'photo' => $optionPhoto2,
-
+//                        'photo' => $optionPhoto2,
                     ],
                     [
                         'label'=> $optionLabel3,
                         'value' => $optionValue3,
                         'calcValue' => $optionCalcValue3,
-                        'photo' => $optionPhoto3,
-
+//                        'photo' => $optionPhoto3,
                     ],
                 ],
                 'shuffleOption' => true,
@@ -97,11 +95,11 @@ class CheckBoxCest
             $requiredMessage,
         ], $I->cmnt('Check element label, required message'));
 
-        $I->canSeeElement("//input[contains(@name,$nameAttribute)]", [], $I->cmnt('Check RadioField name attribute'));
-        $I->canSeeElement("//input[contains(@data-name,$nameAttribute)]",[], $I->cmnt('Check RadioField data-name attribute'));
-        $I->canSeeElement("//input[contains(@class,$containerClass)]", [], $I->cmnt('Check RadioField container class'));
-        $I->canSeeElement("//div", ['data-content' => $helpMessage], $I->cmnt('Check RadioField help message'));
-        echo $I->cmnt("All test cases went through. ",'yellow','',array('blink'));
+        $I->canSeeElement("//input[contains(@name,$nameAttribute)]", [], $I->cmnt('Check CheckBox name attribute'));
+        $I->canSeeElement("//input[contains(@data-name,$nameAttribute)]",[], $I->cmnt('Check CheckBox data-name attribute'));
+        $I->canSeeElement("//input[contains(@class,$containerClass)]", [], $I->cmnt('Check CheckBox container class'));
+        $I->canSeeElement("//div", ['data-content' => $helpMessage], $I->cmnt('Check CheckBox help message'));
+        echo $I->cmnt("All test cases went through. ",'yellow','', array('blink'));
 
     }
 }
