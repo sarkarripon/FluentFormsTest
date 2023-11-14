@@ -107,6 +107,5 @@ class MultipleChoiceCest
         $I->canSeeElement("//div", ['data-content' => $helpMessage], $I->cmnt('Check MultipleChoice help message'));
         echo $I->cmnt("All test cases went through. ",'yellow','',array('blink'));
 
-
     }
 }
