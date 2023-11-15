@@ -422,7 +422,6 @@ class AcceptanceTester extends \Codeception\Actor
             ? $this->clicked(FluentFormsSelectors::postSection)
             : $this->clicked(FluentFormsSelectors::generalSection);
 
-
         $counter = 1;
         foreach ($data as $fieldType => $fields) {
             $sectionType = match ($fieldType) {

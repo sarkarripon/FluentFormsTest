@@ -1306,9 +1306,9 @@ trait FieldCustomizer
                 ? $I->filledField(GeneralFields::placeholder, $basicOperand['placeholder'], 'Fill As Placeholder')
                 : null;
 
-            if ($basicOperand['requiredMessage']) { // Required Message
+            if ($basicOperand['requiredMessage']) { //Required Message
                 $I->clicked(GeneralFields::radioSelect('Required'),'Select Required');
-                $I->clicked(GeneralFields::radioSelect('Error Message', 2),'Select Required');
+                $I->clickByJS(GeneralFields::radioSelect('Error Message', 2),'Select error message type');
                 $I->filledField(GeneralFields::customizationFields('Required'), $basicOperand['requiredMessage'], 'Fill As Required Message');
             }
 

@@ -41,11 +41,11 @@ class WebsiteUrlCest
         $maxLength = $faker->numberBetween(10, 100);
 
         $customName = [
-            'textArea' => $elementLabel,
+            'websiteUrl' => $elementLabel,
         ];
 
         $this->prepareForm($I, $pageName, [
-            'generalFields' => ['textArea'],
+            'generalFields' => ['websiteUrl'],
         ], true, $customName);
 
         $this->customizeWebsiteUrl($I, $elementLabel,
@@ -68,16 +68,13 @@ class WebsiteUrlCest
         $I->seeText([
             $elementLabel,
             $requiredMessage,
-
         ], $I->cmnt('Check element label and required message'));
 
-        $I->seeElement("//textarea", ['placeholder' => $placeholder], $I->cmnt('Check textarea placeholder'));
-        $I->seeElement("//textarea", ['rows' => $rows, 'cols' => $columns], $I->cmnt('Check textarea rows and columns'));
-        $I->seeElement("//textarea", ['maxlength' => $maxLength], $I->cmnt('Check textarea maxlength'));
-        $I->seeElement("//textarea", ['name' => $nameAttribute], $I->cmnt('Check textarea name attribute'));
-        $I->seeElement("//textarea", ['data-name' => $nameAttribute], $I->cmnt('Check textarea name attribute'));
-        $I->seeElement("//div[contains(@class,'$containerClass')]", [], $I->cmnt('Check textarea container class'));
-        $I->seeElement("//textarea[contains(@class,'$elementClass')]", [], $I->cmnt('Check textarea element class'));
+        $I->canSeeElement("//input", ['placeholder' => $placeholder], $I->cmnt('Check WebsiteUrl placeholder'));
+        $I->canSeeElement("//input", ['name' => $nameAttribute], $I->cmnt('Check WebsiteUrl name attribute'));
+        $I->canSeeElement("//input", ['data-name' => $nameAttribute], $I->cmnt('Check WebsiteUrl name attribute'));
+        $I->canSeeElement("//div[contains(@class,'$containerClass')]", [], $I->cmnt('Check WebsiteUrl container class'));
+        $I->canSeeElement("//input[contains(@class,'$elementClass')]", [], $I->cmnt('Check WebsiteUrl element class'));
         echo $I->cmnt("All test cases went through. ", 'yellow','',array('blink'));
 
     }
