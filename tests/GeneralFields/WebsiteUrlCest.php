@@ -5,13 +5,13 @@ namespace Tests\GeneralFields;
 
 use Tests\Support\AcceptanceTester;
 use Tests\Support\Factories\DataProvider\DataGenerator;
-use Tests\Support\Helper\FieldCustomizer;
+use Tests\Support\Helper\GeneralFieldCustomizer;
 use Tests\Support\Helper\Integrations\IntegrationHelper;
 use Tests\Support\Selectors\FieldSelectors;
 
 class WebsiteUrlCest
 {
-    use IntegrationHelper, FieldCustomizer, DataGenerator;
+    use IntegrationHelper, GeneralFieldCustomizer, DataGenerator;
     public function _before(AcceptanceTester $I)
     {
         $I->loadDotEnvFile();
@@ -27,7 +27,8 @@ class WebsiteUrlCest
         $elementLabel = $faker->words(2, true);
         $adminFieldLabel = $faker->words(2, true);
         $placeholder = $faker->words(3, true);
-        $requiredMessage = $faker->words(2, true);
+        $requiredMessage = $faker->words(3, true);
+        $validationMessage = $faker->words(3, true);
 
         $defaultValue = $faker->words(2, true);
         $containerClass = $faker->firstName();
@@ -36,9 +37,6 @@ class WebsiteUrlCest
         $prefixLabel = $faker->words(2, true);
         $suffixLabel = $faker->words(3, true);
         $nameAttribute = $faker->firstName();
-        $rows = $faker->numberBetween(1, 6);
-        $columns = $faker->numberBetween(1, 6);
-        $maxLength = $faker->numberBetween(10, 100);
 
         $customName = [
             'websiteUrl' => $elementLabel,
@@ -53,17 +51,18 @@ class WebsiteUrlCest
 //            'adminFieldLabel' => $adminFieldLabel,
                 'placeholder' => $placeholder,
                 'requiredMessage' => $requiredMessage,
+                'validationMessage' => $validationMessage,
             ],
             [
-//            'defaultValue' => $defaultValue,
+//                'defaultValue' => $defaultValue,
                 'containerClass' => $containerClass,
                 'elementClass' => $elementClass,
                 'helpMessage' => $helpMessage,
-                'maxLength' => $maxLength,
                 'nameAttribute' => $nameAttribute,
             ]);
 
         $this->preparePage($I, $pageName);
+        $I->clicked(FieldSelectors::submitButton);
         $I->clicked(FieldSelectors::submitButton);
         $I->seeText([
             $elementLabel,

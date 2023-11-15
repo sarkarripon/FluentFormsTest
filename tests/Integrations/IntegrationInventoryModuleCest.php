@@ -6,7 +6,7 @@ namespace Tests\Integrations;
 use Codeception\Attribute\Group;
 use Tests\Support\AcceptanceTester;
 use Tests\Support\Factories\DataProvider\DataGenerator;
-use Tests\Support\Helper\FieldCustomizer;
+use Tests\Support\Helper\GeneralFieldCustomizer;
 use Tests\Support\Helper\Integrations\IntegrationHelper;
 use Tests\Support\Selectors\FieldSelectors;
 use Tests\Support\Selectors\FluentFormsSelectors;
@@ -14,7 +14,7 @@ use Tests\Support\Selectors\FluentFormsSelectors;
 
 class IntegrationInventoryModuleCest
 {
-    use IntegrationHelper, FieldCustomizer, DataGenerator;
+    use IntegrationHelper, GeneralFieldCustomizer, DataGenerator;
 
     public function _before(AcceptanceTester $I): void
     {

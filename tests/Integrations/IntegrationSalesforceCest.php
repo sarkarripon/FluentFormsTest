@@ -6,7 +6,7 @@ namespace Tests\Integrations;
 use Codeception\Attribute\Group;
 use Tests\Support\AcceptanceTester;
 use Tests\Support\Factories\DataProvider\DataGenerator;
-use Tests\Support\Helper\FieldCustomizer;
+use Tests\Support\Helper\GeneralFieldCustomizer;
 use Tests\Support\Helper\Integrations\IntegrationHelper;
 use Tests\Support\Helper\Integrations\Salesforce;
 use Tests\Support\Selectors\FieldSelectors;
@@ -14,7 +14,7 @@ use Tests\Support\Selectors\FluentFormsSelectors;
 
 class IntegrationSalesforceCest
 {
-    use Salesforce, IntegrationHelper, DataGenerator, FieldCustomizer;
+    use Salesforce, IntegrationHelper, DataGenerator, GeneralFieldCustomizer;
     public function _before(AcceptanceTester $I)
     {
         $I->loadDotEnvFile();

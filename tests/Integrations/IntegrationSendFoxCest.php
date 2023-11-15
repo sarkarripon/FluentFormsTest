@@ -6,7 +6,7 @@ namespace Tests\Integrations;
 use Codeception\Attribute\Group;
 use Tests\Support\AcceptanceTester;
 use Tests\Support\Factories\DataProvider\DataGenerator;
-use Tests\Support\Helper\FieldCustomizer;
+use Tests\Support\Helper\GeneralFieldCustomizer;
 use Tests\Support\Helper\Integrations\IntegrationHelper;
 use Tests\Support\Helper\Integrations\SendFox;
 use Tests\Support\Selectors\FieldSelectors;
@@ -14,7 +14,7 @@ use Tests\Support\Selectors\FluentFormsSelectors;
 
 class IntegrationSendFoxCest
 {
-    use IntegrationHelper, SendFox, FieldCustomizer, DataGenerator;
+    use IntegrationHelper, SendFox, GeneralFieldCustomizer, DataGenerator;
     public function _before(AcceptanceTester $I): void
     {
         $I->loadDotEnvFile();

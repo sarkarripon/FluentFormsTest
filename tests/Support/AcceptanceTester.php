@@ -165,12 +165,16 @@ class AcceptanceTester extends \Codeception\Actor
      */
     public function seeSuccess($message): void
     {
-        $selector ="(//div[@role='alert'])[1]";
+        $selector = "(//div[@role='alert'])";
         $this->waitForElementVisible($selector);
-        $text =  $this->grabTextFrom($selector);
-        echo $text .PHP_EOL;
+        $text = $this->grabTextFrom($selector);
+        echo $text . PHP_EOL;
         $this->assertStringContainsString($message, $text);
-        $this->tryToClicked("//div[contains(@class,'el-notification__closeBtn')]"); // Close the notification
+        $isMultiple = count($this->grabMultiple($selector));
+
+        for ($index = 1; $index <= $isMultiple; $index++) {
+            $this->retryClicked("(//div[contains(@class,'el-notification__closeBtn')])[$index]"); // Close the notification
+        }
     }
 
     /**

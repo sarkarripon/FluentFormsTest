@@ -6,7 +6,7 @@ use Codeception\Attribute\Group;
 use Tests\Support\AcceptanceTester;
 use Tests\Support\Factories\DataProvider\DataGenerator;
 use Tests\Support\Factories\DataProvider\ShortCodes;
-use Tests\Support\Helper\FieldCustomizer;
+use Tests\Support\Helper\GeneralFieldCustomizer;
 use Tests\Support\Helper\Integrations\Activecampaign;
 use Tests\Support\Helper\Integrations\IntegrationHelper;
 use Tests\Support\Selectors\FieldSelectors;
@@ -14,7 +14,7 @@ use Tests\Support\Selectors\FluentFormsSelectors;
 
 class IntegrationActivecampaignCest
 {
-    use IntegrationHelper, Activecampaign, ShortCodes, DataGenerator, FieldCustomizer;
+    use IntegrationHelper, Activecampaign, ShortCodes, DataGenerator, GeneralFieldCustomizer;
 
     public function _before(AcceptanceTester $I): void
     {

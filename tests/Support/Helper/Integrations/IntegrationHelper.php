@@ -115,7 +115,6 @@ trait IntegrationHelper
             ? $I->createCustomFormField($requiredField, $fieldMappingArray)
             : $I->createFormField($requiredField);
 
-
         $formID = $I->grabTextFrom("button[title='Click to Copy']");
         $I->clicked(FluentFormsSelectors::saveForm);
         $I->seeSuccess('The form is successfully updated.');
