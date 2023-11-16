@@ -76,7 +76,5 @@ class TimeDateCest
         $I->canSeeElement("//div[contains(@class,'$containerClass')]", [], $I->cmnt('Check TimeDate container class'));
         $I->canSeeElement("//input[contains(@class,'$elementClass')]", [], $I->cmnt('Check TimeDate element class'));
         echo $I->cmnt("All test cases went through. ", 'yellow','',array('blink'));
-
-
     }
 }
