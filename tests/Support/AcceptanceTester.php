@@ -14,6 +14,7 @@ use Tests\Support\Selectors\GlobalPageSelec;
 use Tests\Support\Selectors\NewPageSelectors;
 use Tests\Support\Selectors\RenameFormSelec;
 use Symfony\Component\Console\Color;
+use Faker\Factory as Faker;
 
 
 /**
@@ -602,6 +603,29 @@ class AcceptanceTester extends \Codeception\Actor
 //            }
 //        }
 //    }
+
+    public function downloadImage(
+        ?string $dir = null,
+        int $width = 640,
+        int $height = 480,
+        ?string $category = null,
+        bool $fullPath = true,
+        bool $randomize = true,
+        ?string $word = null,
+        bool $gray = false,
+        string $format = 'png'
+    ): string {
+        $faker = Faker::create();
+        $imageUrl = $faker->imageUrl($width, $height, $category, $randomize, $word, $gray, $format); // Get the image URL
+        $directory = $dir ?? sys_get_temp_dir(); // Use system temp directory if $dir is not provided
+        if (!file_exists($directory)) {  // Create the directory if it doesn't exist
+            mkdir($directory, 0777, true);
+        }
+        $fileName = basename($word. ".". $format); // Get the file name from the URL
+        $filePath = $directory . DIRECTORY_SEPARATOR . $fileName; // Set the file path
+        file_put_contents($filePath, file_get_contents($imageUrl)); // Download the image
+        return $fileName; // Return the file name
+    }
 
 
 }

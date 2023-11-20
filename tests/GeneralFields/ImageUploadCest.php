@@ -17,10 +17,13 @@ class ImageUploadCest
     // tests
     public function test_image_upload_field(AcceptanceTester $I)
     {
+        $imageName = \Faker\Factory::create()->firstName();
+        $generatedImage = $I->downloadImage("tests/Support/Data",
+            500,500,null,true,false,$imageName,false,'jpeg');
+
         $I->amOnPage('test_date_time_field_98/');
-        $I->wait(1);
-        $I->attachFile("//input[@name='image-upload']", "tiger.jpeg");
-//        $I->clicked(FieldSelectors::submitButton);
+        $I->attachFile("//input[@name='image-upload']", $generatedImage);
+        $I->clicked(FieldSelectors::submitButton);
 
         exit();
 
