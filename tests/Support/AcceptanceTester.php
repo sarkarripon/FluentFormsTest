@@ -618,6 +618,7 @@ class AcceptanceTester extends \Codeception\Actor
         $faker = Faker::create();
         $imageUrl = $faker->imageUrl($width, $height, $category, $randomize, $word, $gray, $format); // Get the image URL
         $directory = $dir ?? sys_get_temp_dir(); // Use system temp directory if $dir is not provided
+
         if (!file_exists($directory)) {  // Create the directory if it doesn't exist
             mkdir($directory, 0777, true);
         }

@@ -1,4 +1,4 @@
-<?php  //[STAMP] b1c4f0c7349d16c98f534d7250928a50
+<?php  //[STAMP] 66f08f96b832dcd5c8ca104f0645a0f5
 // phpcs:ignoreFile
 namespace Tests\Support\_generated;
 
