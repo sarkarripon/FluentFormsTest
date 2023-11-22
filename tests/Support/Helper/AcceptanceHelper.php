@@ -270,10 +270,16 @@ class AcceptanceHelper extends WebDriver
         $escapeXpath = str_replace('\\', '\\\\', $selector);
         $escapedXpath = addslashes($escapeXpath);
 //        $this->waitForElementVisible($selector);
+
         $this->executeJS("
-        var xpathResult = document.evaluate('$escapedXpath', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null);
-        var element = xpathResult.singleNodeValue;
-        element.value = '$value';");
+                  var xpathResult = document.evaluate(\"$escapedXpath\", document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null);
+                  var element = xpathResult.singleNodeValue;
+                  element.value = '" . $value . "';
+                ");
+//        $this->executeJS("
+//        var xpathResult = document.evaluate('$escapedXpath', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null);
+//        var element = xpathResult.singleNodeValue;
+//        element.value = '$value';");
     }
 
 

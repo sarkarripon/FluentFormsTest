@@ -435,21 +435,22 @@ class AcceptanceTester extends \Codeception\Actor
                 'postFields' => 'postSection',
                 'taxonomyFields' => 'taxonomySection',
             };
-            $this->clicked(constant(FluentFormsSelectors::class . '::' . $sectionType));
+            $this->clicked(constant(FluentFormsSelectors::class . '::' . $sectionType),'Clicking on the section');
+            $this->wait(1);
             foreach ($fields as $inputField) {
                 $customNames = $customNameArr[$inputField] ?? null;
                 if (is_array($customNames)) {
                     foreach ($customNames as $customName) {
                         $selector = constant(FluentFormsSelectors::class . '::' . $fieldType)[$inputField];
                         $this->clicked($selector);
-                        $this->clickByJS("(//div[contains(@class,'item-actions-wrapper')])[{$counter}]");
+                        $this->clickByJS("(//div[contains(@class,'item-actions-wrapper')])[{$counter}]", "Clicking on the field which will be renamed");
 
                         if ($inputField === 'nameFields') {
                             $this->filledField("//div[@edititem='[object Object]']//input[@type='text']", $customName);
                         } else {
                             $this->filledField("//div[@prop='label']//input[@type='text']", $customName);
                         }
-                        $this->clicked("//a[normalize-space()='Input Fields']");
+                        $this->clicked("//a[normalize-space()='Input Fields']", "Clicking on the input field tab");
                         $counter++;
                     }
                 } else {

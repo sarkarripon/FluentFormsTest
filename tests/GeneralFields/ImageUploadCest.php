@@ -57,9 +57,9 @@ class ImageUploadCest
                 'buttonText' => $buttonText,
                 'adminFieldLabel' => $adminFieldLabel,
                 'requiredMessage' => $requiredMessage,
-                'maxFileSize' => $maxFileSize,
+                'maxFileSize' => ['unit' => 'KB', 'size' => $maxFileSize,],
                 'maxFileCount' => $maxFileCount,
-                'allowedImages' => 'JPG',
+                'allowedImages' => 'JPEG',
                 'fileLocationType' => false,
             ],
             [
@@ -71,10 +71,14 @@ class ImageUploadCest
 
         $this->preparePage($I, $pageName);
 
-        $I->attachFile("//input[@name='image-upload']", $generatedImage);
+        $I->attachFile("//input[@name='$nameAttribute']", $generatedImage,'Upload Image');
+        exit();
+        $I->canSee($text);
 
         $I->clicked(FieldSelectors::submitButton);
         $I->clicked(FieldSelectors::submitButton);
+
+        $I->runShellCommand($I, "rm -rf tests/Support/Data/$generatedImage", "Remove image file from data folder after uploading");
 
 
         $I->seeText([
@@ -82,13 +86,12 @@ class ImageUploadCest
             $requiredMessage,
         ], $I->cmnt('Check element label and required message'));
 
-        $I->canSeeElement("//input", ['name' => $nameAttribute], $I->cmnt('Check TimeDate name attribute'));
-        $I->canSeeElement("//input", ['data-name' => $nameAttribute], $I->cmnt('Check TimeDate name attribute'));
-        $I->canSeeElement("//div[contains(@class,'$containerClass')]", [], $I->cmnt('Check TimeDate container class'));
-        $I->canSeeElement("//input[contains(@class,'$elementClass')]", [], $I->cmnt('Check TimeDate element class'));
+        $I->canSeeElement("//input", ['name' => $nameAttribute], $I->cmnt('Check ImageUpload name attribute'));
+        $I->canSeeElement("//input", ['data-name' => $nameAttribute], $I->cmnt('Check ImageUpload name attribute'));
+        $I->canSeeElement("//div[contains(@class,'$containerClass')]", [], $I->cmnt('Check ImageUpload container class'));
+        $I->canSeeElement("//input[contains(@class,'$elementClass')]", [], $I->cmnt('Check ImageUpload element class'));
         echo $I->cmnt("All test cases went through. ", 'yellow','',array('blink'));
 
-        $I->runShellCommand($I, "rm -rf tests/Support/Data/$generatedImage", "Remove image file from data folder");
 
 
     }

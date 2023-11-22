@@ -1501,18 +1501,29 @@ trait GeneralFieldCustomizer
             }
 
             if ($basicOperand['maxFileSize']) { //Max File Size
-                if (is_array($basicOperand['maxFileSize'])) {
-                    $I->clickByJS("//div[normalize-space()='Max File Size']/following::span[normalize-space()='Enable']");
+                if (is_array($basicOperand['maxFileSize']) && isset($basicOperand['maxFileSize']['unit'])) {
+                    $I->fillByJS("//input[@placeholder='Select']", $basicOperand['maxFileSize']['unit'],'Select Unit');
+                    $I->filledField("(//input[@type='number'])[1]", $basicOperand['maxFileSize']['size'], 'Fill As Max File Size');
+                }else{
+                    $I->filledField("(//input[@type='number'])[1]", $basicOperand['maxFileSize'], 'Fill As Max File Size');
                 }
-                $I->filledField("(//input[@type='number'])[1]", $basicOperand['maxFileSize'], 'Fill As Max File Size');
             }
 
             if ($basicOperand['maxFileCount']) { //Max File Count
-                $I->filledField(GeneralFields::customizationFields('Max File Count'), $basicOperand['maxFileCount'], 'Fill As Max File Count');
+                $I->filledField("(//input[@type='number'])[2]", $basicOperand['maxFileCount'], 'Fill As Max File Count');
             }
 
             if ($basicOperand['allowedImages']) { //Allowed Images
-                $I->filledField(GeneralFields::customizationFields('Allowed Images'), $basicOperand['allowedImages'], 'Fill As Allowed Images');
+
+                $basicOperand['allowedImages'] === 'JPG'
+                    ? $I->clicked("//span[normalize-space()='Allowed Images']/following::span[normalize-space()='JPG']", 'Select JPG')
+                    : null;
+                $basicOperand['allowedImages'] === 'PNG'
+                    ? $I->clicked("//span[normalize-space()='Allowed Images']/following::span[normalize-space()='PNG']",'Select PNG')
+                    : null;
+                $basicOperand['allowedImages'] === 'GIF'
+                    ? $I->clicked("//span[normalize-space()='Allowed Images']/following::span[normalize-space()='GIF']", 'Select GIF')
+                    : null;
             }
 
             if ($basicOperand['fileLocationType']) { //File Location Type
