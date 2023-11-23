@@ -292,9 +292,11 @@ class AcceptanceHelper extends WebDriver
             $this->waitForElementVisible($selector, 10);
             $elementText = $this->grabTextFrom($selector);
         }
+
         if (is_string($actionTexts)) {
             $actionTexts = [$actionTexts];
         }
+
         foreach ($actionTexts as $actionText) {
             $actionText = preg_quote($actionText, '/');
             if (!preg_match("/$actionText/i", $elementText)) {

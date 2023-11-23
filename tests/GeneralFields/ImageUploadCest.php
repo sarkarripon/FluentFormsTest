@@ -3,6 +3,7 @@
 
 namespace Tests\GeneralFields;
 
+use Codeception\Attribute\Group;
 use Tests\Support\AcceptanceTester;
 use Tests\Support\Factories\DataProvider\DataGenerator;
 use Tests\Support\Helper\GeneralFieldCustomizer;
@@ -19,6 +20,7 @@ class ImageUploadCest
     }
 
     // tests
+    #[Group('generalFields')]
     public function test_image_upload_field(AcceptanceTester $I)
     {
         $pageName = __FUNCTION__ . '_' . rand(1, 100);
@@ -72,8 +74,6 @@ class ImageUploadCest
         $this->preparePage($I, $pageName);
 
         $I->attachFile("//input[@name='$nameAttribute']", $generatedImage,'Upload Image');
-        exit();
-        $I->canSee($text);
 
         $I->clicked(FieldSelectors::submitButton);
         $I->clicked(FieldSelectors::submitButton);
@@ -91,8 +91,6 @@ class ImageUploadCest
         $I->canSeeElement("//div[contains(@class,'$containerClass')]", [], $I->cmnt('Check ImageUpload container class'));
         $I->canSeeElement("//input[contains(@class,'$elementClass')]", [], $I->cmnt('Check ImageUpload element class'));
         echo $I->cmnt("All test cases went through. ", 'yellow','',array('blink'));
-
-
-
+        
     }
 }

@@ -3,6 +3,7 @@
 
 namespace Tests\GeneralFields;
 
+use Codeception\Attribute\Group;
 use Tests\Support\AcceptanceTester;
 use Tests\Support\Factories\DataProvider\DataGenerator;
 use Tests\Support\Helper\GeneralFieldCustomizer;
@@ -20,6 +21,7 @@ class MaskInputCest
     }
 
     // tests
+    #[Group('generalFields')]
     public function test_mask_input_field(AcceptanceTester $I)
     {
         $pageName = __FUNCTION__ . '_' . rand(1, 100);
@@ -83,6 +85,7 @@ class MaskInputCest
         echo $I->cmnt("All test cases went through. ",'yellow','',array('blink') );
     }
 
+    #[Group('generalFields')]
     public function test_maskinput_field_with_default_value(AcceptanceTester $I)
     {
         $pageName = __FUNCTION__ . '_' . rand(1, 100);

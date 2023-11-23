@@ -3,6 +3,7 @@
 
 namespace Tests\GeneralFields;
 
+use Codeception\Attribute\Group;
 use Tests\Support\AcceptanceTester;
 use Tests\Support\Factories\DataProvider\DataGenerator;
 use Tests\Support\Helper\GeneralFieldCustomizer;
@@ -20,6 +21,7 @@ class NameFieldCest
     }
 
     // tests
+    #[Group('generalFields')]
     public function test_name_fields_without_default_value(AcceptanceTester $I)
     {
 
@@ -108,6 +110,7 @@ class NameFieldCest
 
         echo $I->cmnt("Tested Name Fields without default value and everything looks good.",'yellow','',array('blink') );
     }
+    #[Group('generalFields')]
     public function test_name_fields_with_default_value(AcceptanceTester $I)
     {
         $pageName = __FUNCTION__ . '_' . rand(1, 100);
@@ -166,6 +169,7 @@ class NameFieldCest
 
         echo $I->cmnt("Checked Admin field label, default value and form post data ", 'yellow','',array('blink'));
     }
+    #[Group('generalFields')]
     public function test_name_fields_hide_label(AcceptanceTester $I): void
     {
         $pageName = __FUNCTION__ . '_' . rand(1, 100);

@@ -1561,8 +1561,135 @@ trait GeneralFieldCustomizer
 
     }
 
-    public function customizeFileUpload()
+    public function customizeFileUpload(
+        AcceptanceTester $I,
+        $fieldName,
+        ?array $basicOptions = null,
+        ?array $advancedOptions = null,
+        ?bool $isHiddenLabel = false
+    ): void
     {
+        $I->clickOnExactText($fieldName);
+
+        $basicOperand = null;
+        $advancedOperand = null;
+
+        $basicOptionsDefault = [
+            'buttonText' => false,
+            'adminFieldLabel' => false,
+            'requiredMessage' => false,
+            'maxFileSize' => false,
+            'maxFileCount' => false,
+            'allowedFiles' => false,
+            'fileLocationType' => false,
+        ];
+
+        $advancedOptionsDefault = [
+            'containerClass' => false,
+            'elementClass' => false,
+            'helpMessage' => false,
+            'nameAttribute' => false,
+        ];
+
+        if (!is_null($basicOptions)) {
+            $basicOperand = array_merge($basicOptionsDefault, $basicOptions);
+        }
+
+        if (!is_null($advancedOptions)) {
+            $advancedOperand = array_merge($advancedOptionsDefault, $advancedOptions);
+        }
+
+        //                                           Basic options                                              //
+        // adminFieldLabel
+        if (isset($basicOperand)) {
+
+            $basicOperand['buttonText'] // Button Text
+                ? $I->filledField(GeneralFields::customizationFields('Button Text'), $basicOperand['buttonText'], 'Fill As Button Text')
+                : null;
+
+            $basicOperand['adminFieldLabel'] // adminFieldLabel
+                ? $I->filledField(GeneralFields::adminFieldLabel, $basicOperand['adminFieldLabel'], 'Fill As Admin Field Label')
+                : null;
+
+            if ($basicOperand['requiredMessage']) { //Required Message
+                $I->clicked(GeneralFields::radioSelect('Required'),'Select Required');
+                $I->clickByJS(GeneralFields::radioSelect('Error Message', 2),'Select error message type');
+                $I->filledField(GeneralFields::customizationFields('Required'), $basicOperand['requiredMessage'], 'Fill As Required Message');
+            }
+
+            if ($basicOperand['maxFileSize']) { //Max File Size
+                if (is_array($basicOperand['maxFileSize']) && isset($basicOperand['maxFileSize']['unit'])) {
+                    $I->fillByJS("//input[@placeholder='Select']", $basicOperand['maxFileSize']['unit'],'Select Unit');
+                    $I->filledField("(//input[@type='number'])[1]", $basicOperand['maxFileSize']['size'], 'Fill As Max File Size');
+                }else{
+                    $I->filledField("(//input[@type='number'])[1]", $basicOperand['maxFileSize'], 'Fill As Max File Size');
+                }
+            }
+
+            if ($basicOperand['maxFileCount']) { //Max File Count
+                $I->filledField("(//input[@type='number'])[2]", $basicOperand['maxFileCount'], 'Fill As Max File Count');
+            }
+
+            if ($basicOperand['allowedFiles']) { //Allowed files
+
+                $basicOperand['allowedFiles'] === 'image'
+                    ? $I->clicked("//span[normalize-space()='Images (jpg, jpeg, gif, png, bmp)']", 'Select image files')
+                    : null;
+                $basicOperand['allowedFiles'] === 'audio'
+                    ? $I->clicked("//span[contains(text(),'Audio (mp3, wav, ogg, oga')]",'Select audio files')
+                    : null;
+                $basicOperand['allowedFiles'] === 'video'
+                    ? $I->clicked("//span[contains(text(),'Video (avi, divx')]", 'Select video files')
+                    : null;
+                $basicOperand['allowedFiles'] === 'pdf'
+                    ? $I->clicked("//span[normalize-space()='PDF (pdf)']", 'Select PDF files')
+                    : null;
+                $basicOperand['allowedFiles'] === 'docs'
+                    ? $I->clicked("//span[contains(text(),'Docs (doc, ppt, pps')]", 'Select Docs files')
+                    : null;
+                $basicOperand['allowedFiles'] === 'zip'
+                    ? $I->clicked("//span[normalize-space()='Zip Archives (zip, gz)']", 'Select Zip files')
+                    : null;
+                $basicOperand['allowedFiles'] === 'executableFiles'
+                    ? $I->clicked("//span[normalize-space()='Executable Files (exe)']", 'Select Executable Files')
+                    : null;
+                $basicOperand['allowedFiles'] === 'csv'
+                    ? $I->clicked("//span[normalize-space()='CSV (csv)']", 'Select CSV files')
+                    : null;
+            }
+
+            if ($basicOperand['fileLocationType']) { //File Location Type
+                $I->selectOption(GeneralFields::customizationFields('File Location Type'), $basicOperand['fileLocationType'], 'Select File Location Type');
+            }
+
+        }
+
+        //                                           Advanced options                                              //
+
+        if (isset($advancedOperand)) {
+            $I->scrollTo(GeneralFields::advancedOptions);
+            $I->clicked(GeneralFields::advancedOptions,'Expand advanced options');
+            $I->wait(2);
+
+            $advancedOperand['containerClass'] // Container Class
+                ? $I->filledField(GeneralFields::customizationFields('Container Class'), $advancedOperand['containerClass'], 'Fill As Container Class')
+                : null;
+
+            $advancedOperand['elementClass'] // Element Class
+                ? $I->filledField(GeneralFields::customizationFields('Element Class'), $advancedOperand['elementClass'], 'Fill As Element Class')
+                : null;
+
+            $advancedOperand['helpMessage'] // Help Message
+                ? $I->filledField("//textarea[@class='el-textarea__inner']", $advancedOperand['helpMessage'], 'Fill As Help Message')
+                : null;
+
+            $advancedOperand['nameAttribute'] // Name Attribute
+                ? $I->filledField(GeneralFields::customizationFields('Name Attribute'), $advancedOperand['nameAttribute'], 'Fill As Name Attribute')
+                : null;
+
+        }
+        $I->clicked(FluentFormsSelectors::saveForm);
+        $I->seeSuccess('The form is successfully updated.');
 
     }
 

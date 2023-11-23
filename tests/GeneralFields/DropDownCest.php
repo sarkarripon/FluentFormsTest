@@ -3,6 +3,7 @@
 
 namespace Tests\GeneralFields;
 
+use Codeception\Attribute\Group;
 use Tests\Support\AcceptanceTester;
 use Tests\Support\Factories\DataProvider\DataGenerator;
 use Tests\Support\Helper\GeneralFieldCustomizer;
@@ -13,6 +14,7 @@ class DropDownCest
 {
     use IntegrationHelper, GeneralFieldCustomizer, DataGenerator;
 
+    #[Group('generalFields')]
     public function _before(AcceptanceTester $I)
     {
         $I->loadDotEnvFile();
