@@ -1621,7 +1621,7 @@ trait GeneralFieldCustomizer
                 if (is_array($basicOperand['maxFileSize']) && isset($basicOperand['maxFileSize']['unit'])) {
                     $I->fillByJS("//input[@placeholder='Select']", $basicOperand['maxFileSize']['unit'],'Select Unit');
                     $I->filledField("(//input[@type='number'])[1]", $basicOperand['maxFileSize']['size'], 'Fill As Max File Size');
-                }else{
+                }else {
                     $I->filledField("(//input[@type='number'])[1]", $basicOperand['maxFileSize'], 'Fill As Max File Size');
                 }
             }
@@ -1698,9 +1698,103 @@ trait GeneralFieldCustomizer
 
     }
 
-    public function customizePhone()
+    public function customizePhone(
+        AcceptanceTester $I,
+        $fieldName,
+        ?array $basicOptions = null,
+        ?array $advancedOptions = null,
+        ?bool $isHiddenLabel = false
+    ): void
     {
+        $I->clickOnExactText($fieldName);
 
+        $basicOperand = null;
+        $basicOperand = null;
+
+        $basicOptionsDefault = [
+            'adminFieldLabel' => false,
+            'placeholder' => false,
+            'defaultValue' => false,
+            'requiredMessage' => false,
+            'validationMessage' => false,
+            'autoCountrySelection' => false,
+            'defaultCountry' => false,
+        ];
+
+        $advancedOptionsDefault = [
+            'nameAttribute' => false,
+            'helpMessage' => false,
+            'containerClass' => false,
+            'elementClass' => false,
+        ];
+
+        if (!is_null($basicOptions)) {
+            $basicOperand = array_merge($basicOptionsDefault, $basicOptions);
+        }
+
+        if (!is_null($advancedOptions)) {
+            $basicOperand = array_merge($advancedOptionsDefault, $advancedOptions);
+        }
+
+        //                                           Basic options                                              //
+        // adminFieldLabel
+        if (isset($basicOperand)) {
+
+            $basicOperand['adminFieldLabel'] // adminFieldLabel
+                ? $I->filledField(GeneralFields::adminFieldLabel, $basicOperand['adminFieldLabel'], 'Fill As Admin Field Label')
+                : null;
+
+            $basicOperand['placeholder'] //Placeholder
+                ? $I->filledField(GeneralFields::placeholder, $basicOperand['placeholder'], 'Fill As Placeholder')
+                : null;
+
+            $basicOperand['defaultValue'] // Default Value
+                ? $I->filledField(GeneralFields::defaultField, $basicOperand['defaultValue'], 'Fill As Default Value')
+                : null;
+
+            if ($basicOperand['requiredMessage']) { //Required Message
+                $I->clicked(GeneralFields::radioSelect('Required'),'Select Required');
+                $I->clickByJS(GeneralFields::radioSelect('Error Message', 2),'Select error message type');
+                $I->filledField(GeneralFields::customizationFields('Required'), $basicOperand['requiredMessage'], 'Fill As Required Message');
+            }
+
+            // Phone number Validation Message
+            if ($basicOperand['validationMessage']) {
+                $I->clicked(GeneralFields::radioSelect('Validate Phone Number'),'Select YES to Validate Phone Number');
+                $I->filledField(GeneralFields::customizationFields('Validation Message for Duplicate'),
+                    $basicOperand['validationMessage'], 'Fill As Duplicate Validation Message');
+            }
+            exit('here');
+
+
+        }
+
+        //                                           Advanced options                                              //
+
+        if (isset($basicOperand)) {
+            $I->scrollTo(GeneralFields::advancedOptions);
+            $I->clicked(GeneralFields::advancedOptions,'Expand advanced options');
+            $I->wait(2);
+
+            $basicOperand['containerClass'] // Container Class
+                ? $I->filledField(GeneralFields::customizationFields('Container Class'), $basicOperand['containerClass'], 'Fill As Container Class')
+                : null;
+
+            $basicOperand['elementClass'] // Element Class
+                ? $I->filledField(GeneralFields::customizationFields('Element Class'), $basicOperand['elementClass'], 'Fill As Element Class')
+                : null;
+
+            $basicOperand['helpMessage'] // Help Message
+                ? $I->filledField("//textarea[@class='el-textarea__inner']", $basicOperand['helpMessage'], 'Fill As Help Message')
+                : null;
+
+            $basicOperand['nameAttribute'] // Name Attribute
+                ? $I->filledField(GeneralFields::customizationFields('Name Attribute'), $basicOperand['nameAttribute'], 'Fill As Name Attribute')
+                : null;
+
+        }
+        $I->clicked(FluentFormsSelectors::saveForm);
+        $I->seeSuccess('The form is successfully updated.');
     }
 
     public function customizeHiddenField()

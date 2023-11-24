@@ -72,7 +72,7 @@ class AcceptanceTester extends \Codeception\Actor
 
             // Display the output
             foreach ($output as $line) {
-                $I->comment($line);
+                $I->comment('Prompt back: '. $line);
             }
         }
     }

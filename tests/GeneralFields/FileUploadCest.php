@@ -76,7 +76,7 @@ class FileUploadCest
         $I->clicked(FieldSelectors::submitButton);
         $I->clicked(FieldSelectors::submitButton);
 
-        $I->runShellCommand($I, "rm -rf tests/Support/Data/$generatedImage", "Remove image file from data folder after uploading");
+        $I->runShellCommand($I, "rm -rf tests/Support/Data/$generatedImage"); // remove image after uploading
 
         $I->seeText([
             $elementLabel,
