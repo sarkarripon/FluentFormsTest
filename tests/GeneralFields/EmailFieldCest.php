@@ -75,14 +75,14 @@ class EmailFieldCest
             $prefixLabel,
             $suffixLabel,
             $requiredMessage,
-
         ], $I->cmnt('Check element label, prefix label, suffix label and required message'));
-        $I->seeElement("//input", ['placeholder' => $placeholder], $I->cmnt('Check email placeholder'));
-        $I->seeElement("//input", ['name' => $nameAttribute], $I->cmnt('Check email name attribute'));
-        $I->seeElement("//input", ['data-name' => $nameAttribute], $I->cmnt('Check email name attribute'));
-        $I->seeElement("//div[contains(@class,'$containerClass')]", [], $I->cmnt('Check email container class'));
-        $I->seeElement("//input[contains(@class,'$elementClass')]", [], $I->cmnt('Check email element class'));
-        $I->seeElement("//div", ['data-content' => $helpMessage], $I->cmnt('Check email help message'));
+
+        $I->canSeeElement("//input", ['placeholder' => $placeholder], $I->cmnt('Check email placeholder'));
+        $I->canSeeElement("//input", ['name' => $nameAttribute], $I->cmnt('Check email name attribute'));
+        $I->canSeeElement("//input", ['data-name' => $nameAttribute], $I->cmnt('Check email name attribute'));
+        $I->canSeeElement("//div[contains(@class,'$containerClass')]", [], $I->cmnt('Check email container class'));
+        $I->canSeeElement("//input[contains(@class,'$elementClass')]", [], $I->cmnt('Check email element class'));
+        $I->canSeeElement("//div", ['data-content' => $helpMessage], $I->cmnt('Check email help message'));
 
         // changing attribute type to 'something' to disable browser html tooltip validation
         $I->executeJS("

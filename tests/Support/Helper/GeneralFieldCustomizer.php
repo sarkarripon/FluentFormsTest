@@ -1719,6 +1719,7 @@ trait GeneralFieldCustomizer
             'validationMessage' => false,
             'autoCountrySelection' => false,
             'defaultCountry' => false,
+            'countryList' => false,
         ];
 
         $advancedOptionsDefault = [
