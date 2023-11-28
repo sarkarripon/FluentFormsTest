@@ -105,18 +105,18 @@ trait GeneralFieldCustomizer
 
                 if ($nameArea == 1){
                     $I->clicked("(//i[contains(@class,'el-icon-caret-bottom')])[1]", 'To expand First Name field');
-                }elseif ($nameArea == 3){
+                }elseif ($nameArea == 2){
                     $I->clicked("(//span[@class='el-checkbox__inner'])[2]", 'To enable Middle Name field');
                     $I->clickByJS("(//i[contains(@class,'el-icon-caret-bottom')])[2]", 'To expand Middle Name field');
-                }elseif ($nameArea == 5){
+                }elseif ($nameArea == 3){
                     $I->clicked("(//i[contains(@class,'el-icon-caret-bottom')])[3]", 'To expand Last Name field');
                 }
                 $fieldData = [
                     'Label' => $name['label'] ?? null,
                     'Default' => $name['default'] ?? null,
                     'Placeholder' => $name['placeholder'] ?? null,
-                    'Help Message' => $name['helpMessage'] ?? null,
                     'Error Message' => $name['required'] ?? null,
+                    'Help Message' => $name['helpMessage'] ?? null,
                 ];
 
                 foreach ($fieldData as $key => $value) {
@@ -128,6 +128,7 @@ trait GeneralFieldCustomizer
 
                     if ($key == "Error Message") {
                         $I->clicked(GeneralFields::isRequire($nameArea));
+                        $I->clickByJS(GeneralFields::isRequire($nameArea,4));
                     }
                     $I->filledField(GeneralFields::nameFieldSelectors($nameArea, $key), $value ?? "");
                 }
@@ -135,8 +136,8 @@ trait GeneralFieldCustomizer
 
         };
         // calling local function, reverse order for scrolling issue
-        $nameFieldLocalFunction($I, $basicOperand['lastName'], 5,);
-        $nameFieldLocalFunction($I, $basicOperand['middleName'], 3,);
+        $nameFieldLocalFunction($I, $basicOperand['lastName'], 3,);
+        $nameFieldLocalFunction($I, $basicOperand['middleName'], 2,);
         $nameFieldLocalFunction($I, $basicOperand['firstName'], 1,);
 
         // Label Placement (Hidden Label)
@@ -199,25 +200,26 @@ trait GeneralFieldCustomizer
         }
 
         //                                           Basic options                                              //
-        // adminFieldLabel
         if (isset($basicOperand)) {
-            // adminFieldLabel
-            $basicOperand['adminFieldLabel']
+
+            $basicOperand['adminFieldLabel'] // adminFieldLabel
             ? $I->filledField(GeneralFields::adminFieldLabel, $basicOperand['adminFieldLabel'], 'Fill As Admin Field Label')
             : null;
+
             $basicOperand['placeholder'] //Placeholder
             ? $I->filledField(GeneralFields::placeholder, $basicOperand['placeholder'], 'Fill As Placeholder')
             : null;
-//         Required Message
-        if ($basicOperand['requiredMessage']) {
-            $I->clicked(GeneralFields::radioSelect('Required'),'Select Required');
-            $I->clicked(GeneralFields::radioSelect('Error Message', 2),'Select Required');
-            $I->filledField(GeneralFields::customizationFields('Required'), $basicOperand['requiredMessage'], 'Fill As Required Message');
+
+        if ($basicOperand['requiredMessage']) { // Required Message
+            $I->clicked(GeneralFields::radioSelect('Required',1),'Mark Yes from Required because by default it is No');
+            $I->clickByJS(GeneralFields::radioSelect('Error Message', 2),'Mark custom from Required because by default it is global');
+            $I->filledField(GeneralFields::customizationFields('Required'), $basicOperand['requiredMessage'], 'Fill As custom Required Message');
         }
-//         Validation Message
-            $basicOperand['validationMessage']
-            ? $I->filledField(GeneralFields::customizationFields('Validation Message'), $basicOperand['validationMessage'], 'Fill As Email Validation Message')
-            : null;
+
+        if ($basicOperand['validationMessage']) { // Validation Message
+            $I->clickByJS(GeneralFields::radioSelect('Validate Email', 4),'Mark custom from Validate Email because by default it is global');
+            $I->filledField(GeneralFields::customizationFields('Validate Email'), $basicOperand['validationMessage'], 'Fill As Email Validation Message');
+            }
         }
 
         //                                           Advanced options                                              //
@@ -243,13 +245,12 @@ trait GeneralFieldCustomizer
             ? $I->filledField("//textarea[@class='el-textarea__inner']", $advancedOperand['helpMessage'], 'Fill As Help Message')
             : null;
 
-            // Duplicate Validation Message
-            if ($advancedOperand['duplicateValidationMessage']) {
+            if ($advancedOperand['duplicateValidationMessage']) { // Duplicate Validation Message
                 $I->clicked(GeneralFields::checkboxSelect(),'Select Duplicate Validation Message');
-                $I->clicked(GeneralFields::radioSelect('Error Message', 2),'Select Required');
                 $I->filledField(GeneralFields::customizationFields('Validation Message for Duplicate'),
                     $advancedOperand['duplicateValidationMessage'], 'Fill As Duplicate Validation Message');
             }
+
             $advancedOperand['prefixLabel'] // Prefix Label
             ? $I->filledField(GeneralFields::customizationFields('Prefix Label'), $advancedOperand['prefixLabel'], 'Fill As Prefix Label')
             : null;
@@ -424,7 +425,7 @@ trait GeneralFieldCustomizer
 
             if ($basicOperand['requiredMessage']) { // Required Message
                 $I->clicked(GeneralFields::radioSelect('Required'),'Select Required');
-                $I->clicked(GeneralFields::radioSelect('Error Message', 2),'Select custom');
+                $I->clickByJS(GeneralFields::radioSelect('Error Message', 2),'Select custom');
                 $I->filledField(GeneralFields::customizationFields('Error Message'), $basicOperand['requiredMessage'], 'Fill As Required Message');
             }
         }
@@ -465,13 +466,9 @@ trait GeneralFieldCustomizer
                 ? $I->filledField(GeneralFields::customizationFields('Name Attribute'), $advancedOperand['nameAttribute'], 'Fill As Name Attribute')
                 : null;
 
-            $advancedOperand['maxLength'] // Max Length
-                ? $I->filledField("//input[@type='number']", $advancedOperand['maxLength'], 'Fill As Max text Length')
-                : null;
-
             if (isset($advancedOperand['uniqueValidationMessage'])) { // Unique Validation Message
                 $I->clicked(GeneralFields::checkboxSelect(), 'Validate as Unique');
-                $I->clicked(GeneralFields::radioSelect('Error Message', 2),'Select Required');
+                $I->clickByJS(GeneralFields::radioSelect('Error Message', 2),'Select Required');
                 $I->filledField(GeneralFields::customizationFields('Validation Message for Duplicate'), $advancedOperand['uniqueValidationMessage'], 'Fill As Unique Validation Message');
             }
         }

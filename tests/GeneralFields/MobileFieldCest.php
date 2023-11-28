@@ -55,7 +55,7 @@ class MobileFieldCest
                 'validationMessage' => $validationMessage,
             ],
             [
-//            'defaultValue' => $defaultValue,
+                'defaultValue' => $defaultValue,
                 'containerClass' => $containerClass,
                 'elementClass' => $elementClass,
                 'helpMessage' => $helpMessage,

@@ -11,15 +11,14 @@ class GeneralFields{
     {
         return "(//*[normalize-space()='$label']/following::input[@type='text'])[1]";
     }
-    public static function nameFieldSelectors(int $nameArea,string $label )
+    public static function nameFieldSelectors(int $nameArea, string $label )
     {
-        // namearea = 1,3,5, label = Label, Default, Placeholder, Help Message, Error Message
-        return "((//div[contains(@class,'address-field-option')])[$nameArea]//span[contains(text(),'$label')]/following::input[@type='text'])[1]";
+        // namearea = 1,2,3 label = Label, Default, Placeholder, Help Message, Error Message
+        return "((//div[contains(@class,'address-field-option__settings')])[$nameArea]//*[contains(text(),'$label')]/following::input[@type='text'])[1]";
     }
-    public static function isRequire(int $whatRequire)
+    public static function isRequire(int $nameArea, $index=1)
     {
-        // 1,3,5
-        return "(//div[@role='radiogroup']//span[contains(@class,'el-radio__inner')])[$whatRequire]";
+        return "((//div[contains(@class,'address-field-option__settings')])[$nameArea]//*[@class='el-radio__inner'])[$index]";
     }
     public static function radioSelect($label, $index = 1)
     {

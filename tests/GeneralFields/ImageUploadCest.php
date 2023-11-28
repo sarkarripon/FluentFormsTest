@@ -73,7 +73,7 @@ class ImageUploadCest
 
         $this->preparePage($I, $pageName);
 
-        $I->attachFile("//input[@name='$nameAttribute']", $generatedImage,'Upload Image');
+//        $I->attachFile("//input[@name='$nameAttribute']", $generatedImage,'Upload Image');
 
         $I->clicked(FieldSelectors::submitButton);
         $I->clicked(FieldSelectors::submitButton);

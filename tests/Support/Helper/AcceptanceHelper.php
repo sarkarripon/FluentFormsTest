@@ -106,9 +106,8 @@ class AcceptanceHelper extends WebDriver
         try {
             parent::clickWithLeftButton($selector);
         }catch (Exception $e){
-            $this->waitForElementClickable($selector);
-            $this->scrollTo($selector);
-            $this->clickByJS($selector);
+            $this->waitForElementVisible($selector);
+            $this->clickWithLeftButton($selector);
         }
 
     }
@@ -246,14 +245,18 @@ class AcceptanceHelper extends WebDriver
      */
     public function clickByJS(string $selector): void
     {
-        $escapeXpath = str_replace('\\', '\\\\', $selector);
-        $escapedXpath = addslashes($escapeXpath);
+        try {
+            $this->seeElementInDOM($selector);
+        }catch (Exception $e) {
+            $this->fail($e->getMessage());
+        }
         $js = <<<JS
-        var xpathExpression = "$escapedXpath";
+        var xpathExpression = "$selector";
         var element = document.evaluate(xpathExpression, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
         if (element) {
             element.click();
         }
+        console.log("Clicked on " + xpathExpression);
         JS;
         $this->executeJS($js);
     }

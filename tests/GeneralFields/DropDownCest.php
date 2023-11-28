@@ -14,7 +14,6 @@ class DropDownCest
 {
     use IntegrationHelper, GeneralFieldCustomizer, DataGenerator;
 
-    #[Group('generalFields')]
     public function _before(AcceptanceTester $I)
     {
         $I->loadDotEnvFile();
@@ -22,6 +21,7 @@ class DropDownCest
     }
 
     // tests
+    #[Group('generalFields')]
     public function test_dropdown_field(AcceptanceTester $I)
     {
         $pageName = __FUNCTION__ . '_' . rand(1, 100);
