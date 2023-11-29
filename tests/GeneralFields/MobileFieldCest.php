@@ -51,36 +51,34 @@ class MobileFieldCest
             [
                 'adminFieldLabel' => $adminFieldLabel,
                 'placeholder' => $placeholder,
+//                'defaultValue' => $defaultValue,
                 'requiredMessage' => $requiredMessage,
                 'validationMessage' => $validationMessage,
+                'autoCountrySelection' => false,
+                'defaultCountry' => false,
+                'countryList' => false,
             ],
             [
-                'defaultValue' => $defaultValue,
+                'nameAttribute' => $nameAttribute,
                 'containerClass' => $containerClass,
                 'elementClass' => $elementClass,
                 'helpMessage' => $helpMessage,
-                'duplicateValidationMessage' => $duplicateValidationMessage,
-                'prefixLabel' => $prefixLabel,
-                'suffixLabel' => $suffixLabel,
-                'nameAttribute' => $nameAttribute,
             ]);
 
         $this->preparePage($I, $pageName);
         $I->clicked(FieldSelectors::submitButton);
         $I->seeText([
             $elementLabel,
-            $prefixLabel,
-            $suffixLabel,
             $requiredMessage,
         ], $I->cmnt('Check element label, prefix label, suffix label and required message'));
 
-        $I->canSeeElement("//input", ['placeholder' => $placeholder], $I->cmnt('Check email placeholder'));
-        $I->canSeeElement("//input", ['name' => $nameAttribute], $I->cmnt('Check email name attribute'));
-        $I->canSeeElement("//input", ['data-name' => $nameAttribute], $I->cmnt('Check email name attribute'));
-        $I->canSeeElement("//div[contains(@class,'$containerClass')]", [], $I->cmnt('Check email container class'));
-        $I->canSeeElement("//input[contains(@class,'$elementClass')]", [], $I->cmnt('Check email element class'));
-        $I->canSeeElement("//div", ['data-content' => $helpMessage], $I->cmnt('Check email help message'));
-
-
+        $I->canSeeElement("//input", ['placeholder' => $placeholder], $I->cmnt('Check Mobile Field placeholder'));
+        $I->canSeeElement("//input", ['name' => $nameAttribute], $I->cmnt('Check Mobile Field name attribute'));
+        $I->canSeeElement("//input", ['data-name' => $nameAttribute], $I->cmnt('Check Mobile Field name attribute'));
+        $I->canSeeElement("//div[contains(@class,'$containerClass')]", [], $I->cmnt('Check Mobile Field container class'));
+        $I->canSeeElement("//input[contains(@class,'$elementClass')]", [], $I->cmnt('Check Mobile Field element class'));
+        $I->canSeeElement("//div", ['data-content' => $helpMessage], $I->cmnt('Check Mobile Field help message'));
+        $I->canSeeElement("//input", ['type' => 'tel'], $I->cmnt('Check Mobile Field type'));
+        echo $I->cmnt("All test cases went through. ", 'yellow','',array('blink'));
     }
 }

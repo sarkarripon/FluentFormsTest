@@ -54,7 +54,6 @@ trait GeneralFieldCustomizer
                 }
             }
         }
-
         return $new;
     }
 
@@ -319,8 +318,9 @@ trait GeneralFieldCustomizer
                 : null;
 
             if ($basicOperand['requiredMessage']) { // Required Message
-                $I->clicked(GeneralFields::radioSelect('Required'),'Select Required');
-                $I->filledField(GeneralFields::customizationFields('Error Message'), $basicOperand['requiredMessage'], 'Fill As Required Message');
+                $I->clicked(GeneralFields::radioSelect('Required',1),'Mark Yes from Required because by default it is No');
+                $I->clickByJS(GeneralFields::radioSelect('Error Message', 2),'Mark custom from Required because by default it is global');
+                $I->filledField(GeneralFields::customizationFields('Required'), $basicOperand['requiredMessage'], 'Fill As custom Required Message');
             }
         }
 
@@ -533,8 +533,8 @@ trait GeneralFieldCustomizer
 
             if ($basicOperand['requiredMessage']) { //Required Message
                 $I->clicked(GeneralFields::radioSelect('Required'),'Select Required');
-                $I->clicked(GeneralFields::radioSelect('Error Message', 2),'Select Required');
-                $I->filledField(GeneralFields::customizationFields('Required'), $basicOperand['requiredMessage'], 'Fill As Required Message');
+                $I->clickByJS(GeneralFields::radioSelect('Error Message', 2),'Select custom');
+                $I->filledField(GeneralFields::customizationFields('Error Message'), $basicOperand['requiredMessage'], 'Fill As Required Message');
             }
         }
 
@@ -1597,9 +1597,7 @@ trait GeneralFieldCustomizer
         }
 
         //                                           Basic options                                              //
-        // adminFieldLabel
         if (isset($basicOperand)) {
-
             $basicOperand['buttonText'] // Button Text
                 ? $I->filledField(GeneralFields::customizationFields('Button Text'), $basicOperand['buttonText'], 'Fill As Button Text')
                 : null;
@@ -1706,7 +1704,7 @@ trait GeneralFieldCustomizer
         $I->clickOnExactText($fieldName);
 
         $basicOperand = null;
-        $basicOperand = null;
+        $advancedOperand = null;
 
         $basicOptionsDefault = [
             'adminFieldLabel' => false,
@@ -1731,13 +1729,12 @@ trait GeneralFieldCustomizer
         }
 
         if (!is_null($advancedOptions)) {
-            $basicOperand = array_merge($advancedOptionsDefault, $advancedOptions);
+            $advancedOperand = array_merge($advancedOptionsDefault, $advancedOptions);
         }
 
         //                                           Basic options                                              //
         // adminFieldLabel
         if (isset($basicOperand)) {
-
             $basicOperand['adminFieldLabel'] // adminFieldLabel
                 ? $I->filledField(GeneralFields::adminFieldLabel, $basicOperand['adminFieldLabel'], 'Fill As Admin Field Label')
                 : null;
@@ -1750,46 +1747,41 @@ trait GeneralFieldCustomizer
                 ? $I->filledField(GeneralFields::defaultField, $basicOperand['defaultValue'], 'Fill As Default Value')
                 : null;
 
-            if ($basicOperand['requiredMessage']) { //Required Message
-                $I->clicked(GeneralFields::radioSelect('Required'),'Select Required');
-                $I->clickByJS(GeneralFields::radioSelect('Error Message', 2),'Select error message type');
-                $I->filledField(GeneralFields::customizationFields('Required'), $basicOperand['requiredMessage'], 'Fill As Required Message');
+            if ($basicOperand['requiredMessage']) { // Required Message
+                $I->clicked(GeneralFields::radioSelect('Required',1),'Mark Yes from Required because by default it is No');
+                $I->clickByJS(GeneralFields::radioSelect('Error Message', 2),'Mark custom from Required because by default it is global');
+                $I->filledField(GeneralFields::customizationFields('Required'), $basicOperand['requiredMessage'], 'Fill As custom Required Message');
             }
 
-            // Phone number Validation Message
-            if ($basicOperand['validationMessage']) {
-                $I->clicked(GeneralFields::radioSelect('Validate Phone Number'),'Select YES to Validate Phone Number');
-                $I->filledField(GeneralFields::customizationFields('Validation Message for Duplicate'),
-                    $basicOperand['validationMessage'], 'Fill As Duplicate Validation Message');
+            if ($basicOperand['validationMessage']) { // Validation Message
+                $I->clickByJS(GeneralFields::radioSelect('Validate Phone Number', 1),'Mark custom from Validate Email because by default it is global');
+                $I->clickByJS(GeneralFields::radioSelect('Validate Phone Number', 4),'Mark custom from Validate Email because by default it is global');
+                $I->filledField(GeneralFields::customizationFields('Validate Phone Number'), $basicOperand['validationMessage'], 'Fill As Email Validation Message');
             }
-            exit('here');
-
-
         }
 
         //                                           Advanced options                                              //
 
-        if (isset($basicOperand)) {
+        if (isset($advancedOperand)) {
             $I->scrollTo(GeneralFields::advancedOptions);
             $I->clicked(GeneralFields::advancedOptions,'Expand advanced options');
             $I->wait(2);
 
-            $basicOperand['containerClass'] // Container Class
-                ? $I->filledField(GeneralFields::customizationFields('Container Class'), $basicOperand['containerClass'], 'Fill As Container Class')
+            $advancedOperand['nameAttribute'] // Name Attribute
+                ? $I->filledField(GeneralFields::customizationFields('Name Attribute'), $advancedOperand['nameAttribute'], 'Fill As Name Attribute')
                 : null;
 
-            $basicOperand['elementClass'] // Element Class
-                ? $I->filledField(GeneralFields::customizationFields('Element Class'), $basicOperand['elementClass'], 'Fill As Element Class')
+            $advancedOperand['helpMessage'] // Help Message
+                ? $I->filledField("//textarea[@class='el-textarea__inner']", $advancedOperand['helpMessage'], 'Fill As Help Message')
                 : null;
 
-            $basicOperand['helpMessage'] // Help Message
-                ? $I->filledField("//textarea[@class='el-textarea__inner']", $basicOperand['helpMessage'], 'Fill As Help Message')
+            $advancedOperand['containerClass'] // Container Class
+                ? $I->filledField(GeneralFields::customizationFields('Container Class'), $advancedOperand['containerClass'], 'Fill As Container Class')
                 : null;
 
-            $basicOperand['nameAttribute'] // Name Attribute
-                ? $I->filledField(GeneralFields::customizationFields('Name Attribute'), $basicOperand['nameAttribute'], 'Fill As Name Attribute')
+            $advancedOperand['elementClass'] // Element Class
+                ? $I->filledField(GeneralFields::customizationFields('Element Class'), $advancedOperand['elementClass'], 'Fill As Element Class')
                 : null;
-
         }
         $I->clicked(FluentFormsSelectors::saveForm);
         $I->seeSuccess('The form is successfully updated.');
