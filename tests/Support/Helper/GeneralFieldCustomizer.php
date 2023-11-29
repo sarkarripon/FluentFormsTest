@@ -572,8 +572,105 @@ trait GeneralFieldCustomizer
         $I->clicked(FluentFormsSelectors::saveForm);
     }
 
-    public function customizeAddressFields()
+    public function customizeAddressFields(
+        AcceptanceTester $I,
+        $fieldName,
+        ?array $basicOptions = null,
+        ?array $advancedOptions = null,
+        ?bool $isHiddenLabel = false
+    ): void
     {
+        $I->clickOnExactText($fieldName);
+
+        $basicOperand = null;
+        $advancedOperand = null;
+
+        $basicOptionsDefault = [
+            'adminFieldLabel' => false,
+            'addressLine1' => false,
+            'addressLine2' => false,
+            'city' => false,
+            'state' => false,
+            'zip' => false,
+            'country' => false,
+        ];
+
+        $advancedOptionsDefault = [
+            'elementClass' => false,
+            'nameAttribute' => false,
+        ];
+
+        if (!is_null($basicOptions)) {
+            $basicOperand = array_merge($basicOptionsDefault, $basicOptions);
+        }
+
+        if (!is_null($advancedOptions)) {
+            $advancedOperand = array_merge($advancedOptionsDefault, $advancedOptions);
+        }
+
+        //                                           Basic options                                              //
+        if (isset($basicOperand) && $basicOperand['adminFieldLabel']) {
+            $I->filledField(GeneralFields::adminFieldLabel, $basicOperand['adminFieldLabel'], 'Fill As Admin Field Label');
+        }
+
+        $nameFieldLocalFunction = function (AcceptanceTester $I, $whichName, $nameArea){
+            // Name Fields
+            if (isset($whichName)) {
+                $name = $whichName;
+
+                if ($nameArea == 1){
+                    $I->clicked("(//i[contains(@class,'el-icon-caret-bottom')])[1]", 'To expand First Name field');
+                }elseif ($nameArea == 2){
+                    $I->clickByJS("(//i[contains(@class,'el-icon-caret-bottom')])[2]", 'To expand Middle Name field');
+                }elseif ($nameArea == 3){
+                    $I->clicked("(//i[contains(@class,'el-icon-caret-bottom')])[3]", 'To expand Last Name field');
+                }
+                $fieldData = [
+                    'Label' => $name['label'] ?? null,
+                    'Default' => $name['default'] ?? null,
+                    'Placeholder' => $name['placeholder'] ?? null,
+                    'Error Message' => $name['required'] ?? null,
+                    'Help Message' => $name['helpMessage'] ?? null,
+                ];
+
+                foreach ($fieldData as $key => $value) {
+                    // Check if "Default" has a value and "Placeholder" is empty, or vice versa.
+                    if (($key == 'Default' && isset($fieldData['Placeholder']) && empty($fieldData['Placeholder'])) ||
+                        ($key == 'Placeholder' && isset($fieldData['Default']) && empty($fieldData['Default']))) {
+                        continue; // Skip this iteration of the loop.
+                    }
+
+                    if ($key == "Error Message") {
+                        $I->clicked(GeneralFields::isRequire($nameArea));
+                        $I->clickByJS(GeneralFields::isRequire($nameArea,4));
+                    }
+                    $I->filledField(GeneralFields::nameFieldSelectors($nameArea, $key), $value ?? "");
+                }
+            }
+
+        };
+        // calling local function, reverse order for scrolling issue
+        $nameFieldLocalFunction($I, $basicOperand['lastName'], 3,);
+        $nameFieldLocalFunction($I, $basicOperand['middleName'], 2,);
+        $nameFieldLocalFunction($I, $basicOperand['firstName'], 1,);
+
+        // Label Placement (Hidden Label)
+        if ($isHiddenLabel) {
+            $I->clicked("(//span[normalize-space()='Hide Label'])[1]");
+        }
+
+        //                                           Advanced options                                              //
+
+        if (isset($advancedOperand)) {
+            $I->clicked(GeneralFields::advancedOptions);
+            $I->fillField("(//span[normalize-space()='Container Class']/following::input[@type='text'])[1]",
+                $advancedOperand['containerClass'] ?? $fieldName);
+
+            $I->filledField("(//span[normalize-space()='Name Attribute']/following::input[@type='text'])[1]",
+                $advancedOperand['nameAttribute'] ?? $fieldName);
+        }
+
+        $I->clicked(FluentFormsSelectors::saveForm);
 
     }
 
@@ -1733,7 +1830,6 @@ trait GeneralFieldCustomizer
         }
 
         //                                           Basic options                                              //
-        // adminFieldLabel
         if (isset($basicOperand)) {
             $basicOperand['adminFieldLabel'] // adminFieldLabel
                 ? $I->filledField(GeneralFields::adminFieldLabel, $basicOperand['adminFieldLabel'], 'Fill As Admin Field Label')
