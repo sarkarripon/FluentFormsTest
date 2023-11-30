@@ -613,24 +613,31 @@ trait GeneralFieldCustomizer
             $I->filledField(GeneralFields::adminFieldLabel, $basicOperand['adminFieldLabel'], 'Fill As Admin Field Label');
         }
 
-        $nameFieldLocalFunction = function (AcceptanceTester $I, $whichName, $nameArea){
-            // Name Fields
+        $addressFieldLocalFunction = function (AcceptanceTester $I, $whichName, $nameArea) {
+            // Address Fields
             if (isset($whichName)) {
                 $name = $whichName;
 
-                if ($nameArea == 1){
-                    $I->clicked("(//i[contains(@class,'el-icon-caret-bottom')])[1]", 'To expand First Name field');
-                }elseif ($nameArea == 2){
-                    $I->clickByJS("(//i[contains(@class,'el-icon-caret-bottom')])[2]", 'To expand Middle Name field');
-                }elseif ($nameArea == 3){
-                    $I->clicked("(//i[contains(@class,'el-icon-caret-bottom')])[3]", 'To expand Last Name field');
+                if ($nameArea == 1){ // address line 1
+                    $I->clicked("(//i[contains(@class,'el-icon-caret-bottom')])[1]", 'To expand Address Line 1 area');
+                }elseif ($nameArea == 2){ // address line 2
+                    $I->clickByJS("(//i[contains(@class,'el-icon-caret-bottom')])[2]", 'To expand Address Line 2 area');
+                }elseif ($nameArea == 3){ // city
+                    $I->clicked("(//i[contains(@class,'el-icon-caret-bottom')])[3]", 'To expand City area');
+                }elseif ($nameArea == 4) { // state
+                    $I->clicked("(//i[contains(@class,'el-icon-caret-bottom')])[4]", 'To expand State area');
+                }elseif ($nameArea == 5) { // zip
+                    $I->clicked("(//i[contains(@class,'el-icon-caret-bottom')])[5]", 'To expand Zip area');
+                }elseif ($nameArea == 6) { // country
+                    $I->clicked("(//i[contains(@class,'el-icon-caret-bottom')])[6]", 'To expand Country area');
                 }
+
                 $fieldData = [
-                    'Label' => $name['label'] ?? null,
-                    'Default' => $name['default'] ?? null,
-                    'Placeholder' => $name['placeholder'] ?? null,
-                    'Error Message' => $name['required'] ?? null,
-                    'Help Message' => $name['helpMessage'] ?? null,
+                    'Label' => $name['label'] ?? false,
+                    'Default' => $name['default'] ?? false,
+                    'Placeholder' => $name['placeholder'] ?? false,
+                    'Help Message' => $name['helpMessage'] ?? false,
+                    'Error Message' => $name['required'] ?? false,
                 ];
 
                 foreach ($fieldData as $key => $value) {
@@ -641,18 +648,36 @@ trait GeneralFieldCustomizer
                     }
 
                     if ($key == "Error Message") {
-                        $I->clicked(GeneralFields::isRequire($nameArea));
+                        $I->clickByJS(GeneralFields::isRequire($nameArea));
                         $I->clickByJS(GeneralFields::isRequire($nameArea,4));
                     }
-                    $I->filledField(GeneralFields::nameFieldSelectors($nameArea, $key), $value ?? "");
+
+                    if ($nameArea == 6 && $key == 'Default' && !empty($value)){
+                        $I->clicked("//input[@id='settings_country_list']",'Expand country list');
+
+                        $I->clickByJS("//span[normalize-space()='$value']");
+                        exit();
+                    }elseif ($nameArea == 6 && $key == 'Help Message'){
+                        continue;
+                    }else{
+                        if ($value){
+                            $I->filledField(GeneralFields::nameFieldSelectors($nameArea, $key), $value);
+                        }
+
+                    }
                 }
             }
 
         };
         // calling local function, reverse order for scrolling issue
-        $nameFieldLocalFunction($I, $basicOperand['lastName'], 3,);
-        $nameFieldLocalFunction($I, $basicOperand['middleName'], 2,);
-        $nameFieldLocalFunction($I, $basicOperand['firstName'], 1,);
+
+        $addressFieldLocalFunction($I, $basicOperand['country'], 6,);
+        $addressFieldLocalFunction($I, $basicOperand['zip'], 5,);
+        $addressFieldLocalFunction($I, $basicOperand['state'], 4,);
+        $addressFieldLocalFunction($I, $basicOperand['city'], 3,);
+        $addressFieldLocalFunction($I, $basicOperand['addressLine2'], 2,);
+        $addressFieldLocalFunction($I, $basicOperand['addressLine1'], 1,);
+
 
         // Label Placement (Hidden Label)
         if ($isHiddenLabel) {
@@ -663,14 +688,18 @@ trait GeneralFieldCustomizer
 
         if (isset($advancedOperand)) {
             $I->clicked(GeneralFields::advancedOptions);
-            $I->fillField("(//span[normalize-space()='Container Class']/following::input[@type='text'])[1]",
-                $advancedOperand['containerClass'] ?? $fieldName);
 
-            $I->filledField("(//span[normalize-space()='Name Attribute']/following::input[@type='text'])[1]",
-                $advancedOperand['nameAttribute'] ?? $fieldName);
+            $advancedOperand['elementClass'] // Element Class
+                ? $I->filledField(GeneralFields::customizationFields('Element Class'), $advancedOperand['elementClass'], 'Fill As Element Class')
+                : null;
+
+            $advancedOperand['nameAttribute'] // Name Attribute
+                ? $I->filledField(GeneralFields::customizationFields('Name Attribute'), $advancedOperand['nameAttribute'], 'Fill As Name Attribute')
+                : null;
         }
 
-        $I->clicked(FluentFormsSelectors::saveForm);
+        $I->clickByJS(FluentFormsSelectors::saveForm);
+        $I->seeSuccess('The form is successfully updated.');
 
     }
 
@@ -923,7 +952,7 @@ trait GeneralFieldCustomizer
                 : null;
         }
 
-        $I->clicked(FluentFormsSelectors::saveForm);
+        $I->clickByJS(FluentFormsSelectors::saveForm);
         $I->seeSuccess('The form is successfully updated.');
 
     }
@@ -1051,7 +1080,7 @@ trait GeneralFieldCustomizer
                 : null;
         }
 
-        $I->clicked(FluentFormsSelectors::saveForm);
+        $I->clickByJS(FluentFormsSelectors::saveForm);
         $I->seeSuccess('The form is successfully updated.');
 
 
@@ -1202,7 +1231,7 @@ trait GeneralFieldCustomizer
                 }
             }
         }
-        $I->clicked(FluentFormsSelectors::saveForm);
+        $I->clickByJS(FluentFormsSelectors::saveForm);
         $I->seeSuccess('The form is successfully updated.');
     }
 
@@ -1347,7 +1376,7 @@ trait GeneralFieldCustomizer
                 }
             }
         }
-        $I->clicked(FluentFormsSelectors::saveForm);
+        $I->clickByJS(FluentFormsSelectors::saveForm);
         $I->seeSuccess('The form is successfully updated.');
 
     }
@@ -1441,7 +1470,7 @@ trait GeneralFieldCustomizer
                 : null;
 
         }
-        $I->clicked(FluentFormsSelectors::saveForm);
+        $I->clickByJS(FluentFormsSelectors::saveForm);
         $I->seeSuccess('The form is successfully updated.');
     }
 
@@ -1534,7 +1563,7 @@ trait GeneralFieldCustomizer
                 : null;
 
         }
-        $I->clicked(FluentFormsSelectors::saveForm);
+        $I->clickByJS(FluentFormsSelectors::saveForm);
         $I->seeSuccess('The form is successfully updated.');
     }
 
@@ -1650,7 +1679,7 @@ trait GeneralFieldCustomizer
                 : null;
 
         }
-        $I->clicked(FluentFormsSelectors::saveForm);
+        $I->clickByJS(FluentFormsSelectors::saveForm);
         $I->seeSuccess('The form is successfully updated.');
 
     }
@@ -1780,7 +1809,7 @@ trait GeneralFieldCustomizer
                 : null;
 
         }
-        $I->clicked(FluentFormsSelectors::saveForm);
+        $I->clickByJS(FluentFormsSelectors::saveForm);
         $I->seeSuccess('The form is successfully updated.');
 
     }
@@ -1879,7 +1908,7 @@ trait GeneralFieldCustomizer
                 ? $I->filledField(GeneralFields::customizationFields('Element Class'), $advancedOperand['elementClass'], 'Fill As Element Class')
                 : null;
         }
-        $I->clicked(FluentFormsSelectors::saveForm);
+        $I->clickByJS(FluentFormsSelectors::saveForm);
         $I->seeSuccess('The form is successfully updated.');
     }
 

@@ -5,6 +5,7 @@ use Hackzilla\PasswordGenerator\Exception\CharactersNotFoundException;
 use Hackzilla\PasswordGenerator\Exception\ImpossibleMinMaxLimitsException;
 use Hackzilla\PasswordGenerator\Generator\ComputerPasswordGenerator;
 use Hackzilla\PasswordGenerator\Generator\RequirementPasswordGenerator;
+use Tests\Support\Factories\DataProvider\CountryNames;
 
 trait DataGenerator
 {
@@ -50,7 +51,11 @@ trait DataGenerator
             } else {
                 if (is_array($value)) {
                     foreach ($value as $method => $argument) {
-                        $generatedData[$key] = $this->faker->{$method}($argument);
+                        if ($method == 'country') {
+                            $generatedData[$key] = CountryNames::getCountryNames($argument);
+                        }else{
+                            $generatedData[$key] = $this->faker->{$method}($argument);
+                        }
                     }
                 }else{
                     $generatedData[$key] = $this->faker->{$value}();

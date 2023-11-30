@@ -105,11 +105,11 @@ class AcceptanceHelper extends WebDriver
     {
         try {
             parent::clickWithLeftButton($selector);
+            echo "Clicked on " . $selector . PHP_EOL;
         }catch (Exception $e){
-            $this->waitForElementVisible($selector);
-            $this->clickWithLeftButton($selector);
+            $this->clickByJS($selector);
+            echo "Clicked by JS on " . $selector . PHP_EOL;
         }
-
     }
     public function clickedOnText(string $actionText, string $followingText = null, $index = 1, $wait=1): void
     {
@@ -134,8 +134,7 @@ class AcceptanceHelper extends WebDriver
                     $this->waitForElementVisible($xpath, $wait);
                     $waitPerformed = true;
                 }
-                $this->waitForElementVisible($xpath);
-                $this->clicked($xpath);
+                $this->clickByJS($xpath);
                 echo "Clicked on " . $xpath . PHP_EOL;
                 break; // Exit the loop if the element is found and clicked successfully
             } catch (Exception $e) {
@@ -162,10 +161,10 @@ class AcceptanceHelper extends WebDriver
         }
 
         $xpathVariations = [
+            "(//$following" . "*[normalize-space()='{$actionText}'])$indexPart",
             "(//$following" . "*[contains(text(),'{$actionText}')])$indexPart",
             "(//$following" . "*[@x-placement]//*[contains(text(),'{$actionText}')])$indexPart",
             "(//$following" . "*[@x-placement]//*[normalize-space()='{$actionText}'])$indexPart",
-            "(//$following" . "*[normalize-space()='{$actionText}'])$indexPart",
             "(//$following" . "*[@placeholder='{$actionText}'])$indexPart",
             ];
 //        print_r($xpathVariations);
@@ -179,6 +178,7 @@ class AcceptanceHelper extends WebDriver
                     $waitPerformed = true;
                 }
                 $this->clickWithLeftButton($xpath);
+                echo "Click on text " . $xpath . PHP_EOL;
                 break; // Exit the loop if the element is found and clicked successfully
             } catch (Exception $e) {
                 $exception[] = $e->getMessage();
@@ -203,11 +203,11 @@ class AcceptanceHelper extends WebDriver
         }
 
         $xpathVariations = [
+            "(//$following" . "*[text()='{$actionText}'])$indexPart",
+            "(//$following" . "*[normalize-space()='{$actionText}'])$indexPart",
+            "(//$following" . "*[@placeholder='{$actionText}'])$indexPart",
             "(//$following" . "*[@x-placement]//*[text()='{$actionText}'])$indexPart",
             "(//$following" . "*[@x-placement]//*[normalize-space()='{$actionText}'])$indexPart",
-            "(//$following" . "*[normalize-space()='{$actionText}'])$indexPart",
-            "(//$following" . "*[text()='{$actionText}'])$indexPart",
-            "(//$following" . "*[@placeholder='{$actionText}'])$indexPart",
         ];
 
         $exception = [];
@@ -227,7 +227,6 @@ class AcceptanceHelper extends WebDriver
                     $this->clickWithLeftButton($xpath);
                     echo "Clicked on " . $xpath . PHP_EOL;
                 }
-
                 break; // Exit the loop if the element is found and clicked successfully
             } catch (Exception $e) {
                 $exception[] = $e->getMessage();
@@ -245,11 +244,6 @@ class AcceptanceHelper extends WebDriver
      */
     public function clickByJS(string $selector): void
     {
-        try {
-            $this->seeElementInDOM($selector);
-        }catch (Exception $e) {
-            $this->fail($e->getMessage());
-        }
         $js = <<<JS
         var xpathExpression = "$selector";
         var element = document.evaluate(xpathExpression, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
@@ -258,7 +252,14 @@ class AcceptanceHelper extends WebDriver
         }
         console.log("Clicked on " + xpathExpression);
         JS;
-        $this->executeJS($js);
+
+        try {
+            $this->wait(1);
+            $this->seeElementInDOM($selector);
+            $this->executeJS($js);
+        }catch (Exception $e) {
+            $this->fail($e->getMessage());
+        }
     }
 
     /**

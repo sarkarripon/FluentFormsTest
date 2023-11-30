@@ -20,7 +20,6 @@ class IntegrationConstantContactCest
         $I->loadDotEnvFile();
         $I->loginWordpress();
     }
-
     // tests
     #[Group('Integration')]
     public function test_constantcontact_push_data(AcceptanceTester $I)

@@ -4,6 +4,7 @@ support_namespace: Support
 params:
     - env
 
+#restart: false
 paths:
     tests: tests
     output: tests/_output

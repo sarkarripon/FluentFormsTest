@@ -18,7 +18,7 @@ trait ConstantContact
             $I->filledField(FluentFormsSettingsSelectors::apiField('Constant Contact access Key'), getenv('CONSTANT_CONTACT_ACCESS_KEY'));
 
             $I->clicked(FluentFormsSettingsSelectors::APISaveButton);
-            $I->seeSuccess("Success");
+            $I->seeSuccess("Your settings has been updated!");
         }
         $this->configureApiSettings($I,"Consta");
     }

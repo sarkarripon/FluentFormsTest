@@ -172,7 +172,7 @@ trait IntegrationHelper
     public function mapEmailInCommon(AcceptanceTester $I, string $feedName, array $listOrService = null,bool $emailField= true): void
     {
         $I->waitForElementClickable(FluentFormsSelectors::integrationFeed, 20);
-        $I->fillByJS(FluentFormsSelectors::feedName, $feedName);
+        $I->filledField(FluentFormsSelectors::feedName, $feedName);
         if ($listOrService) {
             foreach ($listOrService as $key => $value) {
                 $I->retryClicked(FluentFormsSelectors::dropdown($key));
@@ -181,8 +181,6 @@ trait IntegrationHelper
                 } catch (Exception $e) {
                     $I->retryClickOnText($value, $key);
                 }
-
-//                $I->retryClickOnText($value, $key);
             }
         }
         if ($emailField){
@@ -231,11 +229,12 @@ trait IntegrationHelper
         foreach ($fieldMappingArray as $field => $label) {
             echo $field . " => " . $label . "\n";
             echo FluentFormsSelectors::shortcodeDropdown($field, $sectionText) . "\n";
-            $I->clicked(FluentFormsSelectors::shortcodeDropdown($field, $sectionText));
+            $I->wait(1);
+            $I->clicked(FluentFormsSelectors::shortcodeDropdown($field, $sectionText), "Clicking on the $field next to $sectionText");
             try {
-                $I->clickOnExactText($label, $field);  // Using the field label as the following text
+                $I->clickOnExactText($label, $field, null,1, "Clicking on exact text $label next to  $field ");  // Using the field label as the following text
             } catch (Exception $e) {
-                $I->clickOnText($label, $field);  // Using the field label as the following text
+                $I->clickOnText($label, $field, null,1, "Clicking on text $label next to $field");  // Using the field label as the following text
             }
             $I->tryToPressKey(FluentFormsSelectors::shortcodeDropdown($label,$sectionText), WebDriverKeys::ESCAPE);
         }
