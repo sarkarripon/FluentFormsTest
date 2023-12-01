@@ -86,7 +86,7 @@ class AddressFieldCest
                 ],
                 'addressLine2' => [
                     'label' => $addr2label,
-//                  'default' => $addr2default,
+//                    'default' => $addr2default,
                     'placeholder' => $addr2placeholder,
                     'helpMessage' => $addr2helpMessage,
                     'required' => $addr2errorMessage,
@@ -114,7 +114,7 @@ class AddressFieldCest
                 ],
                 'country' => [
                     'label' => $countrylabel,
-                    'default' => $countrydefault,
+//                    'default' => $countrydefault,
                     'placeholder' => $countryplaceholder,
                     'helpMessage' => false,
                     'required' => $countryerrorMessage,
@@ -127,6 +127,7 @@ class AddressFieldCest
         $this->preparePage($I, $pageName);
         $I->clicked(FieldSelectors::submitButton);
         $I->seeText([
+
             $addr1label,
             $addr1errorMessage,
 
@@ -145,21 +146,20 @@ class AddressFieldCest
             $countrylabel,
             $countryerrorMessage,
 
-        ], $I->cmnt('Check label and error message for each name field'));
-        exit();
+        ], $I->cmnt('Check label and error message for each fields'));
 
-        $I->seeElement("(//input[@name='{$nameAttribute}[first_name]'])[1]", ['placeholder' => $fplaceholder], $I->cmnt('Check first name placeholder'));
-        $I->seeElement("(//input[@name='{$nameAttribute}[middle_name]'])[1]", ['placeholder' => $mplaceholder], $I->cmnt('Check middle name placeholder'));
-        $I->seeElement("(//input[@name='{$nameAttribute}[last_name]'])[1]", ['placeholder' => $lplaceholder], $I->cmnt('Check last name placeholder'));
+        $I->canSeeElement("(//input[@name='{$nameAttribute}[address_line_1]'])[1]", ['placeholder' => $addr1placeholder], $I->cmnt('Check addr1 placeholder'));
+        $I->canSeeElement("(//input[@name='{$nameAttribute}[address_line_2]'])[1]", ['placeholder' => $addr2placeholder], $I->cmnt('Check addr2 placeholder'));
+        $I->canSeeElement("(//input[@name='{$nameAttribute}[city]'])[1]", ['placeholder' => $cityplaceholder], $I->cmnt('Check city placeholder'));
+        $I->canSeeElement("(//input[@name='{$nameAttribute}[state]'])[1]", ['placeholder' => $stateplaceholder], $I->cmnt('Check state placeholder'));
+        $I->canSeeElement("(//input[@name='{$nameAttribute}[zip]'])[1]", ['placeholder' => $zipplaceholder], $I->cmnt('Check zip placeholder'));
+        $I->seeElement("//select", ['placeholder' => $countryplaceholder], $I->cmnt('Check country placeholder'));
 
-        $I->seeElement("//div", ['data-content' => $fhelpMessage], $I->cmnt('Check first name help message'));
-        $I->seeElement("//div", ['data-content' => $mhelpMessage], $I->cmnt('Check middle name help message'));
-        $I->seeElement("//div", ['data-content' => $lhelpMessage], $I->cmnt('Check last name help message'));
+        $I->canSeeElement("//div[contains(@class,'$elementClass')]", [], $I->cmnt('Check address field element class'));
 
-        $I->seeElement("//div[contains(@class,'$containerClass')]", [], $I->cmnt('Check container class'));
-        $I->seeElement("//div", ['data-name' => $nameAttribute], $I->cmnt('Check name attribute'));
-
-        echo $I->cmnt("Tested Name Fields without default value and everything looks good.",'yellow','',array('blink') );
+        echo $I->cmnt("All test cases went through.",'yellow','', array('blink'));
 
     }
+
+
 }

@@ -642,10 +642,10 @@ trait GeneralFieldCustomizer
 
                 foreach ($fieldData as $key => $value) {
                     // Check if "Default" has a value and "Placeholder" is empty, or vice versa.
-                    if (($key == 'Default' && isset($fieldData['Placeholder']) && empty($fieldData['Placeholder'])) ||
-                        ($key == 'Placeholder' && isset($fieldData['Default']) && empty($fieldData['Default']))) {
-                        continue; // Skip this iteration of the loop.
-                    }
+//                    if (($key == 'Default' && isset($fieldData['Placeholder']) && empty($fieldData['Placeholder'])) ||
+//                        ($key == 'Placeholder' && isset($fieldData['Default']) && empty($fieldData['Default']))) {
+//                        continue; // Skip this iteration of the loop.
+//                    }
 
                     if ($key == "Error Message") {
                         $I->clickByJS(GeneralFields::isRequire($nameArea));
@@ -654,23 +654,20 @@ trait GeneralFieldCustomizer
 
                     if ($nameArea == 6 && $key == 'Default' && !empty($value)){
                         $I->clicked("//input[@id='settings_country_list']",'Expand country list');
-
                         $I->clickByJS("//span[normalize-space()='$value']");
-                        exit();
+
                     }elseif ($nameArea == 6 && $key == 'Help Message'){
                         continue;
                     }else{
                         if ($value){
                             $I->filledField(GeneralFields::nameFieldSelectors($nameArea, $key), $value);
                         }
-
                     }
                 }
             }
-
         };
-        // calling local function, reverse order for scrolling issue
 
+        // calling local function, reverse order for scrolling issue
         $addressFieldLocalFunction($I, $basicOperand['country'], 6,);
         $addressFieldLocalFunction($I, $basicOperand['zip'], 5,);
         $addressFieldLocalFunction($I, $basicOperand['state'], 4,);
@@ -703,9 +700,93 @@ trait GeneralFieldCustomizer
 
     }
 
-    public function customizeCountryList()
+    public function customizeCountryList(
+        AcceptanceTester $I,
+        $fieldName,
+        ?array $basicOptions = null,
+        ?array $advancedOptions = null,
+        ?bool $isHiddenLabel = false
+    ): void
     {
+        $I->clickOnExactText($fieldName);
 
+        $basicOperand = null;
+        $advancedOperand = null;
+
+        $basicOptionsDefault = [
+            'adminFieldLabel' => false,
+            'smartSearch' => false,
+            'placeholder' => false,
+            'requiredMessage' => false,
+        ];
+
+        $advancedOptionsDefault = [
+            'containerClass' => false,
+            'elementClass' => false,
+            'defaultValue' => false,
+            'countryList' => false,
+            'helpMessage' => false,
+            'nameAttribute' => false,
+        ];
+
+        if (!is_null($basicOptions)) {
+            $basicOperand = array_merge($basicOptionsDefault, $basicOptions);
+        }
+
+        if (!is_null($advancedOptions)) {
+            $advancedOperand = array_merge($advancedOptionsDefault, $advancedOptions);
+        }
+
+        //                                           Basic options                                              //
+        if (isset($basicOperand)) {
+            $basicOperand['adminFieldLabel'] // adminFieldLabel
+                ? $I->filledField(GeneralFields::adminFieldLabel, $basicOperand['adminFieldLabel'], 'Fill As Admin Field Label')
+                : null;
+
+            $basicOperand['smartSearch'] // smartSearch
+                ? $I->clicked("//span[@class='checkbox-label']", 'Select Smart Search')
+                : null;
+
+            $basicOperand['placeholder'] //Placeholder
+                ? $I->filledField(GeneralFields::placeholder, $basicOperand['placeholder'], 'Fill As Placeholder')
+                : null;
+
+            if ($basicOperand['requiredMessage']) { //Required Message
+                $I->clicked(GeneralFields::radioSelect('Required'),'Select Required');
+                $I->clickByJS(GeneralFields::radioSelect('Error Message', 2),'Select error message type');
+                $I->filledField(GeneralFields::customizationFields('Required'), $basicOperand['requiredMessage'], 'Fill As Required Message');
+            }
+        }
+
+        //                                           Advanced options                                              //
+
+        if (isset($advancedOperand)) {
+            $I->scrollTo(GeneralFields::advancedOptions);
+            $I->clicked(GeneralFields::advancedOptions,'Expand advanced options');
+            $I->wait(2);
+
+            $advancedOperand['containerClass'] // Container Class
+                ? $I->filledField(GeneralFields::customizationFields('Container Class'), $advancedOperand['containerClass'], 'Fill As Container Class')
+                : null;
+
+            $advancedOperand['elementClass'] // Element Class
+                ? $I->filledField(GeneralFields::customizationFields('Element Class'), $advancedOperand['elementClass'], 'Fill As Element Class')
+                : null;
+
+            $advancedOperand['defaultValue'] // Default Value
+                ? $I->filledField(GeneralFields::defaultField, $advancedOperand['defaultValue'], 'Fill As Default Value')
+                : null;
+
+            $advancedOperand['helpMessage'] // Help Message
+                ? $I->filledField("//textarea[@class='el-textarea__inner']", $advancedOperand['helpMessage'], 'Fill As Help Message')
+                : null;
+
+            $advancedOperand['nameAttribute'] // Name Attribute
+                ? $I->filledField(GeneralFields::customizationFields('Name Attribute'), $advancedOperand['nameAttribute'], 'Fill As Name Attribute')
+                : null;
+        }
+        $I->clickByJS(FluentFormsSelectors::saveForm);
+        $I->seeSuccess('The form is successfully updated.');
     }
 
     public function customizeNumericField(
