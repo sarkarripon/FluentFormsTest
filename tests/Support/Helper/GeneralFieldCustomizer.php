@@ -773,10 +773,11 @@ trait GeneralFieldCustomizer
                 ? $I->filledField(GeneralFields::customizationFields('Element Class'), $advancedOperand['elementClass'], 'Fill As Element Class')
                 : null;
 
-            $advancedOperand['defaultValue'] // Default Value
-                ? $I->filledField(GeneralFields::defaultField, $advancedOperand['defaultValue'], 'Fill As Default Value')
-                : null;
-
+            if ($advancedOperand['defaultValue']) { // Default Value
+                $defaultValue = $advancedOperand['defaultValue'];
+                $I->clicked("//input[@id='settings_country_list']",'Expand country list');
+                $I->clickByJS("//span[normalize-space()='$defaultValue']");
+                }
             $advancedOperand['helpMessage'] // Help Message
                 ? $I->filledField("//textarea[@class='el-textarea__inner']", $advancedOperand['helpMessage'], 'Fill As Help Message')
                 : null;
