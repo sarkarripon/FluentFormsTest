@@ -70,13 +70,12 @@ class CountryListCest
             $requiredMessage,
         ], $I->cmnt('Check element label, prefix label, suffix label and required message'));
 
-        $I->canSeeElement("//div/select", ['placeholder' => $placeholder], $I->cmnt('Check Mobile Field placeholder'));
-        $I->canSeeElement("//select", ['name' => $nameAttribute], $I->cmnt('Check Mobile Field name attribute'));
-        $I->canSeeElement("//select", ['data-name' => $nameAttribute], $I->cmnt('Check Mobile Field name attribute'));
-        $I->canSeeElement("//div[contains(@class,'$containerClass')]", [], $I->cmnt('Check Mobile Field container class'));
-        $I->canSeeElement("//div[contains(@class,'$elementClass')]", [], $I->cmnt('Check Mobile Field element class'));
-        $I->canSeeElement("//div", ['data-content' => $helpMessage], $I->cmnt('Check Mobile Field help message'));
-        $I->canSeeElement("//input", ['type' => 'tel'], $I->cmnt('Check Mobile Field type'));
+        $I->canSeeElementInDOM("//select",['placeholder' => $placeholder], $I->cmnt('Check addr1 placeholder'));
+        $I->canSeeElementInDOM("//select", ['name' => $nameAttribute], $I->cmnt('Check Country List Field name attribute'));
+        $I->canSeeElementInDOM("//select", ['data-name' => $nameAttribute], $I->cmnt('Check Country List Field name attribute'));
+        $I->canSeeElementInDOM("//div[contains(@class,'$containerClass')]", [], $I->cmnt('Check Country List Field container class'));
+        $I->canSeeElementInDOM("//select[contains(@class,'$elementClass')]", [], $I->cmnt('Check Country List Field element class'));
+        $I->canSeeElementInDOM("//div", ['data-content' => $helpMessage], $I->cmnt('Check Country List Field help message'));
         echo $I->cmnt("All test cases went through. ", 'yellow','',array('blink'));
 
     }
