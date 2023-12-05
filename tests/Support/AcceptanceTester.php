@@ -442,12 +442,14 @@ class AcceptanceTester extends \Codeception\Actor
                 if (is_array($customNames)) {
                     foreach ($customNames as $customName) {
                         $selector = constant(FluentFormsSelectors::class . '::' . $fieldType)[$inputField];
-                        $this->clicked($selector);
+                        $this->clicked($selector, "Clicking on the draggable field");
                         $this->clickByJS("(//div[contains(@class,'item-actions-wrapper')])[{$counter}]", "Clicking on the field which will be renamed");
 
                         if ($inputField === 'nameFields') {
                             $this->filledField("//div[@edititem='[object Object]']//input[@type='text']", $customName);
-                        } else {
+                        }elseif ($inputField === 'hiddenField') {
+                            continue;
+                        }else {
                             $this->filledField("//div[@prop='label']//input[@type='text']", $customName);
                         }
                         $this->clicked("//a[normalize-space()='Input Fields']", "Clicking on the input field tab");
@@ -460,6 +462,8 @@ class AcceptanceTester extends \Codeception\Actor
 
                     if ($inputField == 'nameFields') {
                         $this->filledField("//div[@edititem='[object Object]']//input[@type='text']", $customNames);
+                    }elseif ($inputField === 'hiddenField') {
+                        continue;
                     } else {
                         $this->filledField("//div[@prop='label']//input[@type='text']", $customNames);
                     }

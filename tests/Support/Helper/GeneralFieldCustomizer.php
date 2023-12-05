@@ -1961,8 +1961,8 @@ trait GeneralFieldCustomizer
             }
 
             if ($basicOperand['validationMessage']) { // Validation Message
-                $I->clickByJS(GeneralFields::radioSelect('Validate Phone Number', 1),'Mark custom from Validate Email because by default it is global');
-                $I->clickByJS(GeneralFields::radioSelect('Validate Phone Number', 4),'Mark custom from Validate Email because by default it is global');
+                $I->clickByJS(GeneralFields::radioSelect('Validate Phone Number', 1),'Mark custom from Validate phone because by default it is global');
+                $I->clickByJS(GeneralFields::radioSelect('Validate Phone Number', 4),'Mark custom from Validate phone because by default it is global');
                 $I->filledField(GeneralFields::customizationFields('Validate Phone Number'), $basicOperand['validationMessage'], 'Fill As Email Validation Message');
             }
         }
@@ -1994,55 +1994,7 @@ trait GeneralFieldCustomizer
         $I->seeSuccess('The form is successfully updated.');
     }
 
-    public function customizeHiddenField()
-    {
 
-    }
-
-    public function customizeSectionBreak()
-    {
-
-    }
-
-    public function customizeShortCode()
-    {
-
-    }
-
-    public function customizeTnC()
-    {
-
-    }
-
-    public function customizeActionHook()
-    {
-
-    }
-
-    public function customizeFormStep()
-    {
-
-    }
-
-    public function customizeRating()
-    {
-
-    }
-
-    public function customizeCheckAbleGrid()
-    {
-
-    }
-
-    public function customizeGDPRAgreement()
-    {
-
-    }
-
-    public function customizePassword()
-    {
-
-    }
 
 
 }
