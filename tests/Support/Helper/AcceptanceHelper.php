@@ -5,6 +5,7 @@ namespace Tests\Support\Helper;
 use Codeception\Module\WebDriver;
 use Dotenv;
 use Exception;
+use InvalidArgumentException;
 
 class AcceptanceHelper extends WebDriver
 {
@@ -286,6 +287,37 @@ class AcceptanceHelper extends WebDriver
 //        element.value = '$value';");
     }
 
+    public function fillInsideIframe(string $cssSelector, string $value, $wait = 2): void
+    {
+        // xpath expression check
+        $selectorSanitationFunction =  function ($cssSelector): bool {
+            return (bool) preg_match('/^\/\//', $cssSelector);
+        };
+        $isXpath = $selectorSanitationFunction($cssSelector);
+
+        if ($isXpath) {
+            throw new InvalidArgumentException('XPath expressions are not supported. Please provide a CSS selector.');
+        }
+
+//        $escapedSelector = addslashes($cssSelector);
+
+        $this->waitForElementVisible($cssSelector, $wait);
+        $jsScript = <<<JS
+        var selector = '$cssSelector';
+        var element = document.querySelector(selector);
+        if (element) {
+            var iframe = element.querySelector('iframe');
+            var iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+            var editorBody = iframeDoc.querySelector('body');
+            if (editorBody) {
+                editorBody.innerHTML = '$value';
+            }
+        }
+        console.log("Filled inside iframe " + selector);
+        JS;
+
+        $this->executeJS($jsScript);
+    }
 
 
     public function seeTextCaseInsensitive($actionTexts, $selector): bool

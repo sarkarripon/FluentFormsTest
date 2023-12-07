@@ -1,4 +1,4 @@
-<?php  //[STAMP] 66f08f96b832dcd5c8ca104f0645a0f5
+<?php  //[STAMP] fecefeec21f8f56f7964b411d0076237
 // phpcs:ignoreFile
 namespace Tests\Support\_generated;
 
@@ -460,6 +460,41 @@ trait AcceptanceTesterActions
         $retryNum = isset($this->retryNum) ? $this->retryNum : 1;
         $retryInterval = isset($this->retryInterval) ? $this->retryInterval : 200;
         return $this->getScenario()->runStep(new \Codeception\Step\Retry('fillByJS', func_get_args(), $retryNum, $retryInterval));
+    }
+
+ 
+    /**
+     * [!] Method is generated. Documentation taken from corresponding module.
+     *
+     *
+     * @see \Tests\Support\Helper\AcceptanceHelper::fillInsideIframe()
+     */
+    public function fillInsideIframe(string $cssSelector, string $value): void {
+        $this->getScenario()->runStep(new \Codeception\Step\Action('fillInsideIframe', func_get_args()));
+    }
+    /**
+     * [!] Method is generated. Documentation taken from corresponding module.
+     *
+     * [!] Test won't be stopped on fail. Error won't be logged 
+     *
+     * @see \Tests\Support\Helper\AcceptanceHelper::fillInsideIframe()
+     */
+    public function tryToFillInsideIframe(string $cssSelector, string $value): bool {
+        return $this->getScenario()->runStep(new \Codeception\Step\TryTo('fillInsideIframe', func_get_args()));
+    }
+    /**
+     * [!] Method is generated.
+     * 
+     * * Executes fillInsideIframe and retries on failure.
+     * 
+     * Retry number and interval set by $I->retry();
+     *
+     * @see \Tests\Support\Helper\AcceptanceHelper::fillInsideIframe()
+     */
+    public function retryFillInsideIframe(string $cssSelector, string $value) {
+        $retryNum = isset($this->retryNum) ? $this->retryNum : 1;
+        $retryInterval = isset($this->retryInterval) ? $this->retryInterval : 200;
+        return $this->getScenario()->runStep(new \Codeception\Step\Retry('fillInsideIframe', func_get_args(), $retryNum, $retryInterval));
     }
 
  
