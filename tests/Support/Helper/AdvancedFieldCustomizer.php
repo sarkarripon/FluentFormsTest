@@ -164,12 +164,86 @@ trait AdvancedFieldCustomizer
         }
         $I->clickByJS(FluentFormsSelectors::saveForm);
         $I->seeSuccess('The form is successfully updated.');
-
-
     }
 
-    public function customizeTnC()
+    public function customizeTnC(
+        AcceptanceTester $I,
+        $fieldName,
+        ?array $basicOptions = null,
+        ?array $advancedOptions = null,
+        ?bool $isHiddenLabel = false
+    ): void
     {
+//        $I->clickOnExactText($fieldName);
+        $I->clickByJS("(//div[contains(@class,'item-actions-wrapper')])[1]");
+
+        $basicOperand = null;
+        $advancedOperand = null;
+
+        $basicOptionsDefault = [
+            'adminFieldLabel' => false,
+            'requiredMessage' => false,
+            'termsNConditions' => false,
+            'showCheckbox' => false,
+        ];
+
+        $advancedOptionsDefault = [
+            'containerClass' => false,
+            'elementClass' => false,
+            'nameAttribute' => false,
+        ];
+
+        if (!is_null($basicOptions)) {
+            $basicOperand = array_merge($basicOptionsDefault, $basicOptions);
+        }
+
+        if (!is_null($advancedOptions)) {
+            $advancedOperand = array_merge($advancedOptionsDefault, $advancedOptions);
+        }
+
+        //                                           Basic options                                              //
+        if (isset($basicOperand)) {
+
+            if ($basicOperand['adminFieldLabel']) { //adminFieldLabel
+                $I->filledField(GeneralFields::adminFieldLabel, $basicOperand['adminFieldLabel'], 'Fill As Admin Field Label');
+            }
+
+            if ($basicOperand['requiredMessage']) { // Required Message
+                $I->clicked(GeneralFields::radioSelect('Required',1),'Mark Yes from Required because by default it is No');
+                $I->clickByJS(GeneralFields::radioSelect('Error Message', 2),'Mark custom from Required because by default it is global');
+                $I->filledField(GeneralFields::customizationFields('Required'), $basicOperand['requiredMessage'], 'Fill As custom Required Message');
+            }
+
+            if ($basicOperand['termsNConditions']) { //Terms & Conditions
+                $I->waitForElementVisible("//iframe[contains(@id,'wp_editor')]",5);
+                $I->switchToIFrame("//iframe[contains(@id,'wp_editor')]");
+                $I->filledField("body p:nth-child(1)", $basicOperand['termsNConditions'], 'Fill As Terms & Conditions');
+                $I->switchToIFrame();
+            }
+            if ($basicOperand['showCheckbox']) { //Show Checkbox
+                $I->clicked("//label[@class='el-checkbox']", 'Enable checkbox');
+            }
+        }
+
+        //                                           Advanced options                                              //
+
+        if (isset($advancedOperand)) {
+            $I->clicked(GeneralFields::advancedOptions,'Expand advanced options');
+            $I->wait(2);
+
+            $advancedOperand['containerClass'] // Container Class
+                ? $I->filledField(GeneralFields::customizationFields('Container Class'), $advancedOperand['containerClass'], 'Fill As Container Class')
+                : null;
+            $advancedOperand['elementClass'] // Element Class
+                ? $I->filledField(GeneralFields::customizationFields('Element Class'), $advancedOperand['elementClass'], 'Fill As Element Class')
+                : null;
+            $advancedOperand['nameAttribute'] // Name Attribute
+                ? $I->filledField(GeneralFields::customizationFields('Name Attribute'), $advancedOperand['nameAttribute'], 'Fill As Name Attribute')
+                : null;
+        }
+        $I->clickByJS(FluentFormsSelectors::saveForm);
+        $I->seeSuccess('The form is successfully updated.');
+
 
     }
 
