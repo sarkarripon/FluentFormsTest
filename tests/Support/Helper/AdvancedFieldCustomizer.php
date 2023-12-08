@@ -115,8 +115,56 @@ trait AdvancedFieldCustomizer
 
     }
 
-    public function customizeShortCode()
+    public function customizeShortCode(
+        AcceptanceTester $I,
+        ?array $basicOptions = null,
+        ?array $advancedOptions = null,
+        ?bool $isHiddenLabel = false
+    ): void
     {
+        $I->clickByJS("(//div[contains(@class,'item-actions-wrapper')])[1]");
+
+        $basicOperand = null;
+        $advancedOperand = null;
+
+        $basicOptionsDefault = [
+            'shortcode' => false,
+        ];
+
+        $advancedOptionsDefault = [
+            'elementClass' => false,
+        ];
+
+        if (!is_null($basicOptions)) {
+            $basicOperand = array_merge($basicOptionsDefault, $basicOptions);
+        }
+
+        if (!is_null($advancedOptions)) {
+            $advancedOperand = array_merge($advancedOptionsDefault, $advancedOptions);
+        }
+
+        //                                           Basic options                                              //
+        if (isset($basicOperand)) {
+
+            $basicOperand['shortcode'] // Element Class
+                ? $I->filledField(GeneralFields::customizationFields('Shortcode'), $basicOperand['shortcode'], 'Fill As Shortcode')
+                : null;
+        }
+
+        //                                           Advanced options                                              //
+
+        if (isset($advancedOperand)) {
+            $I->scrollTo(GeneralFields::advancedOptions);
+            $I->clicked(GeneralFields::advancedOptions,'Expand advanced options');
+            $I->wait(2);
+
+            $advancedOperand['elementClass'] // Element Class
+                ? $I->filledField(GeneralFields::customizationFields('Element Class'), $advancedOperand['elementClass'], 'Fill As Element Class')
+                : null;
+        }
+        $I->clickByJS(FluentFormsSelectors::saveForm);
+        $I->seeSuccess('The form is successfully updated.');
+
 
     }
 

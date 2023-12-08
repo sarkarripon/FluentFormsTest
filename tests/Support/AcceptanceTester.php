@@ -413,6 +413,7 @@ class AcceptanceTester extends \Codeception\Actor
                 'taxonomyFields' => 'taxonomySection',
             };
             $this->clicked(constant(FluentFormsSelectors::class . '::' . $sectionType));
+            $this->wait(1);
             foreach ($fields as $inputField) {
                 $selector = constant(FluentFormsSelectors::class . '::' . $fieldType)[$inputField];
                 $this->clicked($selector);
