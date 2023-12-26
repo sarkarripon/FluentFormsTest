@@ -224,8 +224,7 @@ trait AdvancedFieldCustomizer
                 $I->clicked("//label[@class='el-checkbox']", 'Enable checkbox');
             }
         }
-
-        //                                           Advanced options                                              //
+    //                                             Advanced options                                                   //
 
         if (isset($advancedOperand)) {
             $I->clicked(GeneralFields::advancedOptions,'Expand advanced options');
@@ -244,7 +243,6 @@ trait AdvancedFieldCustomizer
         $I->clickByJS(FluentFormsSelectors::saveForm);
         $I->seeSuccess('The form is successfully updated.');
 
-
     }
 
     public function customizeActionHook()
@@ -257,9 +255,111 @@ trait AdvancedFieldCustomizer
 
     }
 
-    public function customizeRating()
+    public function customizeRating(
+        AcceptanceTester $I,
+        $fieldName,
+        ?array $basicOptions = null,
+        ?array $advancedOptions = null,
+        ?bool $isHiddenLabel = false
+    ): void
     {
+        $I->clickOnExactText($fieldName);
 
+        $basicOperand = null;
+        $advancedOperand = null;
+
+        $basicOptionsDefault = [
+            'adminFieldLabel' => false,
+            'options' => false,
+            'showText' => false,
+            'requiredMessage' => false,
+        ];
+
+        $advancedOptionsDefault = [
+            'helpMessage' => false,
+            'nameAttribute' => false,
+        ];
+
+        if (!is_null($basicOptions)) {
+            $basicOperand = array_merge($basicOptionsDefault, $basicOptions);
+        }
+
+        if (!is_null($advancedOptions)) {
+            $advancedOperand = array_merge($advancedOptionsDefault, $advancedOptions);
+        }
+
+        //                                           Basic options                                              //
+        // adminFieldLabel
+        if (isset($basicOperand)) {
+            $basicOperand['adminFieldLabel']
+                ? $I->filledField(GeneralFields::adminFieldLabel, $basicOperand['adminFieldLabel'], 'Fill As Admin Field Label')
+                : null;
+
+            if ($basicOperand['options']) { // configure options
+
+                global $removeField;
+                $removeField = 1;
+                $fieldCounter = 1;
+
+                foreach ($basicOperand['options'] as $fieldContents) {
+
+                    $label = $fieldContents['label'] ?? null;
+                    $value = $fieldContents['value'] ?? null;
+
+                    $label
+                        ? $I->filledField("(//input[@type='text'])[" . ($fieldCounter + 2) . "]", $label, 'Fill As Label')
+                        : null;
+
+                    if (isset($value)) {
+                        if ($fieldCounter === 1) {
+                            $I->clicked("(//span[@class='el-checkbox__inner'])[1]", 'Select Show Values');
+                        }
+                        $I->filledField("(//input[@type='text'])[" . ($fieldCounter + 3) . "]", $value, 'Fill As Value');
+                    }
+
+                    if ($fieldCounter >= 5) {
+                        $I->clickByJS(FluentFormsSelectors::addField($fieldCounter), 'Add Field');
+                    }
+                    $fieldCounter++;
+                    $removeField += 1;
+                }
+                $I->clicked(FluentFormsSelectors::removeField($removeField));
+            }
+
+            if ($basicOperand['requiredMessage']) { //Required Message
+                $I->clicked(GeneralFields::radioSelect('Required'),'Select Required');
+                $I->clickByJS(GeneralFields::radioSelect('Error Message', 2),'Select error message type');
+                $I->filledField(GeneralFields::customizationFields('Required'), $basicOperand['requiredMessage'], 'Fill As Required Message');
+            }
+
+        }
+        exit("basic option end");
+        //                                           Advanced options                                              //
+
+        if (isset($advancedOperand)) {
+            $I->scrollTo(GeneralFields::advancedOptions);
+            $I->clickByJS(GeneralFields::advancedOptions, 'Expand advanced options');
+            $I->wait(2);
+
+            $advancedOperand['defaultValue'] // Default Value
+                ? $I->filledField(GeneralFields::defaultField, $advancedOperand['defaultValue'], 'Fill As Default Value')
+                : null;
+
+            $advancedOperand['containerClass'] // Container Class
+                ? $I->filledField(GeneralFields::customizationFields('Container Class'), $advancedOperand['containerClass'], 'Fill As Container Class')
+                : null;
+
+            $advancedOperand['helpMessage'] // Help Message
+                ? $I->filledField("(//textarea[@class='el-textarea__inner'])", $advancedOperand['helpMessage'], 'Fill As Help Message')
+                : null;
+
+            $advancedOperand['nameAttribute'] // Name Attribute
+                ? $I->filledField(GeneralFields::customizationFields('Name Attribute'), $advancedOperand['nameAttribute'], 'Fill As Name Attribute')
+                : null;
+        }
+
+        $I->clickByJS(FluentFormsSelectors::saveForm);
+        $I->seeSuccess('The form is successfully updated.');
     }
 
     public function customizeCheckAbleGrid()

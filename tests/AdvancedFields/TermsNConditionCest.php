@@ -62,11 +62,10 @@ class TermsNConditionCest
             $requiredMessage,
         ], $I->cmnt('Check element label, terms n condition, and required message'));
 
-        $I->canSeeElement("//div[contains(@name,$nameAttribute)]", [], $I->cmnt('Check DropDown name attribute'));
-        $I->canSeeElement("//div[contains(@data-name,$nameAttribute)]",[], $I->cmnt('Check DropDown data-name attribute'));
-        $I->canSeeElement("//input[contains(@class,$containerClass)]", [], $I->cmnt('Check DropDown container class'));
-        $I->canSeeElement("//input[contains(@class,$elementClass)]", [], $I->cmnt('Check DropDown element class'));
-
+        $I->canSeeElement("//div[contains(@name,$nameAttribute)]", [], $I->cmnt('Check Terms N Condition name attribute'));
+        $I->canSeeElement("//div[contains(@data-name,$nameAttribute)]",[], $I->cmnt('Check Terms N Condition data-name attribute'));
+        $I->canSeeElement("//input[contains(@class,$containerClass)]", [], $I->cmnt('Check Terms N Condition container class'));
+        $I->canSeeElement("//input[contains(@class,$elementClass)]", [], $I->cmnt('Check Terms N Condition element class'));
 
         echo $I->cmnt("All test cases went through. ", 'yellow','',array('blink'));
     }
