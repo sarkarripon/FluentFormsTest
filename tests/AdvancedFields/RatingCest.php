@@ -37,9 +37,15 @@ class RatingCest
         $optionLabel1 = $faker->words(2, true);
         $optionLabel2 = $faker->words(2, true);
         $optionLabel3 = $faker->words(2, true);
+        $optionLabel4 = $faker->words(2, true);
+        $optionLabel5 = $faker->words(2, true);
+        $optionLabel6 = $faker->words(2, true);
         $optionValue1 = $faker->words(3, true);
         $optionValue2 = $faker->words(3, true);
         $optionValue3 = $faker->words(3, true);
+        $optionValue4 = $faker->words(3, true);
+        $optionValue5 = $faker->words(3, true);
+        $optionValue6 = $faker->words(3, true);
         $nameAttribute = $faker->firstName();
 
         $customName = [
@@ -66,6 +72,18 @@ class RatingCest
                         'label'=> $optionLabel3,
                         'value' => $optionValue3,
                     ],
+                    [
+                        'label'=> $optionLabel4,
+                        'value' => $optionValue4,
+                    ],
+                    [
+                        'label'=> $optionLabel5,
+                        'value' => $optionValue5,
+                    ],
+                    [
+                        'label'=> $optionLabel6,
+                        'value' => $optionValue6,
+                    ],
                 ],
                 'requiredMessage' => $requiredMessage,
             ],
@@ -81,11 +99,13 @@ class RatingCest
             $requiredMessage,
         ], $I->cmnt('Check element label, required message'));
 
-        $I->canSeeElement("//input[contains(@name,$nameAttribute)]", [], $I->cmnt('Check RadioField name attribute'));
-        $I->canSeeElement("//input[contains(@data-name,$nameAttribute)]",[], $I->cmnt('Check RadioField data-name attribute'));
-        $I->canSeeElement("//input[contains(@class,$containerClass)]", [], $I->cmnt('Check RadioField container class'));
-        $I->canSeeElement("//div", ['data-content' => $helpMessage], $I->cmnt('Check RadioField help message'));
+        $I->canSeeElement("//input[contains(@name,$nameAttribute)]", [], $I->cmnt('Check Rating field name attribute'));
+        $I->canSeeElement("//input[contains(@data-name,$nameAttribute)]",[], $I->cmnt('Check Rating field data-name attribute'));
+        $I->canSeeElement("//input[contains(@class,$containerClass)]", [], $I->cmnt('Check Rating field container class'));
+        $I->canSeeElement("//div", ['data-content' => $helpMessage], $I->cmnt('Check Rating field help message'));
         echo $I->cmnt("All test cases went through. ",'yellow','',array('blink'));
+
+        // some problem with this test case
 
 
     }

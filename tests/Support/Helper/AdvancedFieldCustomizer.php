@@ -298,6 +298,7 @@ trait AdvancedFieldCustomizer
             if ($basicOperand['options']) { // configure options
 
                 global $removeField;
+                $addField = 1;
                 $removeField = 1;
                 $fieldCounter = 1;
 
@@ -317,10 +318,11 @@ trait AdvancedFieldCustomizer
                         $I->filledField("(//input[@type='text'])[" . ($fieldCounter + 3) . "]", $value, 'Fill As Value');
                     }
 
-                    if ($fieldCounter >= 5) {
-                        $I->clickByJS(FluentFormsSelectors::addField($fieldCounter), 'Add Field');
+                    if ($addField >= 6) {
+                        $I->clickByJS(FluentFormsSelectors::addField($addField), 'Add Field no '.$addField);
                     }
-                    $fieldCounter++;
+                    $fieldCounter+=2;
+                    $addField++;
                     $removeField += 1;
                 }
                 $I->clicked(FluentFormsSelectors::removeField($removeField));
@@ -331,23 +333,14 @@ trait AdvancedFieldCustomizer
                 $I->clickByJS(GeneralFields::radioSelect('Error Message', 2),'Select error message type');
                 $I->filledField(GeneralFields::customizationFields('Required'), $basicOperand['requiredMessage'], 'Fill As Required Message');
             }
-
         }
-        exit("basic option end");
+
         //                                           Advanced options                                              //
 
         if (isset($advancedOperand)) {
             $I->scrollTo(GeneralFields::advancedOptions);
             $I->clickByJS(GeneralFields::advancedOptions, 'Expand advanced options');
             $I->wait(2);
-
-            $advancedOperand['defaultValue'] // Default Value
-                ? $I->filledField(GeneralFields::defaultField, $advancedOperand['defaultValue'], 'Fill As Default Value')
-                : null;
-
-            $advancedOperand['containerClass'] // Container Class
-                ? $I->filledField(GeneralFields::customizationFields('Container Class'), $advancedOperand['containerClass'], 'Fill As Container Class')
-                : null;
 
             $advancedOperand['helpMessage'] // Help Message
                 ? $I->filledField("(//textarea[@class='el-textarea__inner'])", $advancedOperand['helpMessage'], 'Fill As Help Message')
