@@ -363,6 +363,9 @@ trait AdvancedFieldCustomizer
         ?bool $isHiddenLabel = false
     ): void
     {
+        print_r($basicOptions);
+        dd($advancedOptions);
+
         $I->clickOnExactText($fieldName);
         $basicOperand = null;
         $advancedOperand = null;

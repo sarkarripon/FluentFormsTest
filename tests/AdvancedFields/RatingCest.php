@@ -3,6 +3,7 @@
 
 namespace Tests\AdvancedFields;
 
+use Faker\Factory;
 use Tests\Support\AcceptanceTester;
 use Tests\Support\Factories\DataProvider\DataGenerator;
 use Tests\Support\Helper\AdvancedFieldCustomizer;
@@ -23,7 +24,7 @@ class RatingCest
     {
 
         $pageName = __FUNCTION__ . '_' . rand(1, 100);
-        $faker = \Faker\Factory::create();
+        $faker = Factory::create();
 
         $elementLabel = $faker->words(2, true);
         $adminFieldLabel = $faker->words(2, true);

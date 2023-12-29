@@ -3,6 +3,7 @@
 
 namespace Tests\AdvancedFields;
 
+use Faker\Factory;
 use Tests\Support\AcceptanceTester;
 use Tests\Support\Factories\DataProvider\DataGenerator;
 use Tests\Support\Helper\AdvancedFieldCustomizer;
@@ -23,29 +24,35 @@ class CheckableGridCest
     {
 
         $pageName = __FUNCTION__ . '_' . rand(1, 100);
-        $faker = \Faker\Factory::create();
+        $faker = Factory::create();
 
         $elementLabel = $faker->words(2, true);
         $adminFieldLabel = $faker->words(2, true);
-        $placeholder = $faker->words(3, true);
         $requiredMessage = $faker->words(2, true);
 
-        $defaultValue = $faker->words(2, true);
         $containerClass = $faker->firstName();
-        $elementClass = $faker->userName();
         $helpMessage = $faker->words(4, true);
-        $optionLabel1 = $faker->words(2, true);
-        $optionLabel2 = $faker->words(2, true);
-        $optionLabel3 = $faker->words(2, true);
-        $optionLabel4 = $faker->words(2, true);
-        $optionLabel5 = $faker->words(2, true);
-        $optionLabel6 = $faker->words(2, true);
-        $optionValue1 = $faker->words(3, true);
-        $optionValue2 = $faker->words(3, true);
-        $optionValue3 = $faker->words(3, true);
-        $optionValue4 = $faker->words(3, true);
-        $optionValue5 = $faker->words(3, true);
-        $optionValue6 = $faker->words(3, true);
+
+        $gridColumnsLabel1 = $faker->words(2, true);
+        $gridColumnsLabel2 = $faker->words(2, true);
+        $gridColumnsLabel3 = $faker->words(2, true);
+        $gridColumnsLabel4 = $faker->words(2, true);
+
+        $gridRowsLabel1 = $faker->words(2, true);
+        $gridRowsLabel2 = $faker->words(2, true);
+        $gridRowsLabel3 = $faker->words(2, true);
+        $gridRowsLabel4 = $faker->words(2, true);
+
+        $gridColumnsValue1 = $faker->words(3, true);
+        $gridColumnsValue2 = $faker->words(3, true);
+        $gridColumnsValue3 = $faker->words(3, true);
+        $gridColumnsValue4 = $faker->words(3, true);
+
+        $gridRowsValue1 = $faker->words(3, true);
+        $gridRowsValue2 = $faker->words(3, true);
+        $gridRowsValue3 = $faker->words(3, true);
+        $gridRowsValue4 = $faker->words(3, true);
+
         $nameAttribute = $faker->firstName();
 
         $customName = [
@@ -59,19 +66,47 @@ class CheckableGridCest
         $this->customizeCheckAbleGrid($I, $elementLabel,
             [
                 'adminFieldLabel' => $adminFieldLabel,
+                'fieldType' => 'checkBox',  // radio, checkBox
                 'gridColumns' => [
                     [
-                        'label'=> $optionLabel1,
-                        'value' => $optionValue1,
+                        'label'=> $gridColumnsLabel1,
+                        'value' => $gridColumnsValue1,
                     ],
                     [
-                        'label'=> $optionLabel2,
-                        'value' => $optionValue2,
+                        'label'=> $gridColumnsLabel2,
+                        'value' => $gridColumnsValue2,
+                    ],
+                    [
+                        'label'=> $gridColumnsLabel3,
+                        'value' => $gridColumnsValue3,
+                    ],
+                    [
+                        'label'=> $gridColumnsLabel4,
+                        'value' => $gridColumnsValue4,
+                    ],
+                ],
+                'gridRows' => [
+                    [
+                        'label'=> $gridRowsLabel1,
+                        'value' => $gridRowsValue1,
+                    ],
+                    [
+                        'label'=> $gridRowsLabel2,
+                        'value' => $gridRowsValue2,
+                    ],
+                    [
+                        'label'=> $gridRowsLabel3,
+                        'value' => $gridRowsValue3,
+                    ],
+                    [
+                        'label'=> $gridRowsLabel4,
+                        'value' => $gridRowsValue4,
                     ],
                 ],
                 'requiredMessage' => $requiredMessage,
             ],
             [
+                'containerClass' => $containerClass,
                 'helpMessage' => $helpMessage,
                 'nameAttribute' => $nameAttribute,
             ]);
