@@ -363,8 +363,8 @@ trait AdvancedFieldCustomizer
         ?bool $isHiddenLabel = false
     ): void
     {
-        print_r($basicOptions);
-        dd($advancedOptions);
+//        print_r($basicOptions);
+//        dd($advancedOptions);
 
         $I->clickOnExactText($fieldName);
         $basicOperand = null;
@@ -373,8 +373,8 @@ trait AdvancedFieldCustomizer
         $basicOptionsDefault = [
             'adminFieldLabel' => false,
             'fieldType' => false,
-            'options' => false,
-            'showText' => false,
+            'gridColumns' => false,
+            'gridRows' => false,
             'requiredMessage' => false,
         ];
 
@@ -399,31 +399,35 @@ trait AdvancedFieldCustomizer
                 ? $I->filledField(GeneralFields::adminFieldLabel, $basicOperand['adminFieldLabel'], 'Fill As Admin Field Label')
                 : null;
 
-            if ($basicOperand['options']) { // configure options
+            if ($basicOperand['fieldType'] === 'radio') { // Field Type
+                $I->clickByJS("//span[normalize-space()='Radio']", 'Select Field Type ' .$basicOperand['fieldType']);
+            }
+
+            if ($basicOperand['gridColumns']) { // configure Columns
 
                 global $removeField;
                 $addField = 1;
                 $removeField = 1;
                 $fieldCounter = 1;
 
-                foreach ($basicOperand['options'] as $fieldContents) {
+                foreach ($basicOperand['gridColumns'] as $fieldContents) {
 
                     $label = $fieldContents['label'] ?? null;
                     $value = $fieldContents['value'] ?? null;
 
                     $label
-                        ? $I->filledField("(//input[@type='text'])[" . ($fieldCounter + 2) . "]", $label, 'Fill As Label')
+                        ? $I->filledField("(//span[normalize-space()='Grid Columns']/following::input[@type='text'])[" . ($fieldCounter) . "]", $label, 'Fill As Label')
                         : null;
 
                     if (isset($value)) {
                         if ($fieldCounter === 1) {
-                            $I->clicked("(//span[@class='el-checkbox__inner'])[1]", 'Select Show Values');
+                            $I->clicked("(//span[@class='el-checkbox__inner'])[1]", 'Select Show Values of Grid Columns');
                         }
-                        $I->filledField("(//input[@type='text'])[" . ($fieldCounter + 3) . "]", $value, 'Fill As Value');
+                        $I->filledField("(//span[normalize-space()='Grid Columns']/following::input[@type='text'])[" . ($fieldCounter + 1) . "]", $value, 'Fill As Value');
                     }
 
-                    if ($addField >= 6) {
-                        $I->clickByJS(FluentFormsSelectors::addField($addField), 'Add Field no '.$addField);
+                    if ($addField >= 1) {
+                        $I->clickByJS("(//span[normalize-space()='Grid Columns']/following::i[contains(@class,'el-icon-plus')])[$addField]", 'Add Field no '.$addField. ' to Grid Columns');
                     }
                     $fieldCounter+=2;
                     $addField++;
@@ -431,6 +435,40 @@ trait AdvancedFieldCustomizer
                 }
                 $I->clicked(FluentFormsSelectors::removeField($removeField));
             }
+
+            if ($basicOperand['gridRows']) { // configure Columns
+
+                global $removeField;
+                $addField = 1;
+                $removeField = 1;
+                $fieldCounter = 1;
+
+                foreach ($basicOperand['gridRows'] as $fieldContents) {
+
+                    $label = $fieldContents['label'] ?? null;
+                    $value = $fieldContents['value'] ?? null;
+
+                    $label
+                        ? $I->filledField("(//span[normalize-space()='Grid Rows']/following::input[@type='text'])[" . ($fieldCounter) . "]", $label, 'Fill As Label')
+                        : null;
+
+                    if (isset($value)) {
+                        if ($fieldCounter === 1) {
+                            $I->clicked("(//span[@class='el-checkbox__inner'])[2]", 'Select Show Values of Grid Rows');
+                        }
+                        $I->filledField("(//span[normalize-space()='Grid Rows']/following::input[@type='text'])[" . ($fieldCounter + 1) . "]", $value, 'Fill As Value');
+                    }
+
+                    if ($addField >= 1) {
+                        $I->clickByJS("(//span[normalize-space()='Grid Rows']/following::i[contains(@class,'el-icon-plus')])[$addField]", 'Add Field no '.$addField. ' to Grid Rows');
+                    }
+                    $fieldCounter+=2;
+                    $addField++;
+                    $removeField += 1;
+                }
+                $I->clicked("(//span[normalize-space()='Grid Rows']/following::i[contains(@class,'el-icon-minus')])[$removeField]", 'Remove Field no '.$removeField);
+            }
+
 
             if ($basicOperand['requiredMessage']) { //Required Message
                 $I->clicked(GeneralFields::radioSelect('Required'),'Select Required');
@@ -445,6 +483,10 @@ trait AdvancedFieldCustomizer
             $I->scrollTo(GeneralFields::advancedOptions);
             $I->clickByJS(GeneralFields::advancedOptions, 'Expand advanced options');
             $I->wait(2);
+
+            $advancedOperand['containerClass'] // Container Class
+                ? $I->filledField(GeneralFields::customizationFields('Container Class'), $advancedOperand['containerClass'], 'Fill As Container Class')
+                : null;
 
             $advancedOperand['helpMessage'] // Help Message
                 ? $I->filledField("(//textarea[@class='el-textarea__inner'])", $advancedOperand['helpMessage'], 'Fill As Help Message')

@@ -66,41 +66,41 @@ class CheckableGridCest
         $this->customizeCheckAbleGrid($I, $elementLabel,
             [
                 'adminFieldLabel' => $adminFieldLabel,
-                'fieldType' => 'checkBox',  // radio, checkBox
+                'fieldType' => 'radio',  // radio, checkBox
                 'gridColumns' => [
                     [
-                        'label'=> $gridColumnsLabel1,
-                        'value' => $gridColumnsValue1,
+                        'label'=> 'column label 1 '.$gridColumnsLabel1,
+                        'value' => 'column value 1 '.$gridColumnsValue1,
                     ],
                     [
-                        'label'=> $gridColumnsLabel2,
-                        'value' => $gridColumnsValue2,
+                        'label'=> 'column label 2 '.$gridColumnsLabel2,
+                        'value' => 'column value 2 '.$gridColumnsValue2,
                     ],
                     [
-                        'label'=> $gridColumnsLabel3,
-                        'value' => $gridColumnsValue3,
+                        'label'=> 'column label 3 '.$gridColumnsLabel3,
+                        'value' => 'column value 3 '.$gridColumnsValue3,
                     ],
                     [
-                        'label'=> $gridColumnsLabel4,
-                        'value' => $gridColumnsValue4,
+                        'label'=> 'column label 4 '.$gridColumnsLabel4,
+                        'value' => 'column value 4 '.$gridColumnsValue4,
                     ],
                 ],
                 'gridRows' => [
                     [
-                        'label'=> $gridRowsLabel1,
-                        'value' => $gridRowsValue1,
+                        'label'=> 'row label 1 '.$gridRowsLabel1,
+                        'value' => 'row value 1 '.$gridRowsValue1,
                     ],
                     [
-                        'label'=> $gridRowsLabel2,
-                        'value' => $gridRowsValue2,
+                        'label'=> 'row label 2 '.$gridRowsLabel2,
+                        'value' => 'row value 2 '.$gridRowsValue2,
                     ],
                     [
-                        'label'=> $gridRowsLabel3,
-                        'value' => $gridRowsValue3,
+                        'label'=> 'row label 3 '.$gridRowsLabel3,
+                        'value' => 'row value 3 '.$gridRowsValue3,
                     ],
                     [
-                        'label'=> $gridRowsLabel4,
-                        'value' => $gridRowsValue4,
+                        'label'=> 'row label 4 '.$gridRowsLabel4,
+                        'value' => 'row value 4 '.$gridRowsValue4,
                     ],
                 ],
                 'requiredMessage' => $requiredMessage,
@@ -118,10 +118,10 @@ class CheckableGridCest
             $requiredMessage,
         ], $I->cmnt('Check element label, required message'));
 
-        $I->canSeeElement("//input[contains(@name,$nameAttribute)]", [], $I->cmnt('Check Rating field name attribute'));
-        $I->canSeeElement("//input[contains(@data-name,$nameAttribute)]",[], $I->cmnt('Check Rating field data-name attribute'));
-        $I->canSeeElement("//input[contains(@class,$containerClass)]", [], $I->cmnt('Check Rating field container class'));
-        $I->canSeeElement("//div", ['data-content' => $helpMessage], $I->cmnt('Check Rating field help message'));
+        $I->canSeeElement("//input[contains(@name,$nameAttribute)]", [], $I->cmnt('Check Checkable Grid field name attribute'));
+        $I->canSeeElement("//input[contains(@data-name,$nameAttribute)]",[], $I->cmnt('Check Checkable Grid field data-name attribute'));
+        $I->canSeeElement("//input[contains(@class,$containerClass)]", [], $I->cmnt('Check Checkable Grid field container class'));
+        $I->canSeeElement("//div", ['data-content' => $helpMessage], $I->cmnt('Check Checkable Grid field help message'));
         echo $I->cmnt("All test cases went through. ",'yellow','',array('blink'));
 
         // some problem with this test case
