@@ -502,8 +502,77 @@ trait AdvancedFieldCustomizer
 
     }
 
-    public function customizeGDPRAgreement()
+    public function customizeGDPRAgreement(
+        AcceptanceTester $I,
+        ?array $basicOptions = null,
+        ?array $advancedOptions = null,
+        ?bool $isHiddenLabel = false
+    ): void
     {
+//        $I->clickOnExactText($fieldName);
+        $I->clickByJS("(//div[contains(@class,'item-actions-wrapper')])[1]");
+
+        $basicOperand = null;
+        $advancedOperand = null;
+
+        $basicOptionsDefault = [
+            'adminFieldLabel' => false,
+            'description' => false,
+            'validationMessage' => false,
+            'containerClass' => false,
+        ];
+
+        $advancedOptionsDefault = [
+            'elementClass' => false,
+            'nameAttribute' => false,
+        ];
+
+        if (!is_null($basicOptions)) {
+            $basicOperand = array_merge($basicOptionsDefault, $basicOptions);
+        }
+
+        if (!is_null($advancedOptions)) {
+            $advancedOperand = array_merge($advancedOptionsDefault, $advancedOptions);
+        }
+
+        //                                           Basic options                                              //
+        if (isset($basicOperand)) {
+
+            if ($basicOperand['adminFieldLabel']) { //adminFieldLabel
+                $I->filledField(GeneralFields::adminFieldLabel, $basicOperand['adminFieldLabel'], 'Fill As Admin Field Label');
+            }
+
+            if ($basicOperand['description']) { //description
+                $I->filledField("//textarea[@class='el-textarea__inner']", $basicOperand['description'], 'Fill As Admin Field Label');
+            }
+
+            if ($basicOperand['validationMessage']) { // validation Message
+                $I->clicked(GeneralFields::radioSelect('Required Validation Message',2),'Mark Yes from Required because by default it is No');
+                $I->filledField(GeneralFields::customizationFields('Required Validation Message'), $basicOperand['validationMessage'], 'Fill As custom Required Message');
+            }
+
+            $basicOperand['containerClass'] // Container Class
+                ? $I->filledField(GeneralFields::customizationFields('Container Class'), $basicOperand['containerClass'], 'Fill As Container Class')
+                : null;
+
+        }
+//        dd("here");
+
+        //                                             Advanced options                                                   //
+
+        if (isset($advancedOperand)) {
+            $I->clicked(GeneralFields::advancedOptions,'Expand advanced options');
+            $I->wait(2);
+
+            $advancedOperand['elementClass'] // Element Class
+                ? $I->filledField(GeneralFields::customizationFields('Element Class'), $advancedOperand['elementClass'], 'Fill As Element Class')
+                : null;
+            $advancedOperand['nameAttribute'] // Name Attribute
+                ? $I->filledField(GeneralFields::customizationFields('Name Attribute'), $advancedOperand['nameAttribute'], 'Fill As Name Attribute')
+                : null;
+        }
+        $I->clickByJS(FluentFormsSelectors::saveForm);
+        $I->seeSuccess('The form is successfully updated.');
 
     }
 
