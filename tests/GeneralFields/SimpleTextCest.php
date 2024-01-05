@@ -21,7 +21,7 @@ class SimpleTextCest
     }
 
     // tests
-    #[Group('generalFields')]
+    #[Group('generalFields','all')]
     public function test_simple_text_field(AcceptanceTester $I)
     {
         $pageName = __FUNCTION__ . '_' . rand(1, 100);

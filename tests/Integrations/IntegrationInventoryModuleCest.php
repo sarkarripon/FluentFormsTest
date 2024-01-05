@@ -24,7 +24,7 @@ class IntegrationInventoryModuleCest
     }
 
     // tests
-    #[Group('Integration','native')]
+    #[Group('Integration','native','all')]
     public function test_inventory_module(AcceptanceTester $I): void
     {
         $pageName = __FUNCTION__.'_'.rand(1,100);

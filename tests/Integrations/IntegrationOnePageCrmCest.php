@@ -21,7 +21,7 @@ class IntegrationOnePageCrmCest
     }
 
     // tests
-    #[Group('Integration')]
+    #[Group('Integration','all')]
     public function test_push_onePageCrm_data(AcceptanceTester $I)
     {
 //        $remoteData = $this->fetchData('annetta.wisoky@aol.co');

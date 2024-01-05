@@ -3,6 +3,7 @@
 
 namespace Tests\AdvancedFields;
 
+use Codeception\Attribute\Group;
 use Tests\Support\AcceptanceTester;
 use Tests\Support\Factories\DataProvider\DataGenerator;
 use Tests\Support\Helper\AdvancedFieldCustomizer;
@@ -20,6 +21,7 @@ class PasswordCest
     }
 
     // tests
+    #[Group('advancedFields','all')]
     public function test_password_field(AcceptanceTester $I)
     {
         $pageName = __FUNCTION__ . '_' . rand(1, 100);

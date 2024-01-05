@@ -22,7 +22,7 @@ class IntegrationSlackCest
     }
 
     // tests
-    #[Group('Integration')]
+    #[Group('Integration','all')]
     public function test_slack_push_data(AcceptanceTester $I): void
     {
 //        $kjf = $this->fetchSlackData($I,"Dolorem vitae quis et laborum molestiae eos qui.");

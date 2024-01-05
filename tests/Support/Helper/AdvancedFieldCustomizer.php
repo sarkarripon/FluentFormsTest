@@ -210,8 +210,10 @@ trait AdvancedFieldCustomizer
 
             if ($basicOperand['requiredMessage']) { // Required Message
                 $I->clicked(GeneralFields::radioSelect('Required',1),'Mark Yes from Required because by default it is No');
-                $I->clickByJS(GeneralFields::radioSelect('Error Message', 2),'Mark custom from Required because by default it is global');
-                $I->filledField(GeneralFields::customizationFields('Required'), $basicOperand['requiredMessage'], 'Fill As custom Required Message');
+                if ($I->checkElement("//div[contains(@class, 'is-checked') and @role='switch']")){
+                    $I->clickByJS("//div[contains(@class, 'is-checked') and @role='switch']",'Enable custom error message');
+                }
+                $I->filledField(GeneralFields::customizationFields('Custom Error Message'), $basicOperand['requiredMessage'], 'Fill As custom Required Message');
             }
 
             if ($basicOperand['termsNConditions']) { //Terms & Conditions
@@ -328,10 +330,12 @@ trait AdvancedFieldCustomizer
                 $I->clicked(FluentFormsSelectors::removeField($removeField));
             }
 
-            if ($basicOperand['requiredMessage']) { //Required Message
-                $I->clicked(GeneralFields::radioSelect('Required'),'Select Required');
-                $I->clickByJS(GeneralFields::radioSelect('Error Message', 2),'Select error message type');
-                $I->filledField(GeneralFields::customizationFields('Required'), $basicOperand['requiredMessage'], 'Fill As Required Message');
+            if ($basicOperand['requiredMessage']) { // Required Message
+                $I->clicked(GeneralFields::radioSelect('Required',1),'Mark Yes from Required because by default it is No');
+                if ($I->checkElement("//div[contains(@class, 'is-checked') and @role='switch']")){
+                    $I->clickByJS("//div[contains(@class, 'is-checked') and @role='switch']",'Enable custom error message');
+                }
+                $I->filledField(GeneralFields::customizationFields('Custom Error Message'), $basicOperand['requiredMessage'], 'Fill As custom Required Message');
             }
         }
 
@@ -470,10 +474,12 @@ trait AdvancedFieldCustomizer
             }
 
 
-            if ($basicOperand['requiredMessage']) { //Required Message
-                $I->clicked(GeneralFields::radioSelect('Required'),'Select Required');
-                $I->clickByJS(GeneralFields::radioSelect('Error Message', 2),'Select error message type');
-                $I->filledField(GeneralFields::customizationFields('Required'), $basicOperand['requiredMessage'], 'Fill As Required Message');
+            if ($basicOperand['requiredMessage']) { // Required Message
+                $I->clicked(GeneralFields::radioSelect('Required',1),'Mark Yes from Required because by default it is No');
+                if ($I->checkElement("//div[contains(@class, 'is-checked') and @role='switch']")){
+                    $I->clickByJS("//div[contains(@class, 'is-checked') and @role='switch']",'Enable custom error message');
+                }
+                $I->filledField(GeneralFields::customizationFields('Custom Error Message'), $basicOperand['requiredMessage'], 'Fill As custom Required Message');
             }
         }
 

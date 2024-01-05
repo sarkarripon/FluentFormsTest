@@ -21,7 +21,7 @@ class IntegrationClickSendCest
     }
 
     // tests
-    #[Group('Integration', 'test')]
+    #[Group('Integration', 'test', 'all')]
     public function test_clickSend_push_data(AcceptanceTester $I)
     {
 //        $jvhhfdh = $this->fetchClickSendData($I,"russel.dax@yahoo.com");

@@ -21,7 +21,7 @@ class IntegrationConstantContactCest
         $I->loginWordpress();
     }
     // tests
-    #[Group('Integration')]
+    #[Group('Integration', 'all')]
     public function test_constantcontact_push_data(AcceptanceTester $I)
     {
 //        $djfbhf = $this->fetchData("marigu@mailinator.co");

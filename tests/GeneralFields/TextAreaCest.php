@@ -21,7 +21,7 @@ class TextAreaCest
     }
 
     // tests
-    #[Group('generalFields')]
+    #[Group('generalFields','all')]
     public function test_textarea_field(AcceptanceTester $I)
     {
         $pageName = __FUNCTION__ . '_' . rand(1, 100);

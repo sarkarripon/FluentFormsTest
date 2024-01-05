@@ -3,6 +3,7 @@
 
 namespace Tests\AdvancedFields;
 
+use Codeception\Attribute\Group;
 use Tests\Support\AcceptanceTester;
 use Tests\Support\Factories\DataProvider\DataGenerator;
 use Tests\Support\Helper\AdvancedFieldCustomizer;
@@ -19,6 +20,7 @@ class RangeSliderCest
     }
 
     // tests
+    #[Group('advancedFields','all')]
     public function test_range_slider(AcceptanceTester $I)
     {
         $pageName = __FUNCTION__ . '_' . rand(1, 100);
@@ -73,15 +75,15 @@ class RangeSliderCest
             $requiredMessage,
         ], $I->cmnt('Check element label, required message'));
 
-        $I->canSeeElement("//div/input", ['name' => $nameAttribute], $I->cmnt('Check numericField name attribute'));
-        $I->canSeeElement("//div/input", ['data-name' => $nameAttribute], $I->cmnt('Check numericField name attribute'));
-        $I->canSeeElement("//div[contains(@class,'$containerClass')]", [], $I->cmnt('Check numericField container class'));
-        $I->canSeeElement("//div/input[contains(@class,'$elementClass')]", [], $I->cmnt('Check numericField element class'));
+        $I->canSeeElement("//input[@name='$nameAttribute']", [], $I->cmnt('Check Range Slider name attribute'));
+        $I->canSeeElement("//input[@data-name='$nameAttribute']", [], $I->cmnt('Check Range Slider name attribute'));
+        $I->canSeeElement("//div[contains(@class,'$containerClass')]", [], $I->cmnt('Check Range Slider container class'));
+        $I->canSeeElement("//div/div/input[contains(@class,'$elementClass')]", [], $I->cmnt('Check Range Slider element class'));
 
 
-        $I->canSeeElement("//div/input", ['min' => $minValue], $I->cmnt('Check numericField min value'));
-        $I->canSeeElement("//div/input", ['max' => $maxValue], $I->cmnt('Check numericField max value'));
-        $I->canSeeElement("//div/input", ['step' => $steps], $I->cmnt('Check numericField step value'));
+        $I->canSeeElement("//div/div/input", ['min' => $minValue], $I->cmnt('Check Range Slider min value'));
+        $I->canSeeElement("//div,div/input", ['max' => $maxValue], $I->cmnt('Check Range Slider max value'));
+        $I->canSeeElement("//div/div/input", ['step' => $steps], $I->cmnt('Check Range Slider step value'));
 
         echo $I->cmnt("All test cases went through. ", 'yellow', '', array('blink'));
 

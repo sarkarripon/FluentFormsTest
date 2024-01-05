@@ -12,7 +12,7 @@ use Tests\Support\Selectors\FieldSelectors;
 class IntegrationWebhookCest
 {
     use IntegrationHelper, Webhook;
-    #[Group('Integration')]
+    #[Group('Integration','all')]
     public function _before(AcceptanceTester $I): string
     {
         global $webhookUrl;

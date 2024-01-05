@@ -22,7 +22,7 @@ class IntegrationSalesforceCest
     }
 
     // tests
-    #[Group('Integration')]
+    #[Group('Integration','all')]
     public function test_salesforce_push_data(AcceptanceTester $I)
     {
 //       $jhvh =  $this->fetchSalesforceData($I,'gherzog@icloud.com');

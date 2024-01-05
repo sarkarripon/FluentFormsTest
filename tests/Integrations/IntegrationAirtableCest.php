@@ -22,7 +22,7 @@ class IntegrationAirtableCest
     }
 
     // tests
-    #[Group('Integration')]
+    #[Group('Integration','all')]
     public function test_airtable_push_data(AcceptanceTester $I)
     {
 //        $jvj = $this->fetchAirtableData($I,"Quarterly launch");

@@ -22,7 +22,7 @@ class IntegrationSalesflareCest
     }
 
     // tests
-    #[Group('Integration')]
+    #[Group('Integration','all')]
     public function test_Salesflare_push_data(AcceptanceTester $I)
     {
 //        $jhvhf = $this->fetchSalesflareData($I,"qixar@mailinator.com");

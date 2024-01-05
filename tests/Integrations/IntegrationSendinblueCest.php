@@ -22,7 +22,7 @@ class IntegrationSendinblueCest
     }
 
     // tests
-    #[Group('Integration')]
+    #[Group('Integration','all')]
     public function test_sendinblue_push_data(AcceptanceTester $I): void
     {
         $pageName = __FUNCTION__.'_'.rand(1,100);

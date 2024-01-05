@@ -11,7 +11,7 @@ use Tests\Support\Selectors\FieldSelectors;
 class IntegrationZapierCest
 {
     use IntegrationHelper, Zapier, Webhook;
-    #[Group('Integration')]
+    #[Group('Integration','all')]
     public function _before(AcceptanceTester $I): string
     {
         global $webhookUrl;

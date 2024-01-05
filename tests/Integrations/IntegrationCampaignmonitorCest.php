@@ -22,7 +22,7 @@ class IntegrationCampaignmonitorCest
     }
 
     // tests
-    #[Group('Integration')]
+    #[Group('Integration','all')]
     public function test_campaignmonitor_push_data(AcceptanceTester $I)
     {
 //        $jhcb = $this->fetchCampaignmonitorData($I,"balowykosi@mailinator.com");

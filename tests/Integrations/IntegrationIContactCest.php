@@ -22,7 +22,7 @@ class IntegrationIContactCest
     }
 
     // tests
-    #[Group('Integration')]
+    #[Group('Integration','all')]
     public function test_iContact_push_data(AcceptanceTester $I): void
     {
 //        $cjnj= $this->fetchIContactData($I,'qa@wpmanageninja.com');

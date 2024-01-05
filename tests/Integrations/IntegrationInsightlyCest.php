@@ -22,7 +22,7 @@ class IntegrationInsightlyCest
     }
 
     // tests
-    #[Group('Integration')]
+    #[Group('Integration','all')]
     public function test_insightly_push_data(AcceptanceTester $I)
     {
 //        $hbvdf = $this->fetchInsightlyData($I, 'qa@wpmanageninja.com');

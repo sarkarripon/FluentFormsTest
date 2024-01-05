@@ -20,7 +20,7 @@ class CheckBoxCest
     }
 
     // tests
-    #[Group('generalFields')]
+    #[Group('generalFields','all')]
     public function test_check_box(AcceptanceTester $I)
     {
         $pageName = __FUNCTION__ . '_' . rand(1, 100);

@@ -21,7 +21,7 @@ class IntegrationDiscordCest
     }
 
     // tests
-    #[Group('Integration')]
+    #[Group('Integration','all')]
     public function test_discord_notification(AcceptanceTester $I)
     {
 //        $jhcg = $this->fetchDiscordData($I,["hepywuziwa@mailinat.com"]);

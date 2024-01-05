@@ -22,7 +22,7 @@ class IntegrationMailJetCest
     }
 
     // tests
-    #[Group('Integration')]
+    #[Group('Integration','all')]
     public function test_mailJet_push_data(AcceptanceTester $I)
     {
 //        $dhfv = $this->fetchMailJetData($I, 'nogowem@gmail.com');

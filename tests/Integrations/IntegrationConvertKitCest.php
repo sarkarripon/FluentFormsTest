@@ -21,7 +21,7 @@ class IntegrationConvertKitCest
     }
 
     // tests
-    #[Group('Integration')]
+    #[Group('Integration','all')]
     public function test_convertKit_push_data(AcceptanceTester $I)
     {
 //        $kjnfdj = $this->fetchConvertKitData($I,'jasitowe@gmail.com');

@@ -21,7 +21,7 @@ class IntegrationDripCest
     }
 
     // tests
-    #[Group('Integration')]
+    #[Group('Integration','all')]
     public function test_drip_push_data(AcceptanceTester $I)
     {
 //        $remoteData = $this->fetchDripData($I, "omraz@yandex.com");

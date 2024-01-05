@@ -3,6 +3,7 @@
 
 namespace Tests\AdvancedFields;
 
+use Codeception\Attribute\Group;
 use Faker\Factory;
 use Tests\Support\AcceptanceTester;
 use Tests\Support\Factories\DataProvider\DataGenerator;
@@ -20,9 +21,9 @@ class CheckableGridCest
     }
 
     // tests
+    #[Group('advancedFields','all')]
     public function test_checkable_grid(AcceptanceTester $I)
     {
-
         $pageName = __FUNCTION__ . '_' . rand(1, 100);
         $faker = Factory::create();
 

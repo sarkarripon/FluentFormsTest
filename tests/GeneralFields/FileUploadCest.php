@@ -20,7 +20,7 @@ class FileUploadCest
     }
 
     // tests
-    #[Group('generalFields')]
+    #[Group('generalFields','all')]
     public function test_file_upload_field(AcceptanceTester $I)
     {
         $pageName = __FUNCTION__ . '_' . rand(1, 100);

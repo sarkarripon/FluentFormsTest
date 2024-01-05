@@ -22,7 +22,7 @@ class IntegrationHubSpotCest
     }
 
     // tests
-    #[Group('Integration')]
+    #[Group('Integration','all')]
     public function test_hubspot_push_data(AcceptanceTester $I)
     {
 //        $jvbh = $this->fetchHubSpotData($I,'alysha.wehner@yahoo.co');

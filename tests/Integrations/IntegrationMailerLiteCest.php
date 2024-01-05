@@ -20,7 +20,7 @@ class IntegrationMailerLiteCest
     }
 
     // tests
-    #[Group('Integration')]
+    #[Group('Integration','all')]
     public function test_mailerLite_push_data(AcceptanceTester $I): void
     {
 //        $hgg = $this->fetchData("sabina.abbott@yahoo.co");

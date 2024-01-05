@@ -3,6 +3,7 @@
 
 namespace Tests\GeneralFields;
 
+use Codeception\Attribute\Group;
 use Tests\Support\AcceptanceTester;
 use Tests\Support\Factories\DataProvider\DataGenerator;
 use Tests\Support\Helper\GeneralFieldCustomizer;
@@ -19,6 +20,7 @@ class AddressFieldCest
     }
 
     // tests
+    #[Group('generalFields','all')]
     public function test_address_field(AcceptanceTester $I)
     {
 

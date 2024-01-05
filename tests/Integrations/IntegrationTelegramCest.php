@@ -16,7 +16,7 @@ class IntegrationTelegramCest
     public function _before(AcceptanceTester $I): void
     {
         $I->loadDotEnvFile();
-//        $I->loginWordpress();
+        $I->loginWordpress();
     }
 
     // tests

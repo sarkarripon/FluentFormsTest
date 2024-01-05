@@ -20,7 +20,7 @@ class IntegrationGetGistCest
     }
 
     // tests
-    #[Group('Integration')]
+    #[Group('Integration','all')]
     public function test_getGist_push_data(AcceptanceTester $I)
     {
 //        $kjnvj = $this->fetchGetGistData($I,"raul.metz@hotmail.co");

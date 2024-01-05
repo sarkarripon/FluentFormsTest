@@ -17,7 +17,7 @@ class IntegrationTrelloCest
         $I->loginWordpress();
     }
 
-    #[Group('Integration')]
+    #[Group('Integration','all')]
     public function test_trello_push_data(AcceptanceTester $I): void
     {
         $pageName = __FUNCTION__.'_'.rand(1,100);

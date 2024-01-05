@@ -20,7 +20,7 @@ class IntegrationZohoCest
         $I->loadDotEnvFile();
         $I->loginWordpress();
     }
-    #[Group('Integration')]
+    #[Group('Integration','all')]
     public function test_zoho_push_data(AcceptanceTester $I)
     {
 //        $vdf = $this->fetchZohoData($I,"xidulu@mailinator.com");

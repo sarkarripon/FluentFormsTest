@@ -21,7 +21,7 @@ class NameFieldCest
     }
 
     // tests
-    #[Group('generalFields')]
+    #[Group('generalFields','all')]
     public function test_name_fields_without_default_value(AcceptanceTester $I)
     {
 

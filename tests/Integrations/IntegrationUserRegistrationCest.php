@@ -20,7 +20,7 @@ class IntegrationUserRegistrationCest
        $I->loginWordpress();
     }
 
-    #[Group('Integration','native')]
+    #[Group('Integration','native','all')]
     public function test_user_registration(AcceptanceTester $I): array
     {
         global $newUser;

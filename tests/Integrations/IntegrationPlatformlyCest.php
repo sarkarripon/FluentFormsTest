@@ -23,7 +23,7 @@ class IntegrationPlatformlyCest
     /**
      * @dataProvider \Tests\Support\Factories\DataProvider\FormData::fieldData
      */
-    #[Group('Integration')]
+    #[Group('Integration','all')]
     public function test_platformly_push_data(AcceptanceTester $I, Example $example): void
     {
         $this->prepareForm($I,__FUNCTION__, ['generalFields' => ['email', 'nameFields', 'phone']]);

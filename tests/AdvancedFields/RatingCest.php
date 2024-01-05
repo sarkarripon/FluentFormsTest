@@ -3,6 +3,7 @@
 
 namespace Tests\AdvancedFields;
 
+use Codeception\Attribute\Group;
 use Faker\Factory;
 use Tests\Support\AcceptanceTester;
 use Tests\Support\Factories\DataProvider\DataGenerator;
@@ -20,6 +21,7 @@ class RatingCest
     }
 
     // tests
+    #[Group('advancedFields','all')]
     public function test_rating_field(AcceptanceTester $I)
     {
 

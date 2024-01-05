@@ -22,7 +22,7 @@ class IntegrationPipeDriveCest
     }
 
     // tests
-    #[Group('Integration')]
+    #[Group('Integration','all')]
     public function test_pipedrive_people_creation(AcceptanceTester $I)
     {
         $pageName = __FUNCTION__.'_'.rand(1,100);

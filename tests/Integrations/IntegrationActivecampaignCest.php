@@ -22,7 +22,7 @@ class IntegrationActivecampaignCest
         $I->loginWordpress();
     }
 
-    #[Group('Integration','test')]
+    #[Group('Integration','test','all')]
     public function test_activecampaign_push_data(AcceptanceTester $I): void
     {
 //        $remoteData = $this->fetchActivecampaignData($I, "dare.emely@icloud.c");
