@@ -35,7 +35,6 @@ class NetPrompterScoreCest
         $helpMessage = $faker->words(4, true);
         $nameAttribute = $faker->firstName();
 
-
         $customName = [
             'netPromoter' => $elementLabel,
         ];
