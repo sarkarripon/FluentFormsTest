@@ -858,7 +858,6 @@ trait AdvancedFieldCustomizer
                 ? $I->filledField(GeneralFields::customizationFields('Element Class'), $advancedOperand['elementClass'], 'Fill As Element Class')
                 : null;
 
-
         }
         $I->clicked(FluentFormsSelectors::saveForm);
 

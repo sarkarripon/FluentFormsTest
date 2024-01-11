@@ -66,11 +66,12 @@ class NetPrompterScoreCest
             $promoterStartText,
             $promoterEndText,
         ], $I->cmnt('Check element label, required message'));
-exit();
-        $I->canSeeElement("//input[@name='$nameAttribute']", [], $I->cmnt('Check Net Prompter Score name attribute'));
-        $I->canSeeElement("//input[@data-name='$nameAttribute']", [], $I->cmnt('Check Net Prompter Score name attribute'));
+
+        $I->canSeeElement("//td[1]/input[@name='$nameAttribute']", [], $I->cmnt('Check Net Prompter Score name attribute'));
+        $I->canSeeElement("//div[@data-content='$helpMessage']", [], $I->cmnt('Check Net Prompter Score help message'));
         $I->canSeeElement("//div[contains(@class,'$containerClass')]", [], $I->cmnt('Check Net Prompter Score container class'));
-        $I->canSeeElement("//div/div/input[contains(@class,'$elementClass')]", [], $I->cmnt('Check Net Prompter Score element class'));
+
+        $I->canSeeElement("//input[contains(@class,'$elementClass')]", [], $I->cmnt('Check Net Prompter Score element class'));
 
 
         echo $I->cmnt("All test cases went through. ", 'yellow', '', array('blink'));
