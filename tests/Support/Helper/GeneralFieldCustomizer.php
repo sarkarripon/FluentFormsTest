@@ -625,6 +625,7 @@ trait GeneralFieldCustomizer
             $I->filledField(GeneralFields::adminFieldLabel, $basicOperand['adminFieldLabel'], 'Fill As Admin Field Label');
         }
 
+        // this function will be called locally to fill address fields
         $addressFieldLocalFunction = function (AcceptanceTester $I, $whichName, $nameArea) {
             // Address Fields
             if (isset($whichName)) {

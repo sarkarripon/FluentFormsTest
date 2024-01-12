@@ -863,4 +863,139 @@ trait AdvancedFieldCustomizer
 
     }
 
+    public function customizeRepeatField(
+        AcceptanceTester $I,
+                         $fieldName,
+        ?array $basicOptions = null,
+        ?array $advancedOptions = null,
+        ?bool $isHiddenLabel = false
+    ): void
+    {
+        $I->clickOnExactText($fieldName);
+
+        $basicOperand = null;
+        $advancedOperand = null;
+
+        $basicOptionsDefault = [
+            'adminFieldLabel' => false,
+            'addressLine1' => false,
+            'addressLine2' => false,
+            'city' => false,
+            'state' => false,
+            'zip' => false,
+            'country' => false,
+        ];
+
+        $advancedOptionsDefault = [
+            'elementClass' => false,
+            'nameAttribute' => false,
+        ];
+
+        if (!is_null($basicOptions)) {
+            $basicOperand = array_merge($basicOptionsDefault, $basicOptions);
+        }
+
+        if (!is_null($advancedOptions)) {
+            $advancedOperand = array_merge($advancedOptionsDefault, $advancedOptions);
+        }
+
+        //                                           Basic options                                              //
+        if (isset($basicOperand) && $basicOperand['adminFieldLabel']) {
+            $I->filledField(GeneralFields::adminFieldLabel, $basicOperand['adminFieldLabel'], 'Fill As Admin Field Label');
+        }
+
+        // this function will be called locally to fill address fields
+        $addressFieldLocalFunction = function (AcceptanceTester $I, $whichName, $nameArea) {
+            // Address Fields
+            if (isset($whichName)) {
+                $name = $whichName;
+
+                if ($nameArea == 1){ // address line 1
+                    $I->clicked("(//i[contains(@class,'el-icon-caret-bottom')])[1]", 'To expand Address Line 1 area');
+                }elseif ($nameArea == 2){ // address line 2
+                    $I->clickByJS("(//i[contains(@class,'el-icon-caret-bottom')])[2]", 'To expand Address Line 2 area');
+                }elseif ($nameArea == 3){ // city
+                    $I->clicked("(//i[contains(@class,'el-icon-caret-bottom')])[3]", 'To expand City area');
+                }elseif ($nameArea == 4) { // state
+                    $I->clicked("(//i[contains(@class,'el-icon-caret-bottom')])[4]", 'To expand State area');
+                }elseif ($nameArea == 5) { // zip
+                    $I->clicked("(//i[contains(@class,'el-icon-caret-bottom')])[5]", 'To expand Zip area');
+                }elseif ($nameArea == 6) { // country
+                    $I->clicked("(//i[contains(@class,'el-icon-caret-bottom')])[6]", 'To expand Country area');
+                }
+
+                $fieldData = [
+                    'Label' => $name['label'] ?? false,
+                    'Default' => $name['default'] ?? false,
+                    'Placeholder' => $name['placeholder'] ?? false,
+                    'Help Message' => $name['helpMessage'] ?? false,
+                    'Custom' => $name['required'] ?? false,
+                ];
+
+                foreach ($fieldData as $key => $value) {
+                    // Check if "Default" has a value and "Placeholder" is empty, or vice versa.
+//                    if (($key == 'Default' && isset($fieldData['Placeholder']) && empty($fieldData['Placeholder'])) ||
+//                        ($key == 'Placeholder' && isset($fieldData['Default']) && empty($fieldData['Default']))) {
+//                        continue; // Skip this iteration of the loop.
+//                    }
+                    if ($key == "Custom") {
+                        $I->clicked(GeneralFields::isRequire($nameArea));
+                        if ($I->checkElement("(//div[contains(@class, 'is-checked') and @role='switch'])[1]")){
+                            $I->clickByJS("(//div[contains(@class, 'is-checked') and @role='switch'])[1]",'Enable custom error message');
+                        }
+                    }
+
+//                    if ($key == "Error Message") {
+//                        $I->clickByJS(GeneralFields::isRequire($nameArea));
+//                        $I->clickByJS(GeneralFields::isRequire($nameArea,4));
+//                    }
+
+                    if ($nameArea == 6 && $key == 'Default' && !empty($value)){
+                        $I->clicked("//input[@id='settings_country_list']",'Expand country list');
+                        $I->clickByJS("//span[normalize-space()='$value']");
+
+                    }elseif ($nameArea == 6 && $key == 'Help Message'){
+                        continue;
+                    }else{
+                        if ($value){
+                            $I->filledField(GeneralFields::nameFieldSelectors($nameArea, $key), $value);
+                        }
+                    }
+                }
+            }
+        };
+
+        // calling local function, reverse order for scrolling issue
+        $addressFieldLocalFunction($I, $basicOperand['country'], 6,);
+        $addressFieldLocalFunction($I, $basicOperand['zip'], 5,);
+        $addressFieldLocalFunction($I, $basicOperand['state'], 4,);
+        $addressFieldLocalFunction($I, $basicOperand['city'], 3,);
+        $addressFieldLocalFunction($I, $basicOperand['addressLine2'], 2,);
+        $addressFieldLocalFunction($I, $basicOperand['addressLine1'], 1,);
+
+
+        // Label Placement (Hidden Label)
+        if ($isHiddenLabel) {
+            $I->clicked("(//span[normalize-space()='Hide Label'])[1]");
+        }
+
+        //                                           Advanced options                                              //
+
+        if (isset($advancedOperand)) {
+            $I->clicked(GeneralFields::advancedOptions);
+
+            $advancedOperand['elementClass'] // Element Class
+                ? $I->filledField(GeneralFields::customizationFields('Element Class'), $advancedOperand['elementClass'], 'Fill As Element Class')
+                : null;
+
+            $advancedOperand['nameAttribute'] // Name Attribute
+                ? $I->filledField(GeneralFields::customizationFields('Name Attribute'), $advancedOperand['nameAttribute'], 'Fill As Name Attribute')
+                : null;
+        }
+
+        $I->clickByJS(FluentFormsSelectors::saveForm);
+        $I->seeSuccess('The form is successfully updated.');
+
+    }
+
 }
