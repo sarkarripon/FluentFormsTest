@@ -865,7 +865,7 @@ trait AdvancedFieldCustomizer
 
     public function customizeRepeatField(
         AcceptanceTester $I,
-                         $fieldName,
+        $fieldName,
         ?array $basicOptions = null,
         ?array $advancedOptions = null,
         ?bool $isHiddenLabel = false
@@ -878,17 +878,13 @@ trait AdvancedFieldCustomizer
 
         $basicOptionsDefault = [
             'adminFieldLabel' => false,
-            'addressLine1' => false,
-            'addressLine2' => false,
-            'city' => false,
-            'state' => false,
-            'zip' => false,
-            'country' => false,
+            'repeatFieldColumns' => false,
         ];
 
         $advancedOptionsDefault = [
             'elementClass' => false,
             'nameAttribute' => false,
+            'maxRepeatInputs' => false,
         ];
 
         if (!is_null($basicOptions)) {

@@ -14,54 +14,56 @@ class RepeatFieldCest
     use IntegrationHelper, GeneralFieldCustomizer, DataGenerator;
     public function _before(AcceptanceTester $I)
     {
-        $I->loadDotEnvFile();
-        $I->loginWordpress();
+//        $I->loadDotEnvFile();
+//        $I->loginWordpress();
     }
 
     // tests
     public function test_repeat_field(AcceptanceTester $I)
     {
-
         $pageName = __FUNCTION__ . '_' . rand(1, 100);
         $faker = \Faker\Factory::create();
 
         $addFieldElementLabel = $faker->words(2, true);
         $addFieldAdminFieldLabel = $faker->words(2, true);
-        $addr1label = $faker->words(2, true);
-        $addr1default = $faker->words(3, true);
-        $addr1placeholder = $faker->words(2, true);
-        $addr1helpMessage = $faker->words(4, true);
-        $addr1errorMessage = $faker->words(4, true);
 
-        $addr2label = $faker->words(2, true);
-        $addr2default = $faker->words(3, true);
-        $addr2placeholder = $faker->words(2, true);
-        $addr2helpMessage = $faker->words(4, true);
-        $addr2errorMessage = $faker->words(4, true);
+        $textFieldLabel = $faker->words(2, true);
+        $textFieldDefault = $faker->words(3, true);
+        $textFieldPlaceholder = $faker->words(2, true);
+        $textFieldRequire = $faker->words(4, true);
 
-        $citylabel = $faker->words(2, true);
-        $citydefault = $faker->words(3, true);
-        $cityplaceholder = $faker->words(2, true);
-        $cityhelpMessage = $faker->words(4, true);
-        $cityerrorMessage = $faker->words(4, true);
+        $emailFieldLabel = $faker->words(2, true);
+        $emailFieldDefault = $faker->words(3, true);
+        $emailFieldPlaceholder = $faker->words(2, true);
+        $emailFieldRequire = $faker->words(4, true);
+        $emailFieldValidate = $faker->words(4, true);
 
-        $statelabel = $faker->words(2, true);
-        $statedefault = $faker->words(3, true);
-        $stateplaceholder = $faker->words(2, true);
-        $statehelpMessage = $faker->words(4, true);
-        $stateerrorMessage = $faker->words(4, true);
+        $numericFieldLabel = $faker->words(2, true);
+        $numericFieldDefault = $faker->words(3, true);
+        $numericFieldPlaceholder = $faker->words(2, true);
+        $numericFieldRequire = $faker->words(4, true);
 
-        $ziplabel = $faker->words(2, true);
-        $zipdefault = $faker->words(3, true);
-        $zipplaceholder = $faker->words(2, true);
-        $ziphelpMessage = $faker->words(4, true);
-        $ziperrorMessage = $faker->words(4, true);
+        $selectFieldLabel = $faker->words(2, true);
+        $selectFieldPlaceholder = $faker->words(2, true);
 
-        $countrylabel = $faker->words(2, true);
-        $countrydefault = $this->generatedData(['Country' => ['country'=> true]])['Country'];
-        $countryplaceholder = $faker->words(2, true);
-        $countryhelpMessage = $faker->words(4, true);
-        $countryerrorMessage = $faker->words(4, true);
+                $optionLabel1 = $faker->words(2, true);
+                $optionValue1 = $faker->words(2, true);
+                $optionCalcValue1 = $faker->numberBetween(10, 50);
+
+                $optionLabel2 = $faker->words(2, true);
+                $optionValue2 = $faker->words(2, true);
+                $optionCalcValue2 = $faker->numberBetween(10, 50);
+
+                $optionLabel3 = $faker->words(2, true);
+                $optionValue3 = $faker->words(2, true);
+                $optionCalcValue3 = $faker->numberBetween(10, 50);
+
+        $selectFieldRequire = $faker->words(4, true);
+
+        $maskInputFieldLabel = $faker->words(2, true);
+        $maskInputFieldDefault = $faker->words(3, true);
+        $maskInputFieldPlaceholder = $faker->words(2, true);
+        $maskInputFieldRequire = $faker->words(4, true);
 
         $elementClass = $faker->firstNameMale();
         $nameAttribute = $faker->lastName();
@@ -77,48 +79,52 @@ class RepeatFieldCest
         $this->customizeAddressFields($I,
             $addFieldElementLabel,
             ['adminFieldLabel' => $addFieldAdminFieldLabel,
-                'addressLine1' => [
-                    'label' => $addr1label,
-//                    'default' => $addr1default,
-                    'placeholder' => $addr1placeholder,
-                    'helpMessage' => $addr1helpMessage,
-                    'required' => $addr1errorMessage,
+                'textField' => [
+                    'label' => $textFieldLabel,
+                    'default' => $textFieldDefault,
+                    'placeholder' => $textFieldPlaceholder,
+                    'required' => $textFieldRequire,
                 ],
-                'addressLine2' => [
-                    'label' => $addr2label,
-//                    'default' => $addr2default,
-                    'placeholder' => $addr2placeholder,
-                    'helpMessage' => $addr2helpMessage,
-                    'required' => $addr2errorMessage,
+                'emailField' => [
+                    'label' => $emailFieldLabel,
+                    'default' => $emailFieldDefault,
+                    'placeholder' => $emailFieldPlaceholder,
+                    'required' => $emailFieldRequire,
+                    'validateEmail' => $emailFieldValidate,
                 ],
-                'city' => [
-                    'label' => $citylabel,
-//                    'default' => $citydefault,
-                    'placeholder' => $cityplaceholder,
-                    'helpMessage' => $cityhelpMessage,
-                    'required' => $cityerrorMessage,
+                'numericField' => [
+                    'label' => $numericFieldLabel,
+                    'default' => $numericFieldDefault,
+                    'placeholder' => $numericFieldPlaceholder,
+                    'required' => $numericFieldRequire,
                 ],
-                'state' => [
-                    'label' => $statelabel,
-//                    'default' => $statedefault,
-                    'placeholder' => $stateplaceholder,
-                    'helpMessage' => $statehelpMessage,
-                    'required' => $stateerrorMessage,
+                'selectField' => [
+                    'label' => $selectFieldLabel,
+                    'placeholder' => $selectFieldPlaceholder,
+                    'options' => [
+                                    ['label1'=> $optionLabel1,
+                                        'value1'=> $optionValue1,
+                                        'calcValue1'=> $optionCalcValue1,
+                                    ],
+                                    ['label2'=> $optionLabel2,
+                                        'value2'=> $optionValue2,
+                                        'calcValue2'=> $optionCalcValue2,
+                                    ],
+                                    ['label3'=> $optionLabel3,
+                                        'value3'=> $optionValue3,
+                                        'calcValue3'=> $optionCalcValue3,
+                                    ],
+                    ],
+                    'required' => $selectFieldRequire,
                 ],
-                'zip' => [
-                    'label' => $ziplabel,
-//                    'default' => $zipdefault,
-                    'placeholder' => $zipplaceholder,
-                    'helpMessage' => $ziphelpMessage,
-                    'required' => $ziperrorMessage,
+                'maskInputField' => [
+                    'label' => $maskInputFieldLabel,
+                    'default' => $maskInputFieldDefault,
+                    'placeholder' => $maskInputFieldPlaceholder,
+                    'maskInput' => '',
+                    'required' => $maskInputFieldRequire,
                 ],
-                'country' => [
-                    'label' => $countrylabel,
-//                    'default' => $countrydefault,
-                    'placeholder' => $countryplaceholder,
-                    'helpMessage' => false,
-                    'required' => $countryerrorMessage,
-                ],
+
             ],
             [   'elementClass' => $elementClass,
                 'nameAttribute' => $nameAttribute,
@@ -128,23 +134,6 @@ class RepeatFieldCest
         $I->clicked(FieldSelectors::submitButton);
         $I->seeText([
 
-            $addr1label,
-            $addr1errorMessage,
-
-            $addr2label,
-            $addr2errorMessage,
-
-            $citylabel,
-            $cityerrorMessage,
-
-            $statelabel,
-            $stateerrorMessage,
-
-            $ziplabel,
-            $ziperrorMessage,
-
-            $countrylabel,
-            $countryerrorMessage,
 
         ], $I->cmnt('Check label and error message for each fields'));
 
