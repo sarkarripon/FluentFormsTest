@@ -5,17 +5,18 @@ namespace Tests\AdvancedFields;
 
 use Tests\Support\AcceptanceTester;
 use Tests\Support\Factories\DataProvider\DataGenerator;
+use Tests\Support\Helper\AdvancedFieldCustomizer;
 use Tests\Support\Helper\GeneralFieldCustomizer;
 use Tests\Support\Helper\Integrations\IntegrationHelper;
 use Tests\Support\Selectors\FieldSelectors;
 
 class RepeatFieldCest
 {
-    use IntegrationHelper, GeneralFieldCustomizer, DataGenerator;
+    use IntegrationHelper, AdvancedFieldCustomizer, DataGenerator;
     public function _before(AcceptanceTester $I)
     {
-//        $I->loadDotEnvFile();
-//        $I->loginWordpress();
+        $I->loadDotEnvFile();
+        $I->loginWordpress();
     }
 
     // tests
@@ -65,72 +66,76 @@ class RepeatFieldCest
         $maskInputFieldPlaceholder = $faker->words(2, true);
         $maskInputFieldRequire = $faker->words(4, true);
 
-        $elementClass = $faker->firstNameMale();
+        $containerClass = $faker->firstNameMale();
         $nameAttribute = $faker->lastName();
+        $maxRepeatInputs = $faker->numberBetween(2, 5);
 
         $customName = [
-            'addressFields' => $addFieldElementLabel,
+            'repeat' => $addFieldElementLabel,
         ];
 
         $this->prepareForm($I, $pageName, [
-            'generalFields' => ['addressFields'],
+            'advancedFields' => ['repeat'],
         ], true, $customName);
 
-        $this->customizeAddressFields($I,
+        $this->customizeRepeatField($I,
             $addFieldElementLabel,
             ['adminFieldLabel' => $addFieldAdminFieldLabel,
-                'textField' => [
-                    'label' => $textFieldLabel,
-                    'default' => $textFieldDefault,
-                    'placeholder' => $textFieldPlaceholder,
-                    'required' => $textFieldRequire,
+                'repeatFieldColumns' => [
+                            'textField' => [
+                                'label' => $textFieldLabel,
+                                'default' => $textFieldDefault,
+                                'placeholder' => $textFieldPlaceholder,
+                                'required' => $textFieldRequire,
+                            ],
+                            'emailField' => [
+                                'label' => $emailFieldLabel,
+                                'default' => $emailFieldDefault,
+                                'placeholder' => $emailFieldPlaceholder,
+                                'required' => $emailFieldRequire,
+                                'validateEmail' => $emailFieldValidate,
+                            ],
+                            'numericField' => [
+                                'label' => $numericFieldLabel,
+                                'default' => $numericFieldDefault,
+                                'placeholder' => $numericFieldPlaceholder,
+                                'required' => $numericFieldRequire,
+                            ],
+                            'selectField' => [
+                                'label' => $selectFieldLabel,
+                                'placeholder' => $selectFieldPlaceholder,
+                                'options' => [
+                                                ['label1'=> $optionLabel1,
+                                                    'value1'=> $optionValue1,
+                                                    'calcValue1'=> $optionCalcValue1,
+                                                ],
+                                                ['label2'=> $optionLabel2,
+                                                    'value2'=> $optionValue2,
+                                                    'calcValue2'=> $optionCalcValue2,
+                                                ],
+                                                ['label3'=> $optionLabel3,
+                                                    'value3'=> $optionValue3,
+                                                    'calcValue3'=> $optionCalcValue3,
+                                                ],
+                                ],
+                                'required' => $selectFieldRequire,
+                            ],
+                            'maskInputField' => [
+                                'label' => $maskInputFieldLabel,
+                                'default' => $maskInputFieldDefault,
+                                'placeholder' => $maskInputFieldPlaceholder,
+                                'maskInput' => '',
+                                'required' => $maskInputFieldRequire,
+                            ],
                 ],
-                'emailField' => [
-                    'label' => $emailFieldLabel,
-                    'default' => $emailFieldDefault,
-                    'placeholder' => $emailFieldPlaceholder,
-                    'required' => $emailFieldRequire,
-                    'validateEmail' => $emailFieldValidate,
-                ],
-                'numericField' => [
-                    'label' => $numericFieldLabel,
-                    'default' => $numericFieldDefault,
-                    'placeholder' => $numericFieldPlaceholder,
-                    'required' => $numericFieldRequire,
-                ],
-                'selectField' => [
-                    'label' => $selectFieldLabel,
-                    'placeholder' => $selectFieldPlaceholder,
-                    'options' => [
-                                    ['label1'=> $optionLabel1,
-                                        'value1'=> $optionValue1,
-                                        'calcValue1'=> $optionCalcValue1,
-                                    ],
-                                    ['label2'=> $optionLabel2,
-                                        'value2'=> $optionValue2,
-                                        'calcValue2'=> $optionCalcValue2,
-                                    ],
-                                    ['label3'=> $optionLabel3,
-                                        'value3'=> $optionValue3,
-                                        'calcValue3'=> $optionCalcValue3,
-                                    ],
-                    ],
-                    'required' => $selectFieldRequire,
-                ],
-                'maskInputField' => [
-                    'label' => $maskInputFieldLabel,
-                    'default' => $maskInputFieldDefault,
-                    'placeholder' => $maskInputFieldPlaceholder,
-                    'maskInput' => '',
-                    'required' => $maskInputFieldRequire,
-                ],
-
             ],
-            [   'elementClass' => $elementClass,
+            [   'containerClass' => $containerClass,
                 'nameAttribute' => $nameAttribute,
+                'maxRepeatInputs' => $maxRepeatInputs,
             ]
         );
         $this->preparePage($I, $pageName);
+        exit();
         $I->clicked(FieldSelectors::submitButton);
         $I->seeText([
 
