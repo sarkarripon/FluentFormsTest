@@ -900,6 +900,97 @@ trait AdvancedFieldCustomizer
         if (isset($basicOperand) && $basicOperand['adminFieldLabel']) {
             $I->filledField(GeneralFields::adminFieldLabel, $basicOperand['adminFieldLabel'], 'Fill As Admin Field Label');
         }
+
+        if (isset($basicOperand) && $basicOperand['repeatFieldColumns']) {
+            $columnType = $basicOperand['repeatFieldColumns'];
+
+            $totalColumnNeeded = count($basicOperand['repeatFieldColumns']);
+//            $columnArray = range(1, $totalColumnNeeded);
+            global $nextIndex;
+            global $index;
+            $nextIndex = null;
+            $index = 1;
+                if (isset($columnType['textField'])){
+                    $addColumn = $index ?? 1;
+                    $nextColumn = $nextIndex ?? 1;
+
+                    if($nextIndex >= 2){
+                        $I->clicked("(//span[@class='ff-repeater-setting-label']/following::i[contains(@class,'el-icon-plus')])[$addColumn]", "Add column $addColumn");
+                    }
+                    $I->clicked("(//div[@class='ff-repeater-title'])[$nextColumn]",'Expand column '.$nextColumn);
+                    $I->clicked("(//span[@class='ff-repeater-setting-label']/following::i[contains(@class,'el-icon-arrow-up')])[$nextColumn]",'Expand Field type in column' . $nextColumn);
+                    $I->clickOnExactText('Text Field','Field Type',null,1,"Select field type");
+
+                    $fieldData = [
+                        'Label' => $columnType['textField']['label'] ?? false,
+                        'Default' => $columnType['textField']['default'] ?? false,
+                        'Placeholder' => $columnType['textField']['placeholder'] ?? false,
+                        'Required' => $columnType['textField']['required'] ?? false,
+                    ];
+                    foreach ($fieldData as $key => $value) {
+                        if ($key == "Label") {
+                            $I->filledField(GeneralFields::customizationFields('Label'), $value, 'Fill As Label');
+                        }
+                        if ($key == "Default") {
+                            $I->filledField(GeneralFields::defaultField, $value, 'Fill As Default');
+                        }
+                        if ($key == "Placeholder") {
+                            $I->filledField(GeneralFields::customizationFields('Placeholder'), $value, 'Fill As Placeholder');
+                        }
+                        if ($key == "Required") {
+                            $I->clicked(GeneralFields::isRequire($nextColumn));
+                            if ($I->checkElement("(//div[contains(@class, 'is-checked') and @role='switch'])[1]")){
+                                $I->clickByJS("(//div[contains(@class, 'is-checked') and @role='switch'])[1]",'Enable custom error message');
+                            }
+                        }
+                    }
+
+                    $I->clicked("(//div[@class='ff-repeater-title'])[$nextColumn]",'Collapse column '.$nextColumn);
+                    $nextIndex = $addColumn + 1;
+                    $index = $addColumn;
+                }
+
+                if (isset($columnType['emailField'])){
+                    $addColumn = $index ?? 1;
+                    $nextColumn = $nextIndex ?? 1;
+                    if($nextIndex >= 2){
+                        $I->clicked("(//span[@class='ff-repeater-setting-label']/following::i[contains(@class,'el-icon-plus')])[$addColumn]", "Add column $addColumn");
+                    }
+                    $I->clicked("(//div[@class='ff-repeater-title'])[$nextColumn]",'Expand column '.$nextColumn);
+                    $I->clicked("(//span[@class='ff-repeater-setting-label']/following::i[contains(@class,'el-icon-arrow-up')])[$nextColumn]",'Expand Field type in column '.$nextColumn);
+                    $I->clickOnExactText('Email Field','Field Type',null,1,"Select field type");
+
+
+
+                    $I->clicked("(//div[@class='ff-repeater-title'])[$nextColumn]",'Collapse column '.$nextColumn);
+
+                    $nextIndex = $addColumn + 1;
+                    $index = $addColumn;
+                }
+
+                if (isset($columnType['numericField'])){
+                    $addColumn = $index ?? 1;
+                    $nextColumn = $nextIndex ?? 1;
+                    if($nextIndex >= 2){
+                        $I->clicked("(//span[@class='ff-repeater-setting-label']/following::i[contains(@class,'el-icon-plus')])[$addColumn]", "Add column $addColumn");
+                    }
+                    $I->clicked("(//div[@class='ff-repeater-title'])[$nextColumn]",'Expand column '.$nextColumn);
+                    $I->clicked("(//span[@class='ff-repeater-setting-label']/following::i[contains(@class,'el-icon-arrow-up')])[$nextColumn]",'Expand Field type in column '.$nextColumn);
+                    $I->clickOnExactText('Numeric Field','Field Type',null,1,"Select field type");
+
+                    //...........................
+
+
+                    $I->clicked("(//div[@class='ff-repeater-title'])[$nextColumn]",'Collapse column '.$nextColumn);
+
+                    $nextIndex = $addColumn + 1;
+                    $index = $addColumn;
+                }
+
+
+
+        }
+
         // this function will be called locally to fill address fields
 //        $addressFieldLocalFunction = function (AcceptanceTester $I, $whichName, $nameArea) {
 //            // Address Fields
