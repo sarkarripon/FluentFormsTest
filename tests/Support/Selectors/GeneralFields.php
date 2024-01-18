@@ -11,16 +11,33 @@ class GeneralFields{
     {
         return "(//*[normalize-space()='$label']/following::input[@type='text'])[1]";
     }
+
+    public static function sectionWiseFields($nameArea, $label): string
+    {
+        return "((//div[contains(@class,'address-field-option__settings')])[$nameArea]//*[normalize-space()='$label']/following::input[@type='text'])[1]";
+    }
     public static function nameFieldSelectors(int $nameArea, string $label )
     {
-        // namearea = 1,2,3 label = Label, Default, Placeholder, Help Message, Error Message
+        // nameArea = 1,2,3 label = Label, Default, Placeholder, Help Message, Error Message
         return "((//div[contains(@class,'address-field-option__settings')])[$nameArea]//*[contains(text(),'$label')]/following::input[@type='text'])[1]";
     }
-    public static function isRequire(int $nameArea, $index=1)
+    public static function isRequire(int $nameArea, $index=1): string
     {
-        return "((//div[contains(@class,'address-field-option__settings')])[$nameArea]//*[@class='el-radio__inner'])[$index]";
+        $indexPart = "";
+        if ($index !== null) {
+            $indexPart = "[$index]";
+        }
+        return "((//div[contains(@class,'address-field-option__settings')])[$nameArea]//*[@class='el-radio__inner'])$indexPart";
     }
-    public static function radioSelect($label, $index = 1)
+    public static function errorMessageType(int $nameArea, $index=1): string
+    {
+        $indexPart = "";
+        if ($index !== null) {
+            $indexPart = "[$index]";
+        }
+        return "((//div[contains(@class,'address-field-option__settings')])[$nameArea]//div[contains(@class, 'is-checked') and @role='switch'])$indexPart";
+    }
+    public static function radioSelect($label, $index = 1): string
     {
         $indexPart = "";
         if ($index !== null) {
@@ -32,6 +49,18 @@ class GeneralFields{
     {
         $preceding = $precedingElement ?? "//*[contains(@class,'checkbox-label')]";
         return "($preceding/preceding::span[@class='el-checkbox__inner'])[1]";
+    }
+    public static function indexedDefaultField($nameArea): string
+    {
+        return "((//div[contains(@class,'address-field-option__settings')])[$nameArea]//div[contains(@class,'el-input-group--append')]//input[@type='text'])[1]";
+    }
+    public static function addFieldInSection($nameArea, $index): string
+    {
+        return "((//div[contains(@class,'address-field-option__settings')])[$nameArea]//i[contains(@class,'el-icon-plus')])[{$index}]";
+    }
+    public static function removeFieldInSection($nameArea, $index): string
+    {
+        return "((//div[contains(@class,'address-field-option__settings')])[$nameArea]//i[contains(@class,'el-icon-minus')])[{$index}]";
     }
     const defaultField = "//div[contains(@class,'el-input-group--append')]//input[@type='text']";
 

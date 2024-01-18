@@ -222,6 +222,7 @@ class FluentFormsSelectors
     {
         return "(//i[contains(@class,'el-icon-plus')])[{$index}]";
     }
+
     public static function removeField($index): string
     {
         return "(//i[contains(@class,'el-icon-minus')])[{$index}]";

@@ -863,6 +863,24 @@ trait AdvancedFieldCustomizer
 
     }
 
+    private static $nextIndex = 1;
+    private static $index = 0;
+
+    public static function getNextIndex() {
+        return self::$nextIndex;
+    }
+
+    public static function getIndex() {
+        return self::$index;
+    }
+
+    public static function incrementNextIndex() {
+        self::$nextIndex++;
+    }
+
+    public static function incrementIndex() {
+        self::$index++;
+    }
     public function customizeRepeatField(
         AcceptanceTester $I,
         $fieldName,
@@ -904,160 +922,275 @@ trait AdvancedFieldCustomizer
         if (isset($basicOperand) && $basicOperand['repeatFieldColumns']) {
             $columnType = $basicOperand['repeatFieldColumns'];
 
-            $totalColumnNeeded = count($basicOperand['repeatFieldColumns']);
-//            $columnArray = range(1, $totalColumnNeeded);
-            global $nextIndex;
-            global $index;
-            $nextIndex = null;
-            $index = 1;
                 if (isset($columnType['textField'])){
-                    $addColumn = $index ?? 1;
-                    $nextColumn = $nextIndex ?? 1;
+                    echo AdvancedFieldCustomizer::getIndex();
+                    echo AdvancedFieldCustomizer::getNextIndex();
+                    $addColumn = AdvancedFieldCustomizer::getIndex() ?? 1;
+                    $nextColumn = AdvancedFieldCustomizer::getNextIndex() ?? 1;
 
-                    if($nextIndex >= 2){
-                        $I->clicked("(//span[@class='ff-repeater-setting-label']/following::i[contains(@class,'el-icon-plus')])[$addColumn]", "Add column $addColumn");
+                    if(AdvancedFieldCustomizer::getIndex() >= 1){
+                        $I->clicked("(//span[@class='ff-repeater-setting-label']/following::i[contains(@class,'el-icon-plus')])[$addColumn]", "Add column " .$addColumn);
+    
                     }
                     $I->clicked("(//div[@class='ff-repeater-title'])[$nextColumn]",'Expand column '.$nextColumn);
-                    $I->clicked("(//span[@class='ff-repeater-setting-label']/following::i[contains(@class,'el-icon-arrow-up')])[$nextColumn]",'Expand Field type in column' . $nextColumn);
+                    $I->clicked("(//span[@class='ff-repeater-setting-label']/following::i[contains(@class,'el-icon-arrow-up')])[$nextColumn]",'Expand Field type in column ' . $nextColumn);
                     $I->clickOnExactText('Text Field','Field Type',null,1,"Select field type");
 
                     $fieldData = [
                         'Label' => $columnType['textField']['label'] ?? false,
                         'Default' => $columnType['textField']['default'] ?? false,
                         'Placeholder' => $columnType['textField']['placeholder'] ?? false,
-                        'Required' => $columnType['textField']['required'] ?? false,
+                        'Custom' => $columnType['textField']['required'] ?? false,
                     ];
+
                     foreach ($fieldData as $key => $value) {
                         if ($key == "Label") {
-                            $I->filledField(GeneralFields::customizationFields('Label'), $value, 'Fill As Label');
+                            $I->filledField(GeneralFields::sectionWiseFields($nextColumn,$key), $value, 'Fill As textField Label');
                         }
                         if ($key == "Default") {
-                            $I->filledField(GeneralFields::defaultField, $value, 'Fill As Default');
+                            $I->filledField(GeneralFields::indexedDefaultField($nextColumn), $value, 'Fill As textField Default');
                         }
                         if ($key == "Placeholder") {
-                            $I->filledField(GeneralFields::customizationFields('Placeholder'), $value, 'Fill As Placeholder');
+                            $I->filledField(GeneralFields::sectionWiseFields($nextColumn,$key), $value, 'Fill As textField Placeholder');
                         }
-                        if ($key == "Required") {
-                            $I->clicked(GeneralFields::isRequire($nextColumn));
-                            if ($I->checkElement("(//div[contains(@class, 'is-checked') and @role='switch'])[1]")){
-                                $I->clickByJS("(//div[contains(@class, 'is-checked') and @role='switch'])[1]",'Enable custom error message');
+                        if ($key == "Custom") {
+                            $I->clicked(GeneralFields::isRequire($nextColumn,1));
+                            if ($I->checkElement(GeneralFields::errorMessageType($nextColumn,1))){
+                                $I->clickByJS(GeneralFields::errorMessageType($nextColumn,1),'Enable custom error message');
                             }
+                            $I->filledField(GeneralFields::sectionWiseFields($nextColumn,$key), $value, 'Fill As custom error message');
                         }
                     }
 
-                    $I->clicked("(//div[@class='ff-repeater-title'])[$nextColumn]",'Collapse column '.$nextColumn);
-                    $nextIndex = $addColumn + 1;
-                    $index = $addColumn;
+//                    $I->clicked("(//div[@class='ff-repeater-title'])[$nextColumn]",'Collapse column '.$nextColumn);
+                    AdvancedFieldCustomizer::incrementNextIndex();
+                    AdvancedFieldCustomizer::incrementIndex();
                 }
 
                 if (isset($columnType['emailField'])){
-                    $addColumn = $index ?? 1;
-                    $nextColumn = $nextIndex ?? 1;
-                    if($nextIndex >= 2){
+                    echo AdvancedFieldCustomizer::getIndex();
+                    echo AdvancedFieldCustomizer::getNextIndex();
+                    $addColumn = AdvancedFieldCustomizer::getIndex() ?? 1;
+                    $nextColumn = AdvancedFieldCustomizer::getNextIndex() ?? 1;
+
+                    if(AdvancedFieldCustomizer::getIndex() >= 1){
                         $I->clicked("(//span[@class='ff-repeater-setting-label']/following::i[contains(@class,'el-icon-plus')])[$addColumn]", "Add column $addColumn");
+    
                     }
                     $I->clicked("(//div[@class='ff-repeater-title'])[$nextColumn]",'Expand column '.$nextColumn);
                     $I->clicked("(//span[@class='ff-repeater-setting-label']/following::i[contains(@class,'el-icon-arrow-up')])[$nextColumn]",'Expand Field type in column '.$nextColumn);
                     $I->clickOnExactText('Email Field','Field Type',null,1,"Select field type");
 
+                    $fieldData = [
+                        'Label' => $columnType['emailField']['label'] ?? false,
+                        'Default' => $columnType['emailField']['default'] ?? false,
+                        'Placeholder' => $columnType['emailField']['placeholder'] ?? false,
+                        'Custom' => $columnType['emailField']['required'] ?? false,
+                        'Validate Email' => $columnType['emailField']['validateEmail'] ?? false,
+                    ];
 
+                    foreach ($fieldData as $key => $value) {
+                        if ($key == "Label") {
+                            $I->filledField(GeneralFields::sectionWiseFields($nextColumn, $key), $value, 'Fill As emailField Label');
+                        }
+                        if ($key == "Default") {
+                            $I->filledField(GeneralFields::indexedDefaultField($nextColumn), $value, 'Fill As emailField Default');
+                        }
+                        if ($key == "Placeholder") {
+                            $I->filledField(GeneralFields::sectionWiseFields($nextColumn, $key), $value, 'Fill As emailField Placeholder');
+                        }
+                        if ($key == "Custom") {
+                            $I->clicked(GeneralFields::isRequire($nextColumn,1));
+                            if ($I->checkElement(GeneralFields::errorMessageType($nextColumn,1))){
+                                $I->clickByJS(GeneralFields::errorMessageType($nextColumn,1),'Enable emailField custom error message');
+                            }
+                            $I->filledField(GeneralFields::sectionWiseFields($nextColumn, $key), $value, 'Fill As emailField custom error message');
+                        }
 
-                    $I->clicked("(//div[@class='ff-repeater-title'])[$nextColumn]",'Collapse column '.$nextColumn);
-
-                    $nextIndex = $addColumn + 1;
-                    $index = $addColumn;
+                        if ($key == "Validate Email") {
+                            if ($I->checkElement("(//div[normalize-space()='Validate Email']/following::div[contains(@class, 'is-checked') and @role='switch'])")){
+                                $I->clickByJS("(//div[normalize-space()='Validate Email']/following::div[contains(@class, 'is-checked') and @role='switch'])",'Enable custom error message');
+                            }
+                            $I->filledField(GeneralFields::sectionWiseFields($nextColumn, $key), $value, 'Fill As Email Validation Message');
+                        }
+                    }
+//                    $I->clicked("(//div[@class='ff-repeater-title'])[$nextColumn]",'Collapse column '.$nextColumn);
+                    AdvancedFieldCustomizer::incrementNextIndex();
+                    AdvancedFieldCustomizer::incrementIndex();
                 }
 
                 if (isset($columnType['numericField'])){
-                    $addColumn = $index ?? 1;
-                    $nextColumn = $nextIndex ?? 1;
-                    if($nextIndex >= 2){
+                    echo AdvancedFieldCustomizer::getIndex();
+                    echo AdvancedFieldCustomizer::getNextIndex();
+                    $addColumn = AdvancedFieldCustomizer::getIndex() ?? 1;
+                    $nextColumn = AdvancedFieldCustomizer::getNextIndex() ?? 1;
+
+                    if(AdvancedFieldCustomizer::getIndex() >= 1){
                         $I->clicked("(//span[@class='ff-repeater-setting-label']/following::i[contains(@class,'el-icon-plus')])[$addColumn]", "Add column $addColumn");
+    
                     }
                     $I->clicked("(//div[@class='ff-repeater-title'])[$nextColumn]",'Expand column '.$nextColumn);
                     $I->clicked("(//span[@class='ff-repeater-setting-label']/following::i[contains(@class,'el-icon-arrow-up')])[$nextColumn]",'Expand Field type in column '.$nextColumn);
                     $I->clickOnExactText('Numeric Field','Field Type',null,1,"Select field type");
 
-                    //...........................
+                    $fieldData = [
+                        'Label' => $columnType['numericField']['label'] ?? false,
+                        'Default' => $columnType['numericField']['default'] ?? false,
+                        'Placeholder' => $columnType['numericField']['placeholder'] ?? false,
+                        'Custom' => $columnType['numericField']['required'] ?? false,
+                    ];
+
+                    foreach ($fieldData as $key => $value) {
+                        if ($key == "Label") {
+                            $I->filledField(GeneralFields::sectionWiseFields($nextColumn,$key), $value, 'Fill As numericField Label');
+                        }
+                        if ($key == "Default") {
+                            $I->filledField(GeneralFields::indexedDefaultField($nextColumn), $value, 'Fill As numericField Default');
+                        }
+                        if ($key == "Placeholder") {
+                            $I->filledField(GeneralFields::sectionWiseFields($nextColumn,$key), $value, 'Fill As numericField Placeholder');
+                        }
+                        if ($key == "Custom") {
+                            $I->clicked(GeneralFields::isRequire($nextColumn,1));
+                            if ($I->checkElement(GeneralFields::errorMessageType($nextColumn,1))){
+                                $I->clickByJS(GeneralFields::errorMessageType($nextColumn,1),'Enable numericField custom error message');
+                            }
+                            $I->filledField(GeneralFields::sectionWiseFields($nextColumn,$key), $value, 'Fill As numericField custom error message');
+                        }
+                    }
 
 
-                    $I->clicked("(//div[@class='ff-repeater-title'])[$nextColumn]",'Collapse column '.$nextColumn);
-
-                    $nextIndex = $addColumn + 1;
-                    $index = $addColumn;
+//                    $I->clicked("(//div[@class='ff-repeater-title'])[$nextColumn]",'Collapse column '.$nextColumn);
+                    AdvancedFieldCustomizer::incrementNextIndex();
+                    AdvancedFieldCustomizer::incrementIndex();
                 }
 
+            if (isset($columnType['selectField'])){
+                echo AdvancedFieldCustomizer::getIndex();
+                echo AdvancedFieldCustomizer::getNextIndex();
+                $addColumn = AdvancedFieldCustomizer::getIndex() ?? 1;
+                $nextColumn = AdvancedFieldCustomizer::getNextIndex() ?? 1;
+                if(AdvancedFieldCustomizer::getIndex() >= 1){
+                    $I->clicked("(//span[@class='ff-repeater-setting-label']/following::i[contains(@class,'el-icon-plus')])[$addColumn]", "Add column $addColumn");
+                }
+                $I->clicked("(//div[@class='ff-repeater-title'])[$nextColumn]",'Expand column '.$nextColumn);
+                $I->clicked("(//span[@class='ff-repeater-setting-label']/following::i[contains(@class,'el-icon-arrow-up')])[$nextColumn]",'Expand Field type in column '.$nextColumn);
+                $I->clickOnExactText('Select Field','Field Type',null,1,"Select field type");
+
+                $fieldData = [
+                    'Label' => $columnType['selectField']['label'] ?? false,
+                    'Placeholder' => $columnType['selectField']['placeholder'] ?? false,
+                    'Options' => $columnType['selectField']['options'] ?? null,
+                    'Custom' => $columnType['selectField']['required'] ?? false,
+                ];
+
+                foreach ($fieldData as $labelName => $labelValue) {
+                    if ($labelName == "Label") {
+                        $I->filledField(GeneralFields::sectionWiseFields($nextColumn,$labelName), $labelValue, 'Fill As selectField Label');
+                    }
+
+                    if ($labelName == "Placeholder") {
+                        $I->filledField(GeneralFields::sectionWiseFields($nextColumn,$labelName), $labelValue, 'Fill As selectField Placeholder');
+                    }
+
+                    if ($labelName == "Options") {
+                        global $removeField;
+                        $removeField = 1;
+                        $fieldCounter = 1;
+
+                        foreach ($labelValue as $fieldContents) {
+
+                            $value = $fieldContents['value'];
+                            $label = $fieldContents['label'];
+                            $calcValue = $fieldContents['calcValue'];
+
+                            $label
+                                ? $I->filledField("(//input[@placeholder='label'])[$fieldCounter]", $label, 'Fill As Label')
+                                : null;
+
+                            if (isset($value)) {
+                                if ($fieldCounter === 1) {
+                                    $I->clicked("(//span[@class='el-checkbox__inner'])[1]", 'Select Show Values');
+                                }
+                                $I->filledField("(//input[@placeholder='value'])[$fieldCounter]", $value, 'Fill As Value');
+                            }
+                            if (isset($calcValue)) {
+                                if ($fieldCounter === 1) {
+                                    $I->clicked("(//span[@class='el-checkbox__inner'])[2]", 'Select Calc Values');
+                                }
+                                $I->filledField("(//input[@placeholder='calc value'])[$fieldCounter]", $calcValue, 'Fill As calc Value');
+                            }
+
+                            if ($fieldCounter >= 2) {
+                                $I->clickByJS(GeneralFields::addFieldInSection($nextColumn, $fieldCounter), 'Add Field');
+                            }
+                            $fieldCounter++;
+                            $removeField += 1;
+                        }
+                        $I->clicked(GeneralFields::removeFieldInSection($nextColumn, $removeField));
+                    }
+
+                    if ($labelName == "Custom") {
+                        $I->clicked(GeneralFields::isRequire($nextColumn,1));
+                        if ($I->checkElement(GeneralFields::errorMessageType($nextColumn,1))){
+                            $I->clickByJS(GeneralFields::errorMessageType($nextColumn,1),'Enable selectField custom error message');
+                        }
+                        $I->filledField(GeneralFields::sectionWiseFields($nextColumn,$labelName), $labelValue, 'Fill As selectField custom error message');
+                    }
+                }
+
+//                $I->clicked("(//div[@class='ff-repeater-title'])[$nextColumn]",'Collapse column '.$nextColumn);
+                AdvancedFieldCustomizer::incrementNextIndex();
+                AdvancedFieldCustomizer::incrementIndex();
+            }
+
+            if (isset($columnType['maskInputField'])){
+                echo AdvancedFieldCustomizer::getIndex();
+                echo AdvancedFieldCustomizer::getNextIndex();
+                $addColumn = AdvancedFieldCustomizer::getIndex() ?? 1;
+                $nextColumn = AdvancedFieldCustomizer::getNextIndex() ?? 1;
+                if(AdvancedFieldCustomizer::getIndex() >= 1){
+                    $I->clicked("(//span[@class='ff-repeater-setting-label']/following::i[contains(@class,'el-icon-plus')])[$addColumn]", "Add column $addColumn");
+
+                }
+                $I->clicked("(//div[@class='ff-repeater-title'])[$nextColumn]",'Expand column '.$nextColumn);
+                $I->clicked("(//span[@class='ff-repeater-setting-label']/following::i[contains(@class,'el-icon-arrow-up')])[$nextColumn]",'Expand Field type in column '.$nextColumn);
+                $I->clickOnExactText('Input Mask Field','Field Type',null,1,"Select field type");
+
+                $fieldData = [
+                    'Label' => $columnType['maskInputField']['label'] ?? false,
+                    'Default' => $columnType['maskInputField']['default'] ?? false,
+                    'Placeholder' => $columnType['maskInputField']['placeholder'] ?? false,
+                    'Custom' => $columnType['maskInputField']['required'] ?? false,
+                ];
+
+                foreach ($fieldData as $key => $value) {
+                    if ($key == "Label") {
+                        $I->filledField(GeneralFields::sectionWiseFields($nextColumn,$key), $value, 'Fill As maskInputField Label');
+                    }
+                    if ($key == "Default") {
+                        $I->filledField(GeneralFields::indexedDefaultField($nextColumn), $value, 'Fill As maskInputField Default');
+                    }
+                    if ($key == "Placeholder") {
+                        $I->filledField(GeneralFields::sectionWiseFields($nextColumn,$key), $value, 'Fill As maskInputField Placeholder');
+                    }
+                    if ($key == "Custom") {
+                        $I->clicked(GeneralFields::isRequire($nextColumn,1));
+                        if ($I->checkElement(GeneralFields::errorMessageType($nextColumn,1))){
+                            $I->clickByJS(GeneralFields::errorMessageType($nextColumn,1),'Enable maskInputField custom error message');
+                        }
+                        $I->filledField(GeneralFields::sectionWiseFields($nextColumn,$key), $value, 'Fill As maskInputField custom error message');
+                    }
+                }
+
+//                $I->clicked("(//div[@class='ff-repeater-title'])[$nextColumn]",'Collapse column '.$nextColumn);
+                AdvancedFieldCustomizer::incrementNextIndex();
+                AdvancedFieldCustomizer::incrementIndex();
+            }
 
 
         }
 
-        // this function will be called locally to fill address fields
-//        $addressFieldLocalFunction = function (AcceptanceTester $I, $whichName, $nameArea) {
-//            // Address Fields
-//            if (isset($whichName)) {
-//                $name = $whichName;
-//
-//                if ($nameArea == 1){ // address line 1
-//                    $I->clicked("(//i[contains(@class,'el-icon-caret-bottom')])[1]", 'To expand Address Line 1 area');
-//                }elseif ($nameArea == 2){ // address line 2
-//                    $I->clickByJS("(//i[contains(@class,'el-icon-caret-bottom')])[2]", 'To expand Address Line 2 area');
-//                }elseif ($nameArea == 3){ // city
-//                    $I->clicked("(//i[contains(@class,'el-icon-caret-bottom')])[3]", 'To expand City area');
-//                }elseif ($nameArea == 4) { // state
-//                    $I->clicked("(//i[contains(@class,'el-icon-caret-bottom')])[4]", 'To expand State area');
-//                }elseif ($nameArea == 5) { // zip
-//                    $I->clicked("(//i[contains(@class,'el-icon-caret-bottom')])[5]", 'To expand Zip area');
-//                }elseif ($nameArea == 6) { // country
-//                    $I->clicked("(//i[contains(@class,'el-icon-caret-bottom')])[6]", 'To expand Country area');
-//                }
-//
-//                $fieldData = [
-//                    'Label' => $name['label'] ?? false,
-//                    'Default' => $name['default'] ?? false,
-//                    'Placeholder' => $name['placeholder'] ?? false,
-//                    'Help Message' => $name['helpMessage'] ?? false,
-//                    'Custom' => $name['required'] ?? false,
-//                ];
-//
-//                foreach ($fieldData as $key => $value) {
-//                    // Check if "Default" has a value and "Placeholder" is empty, or vice versa.
-////                    if (($key == 'Default' && isset($fieldData['Placeholder']) && empty($fieldData['Placeholder'])) ||
-////                        ($key == 'Placeholder' && isset($fieldData['Default']) && empty($fieldData['Default']))) {
-////                        continue; // Skip this iteration of the loop.
-////                    }
-//                    if ($key == "Custom") {
-//                        $I->clicked(GeneralFields::isRequire($nameArea));
-//                        if ($I->checkElement("(//div[contains(@class, 'is-checked') and @role='switch'])[1]")){
-//                            $I->clickByJS("(//div[contains(@class, 'is-checked') and @role='switch'])[1]",'Enable custom error message');
-//                        }
-//                    }
-//
-////                    if ($key == "Error Message") {
-////                        $I->clickByJS(GeneralFields::isRequire($nameArea));
-////                        $I->clickByJS(GeneralFields::isRequire($nameArea,4));
-////                    }
-//
-//                    if ($nameArea == 6 && $key == 'Default' && !empty($value)){
-//                        $I->clicked("//input[@id='settings_country_list']",'Expand country list');
-//                        $I->clickByJS("//span[normalize-space()='$value']");
-//                    }elseif ($nameArea == 6 && $key == 'Help Message'){
-//                        continue;
-//                    }else{
-//                        if ($value){
-//                            $I->filledField(GeneralFields::nameFieldSelectors($nameArea, $key), $value);
-//                        }
-//                    }
-//                }
-//            }
-//        };
-
-        // calling local function, reverse order for scrolling issue
-//        $addressFieldLocalFunction($I, $basicOperand['country'], 6,);
-//        $addressFieldLocalFunction($I, $basicOperand['zip'], 5,);
-//        $addressFieldLocalFunction($I, $basicOperand['state'], 4,);
-//        $addressFieldLocalFunction($I, $basicOperand['city'], 3,);
-//        $addressFieldLocalFunction($I, $basicOperand['addressLine2'], 2,);
-//        $addressFieldLocalFunction($I, $basicOperand['addressLine1'], 1,);
 
 
 

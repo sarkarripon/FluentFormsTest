@@ -82,51 +82,51 @@ class RepeatFieldCest
             $addFieldElementLabel,
             ['adminFieldLabel' => $addFieldAdminFieldLabel,
                 'repeatFieldColumns' => [
-                            'textField' => [
-                                'label' => $textFieldLabel,
-                                'default' => $textFieldDefault,
-                                'placeholder' => $textFieldPlaceholder,
-                                'required' => $textFieldRequire,
-                            ],
-                            'emailField' => [
-                                'label' => $emailFieldLabel,
-                                'default' => $emailFieldDefault,
-                                'placeholder' => $emailFieldPlaceholder,
-                                'required' => $emailFieldRequire,
-                                'validateEmail' => $emailFieldValidate,
-                            ],
-                            'numericField' => [
-                                'label' => $numericFieldLabel,
-                                'default' => $numericFieldDefault,
-                                'placeholder' => $numericFieldPlaceholder,
-                                'required' => $numericFieldRequire,
-                            ],
+//                            'textField' => [
+//                                'label' => $textFieldLabel,
+//                                'default' => $textFieldDefault,
+//                                'placeholder' => $textFieldPlaceholder,
+//                                'required' => $textFieldRequire,
+//                            ],
+//                            'emailField' => [
+//                                'label' => $emailFieldLabel,
+//                                'default' => $emailFieldDefault,
+//                                'placeholder' => $emailFieldPlaceholder,
+//                                'required' => $emailFieldRequire,
+//                                'validateEmail' => $emailFieldValidate,
+//                            ],
+//                            'numericField' => [
+//                                'label' => $numericFieldLabel,
+//                                'default' => $numericFieldDefault,
+//                                'placeholder' => $numericFieldPlaceholder,
+//                                'required' => $numericFieldRequire,
+//                            ],
                             'selectField' => [
                                 'label' => $selectFieldLabel,
                                 'placeholder' => $selectFieldPlaceholder,
                                 'options' => [
-                                                ['label1'=> $optionLabel1,
-                                                    'value1'=> $optionValue1,
-                                                    'calcValue1'=> $optionCalcValue1,
+                                                ['label'=> $optionLabel1,
+                                                    'value'=> $optionValue1,
+                                                    'calcValue'=> $optionCalcValue1,
                                                 ],
-                                                ['label2'=> $optionLabel2,
-                                                    'value2'=> $optionValue2,
-                                                    'calcValue2'=> $optionCalcValue2,
+                                                ['label'=> $optionLabel2,
+                                                    'value'=> $optionValue2,
+                                                    'calcValue'=> $optionCalcValue2,
                                                 ],
-                                                ['label3'=> $optionLabel3,
-                                                    'value3'=> $optionValue3,
-                                                    'calcValue3'=> $optionCalcValue3,
+                                                ['label'=> $optionLabel3,
+                                                    'value'=> $optionValue3,
+                                                    'calcValue'=> $optionCalcValue3,
                                                 ],
                                 ],
                                 'required' => $selectFieldRequire,
                             ],
-                            'maskInputField' => [
-                                'label' => $maskInputFieldLabel,
-                                'default' => $maskInputFieldDefault,
-                                'placeholder' => $maskInputFieldPlaceholder,
-                                'maskInput' => '',
-                                'required' => $maskInputFieldRequire,
-                            ],
+//                            'maskInputField' => [
+//                                'label' => $maskInputFieldLabel,
+//                                'default' => $maskInputFieldDefault,
+//                                'placeholder' => $maskInputFieldPlaceholder,
+//                                'maskInput' => '',
+//                                'required' => $maskInputFieldRequire,
+//                            ],
                 ],
             ],
             [   'containerClass' => $containerClass,
@@ -134,8 +134,9 @@ class RepeatFieldCest
                 'maxRepeatInputs' => $maxRepeatInputs,
             ]
         );
-        $this->preparePage($I, $pageName);
         exit();
+        $this->preparePage($I, $pageName);
+
         $I->clicked(FieldSelectors::submitButton);
         $I->seeText([
 
