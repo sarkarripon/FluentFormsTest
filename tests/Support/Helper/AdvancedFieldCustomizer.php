@@ -863,22 +863,19 @@ trait AdvancedFieldCustomizer
 
     }
 
-    private static $nextIndex = 1;
-    private static $index = 0;
-
-    public static function getNextIndex() {
+    // this is getter setter for index and next index for repeat field
+    private static int $nextIndex = 1;
+    private static int $index = 0;
+    public static function getNextIndex(): int {
         return self::$nextIndex;
     }
-
-    public static function getIndex() {
+    public static function getIndex(): int {
         return self::$index;
     }
-
-    public static function incrementNextIndex() {
+    public static function incrementNextIndex(): void {
         self::$nextIndex++;
     }
-
-    public static function incrementIndex() {
+    public static function incrementIndex(): void {
         self::$index++;
     }
     public function customizeRepeatField(
@@ -930,7 +927,6 @@ trait AdvancedFieldCustomizer
 
                     if(AdvancedFieldCustomizer::getIndex() >= 1){
                         $I->clicked("(//span[@class='ff-repeater-setting-label']/following::i[contains(@class,'el-icon-plus')])[$addColumn]", "Add column " .$addColumn);
-    
                     }
                     $I->clicked("(//div[@class='ff-repeater-title'])[$nextColumn]",'Expand column '.$nextColumn);
                     $I->clicked("(//span[@class='ff-repeater-setting-label']/following::i[contains(@class,'el-icon-arrow-up')])[$nextColumn]",'Expand Field type in column ' . $nextColumn);
@@ -975,7 +971,6 @@ trait AdvancedFieldCustomizer
 
                     if(AdvancedFieldCustomizer::getIndex() >= 1){
                         $I->clicked("(//span[@class='ff-repeater-setting-label']/following::i[contains(@class,'el-icon-plus')])[$addColumn]", "Add column $addColumn");
-    
                     }
                     $I->clicked("(//div[@class='ff-repeater-title'])[$nextColumn]",'Expand column '.$nextColumn);
                     $I->clicked("(//span[@class='ff-repeater-setting-label']/following::i[contains(@class,'el-icon-arrow-up')])[$nextColumn]",'Expand Field type in column '.$nextColumn);
@@ -1027,7 +1022,6 @@ trait AdvancedFieldCustomizer
 
                     if(AdvancedFieldCustomizer::getIndex() >= 1){
                         $I->clicked("(//span[@class='ff-repeater-setting-label']/following::i[contains(@class,'el-icon-plus')])[$addColumn]", "Add column $addColumn");
-    
                     }
                     $I->clicked("(//div[@class='ff-repeater-title'])[$nextColumn]",'Expand column '.$nextColumn);
                     $I->clicked("(//span[@class='ff-repeater-setting-label']/following::i[contains(@class,'el-icon-arrow-up')])[$nextColumn]",'Expand Field type in column '.$nextColumn);
@@ -1058,8 +1052,6 @@ trait AdvancedFieldCustomizer
                             $I->filledField(GeneralFields::sectionWiseFields($nextColumn,$key), $value, 'Fill As numericField custom error message');
                         }
                     }
-
-
 //                    $I->clicked("(//div[@class='ff-repeater-title'])[$nextColumn]",'Collapse column '.$nextColumn);
                     AdvancedFieldCustomizer::incrementNextIndex();
                     AdvancedFieldCustomizer::incrementIndex();
@@ -1151,7 +1143,6 @@ trait AdvancedFieldCustomizer
                 $nextColumn = AdvancedFieldCustomizer::getNextIndex() ?? 1;
                 if(AdvancedFieldCustomizer::getIndex() >= 1){
                     $I->clicked("(//span[@class='ff-repeater-setting-label']/following::i[contains(@class,'el-icon-plus')])[$addColumn]", "Add column $addColumn");
-
                 }
                 $I->clicked("(//div[@class='ff-repeater-title'])[$nextColumn]",'Expand column '.$nextColumn);
                 $I->clicked("(//span[@class='ff-repeater-setting-label']/following::i[contains(@class,'el-icon-arrow-up')])[$nextColumn]",'Expand Field type in column '.$nextColumn);
@@ -1161,6 +1152,7 @@ trait AdvancedFieldCustomizer
                     'Label' => $columnType['maskInputField']['label'] ?? false,
                     'Default' => $columnType['maskInputField']['default'] ?? false,
                     'Placeholder' => $columnType['maskInputField']['placeholder'] ?? false,
+                    'Mask Input' => $columnType['maskInputField']['maskInput'] ?? false,
                     'Custom' => $columnType['maskInputField']['required'] ?? false,
                 ];
 
@@ -1173,6 +1165,10 @@ trait AdvancedFieldCustomizer
                     }
                     if ($key == "Placeholder") {
                         $I->filledField(GeneralFields::sectionWiseFields($nextColumn,$key), $value, 'Fill As maskInputField Placeholder');
+                    }
+                    if ($key == "Mask Input") {
+                        $I->clicked("(//span[normalize-space()='Mask Input']/following::i[contains(@class,'el-icon-arrow-up')])", 'Expand Mask Input');
+                        $I->clickOnExactText($value,'Mask Input',null,1,"Select Mask Input");
                     }
                     if ($key == "Custom") {
                         $I->clicked(GeneralFields::isRequire($nextColumn,1));
@@ -1187,13 +1183,7 @@ trait AdvancedFieldCustomizer
                 AdvancedFieldCustomizer::incrementNextIndex();
                 AdvancedFieldCustomizer::incrementIndex();
             }
-
-
         }
-
-
-
-
 
         // Label Placement (Hidden Label)
         if ($isHiddenLabel) {

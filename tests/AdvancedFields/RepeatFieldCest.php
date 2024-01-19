@@ -82,25 +82,25 @@ class RepeatFieldCest
             $addFieldElementLabel,
             ['adminFieldLabel' => $addFieldAdminFieldLabel,
                 'repeatFieldColumns' => [
-//                            'textField' => [
-//                                'label' => $textFieldLabel,
+                            'textField' => [
+                                'label' => $textFieldLabel,
 //                                'default' => $textFieldDefault,
-//                                'placeholder' => $textFieldPlaceholder,
-//                                'required' => $textFieldRequire,
-//                            ],
-//                            'emailField' => [
-//                                'label' => $emailFieldLabel,
+                                'placeholder' => $textFieldPlaceholder,
+                                'required' => $textFieldRequire,
+                            ],
+                            'emailField' => [
+                                'label' => $emailFieldLabel,
 //                                'default' => $emailFieldDefault,
-//                                'placeholder' => $emailFieldPlaceholder,
-//                                'required' => $emailFieldRequire,
-//                                'validateEmail' => $emailFieldValidate,
-//                            ],
-//                            'numericField' => [
-//                                'label' => $numericFieldLabel,
+                                'placeholder' => $emailFieldPlaceholder,
+                                'required' => $emailFieldRequire,
+                                'validateEmail' => $emailFieldValidate,
+                            ],
+                            'numericField' => [
+                                'label' => $numericFieldLabel,
 //                                'default' => $numericFieldDefault,
-//                                'placeholder' => $numericFieldPlaceholder,
-//                                'required' => $numericFieldRequire,
-//                            ],
+                                'placeholder' => $numericFieldPlaceholder,
+                                'required' => $numericFieldRequire,
+                            ],
                             'selectField' => [
                                 'label' => $selectFieldLabel,
                                 'placeholder' => $selectFieldPlaceholder,
@@ -120,13 +120,13 @@ class RepeatFieldCest
                                 ],
                                 'required' => $selectFieldRequire,
                             ],
-//                            'maskInputField' => [
-//                                'label' => $maskInputFieldLabel,
+                            'maskInputField' => [
+                                'label' => $maskInputFieldLabel,
 //                                'default' => $maskInputFieldDefault,
-//                                'placeholder' => $maskInputFieldPlaceholder,
-//                                'maskInput' => '',
-//                                'required' => $maskInputFieldRequire,
-//                            ],
+                                'placeholder' => $maskInputFieldPlaceholder,
+                                'maskInput' => '23/03/2018',
+                                'required' => $maskInputFieldRequire,
+                            ],
                 ],
             ],
             [   'containerClass' => $containerClass,
@@ -134,14 +134,30 @@ class RepeatFieldCest
                 'maxRepeatInputs' => $maxRepeatInputs,
             ]
         );
-        exit();
+
         $this->preparePage($I, $pageName);
 
+        $I->executeJS("
+            var emailInput = document.querySelector('input[type=\"email\"]');
+            if (emailInput) {
+                emailInput.setAttribute('type', 'something');
+            }");
         $I->clicked(FieldSelectors::submitButton);
         $I->seeText([
+            $addFieldElementLabel,
+            $textFieldLabel,
+            $emailFieldLabel,
+            $numericFieldLabel,
+            $selectFieldLabel,
+            $maskInputFieldLabel,
 
+            $textFieldRequire,
+            $emailFieldRequire,
+            $numericFieldRequire,
+            $selectFieldRequire,
+            $maskInputFieldRequire,
 
-        ], $I->cmnt('Check label and error message for each fields'));
+        ], $I->cmnt('Check all field label and error message'));
 
         $I->canSeeElement("(//input[@name='{$nameAttribute}[address_line_1]'])[1]", ['placeholder' => $addr1placeholder], $I->cmnt('Check addr1 placeholder'));
         $I->canSeeElement("(//input[@name='{$nameAttribute}[address_line_2]'])[1]", ['placeholder' => $addr2placeholder], $I->cmnt('Check addr2 placeholder'));
