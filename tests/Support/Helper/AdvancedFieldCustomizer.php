@@ -1213,4 +1213,17 @@ trait AdvancedFieldCustomizer
 
     }
 
+    public function customizePostCptSelection(
+        AcceptanceTester $I,
+        $fieldName,
+        ?array $basicOptions = null,
+        ?array $advancedOptions = null,
+        ?bool $isHiddenLabel = false
+    ): void
+    {
+
+
+
+    }
+
 }

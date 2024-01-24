@@ -159,14 +159,15 @@ class RepeatFieldCest
 
         ], $I->cmnt('Check all field label and error message'));
 
-        $I->canSeeElement("(//input[@name='{$nameAttribute}[address_line_1]'])[1]", ['placeholder' => $addr1placeholder], $I->cmnt('Check addr1 placeholder'));
-        $I->canSeeElement("(//input[@name='{$nameAttribute}[address_line_2]'])[1]", ['placeholder' => $addr2placeholder], $I->cmnt('Check addr2 placeholder'));
-        $I->canSeeElement("(//input[@name='{$nameAttribute}[city]'])[1]", ['placeholder' => $cityplaceholder], $I->cmnt('Check city placeholder'));
-        $I->canSeeElement("(//input[@name='{$nameAttribute}[state]'])[1]", ['placeholder' => $stateplaceholder], $I->cmnt('Check state placeholder'));
-        $I->canSeeElement("(//input[@name='{$nameAttribute}[zip]'])[1]", ['placeholder' => $zipplaceholder], $I->cmnt('Check zip placeholder'));
-        $I->seeElement("//select", ['placeholder' => $countryplaceholder], $I->cmnt('Check country placeholder'));
-
-        $I->canSeeElement("//div[contains(@class,'$elementClass')]", [], $I->cmnt('Check address field element class'));
+        $I->canSeeElement("//input", ['placeholder' => $textFieldPlaceholder], $I->cmnt('Check textField placeholder'));
+        $I->canSeeElement("//input", ['placeholder' => $emailFieldPlaceholder], $I->cmnt('Check emailField placeholder'));
+        $I->canSeeElement("//input", ['placeholder' => $numericFieldPlaceholder], $I->cmnt('Check numericField placeholder'));
+        $I->canSeeElement("//select", ['placeholder' => $selectFieldPlaceholder], $I->cmnt('Check selectField placeholder'));
+        $I->canSeeElement("//input", ['placeholder' => $maskInputFieldPlaceholder], $I->cmnt('Check maskInput placeholder'));
+        $I->canSeeElement("//div[contains(@class,'$containerClass')]", [], $I->cmnt('Check repeat field container class'));
+        $I->canSeeElement("//input", ['name' => $nameAttribute.'[0][]'], $I->cmnt('Check repeat field name attribute'));
+        $I->canSeeElement("//div", ['data-name' => $nameAttribute], $I->cmnt('Check repeat field name attribute'));
+        $I->canSeeElement("//div", ['data-max_repeat' => $maxRepeatInputs], $I->cmnt('Check max repeat count'));
 
         echo $I->cmnt("All test cases went through.",'yellow','', array('blink'));
 
