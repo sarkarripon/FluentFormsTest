@@ -1939,8 +1939,53 @@ trait GeneralFieldCustomizer
 
     }
 
-    public function customizeCustomHtml()
+    public function customizeCustomHtml(
+        AcceptanceTester $I,
+        $fieldName,
+        ?array $basicOptions = null,
+        ?array $advancedOptions = null,
+        ?bool $isHiddenLabel = false
+    ): void
     {
+        $I->clickByJS("(//div[contains(@class,'item-actions-wrapper')])[1]");
+//        $I->clickOnExactText($fieldName);
+
+        $basicOperand = null;
+        $advancedOperand = null;
+
+        $basicOptionsDefault = [
+            'htmlCode' => false,
+            'containerClass' => false,
+        ];
+
+        $advancedOptionsDefault = [
+        ];
+
+        if (!is_null($basicOptions)) {
+            $basicOperand = array_merge($basicOptionsDefault, $basicOptions);
+        }
+
+        if (!is_null($advancedOptions)) {
+            $advancedOperand = array_merge($advancedOptionsDefault, $advancedOptions);
+        }
+
+        //                                           Basic options                                              //
+        if (isset($basicOperand)) {
+
+            if ($basicOperand['htmlCode']) { //description
+                $I->waitForElementVisible("//iframe[contains(@id,'wp_editor')]",5);
+                $I->switchToIFrame("//iframe[contains(@id,'wp_editor')]");
+                $I->filledField("body p:nth-child(1)", $basicOperand['htmlCode'], 'Fill As description');
+                $I->switchToIFrame();
+            }
+
+            $basicOperand['containerClass'] // Container Class
+                ? $I->filledField(GeneralFields::customizationFields('Container Class'), $basicOperand['containerClass'], 'Fill As Container Class')
+                : null;
+        }
+
+        $I->clickByJS(FluentFormsSelectors::saveForm);
+        $I->seeSuccess('The form is successfully updated.');
 
     }
 
@@ -2038,7 +2083,6 @@ trait GeneralFieldCustomizer
         $I->clickByJS(FluentFormsSelectors::saveForm);
         $I->seeSuccess('The form is successfully updated.');
     }
-
 
 
 
