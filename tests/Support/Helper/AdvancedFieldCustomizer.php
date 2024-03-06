@@ -1373,6 +1373,7 @@ trait AdvancedFieldCustomizer
             $basicOperand['defaultValue']    // Default Value
                 ? $I->filledField(GeneralFields::defaultField, $basicOperand['defaultValue'], 'Fill As Default Value')
                 : null;
+
             if ($basicOperand['requiredMessage']) { // Required Message
                 $I->clicked(GeneralFields::radioSelect('Required',1),'Mark Yes from Required because by default it is No');
                 if ($I->checkElement("//div[contains(@class, 'is-checked') and @role='switch']")){
