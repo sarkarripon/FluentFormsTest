@@ -122,6 +122,11 @@ trait IntegrationHelper
         $I->seeSuccess('The form is successfully updated.');
         return $formID;
     }
+    public function openInPreview(AcceptanceTester $I): void
+    {
+        $I->clicked("//span[normalize-space()='Preview & Design']", 'Clicking on Preview & Design');
+        $I->switchToNextTab();
+    }
 
     public function preparePage(AcceptanceTester $I, string $title = null): void
     {

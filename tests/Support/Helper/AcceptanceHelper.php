@@ -32,6 +32,9 @@ class AcceptanceHelper extends WebDriver
         $this->fillField('Username', $username);
         $this->fillField('Password', $password);
         $this->click('Log In');
+        if($this->checkElement("//input[@name='correct-admin-email']")) {  // If the correct admin email is found, click on it
+            $this->clicked("//input[@name='correct-admin-email']");
+        }
         $this->waitForText('Dashboard', 5);
         $this->see("Dashboard");
         $this->saveSessionSnapshot("loginWordpress");

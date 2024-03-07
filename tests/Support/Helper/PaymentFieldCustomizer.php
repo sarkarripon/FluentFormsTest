@@ -23,6 +23,7 @@ trait PaymentFieldCustomizer
 
         $basicOptionsDefault = [
             'adminFieldLabel' => false,
+            'productDisplayType' => false,
             'paymentAmount' => false,
             'amountLabel' => false,
             'requiredMessage' => false,
@@ -49,12 +50,17 @@ trait PaymentFieldCustomizer
             $basicOperand['adminFieldLabel'] // adminFieldLabel
                 ? $I->filledField(GeneralFields::adminFieldLabel, $basicOperand['adminFieldLabel'], 'Fill As Admin Field Label')
                 : null;
-            $basicOperand['paymentAmount']
-                ? $I->filledField(GeneralFields::customizationFields("Payment Amount"), $basicOperand['paymentAmount'], 'Fill As paymentAmount')
-                : null;
-            exit();
-            $basicOperand['defaultValue']    // Default Value
-                ? $I->filledField(GeneralFields::defaultField, $basicOperand['defaultValue'], 'Fill As Default Value')
+
+            if ($basicOperand['productDisplayType'] == 'Single') { // Product Display Type Single
+                $basicOperand['paymentAmount']
+                    ? $I->filledField(GeneralFields::customizationFields("Payment Amount"), $basicOperand['paymentAmount'], 'Fill As paymentAmount')
+                    : null;
+            }elseif ($basicOperand['productDisplayType'] == 'Radio') { // Product Display Type Radio
+
+            }
+
+            $basicOperand['amountLabel']
+                ? $I->filledField(GeneralFields::customizationFields("Amount Label"), $basicOperand['amountLabel'], 'Fill As paymentAmount')
                 : null;
 
             if ($basicOperand['requiredMessage']) { // Required Message
@@ -73,17 +79,14 @@ trait PaymentFieldCustomizer
             $I->clicked(GeneralFields::advancedOptions,'Expand advanced options');
             $I->wait(2);
 
-            $advancedOperand['nameAttribute'] // Name Attribute
-                ? $I->filledField(GeneralFields::customizationFields('Name Attribute'), $advancedOperand['nameAttribute'], 'Fill As Name Attribute')
+            $advancedOperand['containerClass'] // Container Class
+                ? $I->filledField(GeneralFields::customizationFields('Container Class'), $advancedOperand['containerClass'], 'Fill As Container Class')
                 : null;
             $advancedOperand['helpMessage'] // Help Message
                 ? $I->filledField("//textarea[@class='el-textarea__inner']", $advancedOperand['helpMessage'], 'Fill As Help Message')
                 : null;
-            $advancedOperand['containerClass'] // Container Class
-                ? $I->filledField(GeneralFields::customizationFields('Container Class'), $advancedOperand['containerClass'], 'Fill As Container Class')
-                : null;
-            $advancedOperand['elementClass'] // Element Class
-                ? $I->filledField(GeneralFields::customizationFields('Element Class'), $advancedOperand['elementClass'], 'Fill As Element Class')
+            $advancedOperand['nameAttribute'] // Name Attribute
+                ? $I->filledField(GeneralFields::customizationFields('Name Attribute'), $advancedOperand['nameAttribute'], 'Fill As Name Attribute')
                 : null;
         }
         $I->clicked(FluentFormsSelectors::saveForm);

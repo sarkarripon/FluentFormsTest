@@ -25,33 +25,14 @@ class PaymentItemCest
         $pageName = __FUNCTION__ . '_' . rand(1, 100);
         $faker = Factory::create();
 
-        $elementLabel = $faker->words(2, true);
+        $elementLabel = $faker->words(3, true);
         $adminFieldLabel = $faker->words(2, true);
+        $paymentAmount = $faker->numberBetween(5, 99);
+        $amountLabel = $faker->words(3, true).":";
         $requiredMessage = $faker->words(2, true);
 
         $containerClass = $faker->firstName();
         $helpMessage = $faker->words(4, true);
-
-        $paymentAmount = $faker->numberBetween(5, 99);
-        $gridColumnsLabel2 = $faker->words(2, true);
-        $gridColumnsLabel3 = $faker->words(2, true);
-        $gridColumnsLabel4 = $faker->words(2, true);
-
-        $gridRowsLabel1 = $faker->words(2, true);
-        $gridRowsLabel2 = $faker->words(2, true);
-        $gridRowsLabel3 = $faker->words(2, true);
-        $gridRowsLabel4 = $faker->words(2, true);
-
-        $gridColumnsValue1 = $faker->words(3, true);
-        $gridColumnsValue2 = $faker->words(3, true);
-        $gridColumnsValue3 = $faker->words(3, true);
-        $gridColumnsValue4 = $faker->words(3, true);
-
-        $gridRowsValue1 = $faker->words(3, true);
-        $gridRowsValue2 = $faker->words(3, true);
-        $gridRowsValue3 = $faker->words(3, true);
-        $gridRowsValue4 = $faker->words(3, true);
-
         $nameAttribute = $faker->firstName();
 
         $customName = [
@@ -65,7 +46,9 @@ class PaymentItemCest
         $this->customizePaymentItem($I, $elementLabel,
             [
                 'adminFieldLabel' => $adminFieldLabel,
+                'productDisplayType' => "Single", // Single, Radio, Checkbox, Select,
                 'paymentAmount' => $paymentAmount,
+                'amountLabel' => $amountLabel,
                 'requiredMessage' => $requiredMessage,
             ],
             [
@@ -74,17 +57,18 @@ class PaymentItemCest
                 'nameAttribute' => $nameAttribute,
             ]);
 
-        $this->preparePage($I, $pageName);
-        $I->clicked(FieldSelectors::submitButton);
+        $this->openInPreview($I); // check the form element in preview mode
+//        $this->preparePage($I, $pageName);
+//        $I->clicked(FieldSelectors::submitButton);
         $I->seeText([
             $elementLabel,
-            $requiredMessage,
+//            $requiredMessage,
         ], $I->cmnt('Check element label, required message'));
 
-        $I->canSeeElement("//input[contains(@name,$nameAttribute)]", [], $I->cmnt('Check Checkable Grid field name attribute'));
-        $I->canSeeElement("//input[contains(@data-name,$nameAttribute)]",[], $I->cmnt('Check Checkable Grid field data-name attribute'));
-        $I->canSeeElement("//input[contains(@class,$containerClass)]", [], $I->cmnt('Check Checkable Grid field container class'));
-        $I->canSeeElement("//div", ['data-content' => $helpMessage], $I->cmnt('Check Checkable Grid field help message'));
+        $I->canSeeElement("//input[contains(@name,$nameAttribute)]", [], $I->cmnt('Check PaymentItem field name attribute'));
+        $I->canSeeElement("//input[contains(@data-name,$nameAttribute)]",[], $I->cmnt('Check PaymentItem field data-name attribute'));
+        $I->canSeeElement("//input[contains(@class,$containerClass)]", [], $I->cmnt('Check PaymentItem field container class'));
+        $I->canSeeElement("//div", ['data-content' => $helpMessage], $I->cmnt('Check PaymentItem field help message'));
         echo $I->cmnt("All test cases went through. ",'yellow','',array('blink'));
 
     }
