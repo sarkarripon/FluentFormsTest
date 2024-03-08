@@ -8,19 +8,18 @@ use Tests\Support\AcceptanceTester;
 use Tests\Support\Factories\DataProvider\DataGenerator;
 use Tests\Support\Helper\Integrations\IntegrationHelper;
 use Tests\Support\Helper\PaymentFieldCustomizer;
-use Tests\Support\Selectors\FieldSelectors;
 
-class PaymentItemCest
+class SubscriptionCest
 {
     use IntegrationHelper, PaymentFieldCustomizer, DataGenerator;
-    public function _before(AcceptanceTester $I): void
+    public function _before(AcceptanceTester $I)
     {
         $I->loaddotenvfile();
         $I->loginWordpress();
     }
 
     // tests
-    public function test_payment_Item(AcceptanceTester $I)
+    public function test_subscription_field(AcceptanceTester $I)
     {
         $pageName = __FUNCTION__ . '_' . rand(1, 100);
         $faker = Factory::create();
@@ -46,7 +45,7 @@ class PaymentItemCest
         $this->customizePaymentItem($I, $elementLabel,
             [
                 'adminFieldLabel' => $adminFieldLabel,
-                'productDisplayType' => "Single", // Single, Radio, Checkbox, Select,
+                'productDisplayType' => "Single", // Single Recurring Plan, Multiple Pricing Plans
                 'paymentAmount' => $paymentAmount,
                 'amountLabel' => $amountLabel,
                 'requiredMessage' => $requiredMessage,
@@ -73,6 +72,8 @@ class PaymentItemCest
         $I->canSeeElement("//input[contains(@class,$containerClass)]", [], $I->cmnt('Check PaymentItem field container class'));
         $I->canSeeElement("//div", ['data-content' => $helpMessage], $I->cmnt('Check PaymentItem field help message'));
         echo $I->cmnt("All test cases went through. ",'yellow','',array('blink'));
+
+
 
     }
 }
