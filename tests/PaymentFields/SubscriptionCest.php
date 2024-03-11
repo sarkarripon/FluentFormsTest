@@ -27,27 +27,36 @@ class SubscriptionCest
         $elementLabel = $faker->words(3, true);
         $adminFieldLabel = $faker->words(2, true);
         $paymentAmount = $faker->numberBetween(5, 99);
-        $amountLabel = $faker->words(3, true).":";
+        $signupFee = $faker->numberBetween(5, 99);
+        $trailPeriod = $faker->numberBetween(5, 99);
+        $totalBillingTimes = $faker->numberBetween(5, 99);
+
         $requiredMessage = $faker->words(2, true);
 
-        $containerClass = $faker->firstName();
+        $containerClass = strtolower($faker->firstName());
         $helpMessage = $faker->words(4, true);
-        $nameAttribute = $faker->firstName();
+        $nameAttribute = strtolower($faker->firstName());
 
         $customName = [
-            'paymentItem' => $elementLabel,
+            'subscription' => $elementLabel,
         ];
 
         $this->prepareForm($I, $pageName, [
-            'paymentFields' => ['paymentItem'],
+            'paymentFields' => ['subscription'],
         ], true, $customName);
 
-        $this->customizePaymentItem($I, $elementLabel,
+        $this->customizeSubscription($I, $elementLabel,
             [
                 'adminFieldLabel' => $adminFieldLabel,
-                'productDisplayType' => "Single", // Single Recurring Plan, Multiple Pricing Plans
-                'paymentAmount' => $paymentAmount,
-                'amountLabel' => $amountLabel,
+                'subscriptionType' => "singleRecurringPlan", // singleRecurringPlan, multiplePricingPlans
+                'pricingPlans' => [
+                        'planName' => $faker->words(2, true),
+                        'price' => $paymentAmount,
+                        'billingInterval' => 'Monthly', // Daily, Weekly, Monthly, Yearly
+                        'hasSignupFee' => $signupFee, // 0, 1, 2, 3 ...
+                        'hasTrailPeriod' => false, // 0, 1, 2, 3 ... in days
+                        'totalBillingTimes' => $totalBillingTimes, // 0, 1, 2, 3 ... 0 for unlimited
+                    ],
                 'requiredMessage' => $requiredMessage,
             ],
             [
@@ -63,17 +72,15 @@ class SubscriptionCest
 //        $I->clicked(FieldSelectors::submitButton);
         $I->seeText([
             $elementLabel,
+            "\$".($paymentAmount + $signupFee).".00 for first month then \$".$paymentAmount.".00 for each month, for ".$totalBillingTimes." installments",
 //            $requiredMessage,
         ], $I->cmnt('Check element label, required message'));
 
-
-        $I->canSeeElement("//input[contains(@name,$nameAttribute)]", [], $I->cmnt('Check PaymentItem field name attribute'));
-        $I->canSeeElement("//input[contains(@data-name,$nameAttribute)]",[], $I->cmnt('Check PaymentItem field data-name attribute'));
-        $I->canSeeElement("//input[contains(@class,$containerClass)]", [], $I->cmnt('Check PaymentItem field container class'));
-        $I->canSeeElement("//div", ['data-content' => $helpMessage], $I->cmnt('Check PaymentItem field help message'));
+        $I->canSeeElement("//input[contains(@name,$nameAttribute)]", [], $I->cmnt('Check Subscription field name attribute'));
+        $I->canSeeElement("//input[contains(@data-name,$nameAttribute)]",[], $I->cmnt('Check Subscription field data-name attribute'));
+        $I->canSeeElement("//input[contains(@class,$containerClass)]", [], $I->cmnt('Check Subscription field container class'));
+        $I->canSeeElement("//div", ['data-content' => $helpMessage], $I->cmnt('Check Subscription field help message'));
         echo $I->cmnt("All test cases went through. ",'yellow','',array('blink'));
-
-
 
     }
 }

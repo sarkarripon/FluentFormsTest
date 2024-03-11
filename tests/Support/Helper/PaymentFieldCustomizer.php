@@ -107,9 +107,8 @@ trait PaymentFieldCustomizer
 
         $basicOptionsDefault = [
             'adminFieldLabel' => false,
-            'singleRecurringPlan' => false,
-            'multiplePricingPlans' => false,
-            'amountLabel' => false,
+            'subscriptionType' => false,
+            'pricingPlans' => false,
             'requiredMessage' => false,
         ];
 
@@ -126,6 +125,10 @@ trait PaymentFieldCustomizer
         if (!is_null($advancedOptions)) {
             $advancedOperand = array_merge($advancedOptionsDefault, $advancedOptions);
         }
+//
+//        print_r($basicOperand);
+//        print_r($advancedOperand);
+//        exit();
 
         //                                           Basic options                                              //
 
@@ -135,18 +138,45 @@ trait PaymentFieldCustomizer
                 ? $I->filledField(GeneralFields::adminFieldLabel, $basicOperand['adminFieldLabel'], 'Fill As Admin Field Label')
                 : null;
 
-            if ($basicOperand['productDisplayType'] == 'Single') { // Product Display Type Single
-                $basicOperand['paymentAmount']
-                    ? $I->filledField(GeneralFields::customizationFields("Payment Amount"), $basicOperand['paymentAmount'], 'Fill As paymentAmount')
-                    : null;
-            }elseif ($basicOperand['productDisplayType'] == 'Radio') { // Product Display Type Radio
+            if (isset($basicOperand['subscriptionType'])) { // subscription Type
+                $type = $basicOperand['subscriptionType'];
+                $planName = $basicOperand['pricingPlans']['planName'];
+                $price = $basicOperand['pricingPlans']['price'];
+                $billingInterval = $basicOperand['pricingPlans']['billingInterval'];
+                $hasSignupFee = $basicOperand['pricingPlans']['hasSignupFee'];
+                $hasTrailPeriod = $basicOperand['pricingPlans']['hasTrailPeriod'];
+                $totalBillingTimes = $basicOperand['pricingPlans']['totalBillingTimes'];
 
+
+                if ($type == 'singleRecurringPlan'){
+                     $I->clicked("//span[normalize-space()='Single Recurring Plan']", "Click on Single Recurring Plan");
+                         $planName
+                             ? $I->filledField(GeneralFields::customizationFields("Plan Name"), $planName, 'Fill As Plan Name')
+                             : null;
+
+                         $price
+                             ? $I->filledField(GeneralFields::customizationFields("Price"), $price, 'Fill As Price')
+                             : null;
+
+                        if (isset($billingInterval)){
+                            $I->clicked("(//input[@placeholder='Select'])[1]");
+                            $I->clickOnExactText( $billingInterval, 'Billing Interval');
+                        }
+                        if (isset($hasSignupFee)){
+                            $I->toggleOn($I,"Has Signup Fee?");
+                            $I->filledField(GeneralFields::customizationFields("Has Signup Fee?"), $hasSignupFee, 'Fill As Has Signup Fee');
+                        }
+                        exit();
+                        if (isset($hasTrailPeriod)){
+                            $I->toggleOn($I,"Has Trial Days? (in days)");
+                            $I->filledField(GeneralFields::customizationFields("Has Trial Days? (in days)"), $hasSignupFee, 'Fill As Has Trial Days');
+                        }
+                    if (isset($totalBillingTimes)){
+//                        $I->toggleOn($I,"Has Trial Days? (in days)");
+                        $I->filledField(GeneralFields::customizationFields("Total Billing times"), $hasSignupFee, 'Fill As Total Billing times');
+                    }
+                }
             }
-
-            $basicOperand['amountLabel']
-                ? $I->filledField(GeneralFields::customizationFields("Amount Label"), $basicOperand['amountLabel'], 'Fill As paymentAmount')
-                : null;
-
             if ($basicOperand['requiredMessage']) { // Required Message
                 $I->clicked(GeneralFields::radioSelect('Required',1),'Mark Yes from Required because by default it is No');
                 if ($I->checkElement("//div[contains(@class, 'is-checked') and @role='switch']")){
