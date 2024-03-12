@@ -54,7 +54,7 @@ class SubscriptionCest
                         'price' => $paymentAmount,
                         'billingInterval' => 'Monthly', // Daily, Weekly, Monthly, Yearly
                         'hasSignupFee' => $signupFee, // 0, 1, 2, 3 ...
-                        'hasTrailPeriod' => false, // 0, 1, 2, 3 ... in days
+//                        'hasTrailPeriod' => $trailPeriod, // 0, 1, 2, 3 ... in days
                         'totalBillingTimes' => $totalBillingTimes, // 0, 1, 2, 3 ... 0 for unlimited
                     ],
                 'requiredMessage' => $requiredMessage,
@@ -64,8 +64,6 @@ class SubscriptionCest
                 'helpMessage' => $helpMessage,
                 'nameAttribute' => $nameAttribute,
             ]);
-
-
 
         $this->openInPreview($I); // check the form element in preview mode
 //        $this->preparePage($I, $pageName);

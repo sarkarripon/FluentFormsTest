@@ -140,12 +140,12 @@ trait PaymentFieldCustomizer
 
             if (isset($basicOperand['subscriptionType'])) { // subscription Type
                 $type = $basicOperand['subscriptionType'];
-                $planName = $basicOperand['pricingPlans']['planName'];
-                $price = $basicOperand['pricingPlans']['price'];
-                $billingInterval = $basicOperand['pricingPlans']['billingInterval'];
-                $hasSignupFee = $basicOperand['pricingPlans']['hasSignupFee'];
-                $hasTrailPeriod = $basicOperand['pricingPlans']['hasTrailPeriod'];
-                $totalBillingTimes = $basicOperand['pricingPlans']['totalBillingTimes'];
+                $planName = $basicOperand['pricingPlans']['planName']??null;
+                $price = $basicOperand['pricingPlans']['price']??null;
+                $billingInterval = $basicOperand['pricingPlans']['billingInterval']??null;
+                $hasSignupFee = $basicOperand['pricingPlans']['hasSignupFee']??null;
+                $hasTrailPeriod = $basicOperand['pricingPlans']['hasTrailPeriod']??null;
+                $totalBillingTimes = $basicOperand['pricingPlans']['totalBillingTimes']??null;
 
 
                 if ($type == 'singleRecurringPlan'){
@@ -166,21 +166,19 @@ trait PaymentFieldCustomizer
                             $I->toggleOn($I,"Has Signup Fee?");
                             $I->filledField(GeneralFields::customizationFields("Has Signup Fee?"), $hasSignupFee, 'Fill As Has Signup Fee');
                         }
-                        exit();
                         if (isset($hasTrailPeriod)){
                             $I->toggleOn($I,"Has Trial Days? (in days)");
-                            $I->filledField(GeneralFields::customizationFields("Has Trial Days? (in days)"), $hasSignupFee, 'Fill As Has Trial Days');
+                            $I->filledField(GeneralFields::customizationFields("Has Trial Days? (in days)"), $hasTrailPeriod, 'Fill As Has Trial Days');
                         }
                     if (isset($totalBillingTimes)){
-//                        $I->toggleOn($I,"Has Trial Days? (in days)");
-                        $I->filledField(GeneralFields::customizationFields("Total Billing times"), $hasSignupFee, 'Fill As Total Billing times');
+                        $I->filledField(GeneralFields::customizationFields("Total Billing times"), $totalBillingTimes, 'Fill As Total Billing times');
                     }
                 }
             }
             if ($basicOperand['requiredMessage']) { // Required Message
                 $I->clicked(GeneralFields::radioSelect('Required',1),'Mark Yes from Required because by default it is No');
-                if ($I->checkElement("//div[contains(@class, 'is-checked') and @role='switch']")){
-                    $I->clickByJS("//div[contains(@class, 'is-checked') and @role='switch']",'Enable custom error message');
+                if ($I->checkElement("//div[normalize-space()='Required']/following::div[contains(@class, 'is-checked') and @role='switch']")){
+                    $I->clickByJS("//div[normalize-space()='Required']/following::div[contains(@class, 'is-checked') and @role='switch']",'Enable custom error message');
                 }
                 $I->filledField(GeneralFields::customizationFields('Custom Error Message'), $basicOperand['requiredMessage'], 'Fill As custom Required Message');
             }
@@ -204,7 +202,9 @@ trait PaymentFieldCustomizer
                 : null;
         }
         $I->clicked(FluentFormsSelectors::saveForm);
+
     }
+
 
 
 }
