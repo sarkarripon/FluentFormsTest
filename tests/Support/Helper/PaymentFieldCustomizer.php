@@ -205,6 +205,124 @@ trait PaymentFieldCustomizer
 
     }
 
+    public function customizeCustomAmount(
+        AcceptanceTester $I,
+        $fieldName,
+        ?array $basicOptions = null,
+        ?array $advancedOptions = null,
+        ?bool $isHiddenLabel = false
+    ): void
+    {
+        $I->clickOnExactText($fieldName);
+
+        $basicOperand = null;
+        $advancedOperand = null;
+
+        $basicOptionsDefault = [
+            'adminFieldLabel' => false,
+            'placeholder' => false,
+            'requiredMessage' => false,
+            'minValue' => false,
+            'minValueErrMsg' => false,
+            'maxValue' => false,
+            'maxValueErrMsg' => false,
+
+        ];
+
+        $advancedOptionsDefault = [
+            'defaultValue' => false,
+            'containerClass' => false,
+            'elementClass' => false,
+            'helpMessage' => false,
+            'prefixLabel' => false,
+            'suffixLabel' => false,
+            'nameAttribute' => false,
+            'calculation' => false,
+        ];
+
+        if (!is_null($basicOptions)) {
+            $basicOperand = array_merge($basicOptionsDefault, $basicOptions);
+        }
+
+        if (!is_null($advancedOptions)) {
+            $advancedOperand = array_merge($advancedOptionsDefault, $advancedOptions);
+        }
+
+        //                                           Basic options                                              //
+        // adminFieldLabel
+        if (isset($basicOperand)) {
+            $basicOperand['adminFieldLabel']
+                ? $I->filledField(GeneralFields::adminFieldLabel, $basicOperand['adminFieldLabel'], 'Fill As Admin Field Label')
+                : null;
+
+            $basicOperand['placeholder'] //Placeholder
+                ? $I->filledField(GeneralFields::placeholder, $basicOperand['placeholder'], 'Fill As Placeholder')
+                : null;
+
+            if ($basicOperand['requiredMessage']) { // Required Message
+                $I->clicked(GeneralFields::radioSelect('Required',1),'Mark Yes from Required because by default it is No');
+                if ($I->checkElement("//div[contains(@class, 'is-checked') and @role='switch']")){
+                    $I->clickByJS("//div[contains(@class, 'is-checked') and @role='switch']",'Enable custom error message');
+                }
+                $I->filledField(GeneralFields::customizationFields('Custom Error Message'), $basicOperand['requiredMessage'], 'Fill As custom Required Message');
+            }
+
+            $basicOperand['minValue']   // Min Value
+                ? $I->filledField("(//input[@type='number'])[2]", $basicOperand['minValue'], 'Fill As Min Value')
+                : null;
+
+            $basicOperand['maxValue']   // Max Value
+                ? $I->filledField("(//input[@type='number'])[3]", $basicOperand['maxValue'], 'Fill As Max Value')
+                : null;
+
+            $basicOperand['digits']   // Digits
+                ? $I->filledField("(//input[@type='number'])[4]", $basicOperand['digits'], 'Fill As Digits')
+                : null;
+        }
+        //                                           Advanced options                                              //
+
+        if (isset($advancedOperand)) {
+            $I->scrollTo(GeneralFields::advancedOptions);
+            $I->clickByJS(GeneralFields::advancedOptions, 'Expand advanced options');
+            $I->wait(2);
+
+            $advancedOperand['defaultValue'] // Default Value
+                ? $I->filledField(GeneralFields::defaultField, $advancedOperand['defaultValue'], 'Fill As Default Value')
+                : null;
+
+            $advancedOperand['containerClass'] // Container Class
+                ? $I->filledField(GeneralFields::customizationFields('Container Class'), $advancedOperand['containerClass'], 'Fill As Container Class')
+                : null;
+
+            $advancedOperand['elementClass'] // Element Class
+                ? $I->filledField(GeneralFields::customizationFields('Element Class'), $advancedOperand['elementClass'], 'Fill As Element Class')
+                : null;
+
+            $advancedOperand['helpMessage'] // Help Message
+                ? $I->filledField("(//textarea[@class='el-textarea__inner'])", $advancedOperand['helpMessage'], 'Fill As Help Message')
+                : null;
+
+            $advancedOperand['step']      // Step
+                ? $I->filledField(GeneralFields::customizationFields('Step'), $advancedOperand['step'], 'Fill As Step')
+                : null;
+
+            $advancedOperand['prefixLabel'] // Prefix Label
+                ? $I->filledField(GeneralFields::customizationFields('Prefix Label'), $advancedOperand['prefixLabel'], 'Fill As Prefix Label')
+                : null;
+
+            $advancedOperand['suffixLabel'] // Suffix Label
+                ? $I->filledField(GeneralFields::customizationFields('Suffix Label'), $advancedOperand['suffixLabel'], 'Fill As Suffix Label')
+                : null;
+
+            $advancedOperand['nameAttribute'] // Name Attribute
+                ? $I->filledField(GeneralFields::customizationFields('Name Attribute'), $advancedOperand['nameAttribute'], 'Fill As Name Attribute')
+                : null;
+
+        }
+        $I->clicked(FluentFormsSelectors::saveForm);
+
+    }
+
 
 
 }
