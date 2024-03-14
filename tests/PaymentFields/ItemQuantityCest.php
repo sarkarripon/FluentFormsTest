@@ -9,7 +9,7 @@ use Tests\Support\Helper\Integrations\IntegrationHelper;
 use Tests\Support\Helper\PaymentFieldCustomizer;
 use Tests\Support\Selectors\FieldSelectors;
 
-class CustomAmountCest
+class ItemQuantityCest
 {
     use IntegrationHelper, PaymentFieldCustomizer, DataGenerator;
     public function _before(AcceptanceTester $I)
@@ -19,7 +19,7 @@ class CustomAmountCest
     }
 
     // tests
-    public function test_custom_amount(AcceptanceTester $I)
+    public function test_item_quantity(AcceptanceTester $I)
     {
         $pageName = __FUNCTION__ . '_' . rand(1, 100);
         $faker = \Faker\Factory::create();
@@ -42,16 +42,16 @@ class CustomAmountCest
         $maxValueErrMsg = $faker->words(3, true);
 
         $customName = [
-            'customPaymentAmount' => $elementLabel,
+            'itmQuantity' => $elementLabel,
         ];
 
         $this->prepareForm($I, $pageName, [
-            'paymentFields' => ['customPaymentAmount'],
+            'paymentFields' => ['itmQuantity'],
         ], true, $customName);
 
         $this->customizeCustomAmount($I, $elementLabel,
             [
-            'adminFieldLabel' => $adminFieldLabel,
+                'adminFieldLabel' => $adminFieldLabel,
                 'placeholder' => $placeholder,
                 'requiredMessage' => $requiredMessage,
                 'minValue' => $minValue,
@@ -82,15 +82,15 @@ class CustomAmountCest
             $suffixLabel,
         ], $I->cmnt('Check element label, required message, prefix label, suffix label'));
 
-        $I->canSeeElement("//input", ['placeholder' => $placeholder], $I->cmnt('Check Custom Amount placeholder'));
-        $I->canSeeElement("//input", ['name' => $nameAttribute], $I->cmnt('Check Custom Amount name attribute'));
-        $I->canSeeElement("//input", ['data-name' => $nameAttribute], $I->cmnt('Check Custom Amount name attribute'));
-        $I->canSeeElement("//div[contains(@class,'$containerClass')]", [], $I->cmnt('Check Custom Amount container class'));
-        $I->canSeeElement("//input[contains(@class,'$elementClass')]", [], $I->cmnt('Check Custom Amount element class'));
+        $I->canSeeElement("//input", ['placeholder' => $placeholder], $I->cmnt('Check Item Quantity placeholder'));
+        $I->canSeeElement("//input", ['name' => $nameAttribute], $I->cmnt('Check Item Quantity name attribute'));
+        $I->canSeeElement("//input", ['data-name' => $nameAttribute], $I->cmnt('Check Item Quantity name attribute'));
+        $I->canSeeElement("//div[contains(@class,'$containerClass')]", [], $I->cmnt('Check Item Quantity container class'));
+        $I->canSeeElement("//input[contains(@class,'$elementClass')]", [], $I->cmnt('Check Item Quantity element class'));
 
 
-        $I->canSeeElement("//input", ['min' => $minValue], $I->cmnt('Check Custom Amount min value'));
-        $I->canSeeElement("//input", ['max' => $maxValue], $I->cmnt('Check Custom Amount max value'));
+        $I->canSeeElement("//input", ['min' => $minValue], $I->cmnt('Check Item Quantity min value'));
+        $I->canSeeElement("//input", ['max' => $maxValue], $I->cmnt('Check Item Quantity max value'));
 
 
         echo $I->cmnt("All test cases went through. ", 'yellow', '', array('blink'));
