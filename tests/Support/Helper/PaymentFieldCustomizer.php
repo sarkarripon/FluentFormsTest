@@ -267,17 +267,16 @@ trait PaymentFieldCustomizer
                 $I->filledField(GeneralFields::customizationFields('Custom Error Message'), $basicOperand['requiredMessage'], 'Fill As custom Required Message');
             }
 
-            $basicOperand['minValue']   // Min Value
-                ? $I->filledField("(//input[@type='number'])[2]", $basicOperand['minValue'], 'Fill As Min Value')
-                : null;
+            if($basicOperand['minValue']){  // Min Value
+                $I->filledField("(//input[@type='number'])[2]", $basicOperand['minValue'], 'Fill As Min Value');
+                $I->filledField(GeneralFields::customizationFields('Min Value'), $basicOperand['minValueErrMsg'], 'Fill As Min Value Error Message');
+            }
 
-            $basicOperand['maxValue']   // Max Value
-                ? $I->filledField("(//input[@type='number'])[3]", $basicOperand['maxValue'], 'Fill As Max Value')
-                : null;
+            if($basicOperand['maxValue']){  // Max Value
+                $I->filledField("(//input[@type='number'])[3]", $basicOperand['maxValue'], 'Fill As Max Value');
+                $I->filledField(GeneralFields::customizationFields('Max Value'), $basicOperand['maxValueErrMsg'], 'Fill As Max Value Error Message');
+            }
 
-            $basicOperand['digits']   // Digits
-                ? $I->filledField("(//input[@type='number'])[4]", $basicOperand['digits'], 'Fill As Digits')
-                : null;
         }
         //                                           Advanced options                                              //
 
@@ -302,9 +301,6 @@ trait PaymentFieldCustomizer
                 ? $I->filledField("(//textarea[@class='el-textarea__inner'])", $advancedOperand['helpMessage'], 'Fill As Help Message')
                 : null;
 
-            $advancedOperand['step']      // Step
-                ? $I->filledField(GeneralFields::customizationFields('Step'), $advancedOperand['step'], 'Fill As Step')
-                : null;
 
             $advancedOperand['prefixLabel'] // Prefix Label
                 ? $I->filledField(GeneralFields::customizationFields('Prefix Label'), $advancedOperand['prefixLabel'], 'Fill As Prefix Label')

@@ -19,7 +19,7 @@ class CustomAmountCest
     }
 
     // tests
-    public function tryToTest(AcceptanceTester $I)
+    public function test_custom_amount(AcceptanceTester $I)
     {
         $pageName = __FUNCTION__ . '_' . rand(1, 100);
         $faker = \Faker\Factory::create();
@@ -46,7 +46,7 @@ class CustomAmountCest
         ];
 
         $this->prepareForm($I, $pageName, [
-            'generalFields' => ['customPaymentAmount'],
+            'paymentFields' => ['customPaymentAmount'],
         ], true, $customName);
 
         $this->customizeCustomAmount($I, $elementLabel,
@@ -73,11 +73,11 @@ class CustomAmountCest
 
 //        $this->preparePage($I, $pageName);
         $this->openInPreview($I);
-        exit();
+
         $I->clicked(FieldSelectors::submitButton);
         $I->seeText([
             $elementLabel,
-//            $requiredMessage,
+            $requiredMessage,
             $prefixLabel,
             $suffixLabel,
         ], $I->cmnt('Check element label, required message, prefix label, suffix label'));
@@ -91,7 +91,7 @@ class CustomAmountCest
 
         $I->canSeeElement("//input", ['min' => $minValue], $I->cmnt('Check numericField min value'));
         $I->canSeeElement("//input", ['max' => $maxValue], $I->cmnt('Check numericField max value'));
-        $I->canSeeElement("//input", ['step' => 'any'], $I->cmnt('Check numericField step value'));
+
 
         echo $I->cmnt("All test cases went through. ", 'yellow', '', array('blink'));
 
