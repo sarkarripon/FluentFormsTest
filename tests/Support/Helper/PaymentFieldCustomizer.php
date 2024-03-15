@@ -429,6 +429,65 @@ trait PaymentFieldCustomizer
 
     }
 
+    public function customizePaymentSummery(
+        AcceptanceTester $I,
+        $fieldName,
+        ?array $basicOptions = null,
+        ?array $advancedOptions = null,
+        ?bool $isHiddenLabel = false
+    ): void
+    {
+        $I->clickByJS("(//div[contains(@class,'item-actions-wrapper')])[1]");
+//        $I->clickOnExactText($fieldName);
+
+        $basicOperand = null;
+        $advancedOperand = null;
+
+        $basicOptionsDefault = [
+            'htmlCode' => false,
+        ];
+
+        $advancedOptionsDefault = [
+            'containerClass' => false,
+        ];
+
+        if (!is_null($basicOptions)) {
+            $basicOperand = array_merge($basicOptionsDefault, $basicOptions);
+        }
+
+        if (!is_null($advancedOptions)) {
+            $advancedOperand = array_merge($advancedOptionsDefault, $advancedOptions);
+        }
+
+        //                                           Basic options                                              //
+        if (isset($basicOperand)) {
+
+            if ($basicOperand['htmlCode']) { //description
+                $I->waitForElementVisible("//iframe[contains(@id,'wp_editor')]",5);
+                $I->switchToIFrame("//iframe[contains(@id,'wp_editor')]");
+                $I->filledField("body p:nth-child(1)", $basicOperand['htmlCode'], 'Fill As description');
+                $I->switchToIFrame();
+            }
+
+        }
+
+        //                                           Advanced options                                              //
+
+        if (isset($advancedOperand)) {
+            $I->scrollTo(GeneralFields::advancedOptions);
+            $I->clickByJS(GeneralFields::advancedOptions, 'Expand advanced options');
+            $I->wait(2);
+
+            $advancedOperand['containerClass'] // Container Class
+                ? $I->filledField(GeneralFields::customizationFields('Container Class'), $advancedOperand['containerClass'], 'Fill As Container Class')
+                : null;
+        }
+
+        $I->clickByJS(FluentFormsSelectors::saveForm);
+        $I->seeSuccess('The form is successfully updated.');
+
+    }
+
 
 
 }
