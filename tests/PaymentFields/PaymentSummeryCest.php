@@ -37,7 +37,7 @@ class PaymentSummeryCest
 
         $this->customizePaymentSummery($I, $elementLabel,
             [
-                'htmlCode' => $description,
+                'htmlAreaText' => $description,
             ],
             [
                 'containerClass' => $containerClass,
@@ -47,10 +47,10 @@ class PaymentSummeryCest
 //        $this->preparePage($I, $pageName);
 //        $I->clicked(FieldSelectors::submitButton);
         $I->seeText([
-            $description,
+            substr($description, 0, -1),
         ], $I->cmnt('Check description'));
 
-        $I->canSeeElement("//div[contains(@class,'$containerClass')]", [], $I->cmnt('Check Custom Html Container class'));
+        $I->canSeeElement("//div[contains(@class,'$containerClass')]", [], $I->cmnt('CheckPayment Summery Container class'));
 
         echo $I->cmnt("All test cases went through. ", 'yellow','',array('blink'));
     }

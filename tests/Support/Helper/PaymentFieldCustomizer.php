@@ -444,7 +444,7 @@ trait PaymentFieldCustomizer
         $advancedOperand = null;
 
         $basicOptionsDefault = [
-            'htmlCode' => false,
+            'htmlAreaText' => false,
         ];
 
         $advancedOptionsDefault = [
@@ -462,10 +462,10 @@ trait PaymentFieldCustomizer
         //                                           Basic options                                              //
         if (isset($basicOperand)) {
 
-            if ($basicOperand['htmlCode']) { //description
+            if ($basicOperand['htmlAreaText']) { //description
                 $I->waitForElementVisible("//iframe[contains(@id,'wp_editor')]",5);
                 $I->switchToIFrame("//iframe[contains(@id,'wp_editor')]");
-                $I->filledField("body p:nth-child(1)", $basicOperand['htmlCode'], 'Fill As description');
+                $I->filledField("body p:nth-child(1)", $basicOperand['htmlAreaText'], 'Fill in  rich text area');
                 $I->switchToIFrame();
             }
 
