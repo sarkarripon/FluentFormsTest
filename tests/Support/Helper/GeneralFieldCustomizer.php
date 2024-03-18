@@ -927,6 +927,7 @@ trait GeneralFieldCustomizer
 
         }
         $I->clicked(FluentFormsSelectors::saveForm);
+        $I->seeSuccess('The form is successfully updated.');
     }
 
     public function customizeDropdown(

@@ -488,6 +488,82 @@ trait PaymentFieldCustomizer
 
     }
 
+    public function customizeCoupon(
+        AcceptanceTester $I,
+        $fieldName,
+        ?array $basicOptions = null,
+        ?array $advancedOptions = null,
+        ?bool $isHiddenLabel = false
+    ): void
+    {
+        $I->clickOnExactText($fieldName);
 
+        $basicOperand = null;
+        $advancedOperand = null;
+
+        $basicOptionsDefault = [
+            'adminFieldLabel' => false,
+            'placeholder' => false,
+            'suffixLabel' => false,
+        ];
+
+        $advancedOptionsDefault = [
+            'containerClass' => false,
+            'elementClass' => false,
+            'helpMessage' => false,
+            'nameAttribute' => false,
+        ];
+
+        if (!is_null($basicOptions)) {
+            $basicOperand = array_merge($basicOptionsDefault, $basicOptions);
+        }
+
+        if (!is_null($advancedOptions)) {
+            $advancedOperand = array_merge($advancedOptionsDefault, $advancedOptions);
+        }
+
+        //                                           Basic options                                              //
+        // adminFieldLabel
+        if (isset($basicOperand)) {
+            $basicOperand['adminFieldLabel']
+                ? $I->filledField(GeneralFields::adminFieldLabel, $basicOperand['adminFieldLabel'], 'Fill As Admin Field Label')
+                : null;
+
+            $basicOperand['placeholder'] //Placeholder
+                ? $I->filledField(GeneralFields::placeholder, $basicOperand['placeholder'], 'Fill As Placeholder')
+                : null;
+
+            $basicOperand['suffixLabel'] // Suffix Label
+                ? $I->filledField(GeneralFields::customizationFields('Suffix Label'), $basicOperand['suffixLabel'], 'Fill As Suffix Label')
+                : null;
+
+        }
+        //                                           Advanced options                                              //
+
+        if (isset($advancedOperand)) {
+            $I->scrollTo(GeneralFields::advancedOptions);
+            $I->clickByJS(GeneralFields::advancedOptions, 'Expand advanced options');
+            $I->wait(2);
+
+            $advancedOperand['containerClass'] // Container Class
+                ? $I->filledField(GeneralFields::customizationFields('Container Class'), $advancedOperand['containerClass'], 'Fill As Container Class')
+                : null;
+
+            $advancedOperand['elementClass'] // Element Class
+                ? $I->filledField(GeneralFields::customizationFields('Element Class'), $advancedOperand['elementClass'], 'Fill As Element Class')
+                : null;
+
+            $advancedOperand['helpMessage'] // Help Message
+                ? $I->filledField("(//textarea[@class='el-textarea__inner'])", $advancedOperand['helpMessage'], 'Fill As Help Message')
+                : null;
+
+            $advancedOperand['nameAttribute'] // Name Attribute
+                ? $I->filledField(GeneralFields::customizationFields('Name Attribute'), $advancedOperand['nameAttribute'], 'Fill As Name Attribute')
+                : null;
+
+        }
+        $I->clicked(FluentFormsSelectors::saveForm);
+        $I->seeSuccess('The form is successfully updated.');
+    }
 
 }
