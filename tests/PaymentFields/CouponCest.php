@@ -69,11 +69,6 @@ class CouponCest
         $I->canSeeElement("//div[contains(@class,'$containerClass')]", [], $I->cmnt('Check Coupon container class'));
         $I->canSeeElement("//input[contains(@class,'$elementClass')]", [], $I->cmnt('Check Coupon element class'));
 
-
         echo $I->cmnt("All test cases went through. ", 'yellow', '', array('blink'));
-
-        // checking error message remaining, because of the bug in this field
-
-
     }
 }
