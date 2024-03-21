@@ -37,7 +37,6 @@ class AcceptanceHelper extends WebDriver
         }
         $this->waitForText('Dashboard', 5);
         $this->see("Dashboard");
-        $this->saveSessionSnapshot("loginWordpress");
 
     }
 
