@@ -41,10 +41,15 @@ class FluentFormCest
         if (!$I->tryToSee('Fluent Forms PDF Generator')) {
             $I->installPlugin("fluentforms-pdf.zip");
         }
-        if (!$I->tryToSee('Fluent Forms Pro')) {
+        if (!$I->tryToSee('Fluent Forms Pro Add On Pack')) {
             $I->installPlugin("fluentformpro.zip");
 
             $I->activateFluentFormPro();
+        }
+        if (!$I->tryToSee('Fluent Forms Signature Addon')) {
+            $I->installPlugin("fluentform-signature.zip");
+
+//            $I->activateFluentFormPro();
         }
         $I->amOnPage(GlobalPageSelec::pluginPage);
         $I->see('Fluent Forms Pro Add On Pack');
