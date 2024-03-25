@@ -32,7 +32,7 @@ class AcceptanceHelper extends WebDriver
         $this->fillField('Username', $username);
         $this->fillField('Password', $password);
         $this->click('Log In');
-        if($this->checkElement("//input[@name='correct-admin-email']")) {  // If the correct admin email is found, click on it
+        if($this->checkElement("//input[@name='correct-admin-email']")) {  // If the correct admin email notice is found, click on it
             $this->clicked("//input[@name='correct-admin-email']");
         }
         $this->waitForText('Dashboard', 5);
@@ -355,7 +355,7 @@ class AcceptanceHelper extends WebDriver
     public function checkElement($element): bool
     {
         try {
-            $this->waitForElementVisible($element,5);
+            $this->waitForElementVisible($element,2);
             $this->seeElementInDOM($element);
             return true;
         } catch (Exception $e) {

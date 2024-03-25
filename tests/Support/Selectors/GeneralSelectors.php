@@ -1,7 +1,7 @@
 <?php
 namespace Tests\Support\Selectors;
 
-class GeneralFields{
+class GeneralSelectors{
 
     // Name Fields
     const adminFieldLabel = "//div[@prop='admin_field_label']//input[@type='text']";
@@ -63,5 +63,6 @@ class GeneralFields{
         return "((//div[contains(@class,'address-field-option__settings')])[$nameArea]//i[contains(@class,'el-icon-minus')])[{$index}]";
     }
     const defaultField = "//div[contains(@class,'el-input-group--append')]//input[@type='text']";
+    const saveSettings = "//span[normalize-space()='Save Settings']";
 
 }
