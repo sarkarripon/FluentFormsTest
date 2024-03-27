@@ -112,7 +112,9 @@ class CheckableGridCest
                 'nameAttribute' => $nameAttribute,
             ]);
 
-        $this->preparePage($I, $pageName);
+//        $this->preparePage($I, $pageName);
+        $this->openInPreview($I);
+
         $I->clicked(FieldSelectors::submitButton);
         $I->seeText([
             $elementLabel,
