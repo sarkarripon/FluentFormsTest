@@ -13,7 +13,9 @@ use Tests\Support\Selectors\FluentFormsSelectors;
 
 class EmailFieldCest
 {
-    use IntegrationHelper, GeneralFieldCustomizer, DataGenerator;
+    use IntegrationHelper;
+    use GeneralFieldCustomizer;
+    use DataGenerator;
     public function _before(AcceptanceTester $I)
     {
         $I->loadDotEnvFile();

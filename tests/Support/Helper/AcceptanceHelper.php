@@ -238,7 +238,9 @@ class AcceptanceHelper extends WebDriver
         }
 
         if (count($exception) === count($xpathVariations)) {
+            echo "Clicked on " . $xpath . PHP_EOL;
             $this->fail($actionText . " not found");
+
         }
     }
 

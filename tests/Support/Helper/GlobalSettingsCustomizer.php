@@ -58,10 +58,9 @@ trait GlobalSettingsCustomizer
                 }
 
                 if ($obtainedOptions['emailBody']) {
-                    $I->waitForElementVisible("//iframe[contains(@id,'wp_editor')]", 5);
-                    $I->switchToIFrame("//iframe[contains(@id,'wp_editor')]");
-                    $I->filledField("body h2:nth-child(1)", $obtainedOptions['emailBody'], 'Fill As email body');
-                    $I->switchToIFrame();
+                    $I->waitForElementVisible("(//button[normalize-space()='Text'])", 5);
+                    $I->clicked("(//button[normalize-space()='Text'])");
+                    $I->filledField("//textarea[contains(@id,'wp_editor')]", $obtainedOptions['emailBody'], 'Fill As email body in plain text');
                 }
 
                 if ($obtainedOptions['rawHtmlFormat']) {

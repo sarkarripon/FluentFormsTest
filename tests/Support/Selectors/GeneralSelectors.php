@@ -1,8 +1,8 @@
 <?php
 namespace Tests\Support\Selectors;
 
-class GeneralSelectors{
-
+class GeneralSelectors
+{
     // Name Fields
     const adminFieldLabel = "//div[@prop='admin_field_label']//input[@type='text']";
     const placeholder = "//div[@prop='placeholder']//input[@type='text']";
@@ -45,11 +45,31 @@ class GeneralSelectors{
         }
         return "(//*[normalize-space()='$label']/following::div[@role='radiogroup']//span[contains(@class,'el-radio__inner')])$indexPart";
     }
+    public static function selectRadio(string $checkboxText, bool $isChecked = false): string
+    {
+        $isChecked = $isChecked ? " is-checked" : "";
+        return "//*[contains(text(),'$checkboxText')]/preceding-sibling::span[contains(@class,'el-radio__input$isChecked')]";
+    }
     public static function checkboxSelect($precedingElement=null)
     {
         $preceding = $precedingElement ?? "//*[contains(@class,'checkbox-label')]";
         return "($preceding/preceding::span[@class='el-checkbox__inner'])[1]";
     }
+
+    public static function selectCheckbox(string $checkboxText, bool $isChecked = false)
+    {
+        $isChecked = $isChecked ? "is-checked" : "";
+        $preceding = $isChecked ? "preceding-sibling" : "preceding";
+        return "//*[contains(text(),'$checkboxText')]/$preceding::span[contains(@class,'el-checkbox__input$isChecked')]";
+    }
+//    {
+//        $isChecked = "";
+//        if ($index !== null) {
+//            $indexPart = "[$index]";
+//        }
+//       return "//*[contains(text(),'$checkboxText')]/preceding-sibling::span[contains(@class,'el-checkbox__input is-checked')]";
+//    }
+
     public static function indexedDefaultField($nameArea): string
     {
         return "((//div[contains(@class,'address-field-option__settings')])[$nameArea]//div[contains(@class,'el-input-group--append')]//input[@type='text'])[1]";
