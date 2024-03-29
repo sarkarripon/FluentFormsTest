@@ -29,21 +29,30 @@ trait FormSpecificSettings
         }
 
         $I->clicked("//a[normalize-space()='Double Opt-in Confirmation']");
-        if (!$I->checkElement(GeneralSelectors::selectCheckbox("Enable Double Optin Confirmation before Form Data Processing", true))) {
-            $I->clicked(GeneralSelectors::selectCheckbox("Enable Double Optin Confirmation before Form Data Processing"));
+        if (!$I->checkElement(GeneralSelectors::selectCheckbox("Enable Double Optin Confirmation before Form Data Processing",null, 1,true))) {
+            $I->clicked(GeneralSelectors::selectCheckbox("Enable Double Optin Confirmation before Form Data Processing",null,1));
         }
         $I->clickOnExactText("Select an email field",'Primary Email Field', null, 1, 'Click on Primary Email Field');
         $I->clickOnText($emailLabel);
 
         if ($obtainedOptions['initialSuccessMsg']) {
-            $I->waitForElementVisible("(//button[normalize-space()='Text'])", 5);
-            $I->clicked("(//button[normalize-space()='Text'])");
-            $I->filledField("//textarea[contains(@id,'wp_editor')]", $obtainedOptions['initialSuccessMsg'], 'Fill As double opt-in initial success message in plain text');
+            $I->clickOnExactText("Text","Initial Success Message", 1, 1, "Click Text area of Initial Success Message");
+            $I->filledField("(//label[normalize-space()='Initial Success Message']/following::textarea[contains(@id,'wp_editor')])[1]",
+                $obtainedOptions['initialSuccessMsg'], 'Fill As double opt-in initial success message in plain text');
         }
         if ($obtainedOptions['customizedEmail']) {
             if (!$I->checkElement(GeneralSelectors::selectRadio("Customized Double Optin Email", true))) {
                 $I->clicked(GeneralSelectors::selectRadio("Customized Double Optin Email"));
-                exit();
+                // continue for others
+            }
+        }
+        if ($obtainedOptions['isDisableForLoggedInUser']) {
+            if (!$I->checkElement(GeneralSelectors::selectCheckbox("Disable Double Optin for Logged in users", "Email Type",1,true))) {
+                $I->clicked(GeneralSelectors::selectCheckbox("Disable Double Optin for Logged in users", "Email Type",1));
+            }
+        }else {
+            if ($I->checkElement(GeneralSelectors::selectCheckbox("Disable Double Optin for Logged in users", "Email Type", 1, true))) {
+                $I->clicked(GeneralSelectors::selectCheckbox("Disable Double Optin for Logged in users", "Email Type", 1,true));
             }
         }
 

@@ -56,11 +56,25 @@ class GeneralSelectors
         return "($preceding/preceding::span[@class='el-checkbox__inner'])[1]";
     }
 
-    public static function selectCheckbox(string $checkboxText, bool $isChecked = false)
+    public static function selectCheckbox(string $checkboxLabel, string $referenceText=null, $index=null, bool $isChecked = false)
     {
-        $isChecked = $isChecked ? "is-checked" : "";
+
+
+        $following = "";
+        if (!empty($referenceText)) {
+            $following = "*[normalize-space()='$referenceText']/following::";
+        }
+
+        $indexPart = "";
+        if ($index !== null) {
+            $indexPart = "[$index]";
+        }
+//        return "//*[contains(text(),'$checkboxText')]/preceding-sibling::span[contains(@class,'el-radio__input$isChecked')]";
+
+        $isChecked = $isChecked ? " is-checked" : "";
         $preceding = $isChecked ? "preceding-sibling" : "preceding";
-        return "//*[contains(text(),'$checkboxText')]/$preceding::span[contains(@class,'el-checkbox__input$isChecked')]";
+        return "(//$following" . "span[contains(text(),'$checkboxLabel')]/$preceding::span[contains(@class,'el-checkbox__input$isChecked')])$indexPart";
+
     }
 //    {
 //        $isChecked = "";

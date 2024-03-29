@@ -84,6 +84,7 @@ class AcceptanceHelper extends WebDriver
      */
     public function filledField($selector, $value): void
     {
+        echo "Filling " . $selector . " with " . $value . PHP_EOL;
         try {
             $this->fillField($selector, $value);
         } catch (Exception $e) {

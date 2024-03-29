@@ -61,15 +61,16 @@ class DoubleOptInCest
             [
                 'initialSuccessMsg' => $initialSuccessMsg,
                 'customizedEmail' => [
-                    'emailSubject' => $emailSubject,
-                    'emailBody' => $emailBody,
-                    'rawHtmlFormat' => true,
-                    'fromName' => $fromName,
-                    'replyTo' => $replyTo,
+//                    'emailSubject' => $emailSubject,
+//                    'emailBody' => $emailBody,
+//                    'rawHtmlFormat' => true,
+//                    'fromName' => $fromName,
+//                    'replyTo' => $replyTo,
                 ],
                 'isDisableForLoggedInUser' => false,
             ]
         );
+
 
 
 

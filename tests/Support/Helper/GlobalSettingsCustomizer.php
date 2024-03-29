@@ -8,6 +8,11 @@ use Tests\Support\Selectors\GlobalSettingsSelectors;
 
 trait GlobalSettingsCustomizer
 {
+    public function checkInEmailLog()
+    {
+
+
+    }
     /**
      * ```
      * 'enableModule' => false,
