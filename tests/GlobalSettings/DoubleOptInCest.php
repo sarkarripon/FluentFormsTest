@@ -4,15 +4,19 @@
 namespace Tests\GlobalSettings;
 
 use Tests\Support\AcceptanceTester;
+use Tests\Support\Factories\DataProvider\DataGenerator;
 use Tests\Support\Helper\FormSpecificSettings;
 use Tests\Support\Helper\GlobalSettingsCustomizer;
 use Tests\Support\Helper\Integrations\IntegrationHelper;
+use Tests\Support\Selectors\FieldSelectors;
+use Tests\Support\Selectors\FluentFormsSelectors;
 
 class DoubleOptInCest
 {
     use GlobalSettingsCustomizer;
     use IntegrationHelper;
     use FormSpecificSettings;
+    use DataGenerator;
     public function _before(AcceptanceTester $I)
     {
         $I->loadDotEnvFile();
@@ -71,6 +75,25 @@ class DoubleOptInCest
             ]
         );
 
+        $this->openInPreview($I);
+
+        $fillableDataArr = [
+            $emailFieldLabel => 'email',
+            'First Name' => 'firstName',
+            'Last Name' => 'lastName',
+        ];
+
+        $fakeData = $this->generatedData($fillableDataArr);
+
+        foreach ($fakeData as $selector => $value) {
+            $I->tryToFilledField(FluentFormsSelectors::fillAbleArea($selector), $value);
+        }
+
+        $I->clicked(FieldSelectors::submitButton);
+
+        $this->checkInEmailLog($I, $emailSubject);
+
+        exit();
 
 
 

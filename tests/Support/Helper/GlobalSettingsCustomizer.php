@@ -8,11 +8,12 @@ use Tests\Support\Selectors\GlobalSettingsSelectors;
 
 trait GlobalSettingsCustomizer
 {
-    public function checkInEmailLog()
+    public function checkInEmailLog(AcceptanceTester $I, string $toEmail)
     {
-
-
+        $I->amOnPage(GlobalSettingsSelectors::emailLogPage);
+        $I->clickOnExactText($toEmail, "To", 1, 1, 'Click on To-Email');
     }
+
     /**
      * ```
      * 'enableModule' => false,

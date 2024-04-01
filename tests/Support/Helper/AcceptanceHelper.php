@@ -181,8 +181,8 @@ class AcceptanceHelper extends WebDriver
                     $this->waitForElementVisible($xpath, $wait);
                     $waitPerformed = true;
                 }
-                $this->clickWithLeftButton($xpath);
                 echo "Click on text " . $xpath . PHP_EOL;
+                $this->clickWithLeftButton($xpath);
                 break; // Exit the loop if the element is found and clicked successfully
             } catch (Exception $e) {
                 $exception[] = $e->getMessage();
@@ -198,20 +198,21 @@ class AcceptanceHelper extends WebDriver
     {
         $following = "";
         if (!empty($followingText)) {
-            $following = "*[normalize-space()='$followingText']/following::";
+            $following = "*[normalize-space()='" . trim($followingText) . "']/following::";
+//            $following = "*[normalize-space()='$followingText']/following::";
         }
 
         $indexPart = "";
         if ($index !== null) {
             $indexPart = "[$index]";
         }
-
+        $trimmedText = trim($actionText);
         $xpathVariations = [
-            "(//$following" . "*[text()='{$actionText}'])$indexPart",
-            "(//$following" . "*[normalize-space()='{$actionText}'])$indexPart",
-            "(//$following" . "*[@placeholder='{$actionText}'])$indexPart",
-            "(//$following" . "*[@x-placement]//*[text()='{$actionText}'])$indexPart",
-            "(//$following" . "*[@x-placement]//*[normalize-space()='{$actionText}'])$indexPart",
+            "(//$following" . "*[text()='{$trimmedText}'])$indexPart",
+            "(//$following" . "*[normalize-space()='{$trimmedText}'])$indexPart",
+            "(//$following" . "*[@placeholder='{$trimmedText}'])$indexPart",
+            "(//$following" . "*[@x-placement]//*[text()='{$trimmedText}'])$indexPart",
+            "(//$following" . "*[@x-placement]//*[normalize-space()='{$trimmedText}'])$indexPart",
         ];
 
         $exception = [];
