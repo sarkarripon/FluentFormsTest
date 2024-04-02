@@ -38,6 +38,7 @@ class DoubleOptInCest
         $initialSuccessMsg = $faker->words(5, true);
         $fromName = $faker->words(5, true);
         $replyTo = $faker->email();
+        $fromEmail = $faker->email();
         $deleteInterval = $faker->numberBetween(1, 9);
 
         $this->customizeGlobalDoubleOptIn($I,
@@ -47,6 +48,7 @@ class DoubleOptInCest
                 'emailBody' => $emailBody,
 //                'rawHtmlFormat' => true,
                 'fromName' => $fromName,
+                'fromEmail' => $fromEmail,
                 'replyTo' => $replyTo,
                 'deleteInterval' => $deleteInterval,
             ]);
@@ -90,14 +92,16 @@ class DoubleOptInCest
         }
 
         $I->clicked(FieldSelectors::submitButton);
+        $I->waitForElementVisible("(//div[contains(@class,'ff-message-success')])",10, "Wait for success message");
 
-        $this->checkInEmailLog($I, $emailSubject);
-
-        exit();
-
-
-
-
-
+        $I->seeText([
+            $initialSuccessMsg,
+        ]);
+        $this->checkInEmailLog($I, $emailSubject,[
+            $emailBody,
+            $fromName,
+            $replyTo,
+            $fromEmail,
+        ]);
     }
 }

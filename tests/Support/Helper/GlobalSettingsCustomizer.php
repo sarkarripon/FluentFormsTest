@@ -8,11 +8,39 @@ use Tests\Support\Selectors\GlobalSettingsSelectors;
 
 trait GlobalSettingsCustomizer
 {
-    public function checkInEmailLog(AcceptanceTester $I, string $toEmail)
+    public function checkInEmailLog(AcceptanceTester $I, string $toEmail, array $checks)
     {
         $I->amOnPage(GlobalSettingsSelectors::emailLogPage);
         $I->clickOnExactText($toEmail, "To", 1, 1, 'Click on To-Email');
+
+        $foundTexts = [];
+        $missingTexts = [];
+
+        foreach ($checks as $check) {
+            try {
+                $I->seeText($check);
+                $foundTexts[] = $check;
+            } catch (\Exception $e) {
+                $missingTexts[] = $check;
+            }
+        }
+
+        $message = '';
+        if (count($foundTexts) > 0) {
+            $message .= "Found Texts:" . PHP_EOL;
+            foreach ($foundTexts as $foundText) {
+                $message .= "- " . $foundText . PHP_EOL;
+            }
+        }
+        if (count($missingTexts) > 0) {
+            $message .= "Missing Texts:" . PHP_EOL;
+            foreach ($missingTexts as $missingText) {
+                $message .= "- " . $missingText . PHP_EOL;
+            }
+            $I->fail($message);
+        }
     }
+
 
     /**
      * ```
@@ -43,6 +71,7 @@ trait GlobalSettingsCustomizer
             'emailBody' => false,
             'rawHtmlFormat' => false,
             'fromName' => false,
+            'fromEmail' => false,
             'replyTo' => false,
             'deleteInterval' => false,
         ];
@@ -77,6 +106,10 @@ trait GlobalSettingsCustomizer
 
                 if ($obtainedOptions['fromName']) {
                     $I->filledField(GeneralSelectors::customizationFields("From Name"), $obtainedOptions['fromName'], 'Fill As From Name');
+                }
+
+                if ($obtainedOptions['fromEmail']) {
+                    $I->filledField(GeneralSelectors::customizationFields("From Email"), $obtainedOptions['fromEmail'], 'Fill As From Email');
                 }
 
                 if ($obtainedOptions['replyTo']) {

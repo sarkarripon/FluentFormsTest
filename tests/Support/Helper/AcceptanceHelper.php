@@ -111,6 +111,7 @@ class AcceptanceHelper extends WebDriver
             parent::clickWithLeftButton($selector);
             echo "Clicked on " . $selector . PHP_EOL;
         }catch (Exception $e){
+            $this->waitForElementVisible($selector,1);
             $this->clickByJS($selector);
             echo "Clicked by JS on " . $selector . PHP_EOL;
         }
