@@ -12,6 +12,7 @@ class GlobalSettingsSelectors
 
     // Double opt-in
     const doubleOptInPage = "wp-admin/admin.php?page=fluent_forms_settings#double_optin_settings";
+    const adminApprovalPage = "wp-admin/admin.php?page=fluent_forms_settings#admin_approval";
     const emailLogPage = "wp-admin/admin.php?page=postbox-email-logs.php";
 
 
