@@ -26,7 +26,6 @@ class DoubleOptInCest
     // tests
     public function test_double_opt_in(AcceptanceTester $I)
     {
-
         $pageName = __FUNCTION__ . '_' . rand(1, 100);
         $faker = \Faker\Factory::create();
 
@@ -41,7 +40,7 @@ class DoubleOptInCest
         $fromEmail = $faker->email();
         $deleteInterval = $faker->numberBetween(1, 9);
 
-        $this->customizeGlobalDoubleOptIn($I,
+        $this->configureGlobalDoubleOptIn($I,
             [
                 'enableModule' => true,
                 'emailSubject' => $emailSubject,
@@ -62,8 +61,7 @@ class DoubleOptInCest
             'generalFields' => ['nameFields','email'],
         ], true, $customName);
 
-        $I->clicked("//a[normalize-space()='Settings & Integrations']", 'Click on Settings & Integrations');
-        $this->doubleOptInConfirmation($I, $emailFieldLabel,
+        $this->enableDoubleOptIn($I, $emailFieldLabel,
             [
                 'initialSuccessMsg' => $initialSuccessMsg,
                 'customizedEmail' => [

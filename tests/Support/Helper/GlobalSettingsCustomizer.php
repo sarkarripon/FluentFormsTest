@@ -55,7 +55,7 @@ trait GlobalSettingsCustomizer
      * @param AcceptanceTester $I
      * @param array|null $Options
      */
-    public function customizeGlobalDoubleOptIn
+    public function configureGlobalDoubleOptIn
     (
         AcceptanceTester $I,
         ?array $Options = null,
