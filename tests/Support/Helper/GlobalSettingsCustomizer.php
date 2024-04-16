@@ -3,6 +3,7 @@
 namespace Tests\Support\Helper;
 
 use Tests\Support\AcceptanceTester;
+use Tests\Support\Selectors\FluentFormsSelectors;
 use Tests\Support\Selectors\GeneralSelectors;
 use Tests\Support\Selectors\GlobalSettingsSelectors;
 
@@ -128,7 +129,7 @@ trait GlobalSettingsCustomizer
     }
 
 
-    public function customizeAdminApproval
+    public function configureAdminApproval
     (
         AcceptanceTester $I,
         ?array $Options = null,
@@ -148,7 +149,6 @@ trait GlobalSettingsCustomizer
             'deleteInterval' => false,
         ];
 
-
         if (!is_null($Options)) {
             $obtainedOptions = array_merge($obtainedOptionsDefault, $Options);
         }
@@ -159,38 +159,43 @@ trait GlobalSettingsCustomizer
                 if (!$I->checkElement("(//span[@class='el-checkbox__input is-checked'])", "check if double opt-in is enabled")) {
                     $I->clicked("(//span[contains(@class,'el-checkbox__input')])[1]");
                 }
+            }
 
-                if ($obtainedOptions['emailSubject']) {
-                    $I->filledField(GeneralSelectors::customizationFields("Global Email Subject"), $obtainedOptions['emailSubject'], 'Fill As email subject');
-                }
+            if ($obtainedOptions['recipientEmail']) {
+                $I->tryToClicked(GeneralSelectors::selectRadio('Custom Email',false), 'Select Custom Email');
+                $I->filledField(FluentFormsSelectors::fillAbleArea("Enter Recipient Email Address"), $obtainedOptions['recipientEmail'], 'Fill As Recipient Email');
+            }
 
-                if ($obtainedOptions['emailBody']) {
-                    $I->waitForElementVisible("(//button[normalize-space()='Text'])", 5);
-                    $I->clicked("(//button[normalize-space()='Text'])");
-                    $I->filledField("//textarea[contains(@id,'wp_editor')]", $obtainedOptions['emailBody'], 'Fill As email body in plain text');
-                }
+            if ($obtainedOptions['emailSubject']) {
+                $I->filledField(FluentFormsSelectors::fillAbleArea("Email Subject"), $obtainedOptions['emailSubject'], 'Fill As email subject');
+            }
 
-                if ($obtainedOptions['rawHtmlFormat']) {
-                    if (!$I->checkElement("//label[@class='el-checkbox mt-3 mb-2 is-checked']", "check if double opt-in is enabled")) {
-                        $I->clicked("(//span[@class='el-checkbox__inner'])[2]");
-                    }
-                }
+            if ($obtainedOptions['emailBody']) {
+                $I->waitForElementVisible("(//button[normalize-space()='Text'])", 5);
+                $I->clicked("(//button[normalize-space()='Text'])");
+                $I->filledField("//textarea[contains(@id,'wp_editor')]", $obtainedOptions['emailBody'], 'Fill As email body in plain text');
+            }
 
-                if ($obtainedOptions['fromName']) {
-                    $I->filledField(GeneralSelectors::customizationFields("From Name"), $obtainedOptions['fromName'], 'Fill As From Name');
+            if ($obtainedOptions['rawHtmlFormat']) {
+                if (!$I->checkElement("//label[@class='el-checkbox mt-3 mb-2 is-checked']", "check if double opt-in is enabled")) {
+                    $I->clicked("(//span[@class='el-checkbox__inner'])[2]");
                 }
+            }
 
-                if ($obtainedOptions['fromEmail']) {
-                    $I->filledField(GeneralSelectors::customizationFields("From Email"), $obtainedOptions['fromEmail'], 'Fill As From Email');
-                }
+            if ($obtainedOptions['fromName']) {
+                $I->filledField(GeneralSelectors::customizationFields("From Name"), $obtainedOptions['fromName'], 'Fill As From Name');
+            }
 
-                if ($obtainedOptions['replyTo']) {
-                    $I->filledField(GeneralSelectors::customizationFields("Reply To"), $obtainedOptions['replyTo'], 'Fill As Reply To');
-                }
+            if ($obtainedOptions['fromEmail']) {
+                $I->filledField(GeneralSelectors::customizationFields("From Email"), $obtainedOptions['fromEmail'], 'Fill As From Email');
+            }
 
-                if ($obtainedOptions['deleteInterval']) {
-                    $I->filledField("//input[@role='spinbutton']", $obtainedOptions['deleteInterval'], 'Fill As Delete Interval');
-                }
+            if ($obtainedOptions['replyTo']) {
+                $I->filledField(GeneralSelectors::customizationFields("Reply To"), $obtainedOptions['replyTo'], 'Fill As Reply To');
+            }
+
+            if ($obtainedOptions['deleteInterval']) {
+                $I->filledField("//input[@role='spinbutton']", $obtainedOptions['deleteInterval'], 'Fill As Delete Interval');
             }
         }
 

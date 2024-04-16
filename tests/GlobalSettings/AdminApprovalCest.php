@@ -40,7 +40,7 @@ class AdminApprovalCest
         $fromEmail = $faker->email();
         $deleteInterval = $faker->numberBetween(1, 9);
 
-        $this->customizeAdminApproval($I,
+        $this->configureAdminApproval($I,
             [
 //                'enableModule' => true,
                 'emailNotificationType' => false,
@@ -64,7 +64,7 @@ class AdminApprovalCest
         ], true, $customName);
 
 //        $I->clicked("//a[normalize-space()='Settings & Integrations']", 'Click on Settings & Integrations');
-        $this->doubleOptInConfirmation($I, $emailFieldLabel,
+        $this->enableAdminApproval($I, $emailFieldLabel,
             [
                 'initialSuccessMsg' => $initialSuccessMsg,
                 'customizedEmail' => [

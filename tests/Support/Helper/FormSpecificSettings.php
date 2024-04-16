@@ -71,6 +71,18 @@ trait FormSpecificSettings
         $obtainedOptions = null;
 
         $obtainedOptionsDefault = [
+            'emailNotificationType' => false,
+            'recipientEmail' => false,
+            'emailSubject' => false,
+            'emailBody' => false,
+            'rawHtmlFormat' => false,
+            'fromName' => false,
+            'fromEmail' => false,
+            'replyTo' => false,
+            'deleteInterval' => false,
+
+
+
             'initialSuccessMsg' => false,
             'customizedEmail' => false,
             'isDisableForLoggedInUser' => false,
