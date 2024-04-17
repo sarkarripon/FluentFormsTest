@@ -60,7 +60,7 @@ class IntegrationClickSendCest
         $I->clicked(FieldSelectors::submitButton);
 
         $remoteData = "";
-        if ($I->checkSubmissionLog(['success', $pageName])) {
+        if ($I->checkSubmissionLog()) {
             $remoteData = $this->fetchClickSendData($I, $fakeData['Email']);
             print_r($remoteData);
         }

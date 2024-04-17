@@ -3,6 +3,7 @@
 
 namespace Tests\Integrations;
 
+use Codeception\Attribute\Group;
 use Tests\Support\AcceptanceTester;
 use Tests\Support\Factories\DataProvider\DataGenerator;
 use Tests\Support\Helper\Integrations\IntegrationHelper;
@@ -20,6 +21,7 @@ class IntegrationTelegramCest
     }
 
     // tests
+    #[Group('Integration','all')]
     public function test_telegram_notification(AcceptanceTester $I)
     {
 //        $jhvf = $this->fetchTelegramData($I,'hello');

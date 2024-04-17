@@ -171,8 +171,8 @@ class AcceptanceTester extends \Codeception\Actor
         $text = $this->grabTextFrom($selector);
         echo $text . PHP_EOL;
         $this->assertStringContainsString($message, $text);
-        $isMultiple = count($this->grabMultiple($selector));
 
+        $isMultiple = count($this->grabMultiple($selector));
         for ($index = 1; $index <= $isMultiple; $index++) {
             $this->retryClicked("(//div[contains(@class,'el-notification__closeBtn')])[$index]"); // Close the notification
         }
@@ -474,22 +474,33 @@ class AcceptanceTester extends \Codeception\Actor
             }
         }
     }
-    public function checkSubmissionLog($text, $selector="//tbody/tr[1]")
+    public function checkSubmissionLog()
     {
-        $this->wait(20, 'Before checking submission log');
+//        $this->wait(20, 'Before checking submission log');
         $this->amOnPage(FluentFormsAllEntries::apiLogPage);
+        $this->clicked("(//tbody/tr[1]//i[contains(@class,'icon-refresh')])[2]", "Clicking on the refresh button");
+        $this->seeSuccess("Success");
+        $status = $this->grabTextFrom("//tbody/tr[1]/td[6]");
 
-        $found = false;
-        for ($i = 0; $i < 6; $i++) {
-            if ($this->seeTextCaseInsensitive($text, $selector)) {
-                $found = true;
-                break;
-            } else {
-                $this->wait(10);
-                $this->reloadPage();
-            }
+        if ($status === 'success') {
+            return true;
+        } else {
+            $this->comment('Integration Submission status is '.$status);
+            return false;
         }
-        return $found;
+
+//
+//        $found = false;
+//        for ($i = 0; $i < 10; $i++) {
+//            if ($this->seeTextCaseInsensitive($text, $selector)) {
+//                $found = true;
+//                break;
+//            } else {
+//                $this->wait(10);
+//                $this->reloadPage();
+//            }
+//        }
+//        return $found;
     }
 
     public function checkAdminArea($text)

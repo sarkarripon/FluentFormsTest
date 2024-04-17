@@ -73,7 +73,7 @@ class IntegrationUserRegistrationCest
         return $newUser;
     }
 
-    #[Group('Integration','native')]
+    #[Group('Integration','all')]
     public function test_user_update(AcceptanceTester $I ): void
     {
         global $newUser;

@@ -20,7 +20,7 @@ class IntegrationWebhookCest
         $I->loadDotEnvFile(); $I->loginWordpress();
         return $webhookUrl;
     }
-    #[Group('Integration')]
+    #[Group('Integration','all')]
     public function test_webhook_push_data(AcceptanceTester $I): void
     {
         global $webhookUrl;

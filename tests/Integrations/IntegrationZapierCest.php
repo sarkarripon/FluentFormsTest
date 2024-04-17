@@ -11,7 +11,7 @@ use Tests\Support\Selectors\FieldSelectors;
 class IntegrationZapierCest
 {
     use IntegrationHelper, Zapier, Webhook;
-    #[Group('Integration','all')]
+
     public function _before(AcceptanceTester $I): string
     {
         global $webhookUrl;
@@ -19,7 +19,7 @@ class IntegrationZapierCest
         $I->loadDotEnvFile(); $I->loginWordpress();
         return $webhookUrl;
     }
-    #[Group('Integration')]
+    #[Group('Integration','all')]
     public function test_zapier_push_data(AcceptanceTester $I): void
     {
         global $webhookUrl;

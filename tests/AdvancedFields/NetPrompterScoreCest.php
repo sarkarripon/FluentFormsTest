@@ -3,6 +3,7 @@
 
 namespace Tests\AdvancedFields;
 
+use Codeception\Attribute\Group;
 use Tests\Support\AcceptanceTester;
 use Tests\Support\Factories\DataProvider\DataGenerator;
 use Tests\Support\Helper\AdvancedFieldCustomizer;
@@ -19,6 +20,7 @@ class NetPrompterScoreCest
     }
 
     // tests
+    #[Group('advancedFields','all')]
     public function test_net_prompter_score(AcceptanceTester $I)
     {
         $pageName = __FUNCTION__ . '_' . rand(1, 100);
