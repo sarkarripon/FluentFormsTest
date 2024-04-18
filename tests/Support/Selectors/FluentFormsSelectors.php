@@ -37,7 +37,7 @@ class FluentFormsSelectors
         'numericField' => "//div[contains(@class,'vddl-draggable btn-element')]//span[normalize-space()='Numeric Field']",
         'dropdown' => "//div[contains(@class,'vddl-draggable btn-element')]//span[normalize-space()='Dropdown']",
         'radioField' => "//div[contains(@class,'vddl-draggable btn-element')]//span[normalize-space()='Radio Field']",
-        'checkBox' => "//div[contains(@class,'vddl-draggable btn-element')]//span[normalize-space()='Check Box']",
+        'checkBox' => "//div[contains(@class,'vddl-draggable btn-element')]//span[normalize-space()='Checkbox']",
         'multipleChoice' => "//div[contains(@class,'vddl-draggable btn-element')]//span[normalize-space()='Multiple Choice']",
         'websiteUrl' => "//div[contains(@class,'vddl-draggable btn-element')]//span[normalize-space()='Website URL']",
         'timeDate' => "//div[contains(@class,'vddl-draggable btn-element')]//span[normalize-space()='Time & Date']",
@@ -123,7 +123,7 @@ class FluentFormsSelectors
         return "(//label[normalize-space()='$label']/following::input | //label[normalize-space()='$label']/following::textarea)[1]";
     }
     const mapEmailDropdown = "(//div[@class='el-select']//i[contains(@class,'el-select__caret') or //input[@placeholder='Select a Field']])[1]";
-    const mapEmail = "(//span[contains(text(),'Email')])[1]";
+    const mapEmail = "(//li[contains(@class,'select-dropdown') and .//span[contains(text(),'Email')]])[1]";
 //    const saveButton("Save Feed") = "//span[normalize-space()='Save Feed' and //button[contains(@class,'el-button--primary')]]";
     const integrationFeed = "(//div[contains(@class, 'ff_card_head_group')] | //button[@title='Show Video'])[1]";
     const feedName = "//input[@placeholder='Your Feed Name' or @placeholder='Your Feed Title']";

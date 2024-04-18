@@ -3,6 +3,7 @@
 
 namespace Tests\PaymentFields;
 
+use Codeception\Attribute\Group;
 use Tests\Support\AcceptanceTester;
 use Tests\Support\Factories\DataProvider\DataGenerator;
 use Tests\Support\Helper\Integrations\IntegrationHelper;
@@ -18,6 +19,7 @@ class PaymentSummeryCest
     }
 
     // tests
+    #[Group('PaymentFields', 'all')]
     public function test_payment_summery_field(AcceptanceTester $I)
     {
         $pageName = __FUNCTION__ . '_' . rand(1, 100);

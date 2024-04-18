@@ -3,6 +3,7 @@
 
 namespace Tests\PaymentFields;
 
+use Codeception\Attribute\Group;
 use Faker\Factory;
 use Tests\Support\AcceptanceTester;
 use Tests\Support\Factories\DataProvider\DataGenerator;
@@ -19,6 +20,7 @@ class SubscriptionCest
     }
 
     // tests
+    #[Group('PaymentFields', 'all')]
     public function test_subscription_field(AcceptanceTester $I)
     {
         $pageName = __FUNCTION__ . '_' . rand(1, 100);

@@ -410,6 +410,7 @@ class AcceptanceTester extends \Codeception\Actor
                 default => 'generalSection',
                 'advancedFields' => 'advancedSection',
                 'postFields' => 'postSection',
+                'paymentFields' => 'paymentSection',
                 'taxonomyFields' => 'taxonomySection',
             };
             $this->clicked(constant(FluentFormsSelectors::class . '::' . $sectionType));
@@ -434,6 +435,7 @@ class AcceptanceTester extends \Codeception\Actor
                 default => 'generalSection',
                 'advancedFields' => 'advancedSection',
                 'postFields' => 'postSection',
+                'paymentFields' => 'paymentSection',
                 'taxonomyFields' => 'taxonomySection',
             };
             $this->clicked(constant(FluentFormsSelectors::class . '::' . $sectionType),'Clicking on the section');

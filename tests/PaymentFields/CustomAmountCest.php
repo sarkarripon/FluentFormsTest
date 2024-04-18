@@ -3,6 +3,7 @@
 
 namespace Tests\PaymentFields;
 
+use Codeception\Attribute\Group;
 use Tests\Support\AcceptanceTester;
 use Tests\Support\Factories\DataProvider\DataGenerator;
 use Tests\Support\Helper\Integrations\IntegrationHelper;
@@ -19,6 +20,7 @@ class CustomAmountCest
     }
 
     // tests
+    #[Group('PaymentFields', 'all')]
     public function test_custom_amount(AcceptanceTester $I)
     {
         $pageName = __FUNCTION__ . '_' . rand(1, 100);

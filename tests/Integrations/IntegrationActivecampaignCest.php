@@ -33,11 +33,12 @@ class IntegrationActivecampaignCest
         $listOrService = ['ActiveCampaign List' => 'Master Contact List'];
         $customName = [
             'email' => 'Email Address',
-            'simpleText' => ['First Name', 'Last Name', 'Organization Name'],
+            'simpleText' => ['Organization Name'],
             'phone' => 'Phone Number',
+            'nameFields' => 'Name Fields',
         ];
         $this->prepareForm($I, $pageName, [
-            'generalFields' => ['email', 'simpleText', 'phone'],
+            'generalFields' => ['nameFields','email', 'simpleText', 'phone'],
         ], true, $customName);
         $this->configureActivecampaign($I, "ActiveCampaign");
         $fieldMapping = $this->buildArrayWithKey($customName);

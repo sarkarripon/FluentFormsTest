@@ -3,6 +3,7 @@
 
 namespace Tests\PaymentFields;
 
+use Codeception\Attribute\Group;
 use Faker\Factory;
 use Tests\Support\AcceptanceTester;
 use Tests\Support\Factories\DataProvider\DataGenerator;
@@ -20,6 +21,7 @@ class PaymentItemCest
     }
 
     // tests
+    #[Group('PaymentFields', 'all')]
     public function test_payment_Item(AcceptanceTester $I)
     {
         $pageName = __FUNCTION__ . '_' . rand(1, 100);

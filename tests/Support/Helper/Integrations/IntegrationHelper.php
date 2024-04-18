@@ -141,19 +141,24 @@ trait IntegrationHelper
         $I->amOnUrl($pageUrl);
     }
 
-    public function turnOnIntegration(AcceptanceTester $I, string $integrationName): void
+    public function turnOnIntegration(AcceptanceTester $I, string $integrationName, $index=1): void
     {
+        $indexPart = "";
+        if ($index !== null) {
+            $indexPart = "[$index]";
+        }
+
         $I->retry(4, 200);
         $I->amOnPage(FluentFormsAddonsSelectors::integrationsPage);
         $I->filledField("//input[@placeholder='Search Modules']", $integrationName);
 
-        $isEnabled = $I->checkElement("//div[@role='switch' and contains(@class, 'is-checked')]");
+        $isEnabled = $I->checkElement("(//div[@role='switch' and contains(@class, 'is-checked')])$indexPart");
         if (!$isEnabled) {
-            $I->retryClickWithLeftButton("//div[@role='switch']");
+            $I->retryClickWithLeftButton("(//div[@role='switch'])$indexPart");
         }
-        $gearIcon = $I->checkElement("//div[contains(@class,'ff_card_footer')]//i[contains(@class,'el-icon-setting')]");
+        $gearIcon = $I->checkElement("(//div[contains(@class,'ff_card_footer')]//i[contains(@class,'el-icon-setting')])$indexPart");
         if ($gearIcon) {
-            $I->retryClickWithLeftButton("//div[contains(@class,'ff_card_footer')]//i[contains(@class,'el-icon-setting')]");
+            $I->retryClickWithLeftButton("(//div[contains(@class,'ff_card_footer')]//i[contains(@class,'el-icon-setting')])$indexPart");
         }
     }
 
@@ -190,7 +195,7 @@ trait IntegrationHelper
         }
         if ($emailField){
             $I->clicked(FluentFormsSelectors::mapEmailDropdown);
-            $I->clicked(FluentFormsSelectors::mapEmail);
+            $I->clickByJS(FluentFormsSelectors::mapEmail);
         }
     }
 

@@ -35,7 +35,9 @@ class IntegrationInventoryModuleCest
             'email' => 'Email Address',
             'checkBox' => ['T-shirt']
         ];
-        $this->prepareForm($I, $pageName, ['generalFields' => ['nameFields','email','checkBox']],
+        $this->prepareForm($I, $pageName,
+            ['generalFields' => ['nameFields','email','checkBox']
+            ],
             true, $customName);
 
         $index = $this->convertToIndexArray($customName);
